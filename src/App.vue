@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <Layout></Layout>
+  <div class="app">
     <router-view />
   </div>
 </template>
@@ -18,5 +17,12 @@ export default {
 body,
 html {
   margin: 0px;
+}
+.app {
+  /* 50= navbar  50  */
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 </style>

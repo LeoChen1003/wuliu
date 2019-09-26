@@ -12,6 +12,7 @@ module.exports = {
         'css': resolve('src/assets/css'),
         'images': resolve('src/assets/images'),
         'views': resolve('src/views'),
+        'lang': resolve('src/lang'),
         'components': resolve('src/components'),
         'api': resolve('src/api'),
         'store': resolve('src/store'),
