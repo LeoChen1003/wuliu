@@ -1,7 +1,13 @@
 <template>
   <div>
     <div v-if="!toggleLang">
-      <el-select v-model="language" placeholder="请选择" @change="handleSetLanguage" size='small' style="width:100%;">
+      <el-select
+        v-model="language"
+        placeholder="请选择"
+        @change="handleSetLanguage"
+        size="small"
+        style="width:100%;"
+      >
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -10,10 +16,10 @@
         ></el-option>
       </el-select>
     </div>
-    <div v-if='toggleLang'>
+    <div v-if="toggleLang">
       <el-dropdown trigger="click" class="international" @command="handleSetLanguage">
         <div>
-          <i class="el-icon-s-tools"></i>
+          <svg-icon class-name="international-icon" icon-class="language" />
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item :disabled="language==='zh'" command="zh">中文</el-dropdown-item>

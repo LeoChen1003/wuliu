@@ -10,7 +10,7 @@
         label-position="right"
         label-width="120px"
         hide-required-asterisk
-        size='small'
+        size="small"
       >
         <div class="login-header">
           <span class="line"></span>

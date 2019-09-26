@@ -2,11 +2,7 @@
   <div class>
     <LangSelect :toggleLang="true"></LangSelect>
     <span>{{$t('home.button')}}</span>
-    <el-date-picker
-      v-model="value"
-      type="date"
-      placeholder="选择日期">
-    </el-date-picker>
+    <el-date-picker v-model="value" type="date" placeholder="选择日期"></el-date-picker>
   </div>
 </template>
 

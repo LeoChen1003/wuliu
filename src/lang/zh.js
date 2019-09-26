@@ -1,8 +1,8 @@
 export default {
-  message:{
-    switchLang:'语言切换成功'
+  message: {
+    switchLang: '语言切换成功'
   },
-  login:{
+  login: {
     username: '登录账号',
     password: '登录密码',
     demand: '发货人',
@@ -13,7 +13,7 @@ export default {
     register: '注册',
     forgotPassword: '忘记密码'
   },
-  home:{
-    button:'按钮'
+  home: {
+    button: '按钮'
   }
 }

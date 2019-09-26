@@ -1,8 +1,8 @@
 export default {
-  message:{
-    switchLang:'Switch Language Success'
+  message: {
+    switchLang: 'Switch Language Success'
   },
-  login:{
+  login: {
     username: 'User',
     password: 'Password',
     demand: 'Demand',
@@ -13,7 +13,7 @@ export default {
     register: 'Register',
     forgotPassword: 'Forgot password'
   },
-  home:{
-    button:'button'
+  home: {
+    button: 'button'
   }
 }

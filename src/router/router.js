@@ -15,7 +15,7 @@ const routes = [
             title: '登录页'
         }
     },
-    {   
+    {
         path: '*',
         redirect: {
             path: '/'

@@ -1,8 +1,8 @@
 export default {
-  message:{
-    switchLang:'Switch Language Success'
+  message: {
+    switchLang: 'Switch Language Success'
   },
-  login:{
+  login: {
     username: 'ประเทศอเมริกา',
     password: 'รหัสผ่าน',
     demand: 'ผู้ส่งสินค้า',
@@ -13,7 +13,7 @@ export default {
     register: 'ลงทะเบียน',
     forgotPassword: 'ลืมรหัสผ่าน'
   },
-  home:{
-    button:'th'
+  home: {
+    button: 'th'
   }
 }
