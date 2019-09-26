@@ -1,6 +1,5 @@
 <template>
   <div class>
-    <Layout></Layout>
     <LangSelect :toggleLang="true"></LangSelect>
     <span>{{$t('home.button')}}</span>
     <el-date-picker v-model="value" type="date" placeholder="选择日期"></el-date-picker>

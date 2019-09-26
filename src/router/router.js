@@ -1,4 +1,3 @@
-import Layout from "components/layout/index";
 const routes = [
     {
         path: '/',
@@ -24,7 +23,6 @@ const routes = [
         meta: {
             title: 'booking'
         },
-        component: Layout,
         children: [
             {
                 path: 'index',
@@ -46,7 +44,6 @@ const routes = [
     {
         path: '/2',
         name: 'login',
-        component: Layout,
         component: () => import('@/views/login/index'),
         meta: {
             title: 'tracking'
