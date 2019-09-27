@@ -29,7 +29,7 @@ html {
   overflow: hidden;
 }
 .app-content {
-  min-height: calc(100vh - 50px);
+  height: calc(100vh - 50px);
   width: 100%;
 }
 </style>
