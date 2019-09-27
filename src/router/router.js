@@ -18,33 +18,33 @@ const routes = [
         }
     },
     {
-        path: '/login',
-        name: 'login',
+        path: '/billing',
+        name: 'billing',
         meta: {
-            title: 'booking'
+            title: 'billing'
         },
         children: [
             {
-                path: 'index',
-                component: () => import('@/views/login/index'),
-                meta: { title: 'priceConsulting' }
+                path: 'payableBill',
+                component: () => import('@/views/billing/payableBill'),
+                meta: { title: 'payableBill' }
             },
             {
-                path: '1',
-                component: () => import('@/views/login/index'),
-                meta: { title: 'placeOrder' }
+                path: 'topUp',
+                component: () => import('@/views/billing/topUp'),
+                meta: { title: 'topUp' }
             },
             {
-                path: '2',
-                component: () => import('@/views/login/index'),
-                meta: { title: 'releaseToMarket' }
+                path: 'journal',
+                component: () => import('@/views/billing/journal'),
+                meta: { title: 'journal' }
             },
         ]
     },
     {
-        path: '/2',
+        path: '/payableBill',
         name: 'login',
-        component: () => import('@/views/login/index'),
+        component: () => import('@/views/billing/payableBill'),
         meta: {
             title: 'tracking'
         }

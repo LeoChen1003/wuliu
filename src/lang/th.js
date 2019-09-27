@@ -32,7 +32,21 @@ export default {
     platform: 'แพลตฟอร์มการจัดการ',
     login: 'Login',
     register: 'ลงทะเบียน',
-    forgotPassword: 'ลืมรหัสผ่าน'
+    forgotPassword: 'ลืมรหัสผ่าน',
+    selPartnerType: 'เลือกประเภทสมาชิก',
+    nextStep: 'ขั้นตอนต่อไป',
+    enterAccountInfo: 'ข้อมูลบัญชี',
+    memberType: 'ประเภทสมาชิก',
+    mobilePhoneNo: 'เบอร์โทรศัพท์',
+    messageCode: 'รหัสยืนยัน',
+    sendMessage: 'Send message',
+    graphCaptcha: 'รหัสการตรวจสอบกราฟิก',
+    email: 'จดหมายอิเล็กทรอนิกส์',
+    regName: 'ชื่อบัญชี',
+    regPassword: 'รหัสผ่าน',
+    confirmPassword: 'ยืนยันรหัสผ่าน',
+    termAndConditions: 'ข้อกำหนดและเงื่อนไข',
+    confirm: 'Confirm',
   },
   home: {
     button: 'th'

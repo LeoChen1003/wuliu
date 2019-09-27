@@ -62,7 +62,104 @@
         <div @click="formType = 'forget'">{{$t('login.forgotPassword')}}</div>
       </div>
     </div>
-    <div class="register" v-if="formType == 'register'">注册</div>
+    <div class="register" v-if="formType == 'register'">
+      <el-tabs type="border-card" style="width:600px;">
+        <el-tab-pane>
+          <span slot="label">① {{$t('login.selPartnerType')}}</span>
+          <el-checkbox-group v-model="regList">
+            <div class="regCheck">
+              <el-checkbox :label="0">
+                <div class="regItem">
+                  <div class="reglabel">{{$t('login.demand')}}</div>
+                  <div class="regCon">ผู้ใช้บริการว่าจ้างขนส่งสินค้า ผ่านการให้บริการของ แพลตฟอร์ม</div>
+                </div>
+              </el-checkbox>
+            </div>
+            <div class="regCheck">
+              <el-checkbox :label="1">
+                <div class="regItem">
+                  <div class="reglabel">{{$t('login.supply')}}</div>
+                  <div class="regCon">
+                    ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่ง
+                    <br />ผู้รับปลายทาง โดยผ่านการบริการของแพลตฟอร์ม
+                  </div>
+                </div>
+              </el-checkbox>
+            </div>
+            <div class="regCheck">
+              <el-checkbox :label="2">
+                <div class="regItem">
+                  <div class="reglabel">{{$t('login.hub')}}</div>
+                  <div class="regCon">
+                    ศูนย์รวบรวมและแลกเปลี่ยนสินค้า ระหว่างผู้ส่งสินค้าและผู้ขนส่ง
+                    <br />โดยผ่านการบริการของแพลตฟอร์ม
+                  </div>
+                </div>
+              </el-checkbox>
+            </div>
+          </el-checkbox-group>
+          <div class="nextStep">
+            <el-button type="primary" class="nextBtn">{{$t('login.nextStep')}}</el-button>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane>
+          <span slot="label">② {{$t('login.enterAccountInfo')}}</span>
+          <el-form
+            ref="regForm"
+            :model="regForm"
+            :rules="regRules"
+            class="reg-form"
+            label-position="left"
+            label-width="160px"
+            hide-required-asterisk
+            size="small"
+          >
+            <el-form-item prop="mT" :label="$t('login.memberType')">
+              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
+            </el-form-item>
+            <el-form-item prop="mT" :label="$t('login.mobilePhoneNo')">
+              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
+            </el-form-item>
+            <el-form-item prop="mT" :label="$t('login.messageCode')">
+              <div class="inputWidth" style="display:flex;align-items:center;">
+                <el-input v-model="regForm.mT" placeholder style="width:58%;margin-right:5px;" />
+                <el-button style="width:40%;">{{$t('login.sendMessage')}}</el-button>
+              </div>
+            </el-form-item>
+            <el-form-item prop="mT" :label="$t('login.graphCaptcha')">
+              <div class="inputWidth" style="display:flex;align-items:center;">
+                <el-input v-model="regForm.mT" placeholder style="width:58%;margin-right:5px;" />
+                <el-button style="width:40%;">{{$t('login.sendMessage')}}</el-button>
+              </div>
+            </el-form-item>
+            <el-form-item prop="mT" :label="$t('login.email')">
+              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
+            </el-form-item>
+            <el-form-item prop="mT" :label="$t('login.regName')">
+              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
+            </el-form-item>
+            <el-form-item prop="mT" :label="$t('login.regPassword')">
+              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
+            </el-form-item>
+            <el-form-item prop="mT" :label="$t('login.confirmPassword')">
+              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
+            </el-form-item>
+            <el-form-item>
+              <el-checkbox v-model="regArgee">I accept</el-checkbox>
+              <span class="argee">{{$t('login.termAndConditions')}}</span>
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                :loading="loading"
+                class="inputWidth"
+                type="primary"
+                size="small"
+              >{{$t('login.confirm')}}</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
@@ -99,9 +196,20 @@ export default {
           { required: true, trigger: "blur", validator: validatePassword }
         ]
       },
+      regForm: {},
+      regRules: {
+        username: [
+          { required: true, trigger: "blur", validator: validateUsername }
+        ],
+        password: [
+          { required: true, trigger: "blur", validator: validatePassword }
+        ]
+      },
       loading: false,
       curTab: 1,
-      formType: "login"
+      formType: "login",
+      regList: [],
+      regArgee: false
     };
   },
   //监听属性 类似于data概念
@@ -180,9 +288,43 @@ export default {
   }
   .register {
     position: absolute;
-    top: 50%;
+    top: 15%;
     right: 50%;
-    transform: translate(40%, -55%);
+    transform: translate(50%, 0);
+    .regCheck {
+      margin-top: 20px;
+    }
+    .regItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 40px;
+      .reglabel {
+        width: 150px;
+      }
+      .regCon {
+      }
+    }
+    .nextStep {
+      width: 100%;
+      margin-top: 30px;
+      margin-bottom: 20px;
+      .nextBtn {
+        position: relative;
+        left: 50%;
+        transform: translate(-50%, 0);
+      }
+    }
+    .reg-form {
+      padding-left: 30px;
+      box-sizing: border-box;
+      .argee {
+        color: #169bd5;
+      }
+    }
+    .inputWidth {
+      width: 300px;
+    }
   }
 }
 </style>

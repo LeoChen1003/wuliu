@@ -31,7 +31,21 @@ export default {
     platform: '平台',
     login: '登录',
     register: '注册',
-    forgotPassword: '忘记密码'
+    forgotPassword: '忘记密码',
+    selPartnerType: '选择会员类型',
+    nextStep: '下一步',
+    enterAccountInfo: '输入账户信息',
+    memberType: '会员类型',
+    mobilePhoneNo: '手机号码',
+    messageCode: '短信验证码',
+    sendMessage: '发送短信',
+    graphCaptcha: '图片验证码',
+    email: '邮箱',
+    regName: '用户名',
+    regPassword: '密码',
+    confirmPassword: '确认密码',
+    termAndConditions: '注册条款',
+    confirm: '确认',
   },
   home: {
     button: '按钮'

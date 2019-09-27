@@ -1,7 +1,9 @@
 <template>
   <div class="app">
     <Layout></Layout>
-    <router-view />
+    <div class="app-content">
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -25,5 +27,9 @@ html {
   width: 100%;
   position: relative;
   overflow: hidden;
+}
+.app-content {
+  min-height: calc(100vh - 50px);
+  width: 100%;
 }
 </style>

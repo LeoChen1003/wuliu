@@ -31,7 +31,21 @@ export default {
     platform: 'Platform',
     login: 'Login',
     register: 'Register',
-    forgotPassword: 'Forgot password'
+    forgotPassword: 'Forgot password',
+    selPartnerType: 'Select partner type',
+    nextStep: 'Next Step',
+    enterAccountInfo: 'Enter account information',
+    memberType: 'Member type',
+    mobilePhoneNo: 'Mobile phone no.',
+    messageCode: 'Message verification code',
+    sendMessage: 'Send message',
+    graphCaptcha: 'Graph captcha',
+    email: 'Email',
+    regName: 'User name',
+    regPassword: 'Password',
+    confirmPassword: 'Confirm password',
+    termAndConditions: 'Term and conditions',
+    confirm: 'Confirm',
   },
   home: {
     button: 'button'
