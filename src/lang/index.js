@@ -4,9 +4,9 @@ import Cookies from 'js-cookie'
 import elementEnLocale from 'element-ui/lib/locale/lang/en' // element-ui lang
 import elementZhLocale from 'element-ui/lib/locale/lang/zh-CN'// element-ui lang
 import elementThLocale from 'element-ui/lib/locale/lang/th'// element-ui lang
-import enLocale from './en'
-import zhLocale from './zh'
-import thLocale from './th'
+import enLocale from './en.json'
+import zhLocale from './zh.json'
+import thLocale from './th.json'
 
 Vue.use(VueI18n)
 
