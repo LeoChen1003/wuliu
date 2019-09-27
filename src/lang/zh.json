@@ -50,6 +50,31 @@
   "home": {
     "button": "按钮"
   },
+  "billing": {
+    "billingStatus": "结算状态",
+    "unpaid": "未结算",
+    "paid": "已结算",
+    "cancelled": "已取消",
+    "bookingTime": "下单日期",
+    "trackingNo": "物流单号",
+    "totalAmount": "总金额",
+    "supply": "运输公司",
+    "amount": "金额",
+    "toBeConfirmed": "待确认",
+    "confirmed": "已确认",
+    "rejected": "已拒绝",
+    "date": "充值日期",
+    "type": "类型",
+    "topUp": "充值",
+    "account": "账户",
+    "gaurantee": "保证金",
+    "freight": "运费",
+    "transactionType": "交易类型",
+    "documentNo": "单据编号",
+    "increase": "增加",
+    "decrease": "减少",
+    "balance": "余额"
+  },
   "member": {
     "myData": "我的资料",
     "user": "用户",

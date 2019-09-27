@@ -50,6 +50,31 @@
   "home": {
     "button": "th"
   },
+  "billing": {
+    "billingStatus": "สถานะการเรียกเก็บเงิน",
+    "unpaid": "Unpaid",
+    "paid": "ชำระแล้ว",
+    "cancelled": "ยกเลิก",
+    "bookingTime": "Booking time",
+    "trackingNo": "Tracking No.",
+    "totalAmount": "Total amount",
+    "supply": "Supply",
+    "amount": "Amount",
+    "toBeConfirmed": "To be confirmed",
+    "confirmed": "Confirmed",
+    "rejected": "Rejected",
+    "date": "เดท",
+    "type": "Type",
+    "topUp": "เติม",
+    "account": "Account",
+    "gaurantee": "Gaurantee",
+    "freight": "Freight",
+    "transactionType": "ประเภทธุรกรรม",
+    "documentNo": "หมายเลขเอกสาร",
+    "increase": "เพิ่ม",
+    "decrease": "ลดลง",
+    "balance": "สมดุล"
+  },
   "member": {
     "myData": "ข้อมูลของฉัน",
     "user": "ผู้ใช้งาน",
