@@ -23,13 +23,13 @@ html {
 }
 .app {
   /* 50= navbar  50  */
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
   position: relative;
   overflow: hidden;
 }
 .app-content {
-  min-height: calc(100vh - 50px);
+  height: calc(100vh - 50px);
   width: 100%;
 }
 </style>

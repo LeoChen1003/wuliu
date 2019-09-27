@@ -26,27 +26,46 @@ const routes = [
         children: [
             {
                 path: 'payableBill',
-                component: () => import('@/views/billing/payableBill'),
+                redirect: '/payableBill',
                 meta: { title: 'payableBill' }
             },
             {
                 path: 'topUp',
-                component: () => import('@/views/billing/topUp'),
+                redirect: '/topUp',
                 meta: { title: 'topUp' }
             },
             {
                 path: 'journal',
-                component: () => import('@/views/billing/journal'),
+                redirect: '/journal',
                 meta: { title: 'journal' }
             },
         ]
     },
     {
         path: '/payableBill',
-        name: 'login',
+        name: '应付账单',
+        hidden: true,
         component: () => import('@/views/billing/payableBill'),
         meta: {
-            title: 'tracking'
+            title: 'payableBill'
+        }
+    },
+    {
+        path: '/topUp',
+        name: '充值',
+        hidden: true,
+        component: () => import('@/views/billing/topUp'),
+        meta: {
+            title: 'topUp'
+        }
+    },
+    {
+        path: '/journal',
+        name: '流水账',
+        hidden: true,
+        component: () => import('@/views/billing/journal'),
+        meta: {
+            title: 'journal'
         }
     },
     {
