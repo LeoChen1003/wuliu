@@ -43,10 +43,29 @@ const routes = [
   },
   {
     path: '/payableBill',
-    name: 'login',
+    name: '应付账单',
+    hidden: true,
     component: () => import('@/views/billing/payableBill'),
     meta: {
-      title: 'tracking'
+      title: 'payableBill'
+    }
+  },
+  {
+    path: '/topUp',
+    name: '充值',
+    hidden: true,
+    component: () => import('@/views/billing/topUp'),
+    meta: {
+      title: 'topUp'
+    }
+  },
+  {
+    path: '/journal',
+    name: '流水账',
+    hidden: true,
+    component: () => import('@/views/billing/journal'),
+    meta: {
+      title: 'journal'
     }
   },
   {

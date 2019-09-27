@@ -23,7 +23,7 @@ html {
 }
 .app {
   /* 50= navbar  50  */
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
   position: relative;
   overflow: hidden;

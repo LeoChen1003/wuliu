@@ -1,5 +1,19 @@
 <template>
-  <div class="ma">213</div>
+  <div class="manage">
+    <div class="center">
+      <el-table :data="[{},{},{}]" border>
+        <el-table-column :label="$t('billing.bookingTime')"></el-table-column>
+        <el-table-column :label="$t('billing.trackingNo')"></el-table-column>
+        <el-table-column :label="$t('billing.totalAmount')"></el-table-column>
+      </el-table>
+    </div>
+    <div class="right">
+      <el-table :data="[{},{},{}]" border>
+        <el-table-column :label="$t('billing.supply')"></el-table-column>
+        <el-table-column :label="$t('billing.amount')"></el-table-column>
+      </el-table>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -23,7 +37,14 @@ export default {
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
-.ma {
+.manage {
   height: 100%;
+  padding-top: 20px;
+  .center {
+    width: 40%;
+  }
+  .right {
+    width: 40%;
+  }
 }
 </style>
