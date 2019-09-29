@@ -109,7 +109,7 @@
             <el-form-item :label="$t('member.contacktName')">
               <el-input class="inp"></el-input>
             </el-form-item>
-            <el-form-item :label="$t('member.phone_No')">
+            <el-form-item :label="$t('member.ph one_No')">
               <el-input class="inp"></el-input>
             </el-form-item>
             <el-form-item :label="$t('member.email')">
