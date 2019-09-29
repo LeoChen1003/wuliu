@@ -1,21 +1,23 @@
 <template>
-  <div class="navbar">
-    <div class="right">
-      <img src="../../assets/image/logo.png" alt="logo" style="margin-right:20px;" />
-      <el-menu :default-active="$route.path" router mode="horizontal">
-        <menuItem v-for="(item,index) in routes" :item="item" :key="index"></menuItem>
-      </el-menu>
-    </div>
-    <div class="left">
-      <div style="margin-right:40px;">
-        <span>Welcome,Demand_A</span>
+  <div>
+    <div class="navbar">
+      <div class="right">
+        <img src="../../assets/image/logo.png" alt="logo" style="margin-right:20px;" />
+        <el-menu :default-active="$route.path" router mode="horizontal">
+          <menuItem v-for="(item,index) in routes" :item="item" :key="index"></menuItem>
+        </el-menu>
       </div>
-      <el-button
-        @click="logout"
-        type="text"
-        style="color:#333;margin-right:15px;"
-      >{{$t('layout.logout')}}</el-button>
-      <LangSelect :toggleLang="true"></LangSelect>
+      <div class="left">
+        <div style="margin-right:40px;">
+          <span>Welcome,Demand_A</span>
+        </div>
+        <el-button
+          @click="logout"
+          type="text"
+          style="color:#333;margin-right:15px;"
+        >{{$t('layout.logout')}}</el-button>
+        <LangSelect :toggleLang="true"></LangSelect>
+      </div>
     </div>
   </div>
 </template>
@@ -76,6 +78,6 @@ export default {
 </style>
 <style >
 .el-submenu {
-  width: 120px;
+  width: 160px;
 }
 </style>
