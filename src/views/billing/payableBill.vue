@@ -82,6 +82,8 @@ export default {
       width: 225px;
     }
     .timePicker {
+      height: 42px;
+      line-height: 40px;
       padding-left: 30px;
     }
   }
@@ -106,5 +108,8 @@ export default {
 .billing .el-tabs--left .el-tabs__header.is-left {
   margin-right: 0px;
   width: 210px;
+}
+.billing .el-tabs--card > .el-tabs__header .el-tabs__nav {
+  border: none;
 }
 </style>
