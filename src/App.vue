@@ -2,7 +2,9 @@
   <div class="app">
     <Layout></Layout>
     <div class="app-content">
-      <router-view />
+      <el-scrollbar style="height:100%;">
+        <router-view />
+      </el-scrollbar>
     </div>
   </div>
 </template>
@@ -31,5 +33,8 @@ html {
 .app-content {
   height: calc(100vh - 50px);
   width: 100%;
+}
+.el-scrollbar__wrap {
+  overflow-x: hidden;
 }
 </style>
