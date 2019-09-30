@@ -180,7 +180,118 @@
       <el-tab-pane name="4"
                    :label="$t('member.relevantdocument_supply')">
         <div class="container">
+          <el-form label-width="200px">
+            <el-form-item :label="$t('member.affidavit')">
+              <el-upload class="upload"
+                         action="https://jsonplaceholder.typicode.com/posts/"
+                         multiple
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{$t('member.upload')}}</el-button>
+                <div slot="tip"
+                     class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+              </el-upload>
+            </el-form-item>
+            <el-form-item :label="$t('member.transportationLicense')">
 
+            </el-form-item>
+            <el-form-item :label="$t('member.IDcard')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.houseParticulars')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.bangAccount')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.mapForDistributionCenters')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.carRegistration')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.cargoInsurance')">
+              <div>
+                <div class="z-cell">
+                  <el-checkbox v-model="perPrice">
+                    <el-input size="small"
+                              class="checkbox-inp"></el-input>
+                    THB
+                    <el-select size="small"
+                               v-model="perPriceSelected"
+                               class="checkbox-select"
+                               placeholder="Per price"></el-select>
+                  </el-checkbox>
+                </div>
+                <div class="z-cell">
+                  <el-checkbox v-model="perShipment">
+                    <el-input size="small"
+                              class="checkbox-inp"></el-input>
+                    THB
+                    <el-select size="small"
+                               v-model="perShipmentSelected"
+                               class="checkbox-select"
+                               placeholder="Per shipment"></el-select>
+                  </el-checkbox>
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item :label="$t('member.dc')">
+              <div class="z-cell">
+                <el-switch v-model="dc"
+                           :active-text="$t('member.have')"
+                           :inactive-text="$t('member.notHave')"></el-switch>
+              </div>
+              <transition name="el-fade-in">
+                <div class="z-cell dc-wrapper"
+                     v-if="dc">
+                  <div>
+                    <el-table border
+                              :data="dcList"
+                              style="width:700px;">
+                      <el-table-column align="center"
+                                       :label="$t('member.dcAddress')">
+                        <template slot-scope="scope">
+                          <el-input type="textarea"
+                                    resize="none"
+                                    v-model="scope.row.address">
+                          </el-input>
+                        </template>
+                      </el-table-column>
+                      <el-table-column align="center"
+                                       :label="$t('member.transportationExperience')">
+                        <template slot-scope="scope">
+                          <el-input type="textarea"
+                                    resize="none"
+                                    v-model="scope.row.experience">
+                          </el-input>
+                        </template>
+                      </el-table-column>
+                      <el-table-column center
+                                       width="100px">
+                        <template slot-scope="scope">
+                          <div style="text-align:center;">
+                            <el-button v-if="scope.$index != 0"
+                                       type="danger"
+                                       @click="delDc(scope.row,scope.$index)"
+                                       icon="el-icon-delete"
+                                       circle></el-button>
+                          </div>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                  <div class="dc-add-button">
+                    <el-button type="primary"
+                               @click="addDc"
+                               icon="el-icon-plus"
+                               circle></el-button>
+                  </div>
+                </div>
+              </transition>
+            </el-form-item>
+          </el-form>
         </div>
       </el-tab-pane>
       <!-- 相关文件(货运站) -->
@@ -205,11 +316,24 @@
 export default {
   data () {
     return {
-      tabActive: '3'
+      tabActive: '4',
+      dc: false,
+      dcList: [{ address: '', experience: '' }],
+      perShipment: false,
+      perShipmentSelected: null,
+      perPrice: false,
+      perPriceSelected: null
     };
   },
   mounted () { },
-  methods: {}
+  methods: {
+    addDc () {
+      this.dcList.push({ address: '', experience: '' })
+    },
+    delDc (row, index) {
+      this.dcList.splice(index, 1)
+    }
+  }
 }
 
 </script>
@@ -247,5 +371,27 @@ export default {
 
 .upload {
   width: 400px;
+}
+
+.z-cell {
+  margin-bottom: 20px;
+}
+
+.checkbox-inp {
+  width: 200px;
+}
+
+.checkbox-select {
+  width: 200px;
+}
+
+.dc-wrapper {
+  display: flex;
+  align-items: flex-end;
+}
+
+.dc-add-button {
+  height: 56px;
+  margin-left: 20px;
 }
 </style>

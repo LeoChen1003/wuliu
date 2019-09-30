@@ -164,6 +164,14 @@
     "IDcard": "身份证",
     "houseParticulars": "房屋登记复印件",
     "bangAccount": "银行账户复印件",
-    "upload": "上传"
+    "upload": "上传",
+    "mapForDistributionCenters": "配送中心地图",
+    "cargoInsurance": "货物损失丢失保险",
+    "dc": "DC",
+    "carRegistration": "汽车注册复印件",
+    "have": "有",
+    "notHave": "没有",
+    "dcAddress": "DC地址",
+    "transportationExperience": "运营年限"
   }
 }

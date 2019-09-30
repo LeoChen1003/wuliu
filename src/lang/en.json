@@ -164,6 +164,14 @@
     "IDcard": "ID card",
     "houseParticulars": "House Particulars",
     "bangAccount": "Bang account",
-    "upload": "upload"
+    "upload": "upload",
+    "mapForDistributionCenters": "Map for distribution centers",
+    "carRegistration": "Car Registration",
+    "cargoInsurance": " Cargo Insurance",
+    "dc": "DC",
+    "have": "have",
+    "notHave": "not have",
+    "dcAddress": "DC Address",
+    "transportationExperience": "Transportation experience"
   }
 }
