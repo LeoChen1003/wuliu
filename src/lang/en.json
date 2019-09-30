@@ -158,6 +158,12 @@
     "bankAccount_No": "Bank account No.",
     "billingAddress": "Billing Address",
     "profileDiscription": "Profile discription",
-    "region": "Region"
+    "region": "Region",
+    "affidavit": "Affidavit",
+    "transportationLicense": "Transportation License",
+    "IDcard": "ID card",
+    "houseParticulars": "House Particulars",
+    "bangAccount": "Bang account",
+    "upload": "upload"
   }
 }
