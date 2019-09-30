@@ -220,6 +220,9 @@ export default {
     choseTab(n) {
       let self = this;
       self.curTab = n;
+    },
+    handleLogin() {
+      this.$router.replace("/payableBill");
     }
   },
   created() {},
