@@ -3,9 +3,10 @@
   <div class="wrapper">
     <el-tabs tab-position="left"
              v-model="tabActive"
-             style="height:100%"
-             type="card">
-      <el-tab-pane :label="$t('member.membershipApplicationProcess')">
+             style="height:100%">
+      <!-- 会员申请流程 -->
+      <el-tab-pane name='1'
+                   :label="$t('member.membershipApplicationProcess')">
         <div class="container">
           <el-steps simple>
             <el-step :title="$t('member.register')"
@@ -78,7 +79,8 @@
           </el-steps>
         </div>
       </el-tab-pane>
-      <el-tab-pane :name="1"
+      <!-- 基础资料 -->
+      <el-tab-pane name='2'
                    :label="$t('member.essentialData')">
         <div class="container">
           <el-form ref="form"
@@ -109,7 +111,7 @@
             <el-form-item :label="$t('member.contacktName')">
               <el-input class="inp"></el-input>
             </el-form-item>
-            <el-form-item :label="$t('member.ph one_No')">
+            <el-form-item :label="$t('member.phone_No')">
               <el-input class="inp"></el-input>
             </el-form-item>
             <el-form-item :label="$t('member.email')">
@@ -142,22 +144,55 @@
           </el-form>
         </div>
       </el-tab-pane>
-      <el-tab-pane :label="$t('member.relevantDocument_demand')">
+      <!-- 相关文件（发货人）150px -->
+      <el-tab-pane name="3"
+                   :label="$t('member.relevantDocument_demand')">
+        <div class="container">
+          <el-form label-width="200px">
+            <el-form-item :label="$t('member.affidavit')">
+              <el-upload class="upload"
+                         action="https://jsonplaceholder.typicode.com/posts/"
+                         multiple
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{$t('member.upload')}}</el-button>
+                <div slot="tip"
+                     class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+              </el-upload>
+            </el-form-item>
+            <el-form-item :label="$t('member.transportationLicense')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.IDcard')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.houseParticulars')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.bangAccount')">
+
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-tab-pane>
+      <!-- 相关文件(运输公司) -->
+      <el-tab-pane name="4"
+                   :label="$t('member.relevantdocument_supply')">
         <div class="container">
 
         </div>
       </el-tab-pane>
-      <el-tab-pane :label="$t('member.relevantdocument_supply')">
+      <!-- 相关文件(货运站) -->
+      <el-tab-pane name="5"
+                   :label="$t('member.relevantdocument_HUB')">
         <div class="container">
 
         </div>
       </el-tab-pane>
-      <el-tab-pane :label="$t('member.relevantdocument_HUB')">
-        <div class="container">
-
-        </div>
-      </el-tab-pane>
-      <el-tab-pane :label="$t('member.myContract')">
+      <!-- 我的会员合同 -->
+      <el-tab-pane name="6"
+                   :label="$t('member.myContract')">
         <div class="container">
 
         </div>
@@ -170,7 +205,7 @@
 export default {
   data () {
     return {
-      tabActive: 1
+      tabActive: '3'
     };
   },
   mounted () { },
@@ -207,6 +242,10 @@ export default {
 }
 
 .inp {
+  width: 400px;
+}
+
+.upload {
   width: 400px;
 }
 </style>

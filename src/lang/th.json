@@ -110,6 +110,12 @@
     "bankAccount_No": "เลขที่บัญชีธนาคาร",
     "billingAddress": "ที่อยู่เรียกเก็บเงิน",
     "profileDiscription": "รายละเอียดบริษัท",
-    "region": "Region"
+    "region": "Region",
+    "affidavit": "หนังสือรับรอง",
+    "transportationLicense": "ใบอนุญาติประกอบการขนส่ง",
+    "IDcard": "บัตรประจำตัวประชาชน",
+    "houseParticulars": "สำเนาทะเบียนบ้าน",
+    "bangAccount": "บัญชีธนาคาร",
+    "upload": "ที่อัพโหลด"
   }
 }

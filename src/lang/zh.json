@@ -110,6 +110,12 @@
     "bankAccount_No": "银行账号",
     "billingAddress": "账单地址",
     "profileDiscription": "简介",
-    "region": "Region"
+    "region": "Region",
+    "affidavit": "法律宣誓书复印件",
+    "transportationLicense": "运输许可证",
+    "IDcard": "身份证",
+    "houseParticulars": "房屋登记复印件",
+    "bangAccount": "银行账户复印件",
+    "upload": "上传"
   }
 }
