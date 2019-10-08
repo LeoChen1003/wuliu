@@ -1,14 +1,14 @@
 <template>
   <div class>
-    <el-tabs tab-position="left" v-model="tabActive" style="height:100%" type="card">
+    <el-tabs v-model="tabActive" tab-position="left" style="height:100%" type="card">
       <el-tab-pane :label="$t('tracking.Pending')">
         <div class="container">
           <el-table :data="[{},{},{}]" border :cell-style="cell">
-            <el-table-column :label="$t('tracking.tracking')"></el-table-column>
-            <el-table-column :label="$t('tracking.deliveryPoint')"></el-table-column>
-            <el-table-column :label="$t('tracking.supply')"></el-table-column>
+            <el-table-column :label="$t('tracking.tracking')" />
+            <el-table-column :label="$t('tracking.deliveryPoint')" />
+            <el-table-column :label="$t('tracking.supply')" />
             <el-table-column :label="$t('tracking.remarks')">
-              <el-checkbox v-model="checked"></el-checkbox>
+              <el-checkbox v-model="checked" />
             </el-table-column>
             <el-table-column>
               <div>
@@ -16,34 +16,34 @@
                   size="small"
                   type="primary"
                   @click="printeDialog = true"
-                >{{$t('tracking.print')}}</el-button>
+                >{{ $t('tracking.print') }}</el-button>
                 <el-button
                   size="small"
                   type="primary"
                   @click="comfirmDialog = true"
-                >{{$t('tracking.confirm')}}</el-button>
+                >{{ $t('tracking.confirm') }}</el-button>
               </div>
             </el-table-column>
           </el-table>
         </div>
       </el-tab-pane>
       <el-tab-pane :label="$t('tracking.toBeconfirmedOrderbyDemand')">
-        <div class="container"></div>
+        <div class="container" />
       </el-tab-pane>
       <el-tab-pane :label="$t('tracking.toBeconfirmedOrderbySupply')">
-        <div class="container"></div>
+        <div class="container" />
       </el-tab-pane>
       <el-tab-pane :label="$t('tracking.tobePickedUp')">
-        <div class="container"></div>
+        <div class="container" />
       </el-tab-pane>
       <el-tab-pane :label="$t('tracking.intransit')">
-        <div class="container"></div>
+        <div class="container" />
       </el-tab-pane>
       <el-tab-pane :label="$t('tracking.documentTobereturned')">
-        <div class="container"></div>
+        <div class="container" />
       </el-tab-pane>
       <el-tab-pane :label="$t('tracking.completed')">
-        <div class="container"></div>
+        <div class="container" />
       </el-tab-pane>
     </el-tabs>
 
@@ -54,10 +54,10 @@
       class="comfirmDialog"
     >
       <el-table :data="[{},{},{}]" border>
-        <el-table-column :label="$t('tracking.supply')"></el-table-column>
-        <el-table-column :label="$t('tracking.KPI')"></el-table-column>
-        <el-table-column :label="$t('tracking.truckType')"></el-table-column>
-        <el-table-column :label="$t('tracking.quotation')"></el-table-column>
+        <el-table-column :label="$t('tracking.supply')" />
+        <el-table-column :label="$t('tracking.KPI')" />
+        <el-table-column :label="$t('tracking.truckType')" />
+        <el-table-column :label="$t('tracking.quotation')" />
       </el-table>
       <span slot="footer">
         <div class="footerBtn">
@@ -66,7 +66,7 @@
             plain
             style="width:300px;"
             @click="printeDialog = false"
-          >{{$t('tracking.confirm')}}</el-button>
+          >{{ $t('tracking.confirm') }}</el-button>
         </div>
       </span>
     </el-dialog>
@@ -84,7 +84,7 @@
             plain
             style="width:300px;"
             @click="printeDialog = false"
-          >{{$t('tracking.confirm')}}</el-button>
+          >{{ $t('tracking.confirm') }}</el-button>
         </div>
       </span>
     </el-dialog>
@@ -92,28 +92,28 @@
 </template>
 
 <script>
-//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
-//例如：import 《组件名称》 from '《组件路径》';
+// 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
+// 例如：import 《组件名称》 from '《组件路径》';
 
 export default {
-  //import引入的组件需要注入到对象中才能使用
+  // import引入的组件需要注入到对象中才能使用
   components: {},
   data() {
     return {
       comfirmDialog: false,
       printeDialog: false
-    };
+    }
   },
-  //监听属性 类似于data概念
+  // 监听属性 类似于data概念
   computed: {},
-  //监控data中的数据变化
+  // 监控data中的数据变化
   watch: {},
+  created() {},
+  mounted() {},
   methods: {
     cell() {}
-  },
-  created() {},
-  mounted() {}
-};
+  }
+}
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类

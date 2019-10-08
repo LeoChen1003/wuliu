@@ -1,332 +1,331 @@
 <template>
-  <div class="manage">
-    <div class="loginBox" v-if="formType == 'login'">
-      <el-form
-        ref="loginForm"
-        :model="loginForm"
-        :rules="loginRules"
-        class="login-form"
-        autocomplete="on"
-        label-position="right"
-        label-width="120px"
-        hide-required-asterisk
-        size="small"
-      >
-        <div class="login-header">
-          <img src="../../assets/image/logo.png" alt="logo" />
-          <LangSelect :toggleLang="true" class="langBtn"></LangSelect>
-        </div>
-        <div class="choseTab">
-          <div @click="choseTab(1)" :class="curTab==1?'isActive':''">{{$t('login.demand')}}</div>
-          <div @click="choseTab(2)" :class="curTab==2?'isActive':''">{{$t('login.supply')}}</div>
-          <div @click="choseTab(3)" :class="curTab==3?'isActive':''">{{$t('login.hub')}}</div>
-          <div @click="choseTab(4)" :class="curTab==4?'isActive':''">{{$t('login.platform')}}</div>
-        </div>
-        <el-form-item prop="username" :label="$t('login.username')">
+  <div class="login-container">
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
+
+      <div class="title-container">
+        <h3 class="title">Login Form</h3>
+      </div>
+
+      <el-form-item prop="username">
+        <span class="svg-container">
+          <svg-icon icon-class="user" />
+        </span>
+        <el-input
+          ref="username"
+          v-model="loginForm.username"
+          placeholder="Username"
+          name="username"
+          type="text"
+          tabindex="1"
+          autocomplete="on"
+        />
+      </el-form-item>
+
+      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+        <el-form-item prop="password">
+          <span class="svg-container">
+            <svg-icon icon-class="password" />
+          </span>
           <el-input
-            ref="username"
-            v-model="loginForm.username"
-            placeholder="请输入您的登录账号"
-            name="username"
-            type="text"
-            tabindex="1"
-            autocomplete="on"
-            size="small"
-            class="inputWidth"
-          />
-        </el-form-item>
-        <el-form-item prop="password" :label="$t('login.password')">
-          <el-input
+            :key="passwordType"
             ref="password"
             v-model="loginForm.password"
-            placeholder="密码"
+            :type="passwordType"
+            placeholder="Password"
             name="password"
+            tabindex="2"
             autocomplete="on"
-            size="small"
+            @keyup.native="checkCapslock"
+            @blur="capsTooltip = false"
             @keyup.enter.native="handleLogin"
-            class="inputWidth"
           />
+          <span class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          </span>
         </el-form-item>
-        <el-form-item>
-          <el-button
-            :loading="loading"
-            class="inputWidth"
-            @click.native.prevent="handleLogin"
-            type="button"
-            size="small"
-          >{{$t('login.login')}}</el-button>
-        </el-form-item>
-      </el-form>
-      <div class="atPassword">
-        <div @click="formType = 'register'">{{$t('login.register')}}</div>
-        <div @click="formType = 'forget'">{{$t('login.forgotPassword')}}</div>
+      </el-tooltip>
+
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+
+      <div style="position:relative">
+        <div class="tips">
+          <span>Username : admin</span>
+          <span>Password : any</span>
+        </div>
+        <div class="tips">
+          <span style="margin-right:18px;">Username : editor</span>
+          <span>Password : any</span>
+        </div>
+
+        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
+          Or connect with
+        </el-button>
       </div>
-    </div>
-    <div class="register" v-if="formType == 'register'">
-      <el-tabs type="border-card" style="width:600px;">
-        <el-tab-pane>
-          <span slot="label">① {{$t('login.selPartnerType')}}</span>
-          <el-checkbox-group v-model="regList">
-            <div class="regCheck">
-              <el-checkbox :label="0">
-                <div class="regItem">
-                  <div class="reglabel">{{$t('login.demand')}}</div>
-                  <div class="regCon">ผู้ใช้บริการว่าจ้างขนส่งสินค้า ผ่านการให้บริการของ แพลตฟอร์ม</div>
-                </div>
-              </el-checkbox>
-            </div>
-            <div class="regCheck">
-              <el-checkbox :label="1">
-                <div class="regItem">
-                  <div class="reglabel">{{$t('login.supply')}}</div>
-                  <div class="regCon">
-                    ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่ง
-                    <br />ผู้รับปลายทาง โดยผ่านการบริการของแพลตฟอร์ม
-                  </div>
-                </div>
-              </el-checkbox>
-            </div>
-            <div class="regCheck">
-              <el-checkbox :label="2">
-                <div class="regItem">
-                  <div class="reglabel">{{$t('login.hub')}}</div>
-                  <div class="regCon">
-                    ศูนย์รวบรวมและแลกเปลี่ยนสินค้า ระหว่างผู้ส่งสินค้าและผู้ขนส่ง
-                    <br />โดยผ่านการบริการของแพลตฟอร์ม
-                  </div>
-                </div>
-              </el-checkbox>
-            </div>
-          </el-checkbox-group>
-          <div class="nextStep">
-            <el-button type="primary" class="nextBtn">{{$t('login.nextStep')}}</el-button>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane>
-          <span slot="label">② {{$t('login.enterAccountInfo')}}</span>
-          <el-form
-            ref="regForm"
-            :model="regForm"
-            :rules="regRules"
-            class="reg-form"
-            label-position="left"
-            label-width="160px"
-            hide-required-asterisk
-            size="small"
-          >
-            <el-form-item prop="mT" :label="$t('login.memberType')">
-              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.mobilePhoneNo')">
-              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.messageCode')">
-              <div class="inputWidth" style="display:flex;align-items:center;">
-                <el-input v-model="regForm.mT" placeholder style="width:58%;margin-right:5px;" />
-                <el-button style="width:40%;">{{$t('login.sendMessage')}}</el-button>
-              </div>
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.graphCaptcha')">
-              <div class="inputWidth" style="display:flex;align-items:center;">
-                <el-input v-model="regForm.mT" placeholder style="width:58%;margin-right:5px;" />
-                <el-button style="width:40%;">{{$t('login.sendMessage')}}</el-button>
-              </div>
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.email')">
-              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.regName')">
-              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.regPassword')">
-              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.confirmPassword')">
-              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
-            </el-form-item>
-            <el-form-item>
-              <el-checkbox v-model="regArgee">I accept</el-checkbox>
-              <span class="argee">{{$t('login.termAndConditions')}}</span>
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                :loading="loading"
-                class="inputWidth"
-                type="primary"
-                size="small"
-              >{{$t('login.confirm')}}</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
+    </el-form>
+
+    <el-dialog title="Or connect with" :visible.sync="showDialog">
+      Can not be simulated on local, so please combine you own business simulation! ! !
+      <br>
+      <br>
+      <br>
+      <social-sign />
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import LangSelect from "components/LangSelect/index";
+import { validUsername } from '@/utils/validate'
+import SocialSign from './components/SocialSignin'
 
 export default {
-  components: { LangSelect },
+  name: 'Login',
+  components: { SocialSign },
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error("请输入账号"));
+      if (!validUsername(value)) {
+        callback(new Error('Please enter the correct user name'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validatePassword = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error("请输入密码"));
+      if (value.length < 6) {
+        callback(new Error('The password can not be less than 6 digits'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       loginForm: {
-        username: "",
-        password: ""
+        username: 'admin',
+        password: '111111'
       },
       loginRules: {
-        username: [
-          { required: true, trigger: "blur", validator: validateUsername }
-        ],
-        password: [
-          { required: true, trigger: "blur", validator: validatePassword }
-        ]
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
-      regForm: {},
-      regRules: {
-        username: [
-          { required: true, trigger: "blur", validator: validateUsername }
-        ],
-        password: [
-          { required: true, trigger: "blur", validator: validatePassword }
-        ]
-      },
+      passwordType: 'password',
+      capsTooltip: false,
       loading: false,
-      curTab: 1,
-      formType: "login",
-      regList: [],
-      regArgee: false
-    };
+      showDialog: false,
+      redirect: undefined,
+      otherQuery: {}
+    }
   },
-  //监听属性 类似于data概念
-  computed: {},
-  //监控data中的数据变化
-  watch: {},
+  watch: {
+    $route: {
+      handler: function(route) {
+        const query = route.query
+        if (query) {
+          this.redirect = query.redirect
+          this.otherQuery = this.getOtherQuery(query)
+        }
+      },
+      immediate: true
+    }
+  },
+  created() {
+    // window.addEventListener('storage', this.afterQRScan)
+  },
+  mounted() {
+    if (this.loginForm.username === '') {
+      this.$refs.username.focus()
+    } else if (this.loginForm.password === '') {
+      this.$refs.password.focus()
+    }
+  },
+  destroyed() {
+    // window.removeEventListener('storage', this.afterQRScan)
+  },
   methods: {
-    choseTab(n) {
-      let self = this;
-      self.curTab = n;
+    checkCapslock({ shiftKey, key } = {}) {
+      if (key && key.length === 1) {
+        if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
+          this.capsTooltip = true
+        } else {
+          this.capsTooltip = false
+        }
+      }
+      if (key === 'CapsLock' && this.capsTooltip === true) {
+        this.capsTooltip = false
+      }
+    },
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
+      this.$nextTick(() => {
+        this.$refs.password.focus()
+      })
     },
     handleLogin() {
-      this.$router.replace("/payableBill");
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.$store.dispatch('user/login', this.loginForm)
+            .then(() => {
+              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.loading = false
+            })
+            .catch(() => {
+              this.loading = false
+            })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    getOtherQuery(query) {
+      return Object.keys(query).reduce((acc, cur) => {
+        if (cur !== 'redirect') {
+          acc[cur] = query[cur]
+        }
+        return acc
+      }, {})
     }
-  },
-  created() {},
-  mounted() {}
-};
+    // afterQRScan() {
+    //   if (e.key === 'x-admin-oauth-code') {
+    //     const code = getQueryObject(e.newValue)
+    //     const codeMap = {
+    //       wechat: 'code',
+    //       tencent: 'code'
+    //     }
+    //     const type = codeMap[this.auth_type]
+    //     const codeName = code[type]
+    //     if (codeName) {
+    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
+    //         this.$router.push({ path: this.redirect || '/' })
+    //       })
+    //     } else {
+    //       alert('第三方登录失败')
+    //     }
+    //   }
+    // }
+  }
+}
 </script>
-<style lang='scss' scoped>
-//@import url(); 引入公共css类
-.manage {
-  .loginBox {
-    position: absolute;
-    top: 50%;
-    right: 50%;
-    transform: translate(40%, -55%);
-    .login-form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .login-header {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      margin-bottom: 30px;
-      position: relative;
-      img {
-        position: absolute;
-        left: 50%;
+
+<style lang="scss">
+/* 修复input 背景不协调 和光标变色 */
+/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
+
+$bg:#283443;
+$light_gray:#fff;
+$cursor: #fff;
+
+@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
+  .login-container .el-input input {
+    color: $cursor;
+  }
+}
+
+/* reset element-ui css */
+.login-container {
+  .el-input {
+    display: inline-block;
+    height: 47px;
+    width: 85%;
+
+    input {
+      background: transparent;
+      border: 0px;
+      -webkit-appearance: none;
+      border-radius: 0px;
+      padding: 12px 5px 12px 15px;
+      color: $light_gray;
+      height: 47px;
+      caret-color: $cursor;
+
+      &:-webkit-autofill {
+        box-shadow: 0 0 0px 1000px $bg inset !important;
+        -webkit-text-fill-color: $cursor !important;
       }
-      .langBtn {
-        position: absolute;
-        right: 15px;
-      }
-    }
-    .choseTab {
-      width: 100%;
-      padding-left: 130px;
-      margin: 20px 0;
-      box-sizing: border-box;
-      display: flex;
-      justify-content: space-between;
-      color: #333333;
-      font-size: 14px;
-      div {
-        width: 75px;
-        text-align: center;
-        cursor: pointer;
-      }
-      .isActive {
-        font-weight: bold;
-        color: rgb(22, 155, 213);
-      }
-    }
-    .atPassword {
-      display: flex;
-      justify-content: space-between;
-      padding-left: 130px;
-      padding-right: 10px;
-      box-sizing: border-box;
-      color: #169bd5;
-      font-size: 14px;
-    }
-    .inputWidth {
-      width: 300px;
     }
   }
-  .register {
+
+  .el-form-item {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    color: #454545;
+  }
+}
+</style>
+
+<style lang="scss" scoped>
+$bg:#2d3a4b;
+$dark_gray:#889aa4;
+$light_gray:#eee;
+
+.login-container {
+  min-height: 100%;
+  width: 100%;
+  background-color: $bg;
+  overflow: hidden;
+
+  .login-form {
+    position: relative;
+    width: 520px;
+    max-width: 100%;
+    padding: 160px 35px 0;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .tips {
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 10px;
+
+    span {
+      &:first-of-type {
+        margin-right: 16px;
+      }
+    }
+  }
+
+  .svg-container {
+    padding: 6px 5px 6px 15px;
+    color: $dark_gray;
+    vertical-align: middle;
+    width: 30px;
+    display: inline-block;
+  }
+
+  .title-container {
+    position: relative;
+
+    .title {
+      font-size: 26px;
+      color: $light_gray;
+      margin: 0px auto 40px auto;
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+
+  .show-pwd {
     position: absolute;
-    top: 15%;
-    right: 50%;
-    transform: translate(50%, 0);
-    .regCheck {
-      margin-top: 20px;
-    }
-    .regItem {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 40px;
-      .reglabel {
-        width: 150px;
-      }
-      .regCon {
-      }
-    }
-    .nextStep {
-      width: 100%;
-      margin-top: 30px;
-      margin-bottom: 20px;
-      .nextBtn {
-        position: relative;
-        left: 50%;
-        transform: translate(-50%, 0);
-      }
-    }
-    .reg-form {
-      padding-left: 30px;
-      box-sizing: border-box;
-      .argee {
-        color: #169bd5;
-      }
-    }
-    .inputWidth {
-      width: 300px;
+    right: 10px;
+    top: 7px;
+    font-size: 16px;
+    color: $dark_gray;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .thirdparty-button {
+    position: absolute;
+    right: 0;
+    bottom: 6px;
+  }
+
+  @media only screen and (max-width: 470px) {
+    .thirdparty-button {
+      display: none;
     }
   }
 }

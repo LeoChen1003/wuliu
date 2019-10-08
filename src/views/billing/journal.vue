@@ -1,7 +1,7 @@
 <template>
   <div class="manage billing">
     <div class="statusHeader">
-      <div class="status-txt">{{$t('billing.account')}}</div>
+      <div class="status-txt">{{ $t('billing.account') }}</div>
       <div class="timePicker">
         <el-date-picker
           v-model="value1"
@@ -10,21 +10,21 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           size="small"
-        ></el-date-picker>
+        />
       </div>
     </div>
     <div class="content">
-      <el-tabs tab-position="left" v-model="tabActive" style="height:100%" type="card">
+      <el-tabs v-model="tabActive" tab-position="left" style="height:100%" type="card">
         <el-tab-pane :label="$t('billing.gaurantee')">
           <div class="container">
             <div class="center">
               <el-table :data="[{},{},{}]" border>
-                <el-table-column :label="$t('billing.date')"></el-table-column>
-                <el-table-column :label="$t('billing.transactionType')"></el-table-column>
-                <el-table-column :label="$t('billing.documentNo')"></el-table-column>
-                <el-table-column :label="$t('billing.increase')"></el-table-column>
-                <el-table-column :label="$t('billing.decrease')"></el-table-column>
-                <el-table-column :label="$t('billing.balance')"></el-table-column>
+                <el-table-column :label="$t('billing.date')" />
+                <el-table-column :label="$t('billing.transactionType')" />
+                <el-table-column :label="$t('billing.documentNo')" />
+                <el-table-column :label="$t('billing.increase')" />
+                <el-table-column :label="$t('billing.decrease')" />
+                <el-table-column :label="$t('billing.balance')" />
               </el-table>
             </div>
           </div>
@@ -33,12 +33,12 @@
           <div class="container">
             <div class="center">
               <el-table :data="[{},{},{}]" border>
-                <el-table-column :label="$t('billing.date')"></el-table-column>
-                <el-table-column :label="$t('billing.transactionType')"></el-table-column>
-                <el-table-column :label="$t('billing.documentNo')"></el-table-column>
-                <el-table-column :label="$t('billing.increase')"></el-table-column>
-                <el-table-column :label="$t('billing.decrease')"></el-table-column>
-                <el-table-column :label="$t('billing.balance')"></el-table-column>
+                <el-table-column :label="$t('billing.date')" />
+                <el-table-column :label="$t('billing.transactionType')" />
+                <el-table-column :label="$t('billing.documentNo')" />
+                <el-table-column :label="$t('billing.increase')" />
+                <el-table-column :label="$t('billing.decrease')" />
+                <el-table-column :label="$t('billing.balance')" />
               </el-table>
             </div>
           </div>
@@ -49,26 +49,26 @@
 </template>
 
 <script>
-//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
-//例如：import 《组件名称》 from '《组件路径》';
+// 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
+// 例如：import 《组件名称》 from '《组件路径》';
 
 export default {
-  //import引入的组件需要注入到对象中才能使用
+  // import引入的组件需要注入到对象中才能使用
   components: {},
   data() {
     return {
       tabActive: 0,
       value1: []
-    };
+    }
   },
-  //监听属性 类似于data概念
+  // 监听属性 类似于data概念
   computed: {},
-  //监控data中的数据变化
+  // 监控data中的数据变化
   watch: {},
-  methods: {},
   created() {},
-  mounted() {}
-};
+  mounted() {},
+  methods: {}
+}
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类

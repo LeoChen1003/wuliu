@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken, setToken } from '@/utils/auth'
-import { getRid } from './auth';
+import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -11,34 +10,17 @@ const service = axios.create({
   timeout: 5000 // request timeout
 })
 
-
-async function doRequest(error) {
-  setToken(error.response.data.token)
-  let config = error.response.config
-
-  config.headers.Authorization = getToken()
-
-  const res = await axios.request(config)
-
-  return res
-}
-
 // request interceptor
 service.interceptors.request.use(
   config => {
     // do something before request is sent
+
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['Authorization'] = getToken()
+      config.headers['X-Token'] = getToken()
     }
-    if (store.getters.rid) {
-      config.headers['rid'] = getRid()
-    }
-    // config.headers.post['X-Requested-With'] = 'XMLHttpRequest';
-    // config.headers.get['X-Requested-With'] = 'XMLHttpRequest';
-    // config.responseType = 'json';
     return config
   },
   error => {
@@ -62,10 +44,11 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
+
     // if the custom code is not 20000, it is judged as an error.
-    if (res.status !== 200 && res.status) {
+    if (res.code !== 20000) {
       Message({
-        message: res.message || res.msg || 'Error',
+        message: res.message || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
@@ -83,29 +66,19 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject(new Error(res.message || res.msg || 'Error'))
+      return Promise.reject(new Error(res.message || 'Error'))
     } else {
       return res
     }
   },
   error => {
-    if (error.response.status === 402) {
-      return doRequest(error)
-      // reloadMessage(error)
-    } else if (error.response.status === 401) {
-      store.dispatch('user/resetToken').then(() => {
-        location.reload()
-      })
-    } else {
-      console.log('err' + error) // for debug
-      Message({
-        message: error.response.data.msg,
-        type: 'error',
-        duration: 5 * 1000
-      })
-      return Promise.reject(error)
-    }
-
+    console.log('err' + error) // for debug
+    Message({
+      message: error.message,
+      type: 'error',
+      duration: 5 * 1000
+    })
+    return Promise.reject(error)
   }
 )
 

@@ -2,7 +2,7 @@
   "message": {
     "switchLang": "Switch Language Success"
   },
-  "routes": {
+  "route": {
     "booking": "การจอง",
     "priceConsulting": "ราคาให้คำปรึกษา",
     "placeOrder": "สถานที่การสั่งซื้อ",

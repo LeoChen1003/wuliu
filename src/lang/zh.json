@@ -2,7 +2,7 @@
   "message": {
     "switchLang": "语言切换成功"
   },
-  "routes": {
+  "route": {
     "booking": "下单",
     "priceConsulting": "询价",
     "placeOrder": "下单",
