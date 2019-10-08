@@ -164,6 +164,12 @@
     "IDcard": "บัตรประจำตัวประชาชน",
     "houseParticulars": "สำเนาทะเบียนบ้าน",
     "bangAccount": "บัญชีธนาคาร",
-    "upload": "ที่อัพโหลด"
+    "upload": "ที่อัพโหลด",
+    "cargoInsurance": "ประกันภัยสินค้า",
+    "dc": "DC",
+    "carRegistration": "รายการจดทะเบียนรถ",
+    "mapForDistributionCenters": " แผนที่ตั้งศูนย์กระจายสินค้า",
+    "dcAddress": "ที่อยู่ DC",
+    "transportationExperience": "ประสบการณ์ทำงานขนส่ง"
   }
 }
