@@ -172,6 +172,11 @@
     "have": "have",
     "notHave": "not have",
     "dcAddress": "DC Address",
-    "transportationExperience": "Transportation experience"
+    "transportationExperience": "Transportation experience",
+    "functionalArea": " Functional area",
+    "submitHUB": "Submit application_HUB",
+    "submitSupply": "Submit application_Supply",
+    "submitDemand": "Submit application_Demand",
+    "save": "Save"
   }
 }

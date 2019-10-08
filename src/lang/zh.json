@@ -172,6 +172,11 @@
     "have": "有",
     "notHave": "没有",
     "dcAddress": "DC地址",
-    "transportationExperience": "运营年限"
+    "transportationExperience": "运营年限",
+    "functionalArea": "服务区域面积",
+    "submitHUB": "提交会员申请（HUB）",
+    "save": "保存",
+    "submitDemand": "提交会员申请(发货人)",
+    "submitSupply": "提交会员申请(运输公司)"
   }
 }

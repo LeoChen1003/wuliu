@@ -141,6 +141,10 @@
                         type="textarea"
                         resize="none"></el-input>
             </el-form-item>
+            <el-form-item>
+              <el-button type="primary"
+                         class="submitBtn">{{$t('member.save')}}</el-button>
+            </el-form-item>
           </el-form>
         </div>
       </el-tab-pane>
@@ -172,6 +176,10 @@
             </el-form-item>
             <el-form-item :label="$t('member.bangAccount')">
 
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary"
+                         class="submitBtn">{{$t('member.submitDemand')}}</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -291,6 +299,10 @@
                 </div>
               </transition>
             </el-form-item>
+            <el-form-item>
+              <el-button type="primary"
+                         class="submitBtn">{{$t('member.submitSupply')}}</el-button>
+            </el-form-item>
           </el-form>
         </div>
       </el-tab-pane>
@@ -298,7 +310,47 @@
       <el-tab-pane name="5"
                    :label="$t('member.relevantdocument_HUB')">
         <div class="container">
+          <el-form label-width="200px">
+            <el-form-item :label="$t('member.affidavit')">
+              <el-upload class="upload"
+                         action="https://jsonplaceholder.typicode.com/posts/"
+                         multiple
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{$t('member.upload')}}</el-button>
+                <div slot="tip"
+                     class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+              </el-upload>
+            </el-form-item>
+            <el-form-item :label="$t('member.transportationLicense')">
 
+            </el-form-item>
+            <el-form-item :label="$t('member.IDcard')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.houseParticulars')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.bangAccount')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.cargoInsurance')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.mapForDistributionCenters')">
+
+            </el-form-item>
+            <el-form-item :label="$t('member.functionalArea')">
+              <el-input style="width:200px;">
+                <div slot="append">㎡</div>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary"
+                         class="submitBtn">{{$t('member.submitHUB')}}</el-button>
+            </el-form-item>
+          </el-form>
         </div>
       </el-tab-pane>
       <!-- 我的会员合同 -->
@@ -316,7 +368,7 @@
 export default {
   data () {
     return {
-      tabActive: '4',
+      tabActive: '5',
       dc: false,
       dcList: [{ address: '', experience: '' }],
       perShipment: false,
@@ -393,5 +445,9 @@ export default {
 .dc-add-button {
   height: 56px;
   margin-left: 20px;
+}
+
+.submitBtn {
+  width: 300px;
 }
 </style>
