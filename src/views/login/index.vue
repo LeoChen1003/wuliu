@@ -141,7 +141,7 @@
                      size="small">
               <el-form-item prop="chosenTypes"
                             :label="$t('login.memberType')">
-                <el-input v-model="regForm.chosenTypes"
+                <el-input v-model="regForm.choosedRoles"
                           disabled
                           class="inputWidth" />
               </el-form-item>
@@ -160,11 +160,11 @@
                        alt="captcha">
                 </div>
               </el-form-item>
-              <el-form-item prop="mT"
+              <el-form-item prop="smsCode"
                             :label="$t('login.messageCode')">
                 <div class="inputWidth"
                      style="display:flex;align-items:center;">
-                  <el-input v-model="regForm.mT">
+                  <el-input v-model="regForm.smsCode">
                     <el-button @click="sendMessageCode"
                                slot="append">{{ codeFreezeTime == 0 ? $t('login.sendMessage') : codeFreezeTime + 's' }}</el-button>
                   </el-input>
@@ -202,6 +202,7 @@
                 <el-button :loading="loading"
                            class="inputWidth"
                            type="primary"
+                           @click="register"
                            size="small">{{ $t('login.confirm') }}</el-button>
               </el-form-item>
               <el-form-item>
@@ -351,7 +352,7 @@ export default {
         type += `${i},`;
       }
       type = type.substr(0, type.length - 1);
-      self.regForm.chosenTypes = type;
+      self.regForm.choosedRoles = type;
       getCaptcha().then(res => {
         self.captcha = {
           ...self.captcha,
@@ -360,7 +361,7 @@ export default {
         }
       })
     },
-    // 返回
+    // 返回上一步
     prevStep () {
       const self = this;
       self.regStep = 0;
@@ -402,6 +403,18 @@ export default {
           }, 1000);
         })
       }
+    },
+    // 确认注册
+    register () {
+      const self = this;
+      if (!self.regArgee) {
+        return self.$message.warning(self.$t('login.mustAccept'))
+      }
+      register(self.regForm).then(res => {
+        self.$message.success(self.$t('login.registerSuccess'));
+        self.formType = 'login';
+        self.regForm = {};
+      })
     }
   }
 }
