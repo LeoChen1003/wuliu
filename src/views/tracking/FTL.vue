@@ -1,6 +1,9 @@
 <template>
-  <div class>
-    <el-tabs v-model="tabActive" tab-position="left" style="height:100%" type="card">
+  <div class="manage">
+    <div class="statusHeader">
+      <div class="status-txt">{{ $t('billing.billingStatus') }}</div>
+    </div>
+    <el-tabs v-model="tabActive" tab-position="left" style="height:calc(100% - 50px);">
       <el-tab-pane :label="$t('tracking.Pending')">
         <div class="container">
           <el-table :data="[{},{},{}]" border :cell-style="cell">
@@ -102,7 +105,7 @@ export default {
     return {
       comfirmDialog: false,
       printeDialog: false
-    }
+    };
   },
   // 监听属性 类似于data概念
   computed: {},
@@ -113,10 +116,26 @@ export default {
   methods: {
     cell() {}
   }
-}
+};
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
+.manage {
+  height: 100%;
+  padding-top: 20px;
+  box-sizing: border-box;
+}
+.statusHeader {
+  display: flex;
+  .status-txt {
+    height: 40px;
+    line-height: 40px;
+    padding-left: 40px;
+    margin-bottom: 10px;
+    width: 225px;
+    font-size: 20px;
+  }
+}
 .comfirmDialog {
   .footerBtn {
     width: 100%;

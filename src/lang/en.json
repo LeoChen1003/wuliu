@@ -17,7 +17,18 @@
     "member": "Member",
     "basicData": "Basic data",
     "sender": "Sender",
-    "user": "User"
+    "user": "User",
+    "market": "Market",
+    "resources": "Resources",
+    "truck": "Truck",
+    "driver": "Driver",
+    "routeFTL": "Route（FTL）",
+    "routeLTL": "Route（LTL）",
+    "planningLTL": "Planning（LTL）",
+    "order": "Order",
+    "FTLCargoNotViaHUB": "FTL（Cargo not via HUB）",
+    "LTLCargoViaHUB": "LTL(Cargo  via HUB)",
+    "receivable": "Receivable"
   },
   "layout": {
     "logout": "Logout"
@@ -74,7 +85,16 @@
     "cargoShape": "Cargo shape",
     "myQuotaion": "My quotaion(฿)",
     "cargoList": "Cargo list",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "unloading": "Unloading",
+    "loading": "Loading",
+    "documentReturn": "Document return",
+    "printSticker": "Print sticker",
+    "liability": "Liability",
+    "fullTruckLoad": "Full truck load",
+    "sharetruckLoad": "Share truck",
+    "accountBalance": "Account balance",
+    "topUp": "Top up"
   },
   "tracking": {
     "status": "Status",
