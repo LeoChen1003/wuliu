@@ -135,6 +135,22 @@
     "truckType": "Truck type",
     "quotation": "Quotation(฿)"
   },
+  "driver": {
+    "add": "Add",
+    "driver_name": "Driver_name",
+    "phoneNo": "Phone No.",
+    "status": "Status",
+    "task": "Task",
+    "TaskNo": "Task No.",
+    "description": "Description",
+    "implementation": "Implementation",
+    "locationTracking": "Location tracking",
+    "driverLicense": "Driver's license",
+    "driver": "Driver",
+    "name": "Name",
+    "phone": "Phone",
+    "confirm": "Confirm"
+  },
   "billing": {
     "billingStatus": "Billing status",
     "unpaid": "Unpaid",

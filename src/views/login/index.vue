@@ -2,83 +2,85 @@
   <div class="manage">
     <!-- 登录 -->
     <transition name="el-fade-in">
-      <div v-if="formType == 'login'" class="loginBox">
-        <el-form
-          ref="loginForm"
-          :model="loginForm"
-          :rules="loginRules"
-          class="login-form"
-          autocomplete="on"
-          label-position="right"
-          label-width="120px"
-          hide-required-asterisk
-          size="small"
-        >
+      <div v-if="formType == 'login'"
+           class="loginBox">
+        <el-form ref="loginForm"
+                 :model="loginForm"
+                 :rules="loginRules"
+                 class="login-form"
+                 autocomplete="on"
+                 label-position="right"
+                 label-width="120px"
+                 hide-required-asterisk
+                 size="small">
           <div class="login-header">
-            <img src="../../assets/image/logo.png" alt="logo" />
-            <LangSelect :toggle-lang="true" class="langBtn" />
+            <img src="../../assets/image/logo.png"
+                 alt="logo" />
+            <LangSelect :toggle-lang="true"
+                        class="langBtn" />
           </div>
           <div class="choseTab">
-            <div :class="curTab==1?'isActive':''" @click="choseTab(1)">{{ $t('login.demand') }}</div>
-            <div :class="curTab==2?'isActive':''" @click="choseTab(2)">{{ $t('login.supply') }}</div>
-            <div :class="curTab==3?'isActive':''" @click="choseTab(3)">{{ $t('login.hub') }}</div>
-            <div :class="curTab==4?'isActive':''" @click="choseTab(4)">{{ $t('login.platform') }}</div>
+            <div :class="curTab==1?'isActive':''"
+                 @click="choseTab(1)">{{ $t('login.demand') }}</div>
+            <div :class="curTab==2?'isActive':''"
+                 @click="choseTab(2)">{{ $t('login.supply') }}</div>
+            <div :class="curTab==3?'isActive':''"
+                 @click="choseTab(3)">{{ $t('login.hub') }}</div>
+            <div :class="curTab==4?'isActive':''"
+                 @click="choseTab(4)">{{ $t('login.platform') }}</div>
           </div>
-          <el-form-item prop="username" :label="$t('login.username')">
-            <el-input
-              ref="username"
-              v-model="loginForm.username"
-              :placeholder="$t('placeholder.pleaseEnterYourLoginAccount')"
-              name="username"
-              type="text"
-              tabindex="1"
-              autocomplete="on"
-              class="inputWidth"
-            />
+          <el-form-item prop="username"
+                        :label="$t('login.username')">
+            <el-input ref="username"
+                      v-model="loginForm.username"
+                      :placeholder="$t('placeholder.pleaseEnterYourLoginAccount')"
+                      name="username"
+                      type="text"
+                      tabindex="1"
+                      autocomplete="on"
+                      class="inputWidth" />
           </el-form-item>
-          <el-form-item prop="password" :label="$t('login.password')">
-            <el-input
-              ref="password"
-              v-model="loginForm.password"
-              :placeholder="$t('placeholder.pleaseInputPassword')"
-              name="password"
-              type="password"
-              autocomplete="on"
-              class="inputWidth"
-              @keyup.enter.native="handleLogin"
-            />
+          <el-form-item prop="password"
+                        :label="$t('login.password')">
+            <el-input ref="password"
+                      v-model="loginForm.password"
+                      :placeholder="$t('placeholder.pleaseInputPassword')"
+                      name="password"
+                      type="password"
+                      autocomplete="on"
+                      class="inputWidth"
+                      @keyup.enter.native="handleLogin" />
           </el-form-item>
           <el-form-item>
-            <el-button
-              :loading="loading"
-              class="inputWidth"
-              type="primary"
-              @click.native.prevent="handleLogin"
-            >{{ $t('login.login') }}</el-button>
+            <el-button :loading="loading"
+                       class="inputWidth"
+                       type="primary"
+                       @click.native.prevent="handleLogin">{{ $t('login.login') }}</el-button>
           </el-form-item>
         </el-form>
         <div class="atPassword">
-          <el-link
-            :underline="false"
-            type="primary"
-            @click="formType = 'register'"
-          >{{ $t('login.register') }}</el-link>
-          <el-link
-            :underline="false"
-            type="primary"
-            @click="formType = 'forget'"
-          >{{ $t('login.forgotPassword') }}</el-link>
+          <el-link :underline="false"
+                   type="primary"
+                   @click="formType = 'register'">{{ $t('login.register') }}</el-link>
+          <el-link :underline="false"
+                   type="primary"
+                   @click="formType = 'forget'">{{ $t('login.forgotPassword') }}</el-link>
         </div>
       </div>
     </transition>
     <!-- 注册 -->
     <transition name="el-fade-in">
-      <div v-if="formType == 'register'" class="register">
+      <div v-if="formType == 'register'"
+           class="register">
         <el-card>
           <!-- 步骤条 -->
-          <el-steps class="steps" :active="regStep" simple>
-            <el-step :title="$t('login.selPartnerType')" icon="el-icon-user-solid"></el-step>
-            <el-step :title="$t('login.enterAccountInfo')" icon="el-icon-edit"></el-step>
+          <el-steps class="steps"
+                    :active="regStep"
+                    simple>
+            <el-step :title="$t('login.selPartnerType')"
+                     icon="el-icon-user-solid"></el-step>
+            <el-step :title="$t('login.enterAccountInfo')"
+                     icon="el-icon-edit"></el-step>
           </el-steps>
           <!-- 选择类型 -->
           <div v-if="regStep === 0">
@@ -103,7 +105,8 @@
                 </el-checkbox>
               </div>
               <div class="regCheck">
-                <el-checkbox label="HUB" disabled>
+                <el-checkbox label="HUB"
+                             disabled>
                   <div class="regItem">
                     <div class="reglabel">{{ $t('login.hub') }}</div>
                     <div class="regCon">
@@ -115,86 +118,97 @@
               </div>
             </el-checkbox-group>
             <div class="btnBox">
-              <el-button type="info" @click="back" class="backBtn">{{ $t('login.back') }}</el-button>
-              <el-button
-                type="primary"
-                :disabled="regList.length === 0"
-                @click="nextStep"
-                class="nextBtn"
-              >{{ $t('login.nextStep') }}</el-button>
+              <el-button type="info"
+                         @click="back"
+                         class="backBtn">{{ $t('login.back') }}</el-button>
+              <el-button type="primary"
+                         :disabled="regList.length === 0"
+                         @click="nextStep"
+                         class="nextBtn">{{ $t('login.nextStep') }}</el-button>
             </div>
           </div>
           <!-- 输入信息 -->
           <div v-else-if="regStep === 1">
-            <el-form
-              ref="regForm"
-              :model="regForm"
-              :rules="regRules"
-              class="reg-form"
-              label-position="left"
-              label-width="160px"
-              hide-required-asterisk
-              size="small"
-            >
-              <el-form-item prop="chosenTypes" :label="$t('login.memberType')">
-                <el-input v-model="regForm.choosedRoles" disabled class="inputWidth" />
+            <el-form ref="regForm"
+                     :model="regForm"
+                     :rules="regRules"
+                     class="reg-form"
+                     label-position="left"
+                     label-width="160px"
+                     hide-required-asterisk
+                     size="small">
+              <el-form-item prop="chosenTypes"
+                            :label="$t('login.memberType')">
+                <el-input v-model="regForm.choosedRoles"
+                          disabled
+                          class="inputWidth" />
               </el-form-item>
-              <el-form-item prop="phone" :label="$t('login.mobilePhoneNo')">
-                <el-input v-model="regForm.phone" class="inputWidth" />
+              <el-form-item prop="phone"
+                            :label="$t('login.mobilePhoneNo')">
+                <el-input v-model="regForm.phone"
+                          class="inputWidth" />
               </el-form-item>
-              <el-form-item prop="captcha" :label="$t('login.graphCaptcha')">
+              <el-form-item prop="captcha"
+                            :label="$t('login.graphCaptcha')">
                 <div style="display:flex;align-items:center;">
-                  <el-input v-model="captcha.inp" maxlength="4" />
-                  <img :src="captcha.url" @click="refreshCaptcha" alt="captcha" />
+                  <el-input v-model="captcha.inp"
+                            maxlength="4" />
+                  <img :src="captcha.url"
+                       @click="refreshCaptcha"
+                       alt="captcha" />
                 </div>
               </el-form-item>
-              <el-form-item prop="smsCode" :label="$t('login.messageCode')">
-                <div class="inputWidth" style="display:flex;align-items:center;">
+              <el-form-item prop="smsCode"
+                            :label="$t('login.messageCode')">
+                <div class="inputWidth"
+                     style="display:flex;align-items:center;">
                   <el-input v-model="regForm.smsCode">
-                    <el-button
-                      @click="sendMessageCode"
-                      slot="append"
-                    >{{ codeFreezeTime == 0 ? $t('login.sendMessage') : codeFreezeTime + 's' }}</el-button>
+                    <el-button @click="sendMessageCode"
+                               slot="append">{{ codeFreezeTime == 0 ? $t('login.sendMessage') : codeFreezeTime + 's' }}</el-button>
                   </el-input>
                 </div>
               </el-form-item>
-              <el-form-item prop="email" :label="$t('login.email')">
-                <el-input v-model="regForm.email" class="inputWidth" />
+              <el-form-item prop="email"
+                            :label="$t('login.email')">
+                <el-input v-model="regForm.email"
+                          class="inputWidth" />
               </el-form-item>
-              <el-form-item prop="name" :label="$t('login.regName')">
-                <el-input v-model="regForm.name" class="inputWidth" />
+              <el-form-item prop="name"
+                            :label="$t('login.regName')">
+                <el-input v-model="regForm.name"
+                          class="inputWidth" />
               </el-form-item>
-              <el-form-item prop="password" :label="$t('login.regPassword')">
-                <el-input v-model="regForm.password" show-password class="inputWidth" />
+              <el-form-item prop="password"
+                            :label="$t('login.regPassword')">
+                <el-input v-model="regForm.password"
+                          show-password
+                          class="inputWidth" />
               </el-form-item>
-              <el-form-item prop="confirmPassword" :label="$t('login.confirmPassword')">
-                <el-input v-model="regForm.confirmPassword" show-password class="inputWidth" />
+              <el-form-item prop="confirmPassword"
+                            :label="$t('login.confirmPassword')">
+                <el-input v-model="regForm.confirmPassword"
+                          show-password
+                          class="inputWidth" />
               </el-form-item>
               <el-form-item>
                 <el-checkbox v-model="regArgee">I accept</el-checkbox>
-                <el-link
-                  :underline="false"
-                  type="primary"
-                  class="argee"
-                >{{ $t('login.termAndConditions') }}</el-link>
+                <el-link :underline="false"
+                         type="primary"
+                         class="argee">{{ $t('login.termAndConditions') }}</el-link>
               </el-form-item>
               <el-form-item>
-                <el-button
-                  :loading="loading"
-                  class="inputWidth"
-                  type="primary"
-                  @click="register"
-                  size="small"
-                >{{ $t('login.confirm') }}</el-button>
+                <el-button :loading="loading"
+                           class="inputWidth"
+                           type="primary"
+                           @click="register"
+                           size="small">{{ $t('login.confirm') }}</el-button>
               </el-form-item>
               <el-form-item>
-                <el-button
-                  :loading="loading"
-                  class="inputWidth"
-                  type="info"
-                  @click="prevStep"
-                  size="small"
-                >{{ $t('login.back') }}</el-button>
+                <el-button :loading="loading"
+                           class="inputWidth"
+                           type="info"
+                           @click="prevStep"
+                           size="small">{{ $t('login.back') }}</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -210,7 +224,7 @@ import { getCaptcha, register, login, getMessageCode } from "@/api/user";
 
 export default {
   components: { LangSelect },
-  data() {
+  data () {
     const self = this;
     const validateName = (rule, value, callback) => {
       if (!value) {
@@ -302,14 +316,14 @@ export default {
   computed: {},
   // 监控data中的数据变化
   watch: {},
-  created() {},
-  mounted() {},
+  created () { },
+  mounted () { },
   methods: {
-    choseTab(n) {
+    choseTab (n) {
       const self = this;
       self.curTab = n;
     },
-    handleLogin() {
+    handleLogin () {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
@@ -331,12 +345,12 @@ export default {
         }
       });
     },
-    back() {
+    back () {
       const self = this;
       self.formType = "login";
     },
     // 下一步
-    nextStep() {
+    nextStep () {
       const self = this;
       self.regStep = 1;
       let type = "";
@@ -354,13 +368,13 @@ export default {
       });
     },
     // 返回上一步
-    prevStep() {
+    prevStep () {
       const self = this;
       self.regStep = 0;
       self.regForm = {};
     },
     // 刷新验证码
-    refreshCaptcha() {
+    refreshCaptcha () {
       const self = this;
       getCaptcha().then(res => {
         self.captcha = {
@@ -371,7 +385,7 @@ export default {
       });
     },
     // 发送短信
-    sendMessageCode() {
+    sendMessageCode () {
       const self = this;
       if (self.codeFreezeTime != 0) {
         return;
@@ -398,7 +412,7 @@ export default {
       }
     },
     // 确认注册
-    register() {
+    register () {
       const self = this;
       if (!self.regArgee) {
         return self.$message.warning(self.$t("login.mustAccept"));

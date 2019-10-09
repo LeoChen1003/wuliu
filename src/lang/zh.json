@@ -135,6 +135,22 @@
     "truckType": "车型",
     "quotation": "报价(฿)"
   },
+  "driver": {
+    "add": "添加",
+    "driver_name": "司机姓名",
+    "phoneNo": "手机号码",
+    "status": "状态",
+    "task": "任务列表",
+    "TaskNo": "任务编号",
+    "description": "描述",
+    "implementation": "任务执行情况",
+    "locationTracking": "位置跟踪",
+    "driverLicense": "驾照",
+    "driver": "司机",
+    "name": "姓名",
+    "phone": "手机号",
+    "confirm": "确认"
+  },
   "billing": {
     "billingStatus": "结算状态",
     "unpaid": "未结算",
