@@ -243,6 +243,7 @@
     "submitHUB": "提交会员申请（HUB）",
     "save": "保存",
     "submitDemand": "提交会员申请(发货人)",
-    "submitSupply": "提交会员申请(运输公司)"
+    "submitSupply": "提交会员申请(运输公司)",
+    "saveSuccess": "保存成功"
   }
 }
