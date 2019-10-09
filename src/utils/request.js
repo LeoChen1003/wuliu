@@ -17,7 +17,6 @@ service.defaults.transformRequest = [
     return qs.stringify(data)
   }
 ]
-
 // request interceptor
 service.interceptors.request.use(
   config => {
@@ -28,6 +27,9 @@ service.interceptors.request.use(
       // please modify it according to the actual situation
       config.headers['Authorization'] = getToken()
     }
+
+    config.headers['Locale'] = store.state.app.language
+
     return config
   },
   error => {
@@ -82,9 +84,9 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err:' + error.response.data.message || error) // for debug
+    // console.log('err:' + error.response.data.message || error) // for debug
     Message({
-      message: error.response.data.message || error.message,
+      message: error.response ? error.response.data.message : error.message,
       type: 'error',
       duration: 5 * 1000
     })
