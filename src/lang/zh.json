@@ -4,7 +4,8 @@
   },
   "placeholder": {
     "pleaseEnterYourLoginAccount": "请输入您的登录账号",
-    "pleaseInputPassword": "请输入密码"
+    "pleaseInputPassword": "请输入密码",
+    "pleaseChoose": "请选择"
   },
   "route": {
     "booking": "下单",
@@ -73,7 +74,9 @@
     "captcha_required": "请填写图片验证码",
     "smsSend": "短信发送成功",
     "mustAccept": "需要同意注册条款",
-    "registerSuccess": "注册成功"
+    "registerSuccess": "注册成功",
+    "resetPassword": "重置密码",
+    "resetSuccess": "重置成功"
   },
   "home": {
     "button": "按钮"
@@ -135,7 +138,7 @@
     "truckType": "车型",
     "quotation": "报价(฿)"
   },
-  "driver": {
+  "resources": {
     "add": "添加",
     "driver_name": "司机姓名",
     "phoneNo": "手机号码",
@@ -149,7 +152,17 @@
     "driver": "司机",
     "name": "姓名",
     "phone": "手机号",
-    "confirm": "确认"
+    "confirm": "确认",
+    "truck": "卡车",
+    "licensePlate": "车牌号",
+    "truckType": "汽车类型",
+    "detailedInformation": "详细资料",
+    "cabinType": "车厢",
+    "provinceOfRegistrationPlace": "注册地",
+    "annualProductDamageInsurancePolicy": "年度车险",
+    "expireDate": "保险到期日",
+    "IinsuranceValue": "车险金额",
+    "registrationPlace": "保险政策"
   },
   "billing": {
     "billingStatus": "结算状态",

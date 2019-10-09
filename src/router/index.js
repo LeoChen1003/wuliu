@@ -18,47 +18,56 @@ export const constantRoutes = [
     redirect: '/priceConsulting',
     name: '下单',
     meta: {
-      title: 'booking'
+      title: 'booking',
+      roles: ['DEMAND']
     },
     children: [
       {
         path: 'priceConsulting',
         component: () => import('@/views/booking/priceConsulting'),
         name: 'priceConsulting',
-        meta: { title: 'priceConsulting' }
+        meta: { title: 'priceConsulting', roles: ['DEMAND'] }
       },
       {
         path: 'placeOrder',
         component: () => import('@/views/booking/placeOrder'),
         name: 'placeOrder',
-        meta: { title: 'placeOrder' }
+        meta: { title: 'placeOrder', roles: ['DEMAND'] }
       },
       {
         path: 'releaseToMarket',
         component: () => import('@/views/booking/releaseToMarket'),
         name: 'releaseToMarket',
-        meta: { title: 'releaseToMarket' }
+        meta: { title: 'releaseToMarket', roles: ['DEMAND'] }
       }
     ]
-  },
+  }
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
   {
     path: '/tracking',
     component: Layout,
     redirect: '/tracking/FTL',
     name: '订单跟踪',
     meta: {
-      title: 'tracking'
+      title: 'tracking',
+      roles: ['DEMAND']
     },
     children: [
       {
         path: 'FTL',
         component: () => import('@/views/tracking/FTL'),
-        meta: { title: 'FTLNotHUB' }
+        meta: { title: 'FTLNotHUB', roles: ['DEMAND'] }
       },
       {
         path: 'LTL',
         component: () => import('@/views/tracking/LTL'),
-        meta: { title: 'LTLHUB' }
+        meta: { title: 'LTLHUB', roles: ['DEMAND'] }
       }
     ]
   },
@@ -68,33 +77,34 @@ export const constantRoutes = [
     redirect: '/resources/truck',
     name: '资源管理',
     meta: {
-      title: 'resources'
+      title: 'resources',
+      roles: ['SUPPLY']
     },
     children: [
       {
         path: 'truck',
         component: () => import('@/views/resources/truck'),
-        meta: { title: 'truck' }
+        meta: { title: 'truck', roles: ['SUPPLY'] }
       },
       {
         path: 'driver',
         component: () => import('@/views/resources/driver'),
-        meta: { title: 'driver' }
+        meta: { title: 'driver', roles: ['SUPPLY'] }
       },
       {
         path: 'routeFTL',
         component: () => import('@/views/resources/routeFTL'),
-        meta: { title: 'routeFTL' }
+        meta: { title: 'routeFTL', roles: ['SUPPLY'] }
       },
       {
         path: 'routeLTL',
         component: () => import('@/views/resources/routeLTL'),
-        meta: { title: 'routeFTL' }
+        meta: { title: 'routeFTL', roles: ['SUPPLY'] }
       },
       {
         path: 'planningLTL',
         component: () => import('@/views/resources/planningLTL'),
-        meta: { title: 'planningLTL' }
+        meta: { title: 'planningLTL', roles: ['SUPPLY'] }
       }
     ]
   },
@@ -138,22 +148,14 @@ export const constantRoutes = [
       }
     ]
   }
-
 ]
 
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
-
-]
-
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes
+  })
 
 const router = createRouter()
 

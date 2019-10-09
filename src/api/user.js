@@ -44,3 +44,11 @@ export function getMessageCode(data) {
     data
   })
 }
+
+export function forgot(data) {
+  return request({
+    url: '/auth/forgot/password',
+    method: 'post',
+    data
+  })
+}

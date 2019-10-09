@@ -1,14 +1,11 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
-  name: '',
-  avatar: '',
-  introduction: '',
-  roles: [],
-  userInfo: {}
+  userInfo: {},
+  curRole: []
 }
 
 const mutations = {
@@ -18,17 +15,11 @@ const mutations = {
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
   },
-  SET_NAME: (state, name) => {
-    state.name = name
-  },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
-  },
-  SET_ROLES: (state, roles) => {
-    state.roles = roles
-  },
   SET_USERINFO: (state, userInfo) => {
     state.userInfo = userInfo
+  },
+  SET_CURROLE: (state, curRole) => {
+    state.curRole = curRole
   }
 }
 
@@ -61,10 +52,6 @@ const actions = {
           if (!data) {
             reject('Verification failed, please Login again.')
           }
-
-          const { name } = data
-
-          commit('SET_NAME', name)
           commit('SET_USERINFO', data)
           resolve(data)
         })
@@ -88,8 +75,16 @@ const actions = {
   resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
-      commit('SET_ROLES', [])
       removeToken()
+      resolve()
+    })
+  },
+
+  chooseRole({ commit }, role) {
+    return new Promise(resolve => {
+      console.log(role)
+      commit('SET_CURROLE', [role])
+      localStorage.setItem('curRole', role)
       resolve()
     })
   },
