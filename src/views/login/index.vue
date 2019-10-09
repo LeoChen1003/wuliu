@@ -534,6 +534,11 @@ export default {
         self.$message.success(self.$t("login.registerSuccess"));
         self.formType = "login";
         self.regForm = {};
+        self.captcha = {
+          url: "",
+          key: "",
+          inp: ""
+        }
       });
     },
     // 忘记密码框
