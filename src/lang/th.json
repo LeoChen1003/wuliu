@@ -17,7 +17,18 @@
     "member": "สมัครเป็นสมาชิก",
     "basicData": "ข้อมูลพื้นฐาน",
     "sender": "ผู้ส่ง",
-    "user": "ผู้ใช้งาน"
+    "user": "ผู้ใช้งาน",
+    "market": "ตลาด",
+    "resources": "ทรัพยากร",
+    "truck": "รถบรรทุก",
+    "driver": "คนขับรถ",
+    "routeFTL": "เส้นทาง（FTL）",
+    "routeLTL": "เส้นทาง（LTL）",
+    "planningLTL": "การวางแผน（LTL）",
+    "order": "ใบสั่ง",
+    "FTLCargoNotViaHUB": "FTL (สินค้าไม่ผ่าน HUB )",
+    "LTLCargoViaHUB": "LTL(สินค้าผ่าน HUB )",
+    "receivable": "应收账单"
   },
   "layout": {
     "logout": "ออกจากระบบ"
@@ -86,7 +97,16 @@
     "cargoShape": "รูปร่างสินค้า",
     "myQuotaion": "ใบเสนอราคาของฉัน(฿)",
     "cargoList": "รายการขนส่งสินค้า",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "unloading": "การปลดปล่อย",
+    "loading": "กำลังโหลด",
+    "documentReturn": "ส่งคืนเอกสาร",
+    "printSticker": "พิมพ์สติกเกอร์",
+    "liability": "ประกันสินค้า",
+    "fullTruckLoad": "โหลดเต็ม",
+    "sharetruckLoad": "แบ่งปันรถบรรทุก",
+    "accountBalance": "Account balance",
+    "topUp": "เติม"
   },
   "tracking": {
     "status": "สภาพ",
