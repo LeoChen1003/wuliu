@@ -41,14 +41,6 @@ export const constantRoutes = [
       }
     ]
   },
-
-]
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
   {
     path: '/tracking',
     component: Layout,
@@ -146,6 +138,15 @@ export const asyncRoutes = [
       }
     ]
   }
+
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
+
 ]
 
 const createRouter = () => new Router({

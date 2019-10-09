@@ -2,6 +2,10 @@
   "message": {
     "switchLang": "Switch Language Success"
   },
+  "placeholder": {
+    "pleaseEnterYourLoginAccount": "Please enter your login account number.",
+    "pleaseInputPassword": "Please input a password"
+  },
   "route": {
     "booking": "Booking",
     "priceConsulting": "Price consulting",
@@ -68,7 +72,7 @@
     "rule_phone": "Phone is required",
     "rule_confirmPassword": "Confirm password is required",
     "rule_confirmPassword_same": "Passwords do not match",
-    "rule_password_length": "Password's length should be between 8-20",
+    "rule_password_length": "Password's length should be between 6-20",
     "captcha_required": "Graph captcha is required",
     "smsSend": "Message sended",
     "mustAccept": "You need to agree to the registration terms",
