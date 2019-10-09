@@ -70,7 +70,9 @@
     "rule_confirmPassword_same": "Passwords do not match",
     "rule_password_length": "Password's length should be between 8-20",
     "captcha_required": "Graph captcha is required",
-    "smsSend": "Message sended"
+    "smsSend": "Message sended",
+    "mustAccept": "You need to agree to the registration terms",
+    "registerSuccess": "register success"
   },
   "booking": {
     "searchSupply": "Search supply",
