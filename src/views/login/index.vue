@@ -139,7 +139,7 @@
                      size="small">
               <el-form-item prop="chosenTypes"
                             :label="$t('login.memberType')">
-                <el-input v-model="regForm.choosedRoles"
+                <el-input v-model="regForm.chosenTypes"
                           disabled
                           class="inputWidth" />
               </el-form-item>
@@ -358,7 +358,7 @@ export default {
         type += `${i},`;
       }
       type = type.substr(0, type.length - 1);
-      self.regForm.choosedRoles = type;
+      self.regForm.chosenTypes = type;
       getCaptcha().then(res => {
         self.captcha = {
           ...self.captcha,
