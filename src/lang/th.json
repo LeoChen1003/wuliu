@@ -1,6 +1,10 @@
 {
   "message": {
-    "switchLang": "Switch Language Success"
+    "switchLang": "เปลี่ยนภาษาเรียบร้อยแล้ว"
+  },
+  "placeholder": {
+    "pleaseEnterYourLoginAccount": "กรุณาใส่หมายเลขบัญชีผู้ใช้ของคุณ",
+    "pleaseInputPassword": "กรุณาใส่รหัสผ่าน"
   },
   "route": {
     "booking": "การจอง",
@@ -28,7 +32,7 @@
     "order": "ใบสั่ง",
     "FTLCargoNotViaHUB": "FTL (สินค้าไม่ผ่าน HUB )",
     "LTLCargoViaHUB": "LTL(สินค้าผ่าน HUB )",
-    "receivable": "应收账单"
+    "receivable": "บัญชีลูกหนี้"
   },
   "layout": {
     "logout": "ออกจากระบบ"
@@ -40,7 +44,7 @@
     "supply": "ผู้ขนส่ง",
     "hub": "ศูนย์แลกเปลี่ยนสินค้า",
     "platform": "แพลตฟอร์มการจัดการ",
-    "login": "Login",
+    "login": "ล็อกอิน",
     "register": "ลงทะเบียน",
     "forgotPassword": "ลืมรหัสผ่าน",
     "selPartnerType": "เลือกประเภทสมาชิก",
@@ -64,7 +68,7 @@
     "rule_phone": "จำเป็นต้องใช้โทรศัพท์",
     "rule_confirmPassword": "ต้องยืนยันรหัสผ่าน",
     "rule_confirmPassword_same": "รหัสผ่านไม่ตรงกัน",
-    "rule_password_length": "ความยาวของรหัสผ่านควรอยู่ระหว่าง 8-20",
+    "rule_password_length": "ความยาวของรหัสผ่านควรอยู่ระหว่าง 6-20",
     "captcha_required": "ต้องระบุกราฟกราฟ"
   },
   "home": {

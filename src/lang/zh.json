@@ -2,6 +2,10 @@
   "message": {
     "switchLang": "语言切换成功"
   },
+  "placeholder": {
+    "pleaseEnterYourLoginAccount": "请输入您的登录账号",
+    "pleaseInputPassword": "请输入密码"
+  },
   "route": {
     "booking": "下单",
     "priceConsulting": "询价",
@@ -65,7 +69,7 @@
     "rule_phone": "手机不能为空",
     "rule_confirmPassword": "确认密码不能为空",
     "rule_confirmPassword_same": "两次密码不一致",
-    "rule_password_length": "密码长度需要为8~20",
+    "rule_password_length": "密码长度需要为6~20",
     "captcha_required": "请填写图片验证码"
   },
   "home": {
