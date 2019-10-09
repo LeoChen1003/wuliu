@@ -181,8 +181,8 @@
           <el-form label-width="200px">
             <el-form-item :label="$t('member.affidavit')">
               <el-upload class="upload"
-                         action="https://jsonplaceholder.typicode.com/posts/"
-                         multiple
+                         :http-request="(file)=>{uploadFile(file,'1')}"
+                         action="no"
                          :limit="1">
                 <el-button size="small"
                            icon="el-icon-upload2"
@@ -311,7 +311,8 @@
         </div>
       </el-tab-pane>
       <!-- 相关文件(货运站) -->
-      <el-tab-pane name="5"
+      <el-tab-pane disabled
+                   name="5"
                    :label="$t('member.relevantdocument_HUB')">
         <div class="container">
           <el-form label-width="200px">
@@ -359,7 +360,7 @@ import { fillInfo, getInfo, upload } from '@/api/member'
 export default {
   data () {
     return {
-      tabActive: '2',
+      tabActive: '1',
       dc: false,
       dcList: [{ address: '', experience: '' }],
       perShipment: false,
@@ -389,7 +390,6 @@ export default {
     loadData_info () {
       const self = this;
       getInfo().then(res => {
-        console.log(res)
         self.infoForm = res.data;
         self.typeList = self.$store.getters.userInfo.roleListStr.split(',');
       })
@@ -397,11 +397,9 @@ export default {
     // 会员类型选择
     typeListChange (e) {
       const self = this;
-      console.log(e)
     },
     // 注册类型选择
     typeChange (e) {
-      console.log(e)
       const self = this;
       if (e == 'PERSONAL') {
         self.infoForm.companyName = "";
@@ -424,8 +422,11 @@ export default {
     delDc (row, index) {
       this.dcList.splice(index, 1)
     },
-    uploadFile (apply_type, credentials_type, file) {
+    uploadFile (file, e) {
       const self = this;
+      console.log(file)
+      console.log(e)
+      return
       upload({
         apply_type,
         credentials_type,
