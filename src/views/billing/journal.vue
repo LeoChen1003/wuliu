@@ -2,20 +2,20 @@
   <div class="manage billing">
     <div class="statusHeader">
       <div class="status-txt">{{ $t('billing.account') }}</div>
-      <div class="timePicker">
-        <el-date-picker
-          v-model="value1"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          size="small"
-        />
-      </div>
     </div>
     <div class="content">
-      <el-tabs v-model="tabActive" tab-position="left" style="height:100%" type="card">
+      <el-tabs v-model="tabActive" tab-position="left" style="height:calc(100% - 50px);">
         <el-tab-pane :label="$t('billing.gaurantee')">
+          <div class="timePicker">
+            <el-date-picker
+              v-model="value1"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              size="small"
+            />
+          </div>
           <div class="container">
             <div class="center">
               <el-table :data="[{},{},{}]" border>
@@ -30,6 +30,16 @@
           </div>
         </el-tab-pane>
         <el-tab-pane :label="$t('billing.freight')">
+          <div class="timePicker">
+            <el-date-picker
+              v-model="value1"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              size="small"
+            />
+          </div>
           <div class="container">
             <div class="center">
               <el-table :data="[{},{},{}]" border>
@@ -59,7 +69,7 @@ export default {
     return {
       tabActive: 0,
       value1: []
-    }
+    };
   },
   // 监听属性 类似于data概念
   computed: {},
@@ -68,7 +78,7 @@ export default {
   created() {},
   mounted() {},
   methods: {}
-}
+};
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
@@ -81,14 +91,16 @@ export default {
     .status-txt {
       height: 40px;
       line-height: 40px;
-      padding-left: 10px;
+      padding-left: 40px;
+      margin-bottom: 10px;
       width: 225px;
+      font-size: 20px;
     }
-    .timePicker {
-      height: 42px;
-      line-height: 40px;
-      padding-left: 30px;
-    }
+  }
+  .timePicker {
+    height: 42px;
+    line-height: 40px;
+    padding-left: 30px;
   }
   .content {
     height: 100%;
