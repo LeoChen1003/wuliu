@@ -80,7 +80,7 @@ export default {
 </style>
 <style>
 .el-menu {
-  display: flex;
+  /* display: flex; */
 }
 .el-submenu {
   width: 160px;

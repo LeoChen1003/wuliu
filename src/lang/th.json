@@ -60,7 +60,7 @@
     "regPassword": "รหัสผ่าน",
     "confirmPassword": "ยืนยันรหัสผ่าน",
     "termAndConditions": "ข้อกำหนดและเงื่อนไข",
-    "confirm": "Confirm",
+    "confirm": "ยืนยัน",
     "back": "วกกลับ",
     "rule_password": "ต้องการรหัสผ่าน",
     "rule_name": "ต้องระบุชื่อ",
@@ -130,6 +130,22 @@
     "KPI": "KPI",
     "truckType": "Truck type",
     "quotation": "Quotation(฿)"
+  },
+  "driver": {
+    "add": "เพิ่ม",
+    "driver_name": "คนขับรถ",
+    "phoneNo": "หมายเลขโทรศัพท์",
+    "status": "สถานะ",
+    "task": "รายการงาน",
+    "TaskNo": "หมายเลขงาน",
+    "description": "ลักษณะ",
+    "implementation": "ผลการปฏิบัติตาม",
+    "locationTracking": "การติดตามตำแหน่ง",
+    "driverLicense": "เอกสารใบอนุญาตขับรถ",
+    "driver": "คนขับรถ",
+    "name": "ป้ายทะเบียนรถ",
+    "phone": "ประเภทรถบรรทุก",
+    "confirm": "ยืนยัน"
   },
   "billing": {
     "billingStatus": "สถานะการเรียกเก็บเงิน",

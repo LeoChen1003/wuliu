@@ -11,6 +11,7 @@
         :active-text-color="variables.menuActiveText"
         :collapse-transition="false"
         mode="horizontal"
+        class="fixmenu"
       >
         <sidebar-item
           v-for="route in permission_routes"
@@ -55,3 +56,8 @@ export default {
 };
 </script>
 
+<style>
+.fixmenu {
+  display: flex;
+}
+</style>
