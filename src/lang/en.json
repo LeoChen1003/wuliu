@@ -4,7 +4,8 @@
   },
   "placeholder": {
     "pleaseEnterYourLoginAccount": "Please enter your login account number.",
-    "pleaseInputPassword": "Please input a password"
+    "pleaseInputPassword": "Please input a password",
+    "pleaseChoose": "Please choose"
   },
   "route": {
     "booking": "Booking",
@@ -135,7 +136,7 @@
     "truckType": "Truck type",
     "quotation": "Quotation(฿)"
   },
-  "driver": {
+  "resources": {
     "add": "Add",
     "driver_name": "Driver_name",
     "phoneNo": "Phone No.",
@@ -149,7 +150,17 @@
     "driver": "Driver",
     "name": "Name",
     "phone": "Phone",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "truck": "Truck",
+    "licensePlate": "License plate",
+    "truckType": "Truck type",
+    "detailedInformation": "Detailed information",
+    "cabinType": "Cabin type",
+    "provinceOfRegistrationPlace": "Province of registration place",
+    "annualProductDamageInsurancePolicy": "Annual product damage insurance policy",
+    "expireDate": "Expire Date",
+    "IinsuranceValue": "Insurance value",
+    "registrationPlace": "Registration place"
   },
   "billing": {
     "billingStatus": "Billing status",

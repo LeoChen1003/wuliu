@@ -4,7 +4,8 @@
   },
   "placeholder": {
     "pleaseEnterYourLoginAccount": "กรุณาใส่หมายเลขบัญชีผู้ใช้ของคุณ",
-    "pleaseInputPassword": "กรุณาใส่รหัสผ่าน"
+    "pleaseInputPassword": "กรุณาใส่รหัสผ่าน",
+    "pleaseChoose": "โปรดเลือก"
   },
   "route": {
     "booking": "การจอง",
@@ -131,7 +132,7 @@
     "truckType": "Truck type",
     "quotation": "Quotation(฿)"
   },
-  "driver": {
+  "resources": {
     "add": "เพิ่ม",
     "driver_name": "คนขับรถ",
     "phoneNo": "หมายเลขโทรศัพท์",
@@ -145,7 +146,17 @@
     "driver": "คนขับรถ",
     "name": "ป้ายทะเบียนรถ",
     "phone": "ประเภทรถบรรทุก",
-    "confirm": "ยืนยัน"
+    "confirm": "ยืนยัน",
+    "truck": "รถบรรทุก",
+    "licensePlate": "ป้ายทะเบียนรถ",
+    "truckType": "ประเภทรถบรรทุก",
+    "detailedInformation": "ข้อมูลรายละเอียด",
+    "cabinType": "ประเภทห้องโดยสาร",
+    "provinceOfRegistrationPlace": "จังหวัดทะเบียนรถ",
+    "annualProductDamageInsurancePolicy": "กรมธรรม์ประกันภัยความเสียหายต่อสินค้ารายปี",
+    "expireDate": "วันหมดอายุประกันภัย",
+    "IinsuranceValue": "มูลค่ากรมธรรม์",
+    "registrationPlace": "กรมธรรม์ประกันภัยความเสียหายต่อสินค้ารายปี"
   },
   "billing": {
     "billingStatus": "สถานะการเรียกเก็บเงิน",

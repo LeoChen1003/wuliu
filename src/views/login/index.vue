@@ -20,14 +20,14 @@
                         class="langBtn" />
           </div>
           <div class="choseTab">
-            <div :class="curTab==1?'isActive':''"
-                 @click="choseTab(1)">{{ $t('login.demand') }}</div>
-            <div :class="curTab==2?'isActive':''"
-                 @click="choseTab(2)">{{ $t('login.supply') }}</div>
-            <div :class="curTab==3?'isActive':''"
-                 @click="choseTab(3)">{{ $t('login.hub') }}</div>
-            <div :class="curTab==4?'isActive':''"
-                 @click="choseTab(4)">{{ $t('login.platform') }}</div>
+            <div :class="curTab=='DEMAND'?'isActive':''"
+                 @click="choseTab('DEMAND')">{{ $t('login.demand') }}</div>
+            <div :class="curTab=='SUPPLY'?'isActive':''"
+                 @click="choseTab('SUPPLY')">{{ $t('login.supply') }}</div>
+            <div :class="curTab=='HUB'?'isActive':''"
+                 @click="choseTab('HUB')">{{ $t('login.hub') }}</div>
+            <div :class="curTab=='PLATFORM'?'isActive':''"
+                 @click="choseTab('PLATFORM')">{{ $t('login.platform') }}</div>
           </div>
           <el-form-item prop="username"
                         :label="$t('login.username')">
@@ -299,7 +299,7 @@ export default {
         }
       },
       loading: false,
-      curTab: 1,
+      curTab: "DEMAND",
       formType: "login",
       regList: [],
       regArgee: false,
@@ -317,11 +317,14 @@ export default {
   // 监控data中的数据变化
   watch: {},
   created () { },
-  mounted () { },
+  mounted () {
+    this.$store.dispatch('user/chooseRole', this.curTab)
+  },
   methods: {
     choseTab (n) {
       const self = this;
       self.curTab = n;
+      this.$store.dispatch('user/chooseRole', n)
     },
     handleLogin () {
       this.$refs.loginForm.validate(valid => {
@@ -330,6 +333,7 @@ export default {
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
+              this.$store.dispatch('user/getInfo')
               this.$router.push({
                 path: this.redirect || "/",
                 query: this.otherQuery
