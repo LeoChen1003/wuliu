@@ -7,18 +7,18 @@
       @toggleClick="toggleSideBar"
     />-->
     <div class="right">
-      <img src="../../assets/image/logo.png" alt="logo" style="margin-right:20px;" />
+      <img src="../../assets/image/logo.png"
+           alt="logo"
+           style="margin-right:20px;" />
       <sidebar class />
     </div>
     <div class="left">
       <div style="margin-right:40px;">
-        <span>Welcome,Demand_A</span>
+        <span>Welcome,{{name}}</span>
       </div>
-      <el-button
-        @click="logout"
-        type="text"
-        style="color:#333;margin-right:15px;"
-      >{{$t('layout.logout')}}</el-button>
+      <el-button @click="logout"
+                 type="text"
+                 style="color:#333;margin-right:15px;">{{$t('layout.logout')}}</el-button>
       <LangSelect :toggleLang="true"></LangSelect>
     </div>
   </div>
@@ -45,13 +45,13 @@ export default {
     Sidebar
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device"])
+    ...mapGetters(["sidebar", "avatar", "device", "name"])
   },
   methods: {
-    toggleSideBar() {
+    toggleSideBar () {
       this.$store.dispatch("app/toggleSideBar");
     },
-    async logout() {
+    async logout () {
       await this.$store.dispatch("user/logout");
       this.$router.push(`/login?redirect=${this.$route.fullPath}`);
     }

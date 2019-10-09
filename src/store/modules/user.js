@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -7,7 +7,8 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
-  roles: []
+  roles: [],
+  curRole: []
 }
 
 const mutations = {
@@ -25,6 +26,9 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_CURROLE: (state, curRole) => {
+    state.curRole = curRole
   }
 }
 
@@ -33,35 +37,37 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ name: username.trim(), password: password }).then(response => {
-        const { data } = response
-        console.log(data)
-        commit('SET_TOKEN', data)
-        setToken(data)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      login({ name: username.trim(), password: password })
+        .then(response => {
+          const { data } = response
+          console.log(data)
+          commit('SET_TOKEN', data)
+          setToken(data)
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   },
 
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo().then(response => {
-        const { data } = response
-        console.log(data)
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
-
-        const { name } = data
-
-        commit('SET_NAME', name)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
+      getInfo()
+        .then(response => {
+          const { data } = response
+          console.log(data)
+          if (!data) {
+            reject('Verification failed, please Login again.')
+          }
+          const { name } = data
+          commit('SET_NAME', name)
+          resolve(data)
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   },
 
@@ -79,8 +85,16 @@ const actions = {
   resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
-      commit('SET_ROLES', [])
       removeToken()
+      resolve()
+    })
+  },
+
+  chooseRole({ commit }, role) {
+    return new Promise(resolve => {
+      console.log(role)
+      commit('SET_CURROLE', [role])
+      localStorage.setItem('curRole', role)
       resolve()
     })
   },
@@ -98,7 +112,9 @@ const actions = {
       resetRouter()
 
       // generate accessible routes map based on roles
-      const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
+      const accessRoutes = await dispatch('permission/generateRoutes', roles, {
+        root: true
+      })
 
       // dynamically add accessible routes
       router.addRoutes(accessRoutes)
