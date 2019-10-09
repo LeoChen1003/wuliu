@@ -375,23 +375,25 @@ export default {
       if (self.codeFreezeTime != 0) {
         return;
       }
-      if (self.regForm.phone == "") {
-        return self.message.warning(self.$t("login.rule_phone"));
+      if (self.regForm.phone == "" || !self.regForm.phone) {
+        return self.$message.warning(self.$t("login.rule_phone"));
       } else if (self.captcha.inp == "") {
         return self.$message.warning(self.$t("login.captcha_required"));
       } else {
-        self.codeFreezeTime = 60;
-        let codeTimeInterval = setInterval(() => {
-          self.codeFreezeTime--;
-          if (self.codeFreezeTime <= 0) {
-            clearInterval(codeTimeInterval);
-          }
-        }, 1000);
         getMessageCode({
           key: self.captcha.key,
           verifyCode: self.captcha.inp,
           phone: self.regForm.phone
-        }).then(res => {});
+        }).then(res => {
+          self.$message.success(self.$t("login.smsSend"));
+          self.codeFreezeTime = 60;
+          let codeTimeInterval = setInterval(() => {
+            self.codeFreezeTime--;
+            if (self.codeFreezeTime <= 0) {
+              clearInterval(codeTimeInterval);
+            }
+          }, 1000);
+        });
       }
     }
   }

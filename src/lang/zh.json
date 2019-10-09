@@ -70,7 +70,8 @@
     "rule_confirmPassword": "确认密码不能为空",
     "rule_confirmPassword_same": "两次密码不一致",
     "rule_password_length": "密码长度需要为6~20",
-    "captcha_required": "请填写图片验证码"
+    "captcha_required": "请填写图片验证码",
+    "smsSend": "短信发送成功"
   },
   "home": {
     "button": "按钮"

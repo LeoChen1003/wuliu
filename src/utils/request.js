@@ -1,4 +1,5 @@
 import axios from 'axios'
+import qs from 'qs'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken, getLang } from '@/utils/auth'
@@ -10,16 +11,22 @@ const service = axios.create({
   timeout: 10000 // request timeout
 })
 
+service.defaults.transformRequest = [
+  function (data) {
+    // 数据序列化
+    return qs.stringify(data)
+  }
+]
+
 // request interceptor
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+      config.headers['Authorization'] = getToken()
     }
     return config
   },
@@ -75,9 +82,9 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
+    console.log('err:' + error.response.data.message || error) // for debug
     Message({
-      message: error.message,
+      message: error.response.data.message || error.message,
       type: 'error',
       duration: 5 * 1000
     })
