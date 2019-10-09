@@ -77,7 +77,9 @@
     "captcha_required": "Graph captcha is required",
     "smsSend": "Message sended",
     "mustAccept": "You need to agree to the registration terms",
-    "registerSuccess": "register success"
+    "registerSuccess": "register success",
+    "resetPassword": "Reset password",
+    "resetSuccess": "Reset success"
   },
   "booking": {
     "searchSupply": "Search supply",

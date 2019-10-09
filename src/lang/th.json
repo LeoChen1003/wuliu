@@ -70,7 +70,9 @@
     "rule_confirmPassword": "ต้องยืนยันรหัสผ่าน",
     "rule_confirmPassword_same": "รหัสผ่านไม่ตรงกัน",
     "rule_password_length": "ความยาวของรหัสผ่านควรอยู่ระหว่าง 6-20",
-    "captcha_required": "ต้องระบุกราฟกราฟ"
+    "captcha_required": "ต้องระบุกราฟกราฟ",
+    "resetPassword": "ตั้งค่ารหัสผ่านใหม่",
+    "resetSuccess": "ตั้งค่าความสำเร็จ"
   },
   "home": {
     "button": "th"

@@ -74,7 +74,9 @@
     "captcha_required": "请填写图片验证码",
     "smsSend": "短信发送成功",
     "mustAccept": "需要同意注册条款",
-    "registerSuccess": "注册成功"
+    "registerSuccess": "注册成功",
+    "resetPassword": "重置密码",
+    "resetSuccess": "重置成功"
   },
   "home": {
     "button": "按钮"

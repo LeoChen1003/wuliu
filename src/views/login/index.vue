@@ -64,7 +64,7 @@
                    @click="formType = 'register'">{{ $t('login.register') }}</el-link>
           <el-link :underline="false"
                    type="primary"
-                   @click="formType = 'forget'">{{ $t('login.forgotPassword') }}</el-link>
+                   @click="toForgot">{{ $t('login.forgotPassword') }}</el-link>
         </div>
       </div>
     </transition>
@@ -215,12 +215,95 @@
         </el-card>
       </div>
     </transition>
+    <!-- 忘记密码 -->
+    <transition name="el-fade-in">
+      <div v-if="formType == 'forget'"
+           class="forgot">
+        <el-card>
+          <!-- 步骤条 -->
+          <el-steps class="steps"
+                    :active="0"
+                    simple>
+            <el-step :title="$t('login.resetPassword')"
+                     icon="el-icon-lock"></el-step>
+          </el-steps>
+          <!-- 输入信息 -->
+          <div>
+            <el-form ref="forgotForm"
+                     :model="forgotForm"
+                     :rules="forgotRules"
+                     class="reg-form"
+                     label-position="left"
+                     label-width="160px"
+                     hide-required-asterisk
+                     size="small">
+              <el-form-item prop="name"
+                            :label="$t('login.username')">
+                <el-input v-model="forgotForm.name"
+                          class="inputWidth" />
+              </el-form-item>
+              <el-form-item prop="phone"
+                            :label="$t('login.mobilePhoneNo')">
+                <el-input v-model="forgotForm.phone"
+                          class="inputWidth" />
+              </el-form-item>
+              <el-form-item prop="captcha"
+                            :label="$t('login.graphCaptcha')">
+                <div style="display:flex;align-items:center;">
+                  <el-input v-model="captcha.inp"
+                            maxlength="4" />
+                  <img :src="captcha.url"
+                       @click="refreshCaptcha"
+                       alt="captcha" />
+                </div>
+              </el-form-item>
+              <el-form-item prop="code"
+                            :label="$t('login.messageCode')">
+                <div class="inputWidth"
+                     style="display:flex;align-items:center;">
+                  <el-input v-model="forgotForm.code">
+                    <el-button @click="sendMessageCode"
+                               slot="append">{{ codeFreezeTime == 0 ? $t('login.sendMessage') : codeFreezeTime + 's' }}</el-button>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item prop="password"
+                            :label="$t('login.resetPassword')">
+                <el-input v-model="forgotForm.password"
+                          show-password
+                          class="inputWidth" />
+              </el-form-item>
+              <el-form-item prop="confirmPassword"
+                            :label="$t('login.confirmPassword')">
+                <el-input v-model="forgotForm.confirmPassword"
+                          show-password
+                          class="inputWidth" />
+              </el-form-item>
+              <el-form-item>
+                <el-button :loading="loading"
+                           class="inputWidth"
+                           type="primary"
+                           @click="forgotPassword"
+                           size="small">{{ $t('login.confirm') }}</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button :loading="loading"
+                           class="inputWidth"
+                           type="info"
+                           @click="forgotBack"
+                           size="small">{{ $t('login.back') }}</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-card>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import LangSelect from "../../components/LangSelect/index";
-import { getCaptcha, register, login, getMessageCode } from "@/api/user";
+import { getCaptcha, register, login, getMessageCode, forgot } from "@/api/user";
 
 export default {
   components: { LangSelect },
@@ -291,6 +374,27 @@ export default {
           validator: validatePassword
         },
         email: { required: true, trigger: "blur", validator: validateEmail },
+        phone: { required: true, trigger: "blur", validator: validatePhone },
+        confirmPassword: {
+          required: true,
+          trigger: "blur",
+          validator: validateConfirmPassword
+        }
+      },
+      forgotForm: {
+        code: '',
+        confirmPassword: '',
+        name: '',
+        password: '',
+        phone: ''
+      },
+      forgotRules: {
+        name: { required: true, trigger: "blur", validator: validateName },
+        password: {
+          required: true,
+          trigger: "blur",
+          validator: validatePassword
+        },
         phone: { required: true, trigger: "blur", validator: validatePhone },
         confirmPassword: {
           required: true,
@@ -394,15 +498,20 @@ export default {
       if (self.codeFreezeTime != 0) {
         return;
       }
-      if (self.regForm.phone == "" || !self.regForm.phone) {
+      if ((self.regForm.phone == "" || !self.regForm.phone) && self.formType == 'register') {
+        return self.$message.warning(self.$t("login.rule_phone"));
+      } else if ((self.forgotForm.phone == "" || !self.forgotForm.phone) && self.formType == 'forget') {
         return self.$message.warning(self.$t("login.rule_phone"));
       } else if (self.captcha.inp == "") {
         return self.$message.warning(self.$t("login.captcha_required"));
       } else {
+        console.log(self.formType)
+        let phone = self.formType == 'register' ? self.regForm.phone : self.formType == 'forget' ? self.forgotForm.phone : ''
+        console.log(phone)
         getMessageCode({
           key: self.captcha.key,
           verifyCode: self.captcha.inp,
-          phone: self.regForm.phone
+          phone: phone
         }).then(res => {
           self.$message.success(self.$t("login.smsSend"));
           self.codeFreezeTime = 60;
@@ -426,6 +535,44 @@ export default {
         self.formType = "login";
         self.regForm = {};
       });
+    },
+    // 忘记密码框
+    toForgot () {
+      let self = this
+      self.formType = 'forget'
+      self.forgotForm = {
+        code: '',
+        confirmPassword: '',
+        name: '',
+        password: '',
+        phone: ''
+      }
+      getCaptcha().then(res => {
+        self.captcha = {
+          ...self.captcha,
+          url: res.data.image,
+          key: res.data.key
+        };
+      });
+    },
+    // 忘记密码返回
+    forgotBack () {
+      let self = this
+      self.formType = 'login'
+    },
+    // 忘记密码
+    forgotPassword () {
+      let self = this
+      console.log(self.forgotForm)
+      this.$refs.forgotForm.validate(valid => {
+        if (valid) {
+          forgot(self.forgotForm).then(res => {
+            self.$message.success(self.$t("login.resetSuccess"));
+            self.formType = "login";
+            self.forgotForm = {};
+          })
+        }
+      })
     }
   }
 };
@@ -437,7 +584,7 @@ export default {
     position: absolute;
     top: 50%;
     right: 50%;
-    transform: translate(40%, -55%);
+    transform: translate(40%, -60%);
     .login-form {
       display: flex;
       flex-direction: column;
@@ -490,7 +637,8 @@ export default {
       width: 300px;
     }
   }
-  .register {
+  .register,
+  .forgot {
     position: absolute;
     top: 10%;
     margin-bottom: 5%;
@@ -519,6 +667,11 @@ export default {
     }
     .inputWidth {
       width: 300px;
+    }
+  }
+  .forgot {
+    .el-steps {
+      justify-content: center;
     }
   }
 }
