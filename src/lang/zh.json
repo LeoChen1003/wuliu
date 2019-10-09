@@ -45,7 +45,17 @@
     "regPassword": "密码",
     "confirmPassword": "确认密码",
     "termAndConditions": "注册条款",
-    "confirm": "确认"
+    "confirm": "确认",
+    "back": "返回",
+    "rule_password": "密码不能为空",
+    "rule_name": "账号不能为空",
+    "rule_email": "邮箱不能为空",
+    "rule_email_format": "请输入正确的邮箱",
+    "rule_phone": "手机不能为空",
+    "rule_confirmPassword": "确认密码不能为空",
+    "rule_confirmPassword_same": "两次密码不一致",
+    "rule_password_length": "密码长度需要为8~20",
+    "captcha_required": "请填写图片验证码"
   },
   "home": {
     "button": "按钮"

@@ -45,7 +45,16 @@
     "regPassword": "รหัสผ่าน",
     "confirmPassword": "ยืนยันรหัสผ่าน",
     "termAndConditions": "ข้อกำหนดและเงื่อนไข",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "back": "วกกลับ",
+    "rule_password": "ต้องการรหัสผ่าน",
+    "rule_name": "ต้องระบุชื่อ",
+    "rule_email_format": "กรุณาใส่อีเมล์ที่ถูกต้อง",
+    "rule_phone": "จำเป็นต้องใช้โทรศัพท์",
+    "rule_confirmPassword": "ต้องยืนยันรหัสผ่าน",
+    "rule_confirmPassword_same": "รหัสผ่านไม่ตรงกัน",
+    "rule_password_length": "ความยาวของรหัสผ่านควรอยู่ระหว่าง 8-20",
+    "captcha_required": "ต้องระบุกราฟกราฟ"
   },
   "home": {
     "button": "th"
