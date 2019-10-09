@@ -1,184 +1,269 @@
 <template>
   <div class="manage">
-    <div v-if="formType == 'login'" class="loginBox">
-      <el-form
-        ref="loginForm"
-        :model="loginForm"
-        :rules="loginRules"
-        class="login-form"
-        autocomplete="on"
-        label-position="right"
-        label-width="120px"
-        hide-required-asterisk
-        size="small"
-      >
-        <div class="login-header">
-          <img src="../../assets/image/logo.png" alt="logo">
-          <LangSelect :toggle-lang="true" class="langBtn" />
-        </div>
-        <div class="choseTab">
-          <div :class="curTab==1?'isActive':''" @click="choseTab(1)">{{ $t('login.demand') }}</div>
-          <div :class="curTab==2?'isActive':''" @click="choseTab(2)">{{ $t('login.supply') }}</div>
-          <div :class="curTab==3?'isActive':''" @click="choseTab(3)">{{ $t('login.hub') }}</div>
-          <div :class="curTab==4?'isActive':''" @click="choseTab(4)">{{ $t('login.platform') }}</div>
-        </div>
-        <el-form-item prop="username" :label="$t('login.username')">
-          <el-input
-            ref="username"
-            v-model="loginForm.username"
-            placeholder="请输入您的登录账号"
-            name="username"
-            type="text"
-            tabindex="1"
-            autocomplete="on"
-            size="small"
-            class="inputWidth"
-          />
-        </el-form-item>
-        <el-form-item prop="password" :label="$t('login.password')">
-          <el-input
-            ref="password"
-            v-model="loginForm.password"
-            placeholder="密码"
-            name="password"
-            autocomplete="on"
-            size="small"
-            class="inputWidth"
-            @keyup.enter.native="handleLogin"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            :loading="loading"
-            class="inputWidth"
-            type="button"
-            size="small"
-            @click.native.prevent="handleLogin"
-          >{{ $t('login.login') }}</el-button>
-        </el-form-item>
-      </el-form>
-      <div class="atPassword">
-        <div @click="formType = 'register'">{{ $t('login.register') }}</div>
-        <div @click="formType = 'forget'">{{ $t('login.forgotPassword') }}</div>
-      </div>
-    </div>
-    <div v-if="formType == 'register'" class="register">
-      <el-tabs type="border-card" style="width:600px;">
-        <el-tab-pane>
-          <span slot="label">① {{ $t('login.selPartnerType') }}</span>
-          <el-checkbox-group v-model="regList">
-            <div class="regCheck">
-              <el-checkbox :label="0">
-                <div class="regItem">
-                  <div class="reglabel">{{ $t('login.demand') }}</div>
-                  <div class="regCon">ผู้ใช้บริการว่าจ้างขนส่งสินค้า ผ่านการให้บริการของ แพลตฟอร์ม</div>
-                </div>
-              </el-checkbox>
-            </div>
-            <div class="regCheck">
-              <el-checkbox :label="1">
-                <div class="regItem">
-                  <div class="reglabel">{{ $t('login.supply') }}</div>
-                  <div class="regCon">
-                    ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่ง
-                    <br>ผู้รับปลายทาง โดยผ่านการบริการของแพลตฟอร์ม
-                  </div>
-                </div>
-              </el-checkbox>
-            </div>
-            <div class="regCheck">
-              <el-checkbox :label="2">
-                <div class="regItem">
-                  <div class="reglabel">{{ $t('login.hub') }}</div>
-                  <div class="regCon">
-                    ศูนย์รวบรวมและแลกเปลี่ยนสินค้า ระหว่างผู้ส่งสินค้าและผู้ขนส่ง
-                    <br>โดยผ่านการบริการของแพลตฟอร์ม
-                  </div>
-                </div>
-              </el-checkbox>
-            </div>
-          </el-checkbox-group>
-          <div class="nextStep">
-            <el-button type="primary" class="nextBtn">{{ $t('login.nextStep') }}</el-button>
+    <!-- 登录 -->
+    <transition name='el-fade-in'>
+      <div v-if="formType == 'login'"
+           class="loginBox">
+        <el-form ref="loginForm"
+                 :model="loginForm"
+                 :rules="loginRules"
+                 class="login-form"
+                 autocomplete="on"
+                 label-position="right"
+                 label-width="120px"
+                 hide-required-asterisk
+                 size="small">
+          <div class="login-header">
+            <img src="../../assets/image/logo.png"
+                 alt="logo">
+            <LangSelect :toggle-lang="true"
+                        class="langBtn" />
           </div>
-        </el-tab-pane>
-        <el-tab-pane>
-          <span slot="label">② {{ $t('login.enterAccountInfo') }}</span>
-          <el-form
-            ref="regForm"
-            :model="regForm"
-            :rules="regRules"
-            class="reg-form"
-            label-position="left"
-            label-width="160px"
-            hide-required-asterisk
-            size="small"
-          >
-            <el-form-item prop="mT" :label="$t('login.memberType')">
-              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.mobilePhoneNo')">
-              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.messageCode')">
-              <div class="inputWidth" style="display:flex;align-items:center;">
-                <el-input v-model="regForm.mT" placeholder style="width:58%;margin-right:5px;" />
-                <el-button style="width:40%;">{{ $t('login.sendMessage') }}</el-button>
+          <div class="choseTab">
+            <div :class="curTab==1?'isActive':''"
+                 @click="choseTab(1)">{{ $t('login.demand') }}</div>
+            <div :class="curTab==2?'isActive':''"
+                 @click="choseTab(2)">{{ $t('login.supply') }}</div>
+            <div :class="curTab==3?'isActive':''"
+                 @click="choseTab(3)">{{ $t('login.hub') }}</div>
+            <div :class="curTab==4?'isActive':''"
+                 @click="choseTab(4)">{{ $t('login.platform') }}</div>
+          </div>
+          <el-form-item prop="username"
+                        :label="$t('login.username')">
+            <el-input ref="username"
+                      v-model="loginForm.username"
+                      placeholder="请输入您的登录账号"
+                      name="username"
+                      type="text"
+                      tabindex="1"
+                      autocomplete="on"
+                      size="small"
+                      class="inputWidth" />
+          </el-form-item>
+          <el-form-item prop="password"
+                        :label="$t('login.password')">
+            <el-input ref="password"
+                      v-model="loginForm.password"
+                      placeholder="密码"
+                      name="password"
+                      autocomplete="on"
+                      size="small"
+                      class="inputWidth"
+                      @keyup.enter.native="handleLogin" />
+          </el-form-item>
+          <el-form-item>
+            <el-button :loading="loading"
+                       class="inputWidth"
+                       type="button"
+                       size="small"
+                       @click.native.prevent="handleLogin">{{ $t('login.login') }}</el-button>
+          </el-form-item>
+        </el-form>
+        <div class="atPassword">
+          <el-link :underline="false"
+                   type="primary"
+                   @click="formType = 'register'">{{ $t('login.register') }}</el-link>
+          <el-link :underline="false"
+                   type="primary"
+                   @click="formType = 'forget'">{{ $t('login.forgotPassword') }}</el-link>
+        </div>
+      </div>
+    </transition>
+    <!-- 注册 -->
+    <transition name="el-fade-in">
+      <div v-if="formType == 'register'"
+           class="register">
+        <el-card>
+          <!-- 步骤条 -->
+          <el-steps class="steps"
+                    :active="regStep"
+                    simple>
+            <el-step :title="$t('login.selPartnerType')"
+                     icon="el-icon-user-solid"></el-step>
+            <el-step :title="$t('login.enterAccountInfo')"
+                     icon="el-icon-edit"></el-step>
+          </el-steps>
+          <!-- 选择类型 -->
+          <div v-if="regStep === 0">
+            <el-checkbox-group v-model="regList">
+              <div class="regCheck">
+                <el-checkbox label="DEMAND">
+                  <div class="regItem">
+                    <div class="reglabel">{{ $t('login.demand') }}</div>
+                    <div class="regCon">ผู้ใช้บริการว่าจ้างขนส่งสินค้า ผ่านการให้บริการของ แพลตฟอร์ม</div>
+                  </div>
+                </el-checkbox>
               </div>
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.graphCaptcha')">
-              <div class="inputWidth" style="display:flex;align-items:center;">
-                <el-input v-model="regForm.mT" placeholder style="width:58%;margin-right:5px;" />
-                <el-button style="width:40%;">{{ $t('login.sendMessage') }}</el-button>
+              <div class="regCheck">
+                <el-checkbox label="SUPPLY">
+                  <div class="regItem">
+                    <div class="reglabel">{{ $t('login.supply') }}</div>
+                    <div class="regCon">
+                      ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่ง
+                      <br>ผู้รับปลายทาง โดยผ่านการบริการของแพลตฟอร์ม
+                    </div>
+                  </div>
+                </el-checkbox>
               </div>
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.email')">
-              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.regName')">
-              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.regPassword')">
-              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
-            </el-form-item>
-            <el-form-item prop="mT" :label="$t('login.confirmPassword')">
-              <el-input v-model="regForm.mT" placeholder class="inputWidth" />
-            </el-form-item>
-            <el-form-item>
-              <el-checkbox v-model="regArgee">I accept</el-checkbox>
-              <span class="argee">{{ $t('login.termAndConditions') }}</span>
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                :loading="loading"
-                class="inputWidth"
-                type="primary"
-                size="small"
-              >{{ $t('login.confirm') }}</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
+              <div class="regCheck">
+                <el-checkbox label="HUB"
+                             disabled>
+                  <div class="regItem">
+                    <div class="reglabel">{{ $t('login.hub') }}</div>
+                    <div class="regCon">
+                      ศูนย์รวบรวมและแลกเปลี่ยนสินค้า ระหว่างผู้ส่งสินค้าและผู้ขนส่ง
+                      <br>โดยผ่านการบริการของแพลตฟอร์ม
+                    </div>
+                  </div>
+                </el-checkbox>
+              </div>
+            </el-checkbox-group>
+            <div class="btnBox">
+              <el-button type="info"
+                         @click="back"
+                         class="backBtn">{{ $t('login.back') }}</el-button>
+              <el-button type="primary"
+                         :disabled="regList.length === 0"
+                         @click="nextStep"
+                         class="nextBtn">{{ $t('login.nextStep') }}</el-button>
+            </div>
+          </div>
+          <!-- 输入信息 -->
+          <div v-else-if="regStep === 1">
+            <el-form ref="regForm"
+                     :model="regForm"
+                     :rules="regRules"
+                     class="reg-form"
+                     label-position="left"
+                     label-width="160px"
+                     hide-required-asterisk
+                     size="small">
+              <el-form-item prop="chosenTypes"
+                            :label="$t('login.memberType')">
+                <el-input v-model="regForm.chosenTypes"
+                          disabled
+                          class="inputWidth" />
+              </el-form-item>
+              <el-form-item prop="phone"
+                            :label="$t('login.mobilePhoneNo')">
+                <el-input v-model="regForm.phone"
+                          class="inputWidth" />
+              </el-form-item>
+              <el-form-item prop="captcha"
+                            :label="$t('login.graphCaptcha')">
+                <div style="display:flex;align-items:center;">
+                  <el-input v-model="captcha.inp"
+                            maxlength="4" />
+                  <img :src="captcha.url"
+                       @click="refreshCaptcha"
+                       alt="captcha">
+                </div>
+              </el-form-item>
+              <el-form-item prop="mT"
+                            :label="$t('login.messageCode')">
+                <div class="inputWidth"
+                     style="display:flex;align-items:center;">
+                  <el-input v-model="regForm.mT">
+                    <el-button @click="sendMessageCode"
+                               slot="append">{{ codeFreezeTime == 0 ? $t('login.sendMessage') : codeFreezeTime + 's' }}</el-button>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item prop="email"
+                            :label="$t('login.email')">
+                <el-input v-model="regForm.email"
+                          class="inputWidth" />
+              </el-form-item>
+              <el-form-item prop="name"
+                            :label="$t('login.regName')">
+                <el-input v-model="regForm.name"
+                          class="inputWidth" />
+              </el-form-item>
+              <el-form-item prop="password"
+                            :label="$t('login.regPassword')">
+                <el-input v-model="regForm.password"
+                          show-password
+                          class="inputWidth" />
+              </el-form-item>
+              <el-form-item prop="confirmPassword"
+                            :label="$t('login.confirmPassword')">
+                <el-input v-model="regForm.confirmPassword"
+                          show-password
+                          class="inputWidth" />
+              </el-form-item>
+              <el-form-item>
+                <el-checkbox v-model="regArgee">I accept</el-checkbox>
+                <el-link :underline="false"
+                         type="primary"
+                         class="argee">{{ $t('login.termAndConditions') }}</el-link>
+              </el-form-item>
+              <el-form-item>
+                <el-button :loading="loading"
+                           class="inputWidth"
+                           type="primary"
+                           size="small">{{ $t('login.confirm') }}</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button :loading="loading"
+                           class="inputWidth"
+                           type="info"
+                           @click="prevStep"
+                           size="small">{{ $t('login.back') }}</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-card>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import LangSelect from '../../components/LangSelect/index'
+import { getCaptcha, register, login, getMessageCode } from '@/api/user'
 
 export default {
   components: { LangSelect },
-  data() {
-    const validateUsername = (rule, value, callback) => {
+  data () {
+    const self = this;
+    const validateName = (rule, value, callback) => {
       if (!value) {
-        callback(new Error('请输入账号'))
+        callback(new Error(self.$t('login.rule_name')))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (!value) {
-        callback(new Error('请输入密码'))
+        callback(new Error(self.$t('login.rule_password')))
+      } else if (value.length < 8 || value.length > 20) {
+        callback(new Error(self.$t('login.rule_password_length')))
+      } else {
+        callback()
+      }
+    }
+    const validatePhone = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error(self.$t('login.rule_phone')))
+      } else {
+        callback()
+      }
+    }
+    const validateEmail = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error(self.$t('login.rule_email')))
+      } else if (!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value)) {
+        callback(new Error(self.$t('login.rule_email_format')))
+      } else {
+        callback()
+      }
+    }
+    const validateConfirmPassword = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error(self.$t('login.rule_confirmPassword')))
+      } else if (self.regForm.password !== self.regForm.confirmPassword) {
+        callback(new Error(self.$t('login.rule_confirmPassword_same')))
       } else {
         callback()
       }
@@ -189,8 +274,8 @@ export default {
         password: '111111'
       },
       loginRules: {
-        username: [
-          { required: true, trigger: 'blur', validator: validateUsername }
+        name: [
+          { required: true, trigger: 'blur', validator: validateName }
         ],
         password: [
           { required: true, trigger: 'blur', validator: validatePassword }
@@ -198,32 +283,40 @@ export default {
       },
       regForm: {},
       regRules: {
-        username: [
-          { required: true, trigger: 'blur', validator: validateUsername }
-        ],
-        password: [
-          { required: true, trigger: 'blur', validator: validatePassword }
-        ]
+        name: { required: true, trigger: 'blur', validator: validateName },
+        password: { required: true, trigger: 'blur', validator: validatePassword },
+        email: { required: true, trigger: 'blur', validator: validateEmail },
+        phone: { required: true, trigger: 'blur', validator: validatePhone },
+        confirmPassword: { required: true, trigger: 'blur', validator: validateConfirmPassword }
       },
       loading: false,
       curTab: 1,
       formType: 'login',
       regList: [],
-      regArgee: false
+      regArgee: false,
+      regStep: 0,
+      captcha: {
+        url: '',
+        key: '',
+        inp: ''
+      },
+      codeFreezeTime: 0,
     }
   },
   // 监听属性 类似于data概念
   computed: {},
   // 监控data中的数据变化
   watch: {},
-  created() {},
-  mounted() {},
+  created () { },
+  mounted () {
+
+  },
   methods: {
-    choseTab(n) {
+    choseTab (n) {
       const self = this
       self.curTab = n
     },
-    handleLogin() {
+    handleLogin () {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -244,6 +337,71 @@ export default {
           return false
         }
       })
+    },
+    back () {
+      const self = this;
+      self.formType = 'login';
+    },
+    // 下一步
+    nextStep () {
+      const self = this;
+      self.regStep = 1;
+      let type = '';
+      for (let i of self.regList) {
+        type += `${i},`;
+      }
+      type = type.substr(0, type.length - 1);
+      self.regForm.chosenTypes = type;
+      getCaptcha().then(res => {
+        self.captcha = {
+          ...self.captcha,
+          url: res.data.image,
+          key: res.data.key
+        }
+      })
+    },
+    // 返回
+    prevStep () {
+      const self = this;
+      self.regStep = 0;
+      self.regForm = {};
+    },
+    // 刷新验证码
+    refreshCaptcha () {
+      const self = this;
+      getCaptcha().then(res => {
+        self.captcha = {
+          ...self.captcha,
+          url: res.data.image,
+          key: res.data.key
+        }
+      })
+    },
+    // 发送短信
+    sendMessageCode () {
+      const self = this;
+      if (self.codeFreezeTime != 0) {
+        return
+      } if (self.regForm.phone == "") {
+        return self.message.warning(self.$t('login.rule_phone'))
+      } else if (self.captcha.inp == "") {
+        return self.$message.warning(self.$t('login.captcha_required'))
+      } else {
+        self.codeFreezeTime = 60;
+        let codeTimeInterval = setInterval(() => {
+          self.codeFreezeTime--;
+          if (self.codeFreezeTime <= 0) {
+            clearInterval(codeTimeInterval)
+          }
+        }, 1000);
+        getMessageCode({
+          key: self.captcha.key,
+          verifyCode: self.captcha.inp,
+          phone: self.regForm.phone
+        }).then(res => {
+
+        })
+      }
     }
   }
 }
@@ -310,7 +468,8 @@ export default {
   }
   .register {
     position: absolute;
-    top: 15%;
+    top: 10%;
+    margin-bottom: 5%;
     right: 50%;
     transform: translate(50%, 0);
     .regCheck {
@@ -324,25 +483,15 @@ export default {
       .reglabel {
         width: 150px;
       }
-      .regCon {
-      }
     }
-    .nextStep {
+    .btnBox {
       width: 100%;
       margin-top: 30px;
-      margin-bottom: 20px;
-      .nextBtn {
-        position: relative;
-        left: 50%;
-        transform: translate(-50%, 0);
-      }
+      text-align: center;
     }
     .reg-form {
-      padding-left: 30px;
+      margin-top: 20px;
       box-sizing: border-box;
-      .argee {
-        color: #169bd5;
-      }
     }
     .inputWidth {
       width: 300px;
