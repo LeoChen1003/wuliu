@@ -21,6 +21,11 @@
     "journal": "Journal",
     "member": "Member",
     "basicData": "Basic data",
+    "toBeVerified": "To be verified",
+    "rejected": "Rejected",
+    "toBeSignedContract": "To be signed contract",
+    "activated": "Activated",
+    "closed": "Closed",
     "sender": "Sender",
     "user": "User",
     "market": "Market",
@@ -162,7 +167,9 @@
     "annualProductDamageInsurancePolicy": "Annual product damage insurance policy",
     "expireDate": "Expire Date",
     "IinsuranceValue": "Insurance value",
-    "registrationPlace": "Registration place"
+    "registrationPlace": "Registration place",
+    "HAS_INSURANCE": "Have",
+    "DO_NOT_HAS_INSURANCE": "Don't have"
   },
   "billing": {
     "billingStatus": "Billing status",
@@ -246,6 +253,13 @@
     "submitHUB": "Submit application_HUB",
     "submitSupply": "Submit application_Supply",
     "submitDemand": "Submit application_Demand",
-    "save": "Save"
+    "save": "Save",
+    "dateOfSubmission": "Date of submission",
+    "platform_name": "Name",
+    "userName": "User name",
+    "partnerType": "Partner type",
+    "guarantee": "Guarantee",
+    "contract": "Contract",
+    "status": "Status"
   }
 }
