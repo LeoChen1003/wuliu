@@ -94,11 +94,13 @@
                   {{ $t('member.demand') }} ผู้ใช้บริการว่าจ้างขนส่งสินค้า ผ่านการให้บริการของ แพลตฟอร์ม
                 </el-checkbox>
                 <el-checkbox label="SUPPLY">
-                  {{ $t('member.supply') }} ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่งผู้รับปลายทาง โดยผ่านการบริการของแพลตฟอร์ม
+                  {{ $t('member.supply') }} ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า
+                  เพื่อนำส่งผู้รับปลายทาง โดยผ่านการบริการของแพลตฟอร์ม
                 </el-checkbox>
                 <el-checkbox label="HUB"
                              disabled>
-                  {{ $t('member.hub') }} ศูนย์รวบรวมและแลกเปลี่ยนสินค้า ระหว่างผู้ส่งสินค้าและผู้ขนส่ง โดยผ่านการบริการของแพลตฟอร์ม
+                  {{ $t('member.hub') }} ศูนย์รวบรวมและแลกเปลี่ยนสินค้า ระหว่างผู้ส่งสินค้าและผู้ขนส่ง
+                  โดยผ่านการบริการของแพลตฟอร์ม
                 </el-checkbox>
               </el-checkbox-group>
             </el-form-item>
@@ -169,7 +171,8 @@
             <el-form-item>
               <el-button type="primary"
                          @click="saveInfo"
-                         class="submitBtn">{{ $t('member.save') }}</el-button>
+                         class="submitBtn">{{ $t('member.save') }}
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -181,14 +184,13 @@
           <el-form label-width="200px">
             <el-form-item :label="$t('member.affidavit')">
               <el-upload class="upload"
-                         :http-request="(file)=>{uploadFile(file,'1')}"
+                         :http-request="(file)=>{uploadFile(file,'DEMAND','affidavit')}"
                          action="no"
                          :limit="1">
                 <el-button size="small"
                            icon="el-icon-upload2"
-                           type="primary">{{ $t('member.upload') }}</el-button>
-                <div slot="tip"
-                     class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
               </el-upload>
             </el-form-item>
             <el-form-item :label="$t('member.transportationLicense')" />
@@ -197,7 +199,8 @@
             <el-form-item :label="$t('member.bangAccount')" />
             <el-form-item>
               <el-button type="primary"
-                         class="submitBtn">{{ $t('member.submitDemand') }}</el-button>
+                         class="submitBtn">{{ $t('member.submitDemand') }}
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -214,9 +217,11 @@
                          :limit="1">
                 <el-button size="small"
                            icon="el-icon-upload2"
-                           type="primary">{{ $t('member.upload') }}</el-button>
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
                 <div slot="tip"
-                     class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                     class="el-upload__tip">只能上传jpg/png文件，且不超过500kb
+                </div>
               </el-upload>
             </el-form-item>
             <el-form-item :label="$t('member.transportationLicense')" />
@@ -305,7 +310,8 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary"
-                         class="submitBtn">{{ $t('member.submitSupply') }}</el-button>
+                         class="submitBtn">{{ $t('member.submitSupply') }}
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -323,9 +329,11 @@
                          :limit="1">
                 <el-button size="small"
                            icon="el-icon-upload2"
-                           type="primary">{{ $t('member.upload') }}</el-button>
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
                 <div slot="tip"
-                     class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                     class="el-upload__tip">只能上传jpg/png文件，且不超过500kb
+                </div>
               </el-upload>
             </el-form-item>
             <el-form-item :label="$t('member.transportationLicense')" />
@@ -341,7 +349,8 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary"
-                         class="submitBtn">{{ $t('member.submitHUB') }}</el-button>
+                         class="submitBtn">{{ $t('member.submitHUB') }}
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -356,7 +365,8 @@
 </template>
 
 <script>
-import { fillInfo, getInfo, upload } from '@/api/member'
+import { fillInfo, getInfo, uploadF } from '@/api/member'
+
 export default {
   data () {
     return {
@@ -373,46 +383,46 @@ export default {
   },
   watch: {
     typeList (n, o) {
-      const self = this;
-      let type = "";
+      const self = this
+      let type = ''
       for (let i of n) {
-        type += `${i},`;
+        type += `${i},`
       }
-      type = type.substr(0, type.length - 1);
-      self.infoForm.chosenTypes = type;
+      type = type.substr(0, type.length - 1)
+      self.infoForm.chosenTypes = type
     }
   },
   mounted () {
-    this.loadData_info();
+    this.loadData_info()
   },
   methods: {
     // 载入初始数据
     loadData_info () {
-      const self = this;
+      const self = this
       getInfo().then(res => {
-        self.infoForm = res.data;
-        self.typeList = self.$store.getters.userInfo.roleListStr.split(',');
+        self.infoForm = res.data
+        self.typeList = self.$store.getters.userInfo.roleListStr.split(',')
       })
     },
     // 会员类型选择
     typeListChange (e) {
-      const self = this;
+      const self = this
     },
     // 注册类型选择
     typeChange (e) {
-      const self = this;
+      const self = this
       if (e == 'PERSONAL') {
-        self.infoForm.companyName = "";
+        self.infoForm.companyName = ''
       } else {
-        self.infoForm.humanName = "";
+        self.infoForm.humanName = ''
       }
     },
     // 保存基础资料
     saveInfo () {
-      const self = this;
+      const self = this
       fillInfo(self.infoForm).then(res => {
-        self.$message.success(self.$t('member.saveSuccess'));
-        self.loadData_info();
+        self.$message.success(self.$t('member.saveSuccess'))
+        self.loadData_info()
       })
     },
     // dc表格操作
@@ -422,21 +432,20 @@ export default {
     delDc (row, index) {
       this.dcList.splice(index, 1)
     },
-    uploadFile (file, e) {
-      const self = this;
+    uploadFile (file, apply_type, credentials_type) {
+      const self = this
       console.log(file)
-      console.log(e)
-      return
-      upload({
+      uploadF({
+        file: file.file,
+      }, {
         apply_type,
-        credentials_type,
-        file
+        credentials_type
       }).then(res => {
 
       })
     }
 
-  },
+  }
 }
 
 </script>

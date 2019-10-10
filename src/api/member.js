@@ -15,10 +15,14 @@ export function getInfo(data) {
   })
 }
 
-export function uploadFile(data) {
+export function uploadF(data, params) {
   return request({
     url: '/api/member/upload',
     method: 'post',
+    // headers: {
+    //   'Content-Type': 'multipart/form-data'
+    // },
+    params: params,
     data
   })
 }
