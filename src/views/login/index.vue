@@ -356,8 +356,8 @@ export default {
     };
     return {
       loginForm: {
-        username: "",
-        password: ""
+        username: "aoaoao",
+        password: "123123123"
       },
       loginRules: {
         name: [{ required: true, trigger: "blur", validator: validateName }],
@@ -534,6 +534,11 @@ export default {
         self.$message.success(self.$t("login.registerSuccess"));
         self.formType = "login";
         self.regForm = {};
+        self.captcha = {
+          url: "",
+          key: "",
+          inp: ""
+        }
       });
     },
     // 忘记密码框
