@@ -15,11 +15,13 @@ export function getInfo(data) {
   })
 }
 
-export function uploadFile(data) {
+export function getCredentials(apply_type) {
   return request({
-    url: '/api/member/upload',
-    method: 'post',
-    data
+    url: '/api/member/info',
+    method: 'get',
+    params: {
+      apply_type: apply_type
+    }
   })
 }
 
