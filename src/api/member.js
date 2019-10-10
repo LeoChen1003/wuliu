@@ -24,9 +24,18 @@ export function uploadFile(data) {
 }
 
 // 查看所有申请列表
-export function platformList() {
+export function platformList(data) {
   return request({
     url: '/api/platform/audit/list',
+    method: 'get',
+    params: data
+  })
+}
+
+// 资质资料
+export function credentialsList() {
+  return request({
+    url: '/api/member/credentials/list',
     method: 'get'
   })
 }
