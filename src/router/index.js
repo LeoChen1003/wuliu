@@ -13,7 +13,7 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '',
+    path: '/',
     component: Layout,
     redirect: '/priceConsulting',
     name: '下单',
@@ -41,7 +41,8 @@ export const constantRoutes = [
         meta: { title: 'releaseToMarket', roles: ['DEMAND'] }
       }
     ]
-  }
+  },
+  { path: '*', redirect: '/', hidden: true }
 ]
 
 /**
