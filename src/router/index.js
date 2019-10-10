@@ -145,7 +145,37 @@ export const asyncRoutes = [
       {
         path: 'index',
         component: () => import('@/views/member/index'),
-        meta: { title: 'member' }
+        meta: { title: 'member', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
+      },
+      {
+        path: 'platformMember',
+        component: () => import('@/views/member/platform'),
+        meta: { title: 'member', roles: ['PLATFORM'] }
+      },
+      {
+        path: 'toBeVerified',
+        component: () => import('@/views/member/toBeVerified'),
+        meta: { title: 'toBeVerified', roles: ['PLATFORM'] }
+      },
+      {
+        path: 'rejected',
+        component: () => import('@/views/member/rejected'),
+        meta: { title: 'rejected', roles: ['PLATFORM'] }
+      },
+      {
+        path: 'toBeSignedContract',
+        component: () => import('@/views/member/toBeSignedContract'),
+        meta: { title: 'toBeSignedContract', roles: ['PLATFORM'] }
+      },
+      {
+        path: 'activated',
+        component: () => import('@/views/member/activated'),
+        meta: { title: 'activated', roles: ['PLATFORM'] }
+      },
+      {
+        path: 'closed',
+        component: () => import('@/views/member/closed'),
+        meta: { title: 'closed', roles: ['PLATFORM'] }
       }
     ]
   }

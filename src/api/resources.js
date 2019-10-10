@@ -29,7 +29,7 @@ export function driverEdit(id, data) {
 // Truck List
 export function truckList() {
   return request({
-    url: '/api/supply/truck/my',
+    url: '/api/supply/trucks/my',
     method: 'get'
   })
 }
@@ -37,7 +37,7 @@ export function truckList() {
 // Truck add
 export function truckAdd(data) {
   return request({
-    url: '/api/supply/truck/add',
+    url: '/api/supply/trucks/add',
     method: 'post',
     data
   })

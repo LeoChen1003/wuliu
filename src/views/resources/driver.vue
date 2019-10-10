@@ -54,7 +54,8 @@
     </el-row>
     <el-dialog :title="$t('resources.driver')"
                :visible.sync="dialogVisible"
-               width="60%">
+               width="60%"
+               center>
       <div>
         <el-form ref="detailform"
                  :model="detailform"

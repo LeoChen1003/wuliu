@@ -22,3 +22,19 @@ export function uploadFile(data) {
     data
   })
 }
+
+// 查看所有申请列表
+export function platformList() {
+  return request({
+    url: '/api/platform/audit/list',
+    method: 'get'
+  })
+}
+
+// 成为super
+export function besuper() {
+  return request({
+    url: '/api/platform/super',
+    method: 'get'
+  })
+}
