@@ -245,6 +245,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary"
+                         @click="submitDemand"
                          class="submitBtn">{{ $t('member.submitDemand') }}
               </el-button>
             </el-form-item>
@@ -258,7 +259,7 @@
           <el-form label-width="200px">
             <el-form-item :label="$t('member.affidavit')">
               <el-upload class="upload"
-                         :action="baseUrl + '?credentials_type=affidavit&apply_type=DEMAND'"
+                         :action="baseUrl + '?credentials_type=affidavit&apply_type=SUPPLY'"
                          :headers="headers"
                          :on-success="uploadSuccess"
                          :limit="1">
@@ -270,7 +271,7 @@
             </el-form-item>
             <el-form-item :label="$t('member.transportationLicense')">
               <el-upload class="upload"
-                         :action="baseUrl + '?credentials_type=transportation_license&apply_type=DEMAND'"
+                         :action="baseUrl + '?credentials_type=transportation_license&apply_type=SUPPLY'"
                          :headers="headers"
                          :on-success="uploadSuccess"
                          :limit="1">
@@ -282,7 +283,7 @@
             </el-form-item>
             <el-form-item :label="$t('member.IDcard')">
               <el-upload class="upload"
-                         :action="baseUrl + '?credentials_type=idcard&apply_type=DEMAND'"
+                         :action="baseUrl + '?credentials_type=idcard&apply_type=SUPPLY'"
                          :headers="headers"
                          :on-success="uploadSuccess"
                          :limit="1">
@@ -294,7 +295,7 @@
             </el-form-item>
             <el-form-item :label="$t('member.houseParticulars')">
               <el-upload class="upload"
-                         :action="baseUrl + '?credentials_type=house_particulars&apply_type=DEMAND'"
+                         :action="baseUrl + '?credentials_type=house_particulars&apply_type=SUPPLY'"
                          :headers="headers"
                          :on-success="uploadSuccess"
                          :limit="1">
@@ -306,7 +307,7 @@
             </el-form-item>
             <el-form-item :label="$t('member.bangAccount')">
               <el-upload class="upload"
-                         :action="baseUrl + '?credentials_type=bank_account_copy&apply_type=DEMAND'"
+                         :action="baseUrl + '?credentials_type=bank_account_copy&apply_type=SUPPLY'"
                          :headers="headers"
                          :on-success="uploadSuccess"
                          :limit="1">
@@ -316,8 +317,30 @@
                 </el-button>
               </el-upload>
             </el-form-item>
-            <el-form-item :label="$t('member.mapForDistributionCenters')" />
-            <el-form-item :label="$t('member.carRegistration')" />
+            <el-form-item :label="$t('member.mapForDistributionCenters')">
+              <el-upload class="upload"
+                         :action="baseUrl + '?credentials_type=center_map&apply_type=SUPPLY'"
+                         :headers="headers"
+                         :on-success="uploadSuccess"
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
+              </el-upload>
+            </el-form-item>
+            <el-form-item :label="$t('member.carRegistration')">
+              <el-upload class="upload"
+                         :action="baseUrl + '?credentials_type=turck_register_copy&apply_type=SUPPLY'"
+                         :headers="headers"
+                         :on-success="uploadSuccess"
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
+              </el-upload>
+            </el-form-item>
             <el-form-item :label="$t('member.cargoInsurance')">
               <div>
                 <div class="z-cell">
@@ -398,6 +421,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary"
+                         @click="submitSupply"
                          class="submitBtn">{{ $t('member.submitSupply') }}
               </el-button>
             </el-form-item>
@@ -542,13 +566,23 @@ export default {
     delDc (row, index) {
       this.dcList.splice(index, 1)
     },
+    // 文件上传成功的处理
     uploadSuccess (res, file) {
+      console.log(file)
       const self = this;
       if (res.status === 200) {
+        let applyType = res.data.applyType; // 申请类型
+        let credentialsType = res.data.credentialsType; // 文件类型
 
       }
-      console.log(res)
-      console.log(file)
+    },
+    // 提交发货人申请
+    submitDemand () {
+      const self = this;
+    },
+    // 提交运输公司申请
+    submitSupply () {
+      const self = this;
     }
 
   }
