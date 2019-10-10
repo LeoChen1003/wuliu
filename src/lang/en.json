@@ -260,6 +260,11 @@
     "partnerType": "Partner type",
     "guarantee": "Guarantee",
     "contract": "Contract",
-    "status": "Status"
+    "status": "Status",
+    "accept": "accept",
+    "reject": "reject",
+    "reasonsForRefusal": "Reasons for refusal",
+    "reason": "reason",
+    "cancel": "cancel"
   }
 }

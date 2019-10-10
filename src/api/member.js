@@ -34,11 +34,21 @@ export function platformList(data) {
   })
 }
 
-// 资质资料
-export function credentialsList() {
+// 同意申请
+export function platformAccept(data) {
   return request({
-    url: '/api/member/credentials/list',
-    method: 'get'
+    url: '/api/platform/audit/accept',
+    method: 'post',
+    data
+  })
+}
+
+// 拒绝申请
+export function platformRefuse(data) {
+  return request({
+    url: '/api/platform/audit/refuse',
+    method: 'post',
+    data
   })
 }
 

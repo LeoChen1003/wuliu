@@ -1,18 +1,26 @@
 <template>
   <div class='manage'>
     <el-table :data="dataList"
-              border>
+              border
+              :cell-style="cell">
       <el-table-column prop="auditAt"
                        :label="$t('member.dateOfSubmission')"></el-table-column>
       <el-table-column prop="phone"
-                       :label="$t('member.platform_name')"></el-table-column>
+                       :label="$t('member.platform_name')">
+        <template slot-scope="scope">
+          {{scope.row.financeGranteeAccount.name}}
+        </template>
+      </el-table-column>
       <el-table-column prop="activeStatus"
                        :label="$t('member.userName')"></el-table-column>
       <el-table-column prop="applyType"
                        :label="$t('member.partnerType')"></el-table-column>
-      <el-table-column prop="activeStatus"
-                       :label="$t('member.guarantee')"></el-table-column>
-      <el-table-column prop="activeStatus"
+      <el-table-column :label="$t('member.guarantee')">
+        <template slot-scope="scope">
+          {{scope.row.financeGranteeAccount.currentBalance}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="contractNo"
                        :label="$t('member.contract')"></el-table-column>
       <el-table-column prop="auditStatus"
                        :label="$t('member.status')"></el-table-column>
@@ -20,7 +28,7 @@
         <template slot-scope="scope">
           <div style="cursor: pointer;"
                @click="toShow(scope.row)">
-            <i class="el-icon-edit"></i>
+            <svg-icon icon-class="look" />
           </div>
         </template>
       </el-table-column>
@@ -33,7 +41,9 @@
                    @current-change="pageChange"
                    layout="prev, pager, next, jumper"
                    :total="pageTotal"></el-pagination>
-    <el-dialog :visible.sync="dialogVisible"
+    <el-dialog :title="$t('member.essentialData')"
+               center
+               :visible.sync="dialogVisible"
                width="70%">
       <div class="container">
         <el-form ref="form"
@@ -119,10 +129,32 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary"
-                       class="submitBtn">{{ $t('member.save') }}</el-button>
+                       class="submitBtn inp"
+                       @click="toAccept">{{ $t('member.accept') }}</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary"
+                       class="submitBtn inp"
+                       @click="toReject">{{ $t('member.reject') }}</el-button>
           </el-form-item>
         </el-form>
       </div>
+    </el-dialog>
+    <el-dialog :title="$t('member.reasonsForRefusal')"
+               :visible.sync="refuseVisible"
+               center
+               width="40%">
+      <div style="display:flex;justify-content:center;align-items:center;">
+        {{$t('member.reason')}}：
+        <el-input v-model="reason"
+                  class="inp"></el-input>
+      </div>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="dialogVisible = false">{{ $t('member.cancel') }}</el-button>
+        <el-button type="primary"
+                   @click="dialogVisible = false">{{ $t('member.reject') }}</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -130,7 +162,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { platformList, besuper } from '../../api/member'
+import { platformList, besuper, platformAccept, platformRefuse } from '../../api/member'
 
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -143,7 +175,10 @@ export default {
       pageTotal: 0,
       dialogVisible: false,
       infoForm: {},
-      typeList: []
+      typeList: [],
+      curId: null,
+      refuseVisible: false,
+      reason: ''
     };
   },
   //监听属性 类似于data概念
@@ -161,6 +196,11 @@ export default {
     }
   },
   methods: {
+    cell ({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex == 7) {
+        return 'text-align:center;color:#168BD5;font-size:23px;'
+      }
+    },
     getPlatformList () {
       let self = this
       platformList({
@@ -181,6 +221,21 @@ export default {
       let self = this
       self.dialogVisible = true
       self.loadDialog_info(row)
+      self.curId = row.id
+    },
+    toAccept () {
+      let self = this
+      platformAccept({
+        id: self.curId
+      }).then(res => {
+        self.$message.success(res.message)
+        self.dialogVisible = false
+        self.getPlatformList()
+      })
+    },
+    toReject () {
+      let self = this
+      self.refuseVisible = true
     },
     loadDialog_info (row) {
       const self = this;
@@ -205,5 +260,8 @@ export default {
 //@import url(); 引入公共css类
 .manage {
   padding: 20px;
+  .inp {
+    width: 400px;
+  }
 }
 </style>

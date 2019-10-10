@@ -258,6 +258,11 @@
     "partnerType": "会员类型",
     "guarantee": "保证金",
     "contract": "合同",
-    "status": "当前状态"
+    "status": "当前状态",
+    "accept": "同意",
+    "reject": "拒绝",
+    "reasonsForRefusal": "拒绝理由",
+    "reason": "理由",
+    "cancel": "取消"
   }
 }

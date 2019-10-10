@@ -246,6 +246,11 @@
     "partnerType": "ประเภทพันธมิตร",
     "guarantee": "รับประกัน",
     "contract": "สัญญา",
-    "status": "สถานะ"
+    "status": "สถานะ",
+    "accept": "ยอมรับ",
+    "reject": "ปฏิเสธ",
+    "reasonsForRefusal": "เหตุผลสำหรับการปฏิเสธ",
+    "reason": "เหตุผล",
+    "cancel": "ยกเลิก"
   }
 }
