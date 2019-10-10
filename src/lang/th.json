@@ -21,6 +21,11 @@
     "journal": "วารสาร",
     "member": "สมัครเป็นสมาชิก",
     "basicData": "ข้อมูลพื้นฐาน",
+    "toBeVerified": "การตรวจสอบ",
+    "rejected": "ปฏิเสธ",
+    "toBeSignedContract": "สัญญาที่ต้องลงนาม",
+    "activated": "เปิดใช้งาน",
+    "closed": "ปิด",
     "sender": "ผู้ส่ง",
     "user": "ผู้ใช้งาน",
     "market": "ตลาด",
@@ -158,7 +163,9 @@
     "annualProductDamageInsurancePolicy": "กรมธรรม์ประกันภัยความเสียหายต่อสินค้ารายปี",
     "expireDate": "วันหมดอายุประกันภัย",
     "IinsuranceValue": "มูลค่ากรมธรรม์",
-    "registrationPlace": "กรมธรรม์ประกันภัยความเสียหายต่อสินค้ารายปี"
+    "registrationPlace": "กรมธรรม์ประกันภัยความเสียหายต่อสินค้ารายปี",
+    "HAS_INSURANCE": "มี",
+    "DO_NOT_HAS_INSURANCE": "ไม่"
   },
   "billing": {
     "billingStatus": "สถานะการเรียกเก็บเงิน",
@@ -232,6 +239,13 @@
     "carRegistration": "รายการจดทะเบียนรถ",
     "mapForDistributionCenters": " แผนที่ตั้งศูนย์กระจายสินค้า",
     "dcAddress": "ที่อยู่ DC",
-    "transportationExperience": "ประสบการณ์ทำงานขนส่ง"
+    "transportationExperience": "ประสบการณ์ทำงานขนส่ง",
+    "dateOfSubmission": "วันที่ส่ง",
+    "platform_name": "ชื่อ",
+    "userName": "บัญชีผู้ใช้",
+    "partnerType": "ประเภทพันธมิตร",
+    "guarantee": "รับประกัน",
+    "contract": "สัญญา",
+    "status": "สถานะ"
   }
 }

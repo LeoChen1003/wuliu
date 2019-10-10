@@ -12,10 +12,10 @@
                   highlight-current-row
                   @current-change="handleCurrentChange"
                   :cell-style="cell">
-          <el-table-column prop="name"
+          <el-table-column prop="plate"
                            :highlight-current-row='true'
                            :label="$t('resources.licensePlate')"></el-table-column>
-          <el-table-column prop="phone"
+          <el-table-column prop="category"
                            :label="$t('resources.truckType')"></el-table-column>
           <el-table-column prop="activeStatus"
                            :label="$t('resources.status')"></el-table-column>
@@ -54,7 +54,8 @@
     </el-row>
     <el-dialog :title="$t('resources.truck')"
                :visible.sync="dialogVisible"
-               width="60%">
+               width="60%"
+               center>
       <div>
         <el-form ref="detailform"
                  :model="detailform"
@@ -62,18 +63,48 @@
                  class="form"
                  label-position='left'
                  label-width="160px">
-          <el-form-item prop='name'
+          <el-form-item prop='plate'
                         :label="$t('resources.licensePlate')">
-            <el-input v-model="detailform.name"
+            <el-input v-model="detailform.plate"
                       class="inputWidth"></el-input>
           </el-form-item>
-          <el-form-item prop="phone"
+          <el-form-item prop="category"
                         :label="$t('resources.truckType')">
-            <el-input v-model="detailform.phone"
-                      class="inputWidth"></el-input>
+            <el-select v-model="detailform.category"
+                       :placeholder="$t('placeholder.pleaseChoose')"
+                       class="inputWidth">
+              <el-option v-for="item in categoryList"
+                         :key="item.key"
+                         :label="item.value.slice(4)"
+                         :value="item.key">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="subCategory">
+            <el-select v-model="detailform.subCategory"
+                       :placeholder="$t('placeholder.pleaseChoose')"
+                       class="inputWidth">
+              <el-option v-for="item in subCategoryList"
+                         :key="item.key"
+                         :label="item.value.slice(4)"
+                         :value="item.key">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="registerAtRegion"
+                        :label="$t('resources.provinceOfRegistrationPlace')">
+            <el-select v-model="detailform.registerAtRegion"
+                       :placeholder="$t('placeholder.pleaseChoose')"
+                       class="inputWidth">
+              <el-option v-for="item in provList"
+                         :key="item.code"
+                         :label="item.name"
+                         :value="item.code">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item prop="status"
-                        :label="$t('resources.provinceOfRegistrationPlace')">
+                        :label="$t('resources.status')">
             <el-select v-model="detailform.status"
                        :placeholder="$t('placeholder.pleaseChoose')"
                        class="inputWidth">
@@ -84,6 +115,37 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item prop='insuranceExpiredAt'
+                        :label="$t('resources.annualProductDamageInsurancePolicy')">
+            <template>
+              <div class="inputWidth">
+                <el-radio v-model="detailform.insuranceStatus"
+                          label="HAS_INSURANCE"
+                          border>{{$t('resources.HAS_INSURANCE')}}</el-radio>
+                <el-radio v-model="detailform.insuranceStatus"
+                          label="DO_NOT_HAS_INSURANCE"
+                          border>{{$t('resources.DO_NOT_HAS_INSURANCE')}}</el-radio>
+              </div>
+
+            </template>
+
+          </el-form-item>
+          <div v-if="detailform.insuranceStatus == 'HAS_INSURANCE'">
+            <el-form-item prop='insuranceExpiredAt'
+                          :label="$t('resources.expireDate')">
+              <el-date-picker v-model="detailform.insuranceExpiredAt"
+                              type="date"
+                              :placeholder="$t('placeholder.pleaseChoose')"
+                              value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item prop='insuranceAmount'
+                          :label="$t('resources.IinsuranceValue')">
+              <el-input type="number"
+                        v-model="detailform.insuranceAmount"
+                        class="inputWidth"></el-input>
+            </el-form-item>
+          </div>
           <el-form-item>
             <el-button type="primary"
                        style="margin-bottom:20px;"
@@ -101,6 +163,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import { truckList, truckAdd } from "../../api/resources";
+import { truckType, provinceList } from "../../api/data";
 
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -110,9 +173,14 @@ export default {
       dataList: [],
       dialogVisible: false,
       detailform: {
-        name: '',
-        phone: '',
-        status: ''
+        category: '',
+        subCategory: '',
+        insuranceAmount: 0,
+        insuranceExpiredAt: '2019-01-01',
+        insuranceStatus: 'HAS_INSURANCE',
+        plate: '',
+        registerAtRegion: '',
+        status: 'ACTIVE'
       },
       options: [{
         value: 'ACTIVE',
@@ -121,13 +189,17 @@ export default {
         value: 'CLOSED',
         label: 'Closed'
       }],
+      categoryList: [],
+      subCategoryList: [],
+      provList: [],
       editType: '',
       detailRules: {
-        name: [{ required: true, trigger: "blur" }],
-        phone: [
-          { required: true, trigger: "blur" }
-        ],
-        status: [{ required: true }]
+        plate: [{ required: true, trigger: "blur" }],
+        registerAtRegion: [{ required: true, trigger: "change" }],
+        insuranceStatus: [{ required: true, trigger: "change" }],
+        category: [{ required: true, trigger: "change" }],
+        subCategory: [{ required: true, trigger: "change" }],
+        status: [{ required: true, trigger: "change" }]
       },
       loading: false,
       activeTab: 'first',
@@ -156,10 +228,27 @@ export default {
       self.dialogVisible = true
       self.editType = 'add'
       self.detailform = {
-        name: '',
-        phone: '',
-        status: ''
+        category: '',
+        subCategory: '',
+        insuranceAmount: 0,
+        insuranceExpiredAt: '2019-01-01',
+        insuranceStatus: 'HAS_INSURANCE',
+        plate: '',
+        registerAtRegion: '',
+        status: 'ACTIVE'
       }
+      self.getData()
+    },
+    getData () {
+      let self = this
+      truckType().then(res => {
+        self.categoryList = res.data.categories
+        self.subCategoryList = res.data.subCategories
+      })
+      provinceList().then(res => {
+        console.log(res)
+        self.provList = res.data
+      })
     },
     toEdit (row) {
       let self = this
@@ -167,11 +256,17 @@ export default {
       self.editType = 'edit'
       console.log(row)
       self.detailform = {
-        name: row.name,
-        phone: row.phone,
-        status: row.activeStatus
+        category: row.category,
+        subCategory: row.subCategory,
+        insuranceAmount: row.insuranceAmount,
+        insuranceExpiredAt: row.insuranceExpiredAt,
+        insuranceStatus: row.insuranceStatus,
+        plate: row.plate,
+        registerAtRegion: row.registerAtRegion,
+        status: row.status
       }
       self.curEditId = row.id
+      self.getData()
     },
     toConfirm () {
       let self = this

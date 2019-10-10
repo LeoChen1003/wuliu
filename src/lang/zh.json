@@ -21,6 +21,11 @@
     "journal": "账户流水",
     "member": "会员",
     "basicData": "基础资料",
+    "toBeVerified": "待审核",
+    "rejected": "已拒绝",
+    "toBeSignedContract": "待签订合同",
+    "activated": "已激活",
+    "closed": "已停用",
     "sender": "寄件人",
     "user": "用户",
     "market": "市场",
@@ -162,7 +167,9 @@
     "annualProductDamageInsurancePolicy": "年度车险",
     "expireDate": "保险到期日",
     "IinsuranceValue": "车险金额",
-    "registrationPlace": "保险政策"
+    "registrationPlace": "保险政策",
+    "HAS_INSURANCE": "有",
+    "DO_NOT_HAS_INSURANCE": "没有"
   },
   "billing": {
     "billingStatus": "结算状态",
@@ -244,6 +251,13 @@
     "save": "保存",
     "submitDemand": "提交会员申请(发货人)",
     "submitSupply": "提交会员申请(运输公司)",
-    "saveSuccess": "保存成功"
+    "saveSuccess": "保存成功",
+    "dateOfSubmission": "提交日期",
+    "platform_name": "会员名称",
+    "userName": "主账户",
+    "partnerType": "会员类型",
+    "guarantee": "保证金",
+    "contract": "合同",
+    "status": "当前状态"
   }
 }
