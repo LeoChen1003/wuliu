@@ -1,5 +1,6 @@
 import router from './router'
 import store from './store'
+import { resetRouter } from '@/router'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
@@ -27,33 +28,27 @@ router.beforeEach(async(to, from, next) => {
       NProgress.done()
     } else {
       // determine whether the user has obtained his permission roles through getInfo
-      console.log('aaa')
-      console.log(localStorage.curRole)
-      const hasRoles = localStorage.curRole && localStorage.curRole.length > 0
+      const hasRoles = store.getters.curRole && store.getters.curRole.length > 0
       if (hasRoles) {
         await store.dispatch('user/getInfo')
         const accessRoutes = await store.dispatch('permission/generateRoutes', [
           localStorage.curRole
         ])
-
-        // // dynamically add accessible routes
+        resetRouter()
         router.addRoutes(accessRoutes)
+        router.options.routes = store.getters.permission_routes
         next()
       } else {
         try {
-          // get user info
-          // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
           await store.dispatch('user/getInfo')
           const accessRoutes = await store.dispatch(
             'permission/generateRoutes',
             [localStorage.curRole]
           )
-
-          // // dynamically add accessible routes
+          resetRouter()
           router.addRoutes(accessRoutes)
-          // hack method to ensure that addRoutes is complete
-          // set the replace: true, so the navigation will not leave a history record
-          next()
+          router.options.routes = store.getters.permission_routes
+          next({ path: to.redirectedFrom })
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
