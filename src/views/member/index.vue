@@ -3,9 +3,10 @@
   <div class="wrapper">
     <el-tabs v-model="tabActive"
              tab-position="left"
+             @tab-click="tabChange"
              style="height:100%">
       <!-- 会员申请流程 -->
-      <el-tab-pane name="1"
+      <el-tab-pane name="process"
                    :label="$t('member.membershipApplicationProcess')">
         <div class="container">
           <el-steps simple>
@@ -80,7 +81,7 @@
         </div>
       </el-tab-pane>
       <!-- 基础资料 -->
-      <el-tab-pane name="2"
+      <el-tab-pane name="data"
                    :label="$t('member.essentialData')">
         <div class="container">
           <el-form ref="form"
@@ -178,14 +179,15 @@
         </div>
       </el-tab-pane>
       <!-- 相关文件（发货人）150px -->
-      <el-tab-pane name="3"
+      <el-tab-pane name="DEMAND"
                    :label="$t('member.relevantDocument_demand')">
         <div class="container">
           <el-form label-width="200px">
             <el-form-item :label="$t('member.affidavit')">
               <el-upload class="upload"
-                         :http-request="(file)=>{uploadFile(file,'DEMAND','affidavit')}"
-                         action="no"
+                         :action="baseUrl + '?credentials_type=affidavit&apply_type=DEMAND'"
+                         :headers="headers"
+                         :on-success="uploadSuccess"
                          :limit="1">
                 <el-button size="small"
                            icon="el-icon-upload2"
@@ -193,10 +195,54 @@
                 </el-button>
               </el-upload>
             </el-form-item>
-            <el-form-item :label="$t('member.transportationLicense')" />
-            <el-form-item :label="$t('member.IDcard')" />
-            <el-form-item :label="$t('member.houseParticulars')" />
-            <el-form-item :label="$t('member.bangAccount')" />
+            <el-form-item :label="$t('member.transportationLicense')">
+              <el-upload class="upload"
+                         :action="baseUrl + '?credentials_type=transportation_license&apply_type=DEMAND'"
+                         :headers="headers"
+                         :on-success="uploadSuccess"
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
+              </el-upload>
+            </el-form-item>
+            <el-form-item :label="$t('member.IDcard')">
+              <el-upload class="upload"
+                         :action="baseUrl + '?credentials_type=idcard&apply_type=DEMAND'"
+                         :headers="headers"
+                         :on-success="uploadSuccess"
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
+              </el-upload>
+            </el-form-item>
+            <el-form-item :label="$t('member.houseParticulars')">
+              <el-upload class="upload"
+                         :action="baseUrl + '?credentials_type=house_particulars&apply_type=DEMAND'"
+                         :headers="headers"
+                         :on-success="uploadSuccess"
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
+              </el-upload>
+            </el-form-item>
+            <el-form-item :label="$t('member.bangAccount')">
+              <el-upload class="upload"
+                         :action="baseUrl + '?credentials_type=bank_account_copy&apply_type=DEMAND'"
+                         :headers="headers"
+                         :on-success="uploadSuccess"
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
+              </el-upload>
+            </el-form-item>
             <el-form-item>
               <el-button type="primary"
                          class="submitBtn">{{ $t('member.submitDemand') }}
@@ -206,28 +252,70 @@
         </div>
       </el-tab-pane>
       <!-- 相关文件(运输公司) -->
-      <el-tab-pane name="4"
+      <el-tab-pane name="SUPPLY"
                    :label="$t('member.relevantdocument_supply')">
         <div class="container">
           <el-form label-width="200px">
             <el-form-item :label="$t('member.affidavit')">
               <el-upload class="upload"
-                         action="https://jsonplaceholder.typicode.com/posts/"
-                         multiple
+                         :action="baseUrl + '?credentials_type=affidavit&apply_type=DEMAND'"
+                         :headers="headers"
+                         :on-success="uploadSuccess"
                          :limit="1">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
                 </el-button>
-                <div slot="tip"
-                     class="el-upload__tip">只能上传jpg/png文件，且不超过500kb
-                </div>
               </el-upload>
             </el-form-item>
-            <el-form-item :label="$t('member.transportationLicense')" />
-            <el-form-item :label="$t('member.IDcard')" />
-            <el-form-item :label="$t('member.houseParticulars')" />
-            <el-form-item :label="$t('member.bangAccount')" />
+            <el-form-item :label="$t('member.transportationLicense')">
+              <el-upload class="upload"
+                         :action="baseUrl + '?credentials_type=transportation_license&apply_type=DEMAND'"
+                         :headers="headers"
+                         :on-success="uploadSuccess"
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
+              </el-upload>
+            </el-form-item>
+            <el-form-item :label="$t('member.IDcard')">
+              <el-upload class="upload"
+                         :action="baseUrl + '?credentials_type=idcard&apply_type=DEMAND'"
+                         :headers="headers"
+                         :on-success="uploadSuccess"
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
+              </el-upload>
+            </el-form-item>
+            <el-form-item :label="$t('member.houseParticulars')">
+              <el-upload class="upload"
+                         :action="baseUrl + '?credentials_type=house_particulars&apply_type=DEMAND'"
+                         :headers="headers"
+                         :on-success="uploadSuccess"
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
+              </el-upload>
+            </el-form-item>
+            <el-form-item :label="$t('member.bangAccount')">
+              <el-upload class="upload"
+                         :action="baseUrl + '?credentials_type=bank_account_copy&apply_type=DEMAND'"
+                         :headers="headers"
+                         :on-success="uploadSuccess"
+                         :limit="1">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
+              </el-upload>
+            </el-form-item>
             <el-form-item :label="$t('member.mapForDistributionCenters')" />
             <el-form-item :label="$t('member.carRegistration')" />
             <el-form-item :label="$t('member.cargoInsurance')">
@@ -365,12 +453,14 @@
 </template>
 
 <script>
-import { fillInfo, getInfo, uploadF } from '@/api/member'
+import { fillInfo, getInfo, getCredentials } from '@/api/member'
+import { getToken } from '@/utils/auth'
 
 export default {
   data () {
+    const self = this;
     return {
-      tabActive: '1',
+      tabActive: 'process',
       dc: false,
       dcList: [{ address: '', experience: '' }],
       perShipment: false,
@@ -378,7 +468,12 @@ export default {
       perPrice: false,
       perPriceSelected: null,
       infoForm: {},
-      typeList: []
+      typeList: [],
+      baseUrl: process.env.VUE_APP_BASE_API + '/api/member/upload',
+      headers: {
+        "authorization": getToken(),
+        "locale": self.$store.getters.language
+      }
     }
   },
   watch: {
@@ -403,6 +498,21 @@ export default {
         self.infoForm = res.data
         self.typeList = self.$store.getters.userInfo.roleListStr.split(',')
       })
+    },
+    loadData_list (apply_type) {
+      const self = this;
+      getCredentials(apply_type).then(res => {
+
+      })
+    },
+    tabChange (tab, e) {
+      const self = this;
+      let name = tab.name;
+      if (name == 'process') {
+        self.loadData_info();
+      } else if (name == 'DEMAND' || name == 'SUPPLY' || name == 'HUB') {
+        self.loadData_list(name)
+      }
     },
     // 会员类型选择
     typeListChange (e) {
@@ -432,17 +542,13 @@ export default {
     delDc (row, index) {
       this.dcList.splice(index, 1)
     },
-    uploadFile (file, apply_type, credentials_type) {
-      const self = this
-      console.log(file)
-      uploadF({
-        file: file.file,
-      }, {
-        apply_type,
-        credentials_type
-      }).then(res => {
+    uploadSuccess (res, file) {
+      const self = this;
+      if (res.status === 200) {
 
-      })
+      }
+      console.log(res)
+      console.log(file)
     }
 
   }
