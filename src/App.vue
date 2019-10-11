@@ -9,3 +9,9 @@ export default {
   name: 'App'
 }
 </script>
+
+<style>
+.el-date-editor .el-range-separator {
+  width: 15%;
+}
+</style>

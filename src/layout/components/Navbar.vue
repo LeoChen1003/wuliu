@@ -14,7 +14,7 @@
     </div>
     <div class="left">
       <div style="margin-right:40px;">
-        <span>Welcome,{{userInfo.name}}</span>
+        <span>Welcome,{{name}}</span>
       </div>
       <el-button @click="logout"
                  type="text"
@@ -45,7 +45,7 @@ export default {
     Sidebar
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device", "userInfo"])
+    ...mapGetters(["sidebar", "avatar", "device", "name"])
   },
   methods: {
     toggleSideBar () {
