@@ -251,6 +251,13 @@
     "reject": "ปฏิเสธ",
     "reasonsForRefusal": "เหตุผลสำหรับการปฏิเสธ",
     "reason": "เหตุผล",
-    "cancel": "ยกเลิก"
+    "cancel": "ยกเลิก",
+    "qualificationInformation": "ข้อมูลคุณสมบัติ",
+    "activate": "กระตุ้น"
+  },
+  "confirm": {
+    "tips": "ทูลเกล้าฯถวาย",
+    "aysAgree": "คุณแน่ใจนะว่าคุณเห็นด้วย？",
+    "aysActivate": "คุณแน่ใจนะว่าเปิดใช้งาน"
   }
 }

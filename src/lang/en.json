@@ -265,6 +265,13 @@
     "reject": "reject",
     "reasonsForRefusal": "Reasons for refusal",
     "reason": "reason",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "qualificationInformation": "Qualification information",
+    "activate": "activate"
+  },
+  "confirm": {
+    "tips": "Tips",
+    "aysAgree": "Are you sure you agree?",
+    "aysActivate": "Are you sure activate?"
   }
 }

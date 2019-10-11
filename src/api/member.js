@@ -26,9 +26,9 @@ export function getCredentials(apply_type) {
 }
 
 // 查看所有申请列表
-export function platformList(data) {
+export function platformList(auditStatus, data) {
   return request({
-    url: '/api/platform/audit/list',
+    url: '/api/platform/audit/list/' + auditStatus,
     method: 'get',
     params: data
   })
@@ -47,6 +47,15 @@ export function platformAccept(data) {
 export function platformRefuse(data) {
   return request({
     url: '/api/platform/audit/refuse',
+    method: 'post',
+    data
+  })
+}
+
+// 拒绝申请
+export function platformActive(data) {
+  return request({
+    url: '/api/platform/audit/activate',
     method: 'post',
     data
   })

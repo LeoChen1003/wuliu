@@ -148,11 +148,6 @@ export const asyncRoutes = [
         meta: { title: 'member', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
       },
       {
-        path: 'platformMember',
-        component: () => import('@/views/member/platform'),
-        meta: { title: 'member', roles: ['PLATFORM'] }
-      },
-      {
         path: 'toBeVerified',
         component: () => import('@/views/member/toBeVerified'),
         meta: { title: 'toBeVerified', roles: ['PLATFORM'] }
