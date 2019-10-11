@@ -127,8 +127,13 @@ export default {
     return {
       tabActive: 'DEFAULT',
       value1: [],
-      dialogVisible: true,
-      topUpform: {},
+      dialogVisible: false,
+      loading: false,
+      topUpform: {
+        fee_ype: 'FEE',
+        operate_at: '',
+        apply_type: localStorage.getItem('curRole')
+      },
       options: [{
         value: 'GUARANTEE',
         label: 'GUARANTEE'
@@ -137,11 +142,12 @@ export default {
         label: 'FEE'
       }],
       topUpRules: {
-        name: [{ required: true, trigger: "blur" }],
-        phone: [
-          { required: true, trigger: "blur" }
+        fee_ype: [{ required: true }],
+        operate_at: [
+          { required: true, trigger: "change" }
         ],
-        status: [{ required: true }]
+        amount: [{ required: true, trigger: 'blur' }],
+        resource_id: [{ required: true }]
       },
     };
   },
@@ -163,6 +169,13 @@ export default {
     },
     handleClick () {
       this.getTopUpList()
+    },
+    toConfirm () {
+      let self = this
+      self.loading = true
+      topUp(self.topUpform).then(res => {
+
+      })
     }
   }
 };
