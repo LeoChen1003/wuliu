@@ -36,11 +36,20 @@
       </div>
       <div class="container">
         <div class="center">
-          <el-table :data="[{},{},{}]"
+          <el-table :data="dataList"
+                    highlight-current-row
+                    @current-change="handleCurrentChange"
                     border>
-            <el-table-column :label="$t('billing.date')" />
-            <el-table-column :label="$t('billing.type')" />
-            <el-table-column :label="$t('billing.amount')" />
+            <el-table-column prop="operateAt"
+                             :label="$t('billing.date')">
+              <template slot-scope="scope">
+                {{scope.row.operateAt.slice(0,10) + ' ' +scope.row.operateAt.slice(11,19)}}
+              </template>
+            </el-table-column>
+            <el-table-column prop="financeAccountType"
+                             :label="$t('billing.type')"></el-table-column>
+            <el-table-column prop="amount"
+                             :label="$t('billing.amount')"></el-table-column>
           </el-table>
         </div>
         <div class="right" />
@@ -82,11 +91,23 @@
           <el-form-item prop='amount'
                         :label="$t('billing.amount')">
             <el-input v-model="topUpform.amount"
+                      type="number"
                       class="inputWidth"></el-input>
           </el-form-item>
           <el-form-item prop='resource_id'
                         :label="$t('billing.attachment')">
-            <div class="inputWidth">上传</div>
+            <div class="inputWidth">
+              <el-upload class="upload"
+                         :action="baseUrl + '?credentials_type=top_up_copy&apply_type='+apply_type"
+                         :headers="headers"
+                         :limit="1"
+                         :on-success="uploadSuccess">
+                <el-button size="small"
+                           icon="el-icon-upload2"
+                           type="primary">{{ $t('member.upload') }}
+                </el-button>
+              </el-upload>
+            </div>
           </el-form-item>
           <el-form-item prop="remarks"
                         :label="$t('billing.remarks')">
@@ -119,21 +140,27 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { topUpList, topUp } from "../../api/billing"
+import { getToken } from '@/utils/auth'
 
 export default {
   // import引入的组件需要注入到对象中才能使用
   components: {},
   data () {
+    const self = this;
     return {
       tabActive: 'DEFAULT',
-      value1: [],
       dialogVisible: false,
       loading: false,
+      value1: '',
       topUpform: {
         fee_ype: 'FEE',
         operate_at: '',
+        amount: null,
+        resource_id: null,
         apply_type: localStorage.getItem('curRole')
       },
+      dataList: [],
+      apply_type: localStorage.getItem('curRole'),
       options: [{
         value: 'GUARANTEE',
         label: 'GUARANTEE'
@@ -148,6 +175,11 @@ export default {
         ],
         amount: [{ required: true, trigger: 'blur' }],
         resource_id: [{ required: true }]
+      },
+      baseUrl: process.env.VUE_APP_BASE_API + '/api/member/upload',
+      headers: {
+        "authorization": getToken(),
+        "locale": self.$store.getters.language
       },
     };
   },
@@ -165,6 +197,7 @@ export default {
       let applyType = localStorage.getItem('curRole')
       topUpList(applyType, self.tabActive).then(res => {
         console.log(res)
+        self.dataList = res.data.content
       })
     },
     handleClick () {
@@ -172,10 +205,31 @@ export default {
     },
     toConfirm () {
       let self = this
-      self.loading = true
-      topUp(self.topUpform).then(res => {
-
+      this.$refs.topUpform.validate(valid => {
+        if (valid) {
+          self.loading = true
+          topUp(self.topUpform).then(res => {
+            console.log(res)
+            self.$message.success(res.message)
+            self.dialogVisible = false
+            self.loading = false
+            self.getTopUpList()
+          }).catch(el => {
+            self.loading = false
+          })
+        }
       })
+    },
+    // 文件上传成功的处理
+    uploadSuccess (res, file) {
+      console.log(res)
+      const self = this;
+      if (res.status === 200) {
+        self.topUpform.resource_id = res.data.resource.id
+      }
+    },
+    handleCurrentChange (val) {
+      console.log(val)
     }
   }
 };
