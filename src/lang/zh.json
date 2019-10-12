@@ -208,7 +208,7 @@
     "register": "Register",
     "enterData": "Enter data",
     "submitApplication": "Submit application",
-    "downloadContract": "Download contract",
+    "downloadContract": "下载合同",
     "payGuaranteeMoney": "Pay guarantee money",
     "sendContractBackToPlatform": "Send contract back to  platform",
     "onlieTraining": "Onlie training",
@@ -258,6 +258,14 @@
     "partnerType": "会员类型",
     "guarantee": "保证金",
     "contract": "合同",
-    "status": "当前状态"
+    "status": "当前状态",
+    "pleaseCompleteTheInformation": "请填写信息",
+    "applyStatusDefault": "申请已提交，审核中",
+    "applyStatusRejected": "审核失败",
+    "applyStatusAccepted": "审核通过",
+    "goToDownload": "去下载会员合同",
+    "type": "类型",
+    "download": "下载",
+    "uploadContract": "上传合同"
   }
 }

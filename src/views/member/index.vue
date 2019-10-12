@@ -182,13 +182,37 @@
       <el-tab-pane name="DEMAND"
                    :label="$t('member.relevantDocument_demand')">
         <div class="container">
-          <el-form label-width="200px">
+          <el-alert v-if="applyStatus.demand.status == 'REJECTED'"
+                    class="rejectMsg"
+                    show-icon
+                    :closable="false"
+                    :description='applyStatus.demand.rejectReason'
+                    :title="$t('member.applyStatusRejected')"
+                    type="error"></el-alert>
+          <el-alert v-else-if="applyStatus.demand.status == 'DEFAULT'"
+                    class="rejectMsg"
+                    show-icon
+                    :closable="false"
+                    :title="$t('member.applyStatusDefault')"
+                    type="info"></el-alert>
+          <el-alert v-else-if="applyStatus.demand.status == 'ACCEPTED'"
+                    class="rejectMsg"
+                    show-icon
+                    :closable="false"
+                    @click="goToDownload"
+                    :description="$t('member.goToDownload')"
+                    :title="$t('member.applyStatusAccepted')"
+                    type="success"></el-alert>
+          <el-form label-width="200px"
+                   :disabled="applyStatus.demand.status == 'ACCEPTED' || applyStatus.demand.status == 'ACTIVATED' || applyStatus.demand.status == 'DEFAULT'">
             <el-form-item :label="$t('member.affidavit')">
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=affidavit&apply_type=DEMAND'"
                          :headers="headers"
+                         :file-list="fileList.demand.affidavit"
                          :on-success="uploadSuccess"
-                         :limit="1">
+                         accept="image/*"
+                         :on-change="handleChange">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -199,8 +223,10 @@
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=transportation_license&apply_type=DEMAND'"
                          :headers="headers"
+                         :file-list="fileList.demand.transportation_license"
                          :on-success="uploadSuccess"
-                         :limit="1">
+                         accept="image/*"
+                         :on-change="handleChange">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -211,8 +237,10 @@
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=idcard&apply_type=DEMAND'"
                          :headers="headers"
+                         :file-list="fileList.demand.idcard"
                          :on-success="uploadSuccess"
-                         :limit="1">
+                         accept="image/*"
+                         :on-change="handleChange">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -223,8 +251,10 @@
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=house_particulars&apply_type=DEMAND'"
                          :headers="headers"
+                         :file-list="fileList.demand.house_particulars"
                          :on-success="uploadSuccess"
-                         :limit="1">
+                         accept="image/*"
+                         :on-change="handleChange">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -235,8 +265,10 @@
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=bank_account_copy&apply_type=DEMAND'"
                          :headers="headers"
+                         :file-list="fileList.demand.bank_account_copy"
                          :on-success="uploadSuccess"
-                         :limit="1">
+                         accept="image/*"
+                         :on-change="handleChange">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -244,25 +276,54 @@
               </el-upload>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary"
+              <el-button class="submitBtn"
                          @click="submitDemand"
-                         class="submitBtn">{{ $t('member.submitDemand') }}
+                         type="primary">
+                {{ $t('member.submitDemand') }}
               </el-button>
             </el-form-item>
           </el-form>
+          <el-button type="primary"
+                     style="margin-left:200px;"
+                     @click="goToDownload"
+                     v-if="applyStatus.demand.status == 'ACCEPTED'">{{$t('member.goToDownload')}}</el-button>
         </div>
       </el-tab-pane>
       <!-- 相关文件(运输公司) -->
       <el-tab-pane name="SUPPLY"
                    :label="$t('member.relevantdocument_supply')">
         <div class="container">
-          <el-form label-width="200px">
+          <el-alert v-if="applyStatus.supply.status == 'REJECTED'"
+                    class="rejectMsg"
+                    show-icon
+                    :closable="false"
+                    :description='applyStatus.supply.rejectReason'
+                    :title="$t('member.applyStatusRejected')"
+                    type="error"></el-alert>
+          <el-alert v-else-if="applyStatus.supply.status == 'DEFAULT'"
+                    class="rejectMsg"
+                    show-icon
+                    :closable="false"
+                    :title="$t('member.applyStatusDefault')"
+                    type="info"></el-alert>
+          <el-alert v-else-if="applyStatus.supply.status == 'ACCEPTED'"
+                    class="rejectMsg"
+                    show-icon
+                    :closable="false"
+                    @click="goToDownload"
+                    :description="$t('member.goToDownload')"
+                    :title="$t('member.applyStatusAccepted')"
+                    type="success"></el-alert>
+          <el-form label-width="200px"
+                   :disabled="applyStatus.supply.status == 'ACCEPTED' || applyStatus.supply.status == 'ACTIVATED' ">
             <el-form-item :label="$t('member.affidavit')">
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=affidavit&apply_type=SUPPLY'"
                          :headers="headers"
+                         :file-list="fileList.supply.affidavit"
                          :on-success="uploadSuccess"
-                         :limit="1">
+                         accept="image/*"
+                         :on-change="handleChange">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -273,8 +334,10 @@
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=transportation_license&apply_type=SUPPLY'"
                          :headers="headers"
+                         :file-list="fileList.supply.transportation_license"
                          :on-success="uploadSuccess"
-                         :limit="1">
+                         accept="image/*"
+                         :on-change="handleChange">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -285,8 +348,10 @@
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=idcard&apply_type=SUPPLY'"
                          :headers="headers"
+                         :file-list="fileList.supply.idcard"
                          :on-success="uploadSuccess"
-                         :limit="1">
+                         accept="image/*"
+                         :on-change="handleChange">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -297,8 +362,10 @@
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=house_particulars&apply_type=SUPPLY'"
                          :headers="headers"
+                         :file-list="fileList.supply.house_particulars"
                          :on-success="uploadSuccess"
-                         :limit="1">
+                         accept="image/*"
+                         :on-change="handleChange">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -309,8 +376,10 @@
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=bank_account_copy&apply_type=SUPPLY'"
                          :headers="headers"
+                         :file-list="fileList.supply.bank_account_copy"
                          :on-success="uploadSuccess"
-                         :limit="1">
+                         accept="image/*"
+                         :on-change="handleChange">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -321,8 +390,10 @@
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=center_map&apply_type=SUPPLY'"
                          :headers="headers"
+                         :file-list="fileList.supply.center_map"
                          :on-success="uploadSuccess"
-                         :limit="1">
+                         accept="image/*"
+                         :on-change="handleChange">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -331,17 +402,19 @@
             </el-form-item>
             <el-form-item :label="$t('member.carRegistration')">
               <el-upload class="upload"
-                         :action="baseUrl + '?credentials_type=turck_register_copy&apply_type=SUPPLY'"
+                         :action="baseUrl + '?credentials_type=truck_register_copy&apply_type=SUPPLY'"
                          :headers="headers"
+                         :file-list="fileList.supply.truck_register_copy"
                          :on-success="uploadSuccess"
-                         :limit="1">
+                         accept="image/*"
+                         :on-change="handleChange">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
                 </el-button>
               </el-upload>
             </el-form-item>
-            <el-form-item :label="$t('member.cargoInsurance')">
+            <!-- <el-form-item :label="$t('member.cargoInsurance')">
               <div>
                 <div class="z-cell">
                   <el-checkbox v-model="perPrice">
@@ -366,19 +439,22 @@
                   </el-checkbox>
                 </div>
               </div>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item :label="$t('member.dc')">
               <div class="z-cell">
-                <el-switch v-model="dc"
+                <el-switch v-model="dc_status"
+                           @change="dcChange"
+                           :active-value="1"
+                           :inactive-value="0"
                            :active-text="$t('member.have')"
                            :inactive-text="$t('member.notHave')" />
               </div>
               <transition name="el-fade-in">
-                <div v-if="dc"
+                <div v-if="dc_status"
                      class="z-cell dc-wrapper">
                   <div>
                     <el-table border
-                              :data="dcList"
+                              :data="dc"
                               style="width:700px;">
                       <el-table-column align="center"
                                        :label="$t('member.dcAddress')">
@@ -391,7 +467,7 @@
                       <el-table-column align="center"
                                        :label="$t('member.transportationExperience')">
                         <template slot-scope="scope">
-                          <el-input v-model="scope.row.experience"
+                          <el-input v-model="scope.row.years"
                                     type="textarea"
                                     resize="none" />
                         </template>
@@ -421,11 +497,29 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary"
+                         v-if="applyStatus.supply.status == 'DEFAULT'"
+                         disabled
+                         class="submitBtn">
+                {{ $t('member.applyStatusDefault') }}
+              </el-button>
+              <el-button type="primary"
+                         v-else-if="applyStatus.supply.status == 'ACCEPTED'"
+                         disabled
+                         class="submitBtn">
+                {{ $t('member.applyStatusAccepted') }}
+              </el-button>
+              <el-button v-else
+                         class="submitBtn"
                          @click="submitSupply"
-                         class="submitBtn">{{ $t('member.submitSupply') }}
+                         type="primary">
+                {{ $t('member.submitSupply') }}
               </el-button>
             </el-form-item>
           </el-form>
+          <el-button type="primary"
+                     style="margin-left:200px;"
+                     @click="goToDownload"
+                     v-if="applyStatus.demand.status == 'ACCEPTED'">{{$t('member.goToDownload')}}</el-button>
         </div>
       </el-tab-pane>
       <!-- 相关文件(货运站) -->
@@ -437,8 +531,7 @@
             <el-form-item :label="$t('member.affidavit')">
               <el-upload class="upload"
                          action="https://jsonplaceholder.typicode.com/posts/"
-                         multiple
-                         :limit="1">
+                         multiple>
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -468,25 +561,64 @@
         </div>
       </el-tab-pane>
       <!-- 我的会员合同 -->
-      <el-tab-pane name="6"
+      <el-tab-pane name="contract"
                    :label="$t('member.myContract')">
-        <div class="container" />
+        <div class="container">
+          <el-table border
+                    :data="contractList">
+            <el-table-column header-align="center"
+                             align="center"
+                             :label="$t('member.type')">
+              <template slot-scope="scope">
+                <div>
+                  {{scope.row.type == "DEMAND" ? $t('member.demand') : scope.row.type == "SUPPLY" ? $t('member.supply') : ""}}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column header-align="center"
+                             align="center"
+                             :label="$t('member.downloadContract')">
+              <template slot-scope="scope">
+                <el-button type="primary"
+                           @click="downloadContract(scope.row.path)">{{$t('member.download')}}</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column header-align="center"
+                             align="center"
+                             :label="$t('member.uploadContract')">
+              <template slot-scope="scope">
+                <el-upload class="upload"
+                           :action="baseUrl + '?credentials_type=affidavit&apply_type=DEMAND'"
+                           :headers="headers"
+                           :file-list="fileList.demand.affidavit"
+                           :on-success="uploadSuccess"
+                           accept="image/*"
+                           :on-change="handleChange">
+                  <el-button size="small"
+                             icon="el-icon-upload2"
+                             type="primary">{{ $t('member.upload') }}
+                  </el-button>
+                </el-upload>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-import { fillInfo, getInfo, getCredentials } from '@/api/member'
+import { fillInfo, getInfo, getCredentials, submitApply, getApplying, getDc, getContract } from '@/api/member'
 import { getToken } from '@/utils/auth'
 
+let self;
 export default {
   data () {
-    const self = this;
     return {
       tabActive: 'process',
-      dc: false,
-      dcList: [{ address: '', experience: '' }],
+      dc_status: false,
+      dc: [{ address: '', years: '' }],
       perShipment: false,
       perShipmentSelected: null,
       perPrice: false,
@@ -496,13 +628,43 @@ export default {
       baseUrl: process.env.VUE_APP_BASE_API + '/api/member/upload',
       headers: {
         "authorization": getToken(),
-        "locale": self.$store.getters.language
-      }
+        "locale": this.$store.getters.language
+      },
+      fileList: {
+        demand: {
+          affidavit: [],
+          transportation_license: [],
+          idcard: [],
+          house_particulars: [],
+          bank_account_copy: [],
+        },
+        supply: {
+          affidavit: [],
+          transportation_license: [],
+          idcard: [],
+          house_particulars: [],
+          bank_account_copy: [],
+          center_map: [],
+          truck_register_copy: [],
+        }
+      },
+      applyList: {
+        demand: null,
+        supply: null
+      },
+      applyStatus: {
+        demand: {
+          status: null
+        },
+        supply: {
+          status: null
+        }
+      },
+      contractList: []
     }
   },
   watch: {
     typeList (n, o) {
-      const self = this
       let type = ''
       for (let i of n) {
         type += `${i},`
@@ -512,39 +674,70 @@ export default {
     }
   },
   mounted () {
-    this.loadData_info()
+    self = this;
+    self.loadData();
   },
   methods: {
-    // 载入初始数据
+    loadData () {
+      self.loadData_info();
+      self.loadData_list('DEMAND');
+      self.loadData_list('SUPPLY');
+      self.loadData_contract();
+    },
+    // 载入基础资料
     loadData_info () {
-      const self = this
       getInfo().then(res => {
-        self.infoForm = res.data
-        self.typeList = self.$store.getters.userInfo.roleListStr.split(',')
+        self.infoForm = res.data;
+        self.typeList = self.$store.getters.userInfo.roleListStr.split(',');
+      })
+      getApplying().then(res => {
+        console.log(res)
+        for (let i of res.data) {
+          self.applyStatus[i.applyType.toLowerCase()] = {
+            status: i.auditStatus,
+            rejectReason: i.rejectReason
+          };
+        }
       })
     },
+    // 载入相关文件
     loadData_list (apply_type) {
-      const self = this;
+      // 获取文件列表
       getCredentials(apply_type).then(res => {
-
+        for (let i of res.data) {
+          self.fileList[i.applyType.toLowerCase()][i.credentialsType] = [{
+            name: i.resource.name,
+            url: i.resource.path
+          }]
+        }
+      })
+      if (apply_type == "SUPPLY") {
+        getDc().then(res => {
+          self.dc_status = res.data.length == 0 ? 0 : 1;
+          self.dc = res.data;
+        })
+      }
+    },
+    // 获取合同
+    loadData_contract () {
+      getContract().then(res => {
+        self.contractList = res.data;
       })
     },
     tabChange (tab, e) {
-      const self = this;
-      let name = tab.name;
-      if (name == 'process') {
-        self.loadData_info();
-      } else if (name == 'DEMAND' || name == 'SUPPLY' || name == 'HUB') {
-        self.loadData_list(name)
-      }
+      // let name = tab.name;
+      // if (name == 'data') {
+      //   self.loadData_info();
+      // } else if (name == 'DEMAND' || name == 'SUPPLY' || name == 'HUB') {
+      //   self.loadData_list(name)
+      // }
     },
     // 会员类型选择
     typeListChange (e) {
-      const self = this
+
     },
     // 注册类型选择
     typeChange (e) {
-      const self = this
       if (e == 'PERSONAL') {
         self.infoForm.companyName = ''
       } else {
@@ -553,7 +746,6 @@ export default {
     },
     // 保存基础资料
     saveInfo () {
-      const self = this
       fillInfo(self.infoForm).then(res => {
         self.$message.success(self.$t('member.saveSuccess'))
         self.loadData_info()
@@ -561,28 +753,85 @@ export default {
     },
     // dc表格操作
     addDc () {
-      this.dcList.push({ address: '', experience: '' })
+      this.dc.push({ address: '', years: '' })
     },
     delDc (row, index) {
-      this.dcList.splice(index, 1)
+      this.dc.splice(index, 1)
+    },
+    // 文件选中时的处理
+    handlePreview (file, fileList) {
+      // console.log(file)
+      // if (fileList.length > 1) {
+      //   fileList.splice(0, 1);
+      // }
+    },
+    // 文件覆盖上传
+    handleChange (file, fileList) {
+      if (fileList.length > 1) {
+        fileList.splice(0, 1);
+      }
+      // self.fileList.demand.affidavit = []
     },
     // 文件上传成功的处理
     uploadSuccess (res, file) {
       console.log(file)
-      const self = this;
       if (res.status === 200) {
         let applyType = res.data.applyType; // 申请类型
         let credentialsType = res.data.credentialsType; // 文件类型
-
+        self.fileList[self.tabActive.toLowerCase()][res.data.credentialsType][0] = {
+          name: res.data.resource.name,
+          url: res.data.resource.path
+        }
+        // self.loadData_list(self.tabActive);
       }
+    },
+    // 文件删除时的处理
+    handleRemove (file, fileList) {
     },
     // 提交发货人申请
     submitDemand () {
-      const self = this;
+      // 简单验证
+      for (let x in self.fileList.demand) {
+        console.log(x)
+        if (self.fileList.demand[x].length == 0) {
+          return self.$message.warning(self.$t('member.pleaseCompleteTheInformation'))
+        }
+      }
+      submitApply('DEMAND').then(res => {
+        self.loadData();
+      })
+    },
+    dcChange (e) {
+      self.dc = [{ address: '', years: '' }]
     },
     // 提交运输公司申请
     submitSupply () {
-      const self = this;
+      // 简单验证
+      for (let x in self.fileList.supply) {
+        if (self.fileList.supply[x].length == 0) {
+          return self.$message.warning(self.$t('member.pleaseCompleteTheInformation'))
+        }
+      }
+      if (self.dc_status == 1) {
+        for (let i of self.dc) {
+          if (i.address == "" || i.years == "") {
+            return self.$message.warning(self.$t('member.pleaseCompleteTheInformation'))
+          }
+        }
+      }
+      submitApply('SUPPLY', {
+        dc_status: self.dc_status,
+        dc: JSON.stringify(self.dc)
+      }).then(res => {
+        self.loadData();
+      })
+    },
+    // 去下载会员合同
+    goToDownload () {
+      self.tabActive = 'contract';
+    },
+    downloadContract (path) {
+      window.open(path)
     }
 
   }
@@ -655,5 +904,9 @@ export default {
 .el-tab-pane,
 .el-tabs__content {
   height: 100%;
+}
+
+.rejectMsg {
+  margin-bottom: 20px;
 }
 </style>

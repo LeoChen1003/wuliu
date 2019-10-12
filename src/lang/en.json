@@ -260,6 +260,7 @@
     "partnerType": "Partner type",
     "guarantee": "Guarantee",
     "contract": "Contract",
-    "status": "Status"
+    "status": "Status",
+    "pleaseCompleteTheInformation": "Please complete the information"
   }
 }
