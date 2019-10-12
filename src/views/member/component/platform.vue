@@ -229,11 +229,7 @@ export default {
       reason: '',
       refuseLoading: false,
       url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-      srcList: [
-        'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
-        'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg',
-        'https://cdn.withpush.cn/image/20191011/image-57c2bfd59cb6bdfdb08416c1e5ea11cc.png'
-      ]
+      srcList: []
     };
   },
   //监听属性 类似于data概念
@@ -345,7 +341,10 @@ export default {
       const self = this;
       self.infoForm = row.site;
       self.credentials = row.credentials
-      // self.typeList = self.$store.getters.userInfo.roleListStr.split(',');
+      for (let x in self.credentials) {
+        self.srcList.push(self.credentials[x].resource.path)
+      }
+      console.log(self.srcList)
     },
   },
   created () {
