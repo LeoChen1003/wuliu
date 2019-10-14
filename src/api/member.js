@@ -15,9 +15,16 @@ export function getInfo(data) {
   })
 }
 
+export function getApplying(data) {
+  return request({
+    url: '/api/member/info/applying',
+    method: 'get'
+  })
+}
+
 export function getCredentials(apply_type) {
   return request({
-    url: '/api/member/info',
+    url: '/api/member/credentials/list',
     method: 'get',
     params: {
       apply_type: apply_type
@@ -65,6 +72,34 @@ export function platformActive(data) {
 export function besuper() {
   return request({
     url: '/api/platform/super',
+    method: 'get'
+  })
+}
+
+// 提交申请
+export function submitApply(apply_type, data) {
+  return request({
+    url: '/api/member/apply',
+    method: 'post',
+    data: {
+      ...data,
+      apply_type: apply_type
+    }
+  })
+}
+
+// 获取dc
+export function getDc(data) {
+  return request({
+    url: '/api/member/info/dc',
+    method: 'get'
+  })
+}
+
+// 获取合同列表
+export function getContract() {
+  return request({
+    url: '/api/member/contract/list',
     method: 'get'
   })
 }
