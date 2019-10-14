@@ -586,9 +586,8 @@
             <el-table-column header-align="center"
                              align="center"
                              :label="$t('member.uploadContract')">
-              <template slot-scope="scope">
-                <el-upload class="upload"
-                           :action="baseUrl + '?credentials_type=affidavit&apply_type=DEMAND'"
+              <template slot-scope="">
+                <el-upload :action="baseUrl + '?credentials_type=affidavit&apply_type=DEMAND'"
                            :headers="headers"
                            :file-list="fileList.demand.affidavit"
                            :on-success="uploadSuccess"
