@@ -43,11 +43,11 @@ export function truckAdd(data) {
   })
 }
 
-// // Truck edit
-// export function truckEdit(id, data) {
-//   return request({
-//     url: '/api/supply/truck/' + id,
-//     method: 'patch',
-//     data
-//   })
-// }
+// Truck edit
+export function truckEdit(data) {
+  return request({
+    url: '/api/supply/trucks/modify',
+    method: 'post',
+    data
+  })
+}

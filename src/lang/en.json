@@ -5,7 +5,10 @@
   "placeholder": {
     "pleaseEnterYourLoginAccount": "Please enter your login account number.",
     "pleaseInputPassword": "Please input a password",
-    "pleaseChoose": "Please choose"
+    "pleaseChoose": "Please choose",
+    "to": "to",
+    "startDate": "Start date",
+    "endDate": "End date"
   },
   "route": {
     "booking": "Booking",
@@ -169,7 +172,8 @@
     "IinsuranceValue": "Insurance value",
     "registrationPlace": "Registration place",
     "HAS_INSURANCE": "Have",
-    "DO_NOT_HAS_INSURANCE": "Don't have"
+    "DO_NOT_HAS_INSURANCE": "Don't have",
+    "cancel": "cancel"
   },
   "billing": {
     "billingStatus": "Billing status",
@@ -194,7 +198,11 @@
     "documentNo": "Document No.",
     "increase": "Increase",
     "decrease": "Decrease",
-    "balance": "Balance"
+    "balance": "Balance",
+    "search": "search",
+    "topUptype": "Type",
+    "attachment": "Attachment",
+    "remarks": "Remarks"
   },
   "home": {
     "button": "button"
@@ -261,6 +269,18 @@
     "guarantee": "Guarantee",
     "contract": "Contract",
     "status": "Status",
-    "pleaseCompleteTheInformation": "Please complete the information"
+    "pleaseCompleteTheInformation": "Please complete the information",
+    "accept": "accept",
+    "reject": "reject",
+    "reasonsForRefusal": "Reasons for refusal",
+    "reason": "reason",
+    "cancel": "cancel",
+    "qualificationInformation": "Qualification information",
+    "activate": "activate"
+  },
+  "confirm": {
+    "tips": "Tips",
+    "aysAgree": "Are you sure you agree?",
+    "aysActivate": "Are you sure activate?"
   }
 }

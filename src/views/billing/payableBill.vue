@@ -4,28 +4,30 @@
       <div class="status-txt">{{ $t('billing.billingStatus') }}</div>
     </div>
     <div class="content">
-      <el-tabs v-model="tabActive" tab-position="left" style="height:calc(100% - 50px);">
+      <el-tabs v-model="tabActive"
+               tab-position="left"
+               style="height:calc(100% - 50px);">
         <el-tab-pane :label="$t('billing.unpaid')">
           <div class="timePicker">
-            <el-date-picker
-              v-model="value1"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              size="small"
-            />
+            <el-date-picker v-model="value1"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            size="small" />
           </div>
           <div class="container">
             <div class="center">
-              <el-table :data="[{},{},{}]" border>
+              <el-table :data="[{},{},{}]"
+                        border>
                 <el-table-column :label="$t('billing.bookingTime')" />
                 <el-table-column :label="$t('billing.trackingNo')" />
                 <el-table-column :label="$t('billing.totalAmount')" />
               </el-table>
             </div>
             <div class="right">
-              <el-table :data="[{},{},{}]" border>
+              <el-table :data="[{},{},{}]"
+                        border>
                 <el-table-column :label="$t('billing.supply')" />
                 <el-table-column :label="$t('billing.amount')" />
               </el-table>
@@ -34,27 +36,23 @@
         </el-tab-pane>
         <el-tab-pane :label="$t('billing.paid')">
           <div class="timePicker">
-            <el-date-picker
-              v-model="value1"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              size="small"
-            />
+            <el-date-picker v-model="value1"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            size="small" />
           </div>
           <div class="container" />
         </el-tab-pane>
         <el-tab-pane :label="$t('billing.cancelled')">
           <div class="timePicker">
-            <el-date-picker
-              v-model="value1"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              size="small"
-            />
+            <el-date-picker v-model="value1"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            size="small" />
           </div>
           <div class="container" />
         </el-tab-pane>
@@ -70,7 +68,7 @@
 export default {
   // import引入的组件需要注入到对象中才能使用
   components: {},
-  data() {
+  data () {
     return {
       tabActive: 0,
       value1: []
@@ -80,8 +78,8 @@ export default {
   computed: {},
   // 监控data中的数据变化
   watch: {},
-  created() {},
-  mounted() {},
+  created () { },
+  mounted () { },
   methods: {}
 };
 </script>
@@ -122,12 +120,4 @@ export default {
 }
 </style>
 
-<style>
-.billing .el-tabs--left .el-tabs__header.is-left {
-  margin-right: 0px;
-  width: 210px;
-}
-.billing .el-tabs--card > .el-tabs__header .el-tabs__nav {
-  border: none;
-}
-</style>
+

@@ -5,7 +5,10 @@
   "placeholder": {
     "pleaseEnterYourLoginAccount": "请输入您的登录账号",
     "pleaseInputPassword": "请输入密码",
-    "pleaseChoose": "请选择"
+    "pleaseChoose": "请选择",
+    "to": "至",
+    "startDate": "开始日期",
+    "endDate": "结束日期"
   },
   "route": {
     "booking": "下单",
@@ -169,7 +172,8 @@
     "IinsuranceValue": "车险金额",
     "registrationPlace": "保险政策",
     "HAS_INSURANCE": "有",
-    "DO_NOT_HAS_INSURANCE": "没有"
+    "DO_NOT_HAS_INSURANCE": "没有",
+    "cancel": "取消"
   },
   "billing": {
     "billingStatus": "结算状态",
@@ -194,7 +198,11 @@
     "documentNo": "单据编号",
     "increase": "增加",
     "decrease": "减少",
-    "balance": "余额"
+    "balance": "余额",
+    "search": "搜索",
+    "topUptype": "业务类型",
+    "attachment": "附件",
+    "remarks": "备注"
   },
   "member": {
     "myData": "我的资料",
@@ -266,6 +274,18 @@
     "goToDownload": "去下载会员合同",
     "type": "类型",
     "download": "下载",
-    "uploadContract": "上传合同"
+    "uploadContract": "上传合同",
+    "accept": "同意",
+    "reject": "拒绝",
+    "reasonsForRefusal": "拒绝理由",
+    "reason": "理由",
+    "cancel": "取消",
+    "qualificationInformation": "资质信息",
+    "activate": "激活"
+  },
+  "confirm": {
+    "tips": "提示",
+    "aysAgree": "是否确认同意？",
+    "aysActivate": "是否确认激活？"
   }
 }

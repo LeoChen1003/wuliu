@@ -14,8 +14,20 @@ export const constantRoutes = [
   },
   {
     path: '/',
+    component: () => import('@/views/home/index'),
+    hidden: true
+  },
+  { path: '*', redirect: '/', hidden: true }
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
+  {
+    path: '/booking',
     component: Layout,
-    redirect: '/priceConsulting',
     name: '下单',
     meta: {
       title: 'booking',
@@ -42,33 +54,41 @@ export const constantRoutes = [
       }
     ]
   },
-  { path: '*', redirect: '/', hidden: true }
-]
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
+  {
+    path: '/market',
+    component: Layout,
+    redirect: '/market/index',
+    name: '市场',
+    meta: {
+      title: 'tracking',
+      roles: ['SUPPLY']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/market/index'),
+        meta: { title: 'market', roles: ['SUPPLY'] }
+      }
+    ]
+  },
   {
     path: '/tracking',
     component: Layout,
-    redirect: '/tracking/FTL',
     name: '订单跟踪',
     meta: {
       title: 'tracking',
-      roles: ['DEMAND']
+      roles: ['DEMAND', 'SUPPLY', 'PLATFORM']
     },
     children: [
       {
         path: 'FTL',
         component: () => import('@/views/tracking/FTL'),
-        meta: { title: 'FTLNotHUB', roles: ['DEMAND'] }
+        meta: { title: 'FTLNotHUB', roles: ['DEMAND', 'SUPPLY', 'PLATFORM'] }
       },
       {
         path: 'LTL',
         component: () => import('@/views/tracking/LTL'),
-        meta: { title: 'LTLHUB', roles: ['DEMAND'] }
+        meta: { title: 'LTLHUB', roles: ['DEMAND', 'SUPPLY', 'PLATFORM'] }
       }
     ]
   },
@@ -115,23 +135,24 @@ export const asyncRoutes = [
     redirect: '/billing/payableBill',
     name: '账单',
     meta: {
-      title: 'billing'
+      title: 'billing',
+      roles: ['DEMAND', 'SUPPLY', 'HUB']
     },
     children: [
       {
         path: 'payableBill',
         component: () => import('@/views/billing/payableBill'),
-        meta: { title: 'payableBill' }
+        meta: { title: 'payableBill', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
       },
       {
         path: 'journal',
         component: () => import('@/views/billing/journal'),
-        meta: { title: 'journal' }
+        meta: { title: 'journal', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
       },
       {
         path: 'topUp',
         component: () => import('@/views/billing/topUp'),
-        meta: { title: 'topUp' }
+        meta: { title: 'topUp', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
       }
     ]
   },
@@ -146,11 +167,6 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/member/index'),
         meta: { title: 'member', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
-      },
-      {
-        path: 'platformMember',
-        component: () => import('@/views/member/platform'),
-        meta: { title: 'member', roles: ['PLATFORM'] }
       },
       {
         path: 'toBeVerified',

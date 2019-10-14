@@ -5,7 +5,10 @@
   "placeholder": {
     "pleaseEnterYourLoginAccount": "กรุณาใส่หมายเลขบัญชีผู้ใช้ของคุณ",
     "pleaseInputPassword": "กรุณาใส่รหัสผ่าน",
-    "pleaseChoose": "โปรดเลือก"
+    "pleaseChoose": "โปรดเลือก",
+    "to": "ไปถึง",
+    "startDate": "วันที่เริ่มต้น",
+    "endDate": "วันที่สิ้นสุด"
   },
   "route": {
     "booking": "การจอง",
@@ -165,7 +168,8 @@
     "IinsuranceValue": "มูลค่ากรมธรรม์",
     "registrationPlace": "กรมธรรม์ประกันภัยความเสียหายต่อสินค้ารายปี",
     "HAS_INSURANCE": "มี",
-    "DO_NOT_HAS_INSURANCE": "ไม่"
+    "DO_NOT_HAS_INSURANCE": "ไม่",
+    "cancel": "ยกเลิก"
   },
   "billing": {
     "billingStatus": "สถานะการเรียกเก็บเงิน",
@@ -181,7 +185,7 @@
     "confirmed": "Confirmed",
     "rejected": "Rejected",
     "date": "เดท",
-    "type": "Type",
+    "type": "รูปร่างลักษณะ",
     "topUp": "เติม",
     "account": "Account",
     "gaurantee": "Gaurantee",
@@ -190,7 +194,11 @@
     "documentNo": "หมายเลขเอกสาร",
     "increase": "เพิ่ม",
     "decrease": "ลดลง",
-    "balance": "สมดุล"
+    "balance": "สมดุล",
+    "search": "ค้นหา",
+    "topUptype": "ประเภทธุรกิจ",
+    "attachment": "รูปถ่าย",
+    "remarks": "แสดงความคิดเห็น"
   },
   "member": {
     "myData": "ข้อมูลของฉัน",
@@ -246,6 +254,18 @@
     "partnerType": "ประเภทพันธมิตร",
     "guarantee": "รับประกัน",
     "contract": "สัญญา",
-    "status": "สถานะ"
+    "status": "สถานะ",
+    "accept": "ยอมรับ",
+    "reject": "ปฏิเสธ",
+    "reasonsForRefusal": "เหตุผลสำหรับการปฏิเสธ",
+    "reason": "เหตุผล",
+    "cancel": "ยกเลิก",
+    "qualificationInformation": "ข้อมูลคุณสมบัติ",
+    "activate": "กระตุ้น"
+  },
+  "confirm": {
+    "tips": "ทูลเกล้าฯถวาย",
+    "aysAgree": "คุณแน่ใจนะว่าคุณเห็นด้วย？",
+    "aysActivate": "คุณแน่ใจนะว่าเปิดใช้งาน"
   }
 }

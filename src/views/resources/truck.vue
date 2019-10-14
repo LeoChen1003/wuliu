@@ -66,6 +66,7 @@
           <el-form-item prop='plate'
                         :label="$t('resources.licensePlate')">
             <el-input v-model="detailform.plate"
+                      :disabled="editType == 'edit'? true : false"
                       class="inputWidth"></el-input>
           </el-form-item>
           <el-form-item prop="category"
@@ -162,7 +163,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { truckList, truckAdd } from "../../api/resources";
+import { truckList, truckAdd, truckEdit } from "../../api/resources";
 import { truckType, provinceList } from "../../api/data";
 
 export default {
@@ -184,10 +185,10 @@ export default {
       },
       options: [{
         value: 'ACTIVE',
-        label: 'Actived'
+        label: 'ACTIVE'
       }, {
         value: 'CLOSED',
-        label: 'Closed'
+        label: 'CLOSED'
       }],
       categoryList: [],
       subCategoryList: [],
@@ -263,7 +264,7 @@ export default {
         insuranceStatus: row.insuranceStatus,
         plate: row.plate,
         registerAtRegion: row.registerAtRegion,
-        status: row.status
+        status: row.activeStatus
       }
       self.curEditId = row.id
       self.getData()
@@ -283,7 +284,8 @@ export default {
               self.loading = false
             })
           } else if (self.editType == 'edit') {
-            truckEdit(self.curEditId, self.detailform).then(res => {
+            self.detailform.id = self.curEditId
+            truckEdit(self.detailform).then(res => {
               self.$message.success(res.message)
               self.loading = false
               self.getTruckList()
