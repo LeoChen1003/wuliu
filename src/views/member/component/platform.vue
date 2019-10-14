@@ -13,7 +13,7 @@
       <el-table-column prop="phone"
                        :label="$t('member.platform_name')">
         <template slot-scope="scope">
-          {{scope.row.financeGranteeAccount.name}}
+          {{scope.row.financeGranteeAccount?scope.row.financeGranteeAccount.name:''}}
         </template>
       </el-table-column>
       <el-table-column prop="activeStatus"
@@ -22,11 +22,21 @@
                        :label="$t('member.partnerType')"></el-table-column>
       <el-table-column :label="$t('member.guarantee')">
         <template slot-scope="scope">
-          {{scope.row.financeGranteeAccount.currentBalance}}
+          {{scope.row.financeGranteeAccount?scope.row.financeGranteeAccount.currentBalance/100:null}}
         </template>
       </el-table-column>
       <el-table-column prop="contractNo"
-                       :label="$t('member.contract')"></el-table-column>
+                       :label="$t('member.contract')">
+        <template slot-scope="scope">
+          <div style="cursor: pointer;">
+            <el-link :href="scope.row.contract"
+                     target="_blank"
+                     type='primary'>
+              {{scope.row.contractNo}}
+            </el-link>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="auditStatus"
                        :label="$t('member.status')"></el-table-column>
       <el-table-column width='80px;'>
@@ -159,8 +169,8 @@
                 <span v-else-if="item.credentialsType == 'bank_account_copy'">{{$t('member.bangAccount')}}</span>
                 <span v-else-if="item.credentialsType == 'center_map'">{{$t('member.mapForDistributionCenters')}}</span>
                 <span v-else-if="item.credentialsType == 'truck_register_copy'">{{$t('member.carRegistration')}}</span>
-                <span v-else>{{item.credentialsType}}</span>
-                <el-image style="width: 25px; height: 25px"
+                <el-image v-if="item.credentialsType != 'top_up_copy'"
+                          style="width: 25px; height: 25px"
                           src="https://cdn.withpush.cn/image/20191011/image-57c2bfd59cb6bdfdb08416c1e5ea11cc.png"
                           :preview-src-list="getSrcList(index)">
                 </el-image>
@@ -169,6 +179,9 @@
               </div>
             </div>
           </el-form-item>
+          <!-- <el-form-item :label="$t('member.contract')">
+
+          </el-form-item> -->
           <el-form-item>
             <el-button type="primary"
                        class="submitBtn inp"
@@ -212,7 +225,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { platformList, besuper, platformAccept, platformRefuse, platformActive } from '../../../api/member'
+import { platformList, platformAccept, platformRefuse, platformActive } from '../../../api/member'
 
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -260,11 +273,10 @@ export default {
   },
   methods: {
     getSrcList (index) {
-      console.log(index)
       return this.srcList.slice(index).concat(this.srcList.slice(0, index))
     },
     cell ({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex == 7) {
+      if (columnIndex == 7 || columnIndex == 5) {
         return 'text-align:center;color:#168BD5;font-size:23px;'
       }
     },
@@ -362,7 +374,9 @@ export default {
       self.applyType = row.applyType
       self.credentials = row.credentials
       for (let x in self.credentials) {
-        self.srcList.push(self.credentials[x].resource.path)
+        if (self.credentials[x].credentialsType != 'top_up_copy') {
+          self.srcList.push(self.credentials[x].resource.path)
+        }
       }
     },
   },
@@ -370,10 +384,6 @@ export default {
 
   },
   mounted () {
-    // besuper().then(res => {
-    //   console.log(res)
-
-    // })
     this.getPlatformList()
 
   },

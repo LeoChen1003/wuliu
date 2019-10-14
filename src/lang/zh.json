@@ -8,7 +8,15 @@
     "pleaseChoose": "请选择",
     "to": "至",
     "startDate": "开始日期",
-    "endDate": "结束日期"
+    "endDate": "结束日期",
+    "chooseDate": "选择日期",
+    "chooseTime": "选择时间",
+    "pleaseEnterLeywords": "请输入关键词",
+    "placeEnterSenderName": "请输入寄件人姓名",
+    "pleaseEnterTelNumber": "请输入联系电话",
+    "pleaseEnterDetailAddress": "请输入详细地址",
+    "pleaseEnterRegion": "请输入行政区域",
+    "pleaseEnterRecipieName": "请输入收件人姓名"
   },
   "route": {
     "booking": "下单",
@@ -205,7 +213,8 @@
     "remarks": "备注",
     "confirm": "确认",
     "reject": "拒绝",
-    "operation": "操作"
+    "operation": "操作",
+    "reasonsForRefusal": "拒绝原因"
   },
   "member": {
     "myData": "我的资料",

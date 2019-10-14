@@ -38,7 +38,6 @@
         <div class="center">
           <el-table :data="dataList"
                     highlight-current-row
-                    :cell-style="cell"
                     @current-change="handleCurrentChange"
                     border>
             <el-table-column prop="operateAt"
@@ -49,20 +48,14 @@
             </el-table-column>
             <el-table-column prop="financeAccountType"
                              :label="$t('billing.type')"></el-table-column>
-            <el-table-column prop="amount"
-                             :label="$t('billing.amount')">
+            <el-table-column :label="$t('billing.amount')">
               <template slot-scope="scope">
                 {{scope.row.amount/100}}
               </template>
             </el-table-column>
-            <!-- <el-table-column width='80px;'>
-              <template slot-scope="scope">
-                <el-image style="width: 25px; height: 25px"
-                          src="https://cdn.withpush.cn/image/20191011/image-57c2bfd59cb6bdfdb08416c1e5ea11cc.png"
-                          :preview-src-list="[]">
-                </el-image>
-              </template>
-            </el-table-column> -->
+            <el-table-column prop="remarks"
+                             :label="$t('billing.reasonsForRefusal')"
+                             v-if="tabActive == 'REJECTED'"></el-table-column>
           </el-table>
           <el-pagination style="margin-top:10px;text-align: center;margin-bottom:50px;"
                          background
@@ -130,6 +123,7 @@
                          :headers="headers"
                          :limit="1"
                          ref="upload"
+                         accept="image/*"
                          :on-success="uploadSuccess"
                          :on-remove="handleRemove">
                 <el-button size="small"
@@ -241,7 +235,6 @@ export default {
         page: self.page.currentPage - 1,
         pagesize: self.pagesize
       }).then(res => {
-        console.log(res)
         self.dataList = res.data.content
         self.page = {
           total: res.data.totalPages,
@@ -252,13 +245,11 @@ export default {
     pageChange (val) {
       let self = this
       self.page.currentPage = val
-      console.log(val)
       self.getTopUpList()
     },
     pageSizeChange (val) {
       let self = this;
       self.pagesize = val
-      console.log(val)
       self.getTopUpList()
     },
     handleClick () {
@@ -289,7 +280,6 @@ export default {
         if (valid) {
           self.loading = true
           topUp(self.topUpform).then(res => {
-            console.log(res)
             self.$message.success(res.message)
             self.dialogVisible = false
             self.loading = false
@@ -302,17 +292,14 @@ export default {
     },
     // 文件上传成功的处理
     uploadSuccess (res, file) {
-      console.log(res)
       const self = this;
       if (res.status === 200) {
         self.topUpform.resource_id = res.data.resource.id
       }
     },
     handleRemove (file, fileList) {
-      console.log(file, fileList);
     },
     handleCurrentChange (val) {
-      console.log(val)
       const self = this
       self.showUrl = val.resource.path
     }

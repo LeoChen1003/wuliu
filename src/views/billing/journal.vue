@@ -10,13 +10,16 @@
                         end-placeholder="结束日期"
                         value-format='yyyy-MM-dd'
                         size="small" />
-
+        <el-button size="small"
+                   @click="searchIt"
+                   style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button>
       </div>
     </div>
     <div class="content">
       <div>
         <el-tabs v-model="tabActive"
                  tab-position="left"
+                 @tab-click="handleClick"
                  style="height:100%;">
           <el-tab-pane name="GUARANTEE"
                        :label="$t('billing.gaurantee')">
@@ -30,14 +33,28 @@
 
       <div class="container">
         <div class="center">
-          <el-table :data="[{},{},{}]"
+          <el-table :data="dataList"
                     border>
-            <el-table-column :label="$t('billing.date')" />
-            <el-table-column :label="$t('billing.transactionType')" />
+            <el-table-column prop="createdAt"
+                             :label="$t('billing.date')" />
+            <el-table-column prop="eventType"
+                             :label="$t('billing.transactionType')" />
             <el-table-column :label="$t('billing.documentNo')" />
-            <el-table-column :label="$t('billing.increase')" />
-            <el-table-column :label="$t('billing.decrease')" />
-            <el-table-column :label="$t('billing.balance')" />
+            <el-table-column :label="$t('billing.increase')">
+              <template slot-scope="scope">
+                {{(scope.row.amountAfter-scope.row.amountBefore)>0?(scope.row.amountAfter-scope.row.amountBefore)/100:null}}
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('billing.decrease')">
+              <template slot-scope="scope">
+                {{(scope.row.amountAfter-scope.row.amountBefore)>0?null:(scope.row.amountBefore-scope.row.amountAfter)/100}}
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('billing.balance')">
+              <template slot-scope="scope">
+                {{scope.row.amount/100}}
+              </template>
+            </el-table-column>
           </el-table>
         </div>
       </div>
@@ -61,7 +78,8 @@ export default {
     return {
       tabActive: 'GUARANTEE',
       applyType: localStorage.getItem('curRole'),
-      value1: [parseTime((new Date().getTime() - 3600 * 1000 * 24 * 30), '{y}-{m}-{d}'), parseTime(new Date().getTime(), '{y}-{m}-{d}')]
+      value1: [parseTime((new Date().getTime() - 3600 * 1000 * 24 * 30), '{y}-{m}-{d}'), parseTime(new Date().getTime(), '{y}-{m}-{d}')],
+      dataList: []
     };
   },
   // 监听属性 类似于data概念
@@ -81,9 +99,14 @@ export default {
         fromDate: self.value1[0],
         toDate: self.value1[1]
       }).then(res => {
-        console.log(res)
-
+        self.dataList = res.data.content
       })
+    },
+    handleClick () {
+      this.getJournalList()
+    },
+    searchIt () {
+      this.getJournalList()
     }
   }
 };

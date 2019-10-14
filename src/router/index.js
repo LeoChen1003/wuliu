@@ -57,7 +57,6 @@ export const asyncRoutes = [
   {
     path: '/market',
     component: Layout,
-    redirect: '/market/index',
     name: '市场',
     meta: {
       title: 'tracking',
@@ -95,7 +94,6 @@ export const asyncRoutes = [
   {
     path: '/resources',
     component: Layout,
-    redirect: '/resources/truck',
     name: '资源管理',
     meta: {
       title: 'resources',
@@ -132,7 +130,6 @@ export const asyncRoutes = [
   {
     path: '/billing',
     component: Layout,
-    redirect: '/billing/payableBill',
     name: '账单',
     meta: {
       title: 'billing',

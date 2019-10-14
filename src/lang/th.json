@@ -8,7 +8,15 @@
     "pleaseChoose": "โปรดเลือก",
     "to": "ไปถึง",
     "startDate": "วันที่เริ่มต้น",
-    "endDate": "วันที่สิ้นสุด"
+    "endDate": "วันที่สิ้นสุด",
+    "chooseDate": "เลือกวันที่",
+    "chooseTime": "เลือกเวลา",
+    "pleaseEnterLeywords": "กรุณาใส่คำหลัก",
+    "placeEnterSenderName": "กรุณาใส่ชื่อผู้ส่ง",
+    "pleaseEnterTelNumber": "กรุณาใส่เบอร์ติดต่อ",
+    "pleaseEnterDetailAddress": "โปรดระบุที่อยู่รายละเอียด",
+    "pleaseEnterRegion": "โปรดระบุพื้นที่การบริหาร",
+    "pleaseEnterRecipieName": "กรุณาใส่ชื่อผู้รับ"
   },
   "route": {
     "booking": "การจอง",
@@ -201,7 +209,8 @@
     "remarks": "แสดงความคิดเห็น",
     "confirm": "ยืนยัน",
     "reject": "ปฏิเสธ",
-    "operation": "การดำเนินการ"
+    "operation": "การดำเนินการ",
+    "reasonsForRefusal": "เหตุผลสำหรับการปฏิเสธ"
   },
   "member": {
     "myData": "ข้อมูลของฉัน",

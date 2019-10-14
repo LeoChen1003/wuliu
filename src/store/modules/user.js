@@ -31,7 +31,6 @@ const actions = {
       login({ name: username.trim(), password: password })
         .then(response => {
           const { data } = response
-          console.log(data)
           commit('SET_TOKEN', data)
           setToken(data)
           resolve()
@@ -48,7 +47,6 @@ const actions = {
       getInfo()
         .then(response => {
           const { data } = response
-          console.log(data)
           if (!data) {
             reject('Verification failed, please Login again.')
           }

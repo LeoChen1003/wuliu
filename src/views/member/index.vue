@@ -690,7 +690,6 @@ export default {
         self.typeList = self.$store.getters.userInfo.roleListStr.split(',');
       })
       getApplying().then(res => {
-        console.log(res)
         for (let i of res.data) {
           self.applyStatus[i.applyType.toLowerCase()] = {
             status: i.auditStatus,
@@ -773,7 +772,6 @@ export default {
     },
     // 文件上传成功的处理
     uploadSuccess (res, file) {
-      console.log(file)
       if (res.status === 200) {
         let applyType = res.data.applyType; // 申请类型
         let credentialsType = res.data.credentialsType; // 文件类型

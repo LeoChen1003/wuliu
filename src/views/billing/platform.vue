@@ -58,7 +58,7 @@
                   <el-button type="primary"
                              @click="toConfirm(scope.row.id)">{{$t('billing.confirm')}}</el-button>
                   <el-button type="info"
-                             @click="refuseVisible = true;curId = scope.row.id">{{$t('billing.reject')}}</el-button>
+                             @click="refuseVisible = true;curId = scope.row.id;reason='';">{{$t('billing.reject')}}</el-button>
                 </div>
               </template>
             </el-table-column>
@@ -73,7 +73,8 @@
                          layout="prev, pager, next, jumper"
                          :total="page.total"></el-pagination>
         </div>
-        <div class="right">
+        <el-card class="right"
+                 shadow="never">
           <el-image :src='showUrl'
                     v-if="showUrl">
             <!-- <div slot="error"
@@ -81,7 +82,7 @@
               <i class="el-icon-picture-outline"></i>
             </div> -->
           </el-image>
-        </div>
+        </el-card>
       </div>
     </div>
     <el-dialog :title="$t('member.reasonsForRefusal')"
@@ -146,7 +147,6 @@ export default {
         page: self.page.currentPage - 1,
         pagesize: self.pagesize
       }).then(res => {
-        console.log(res)
         self.dataList = res.data.content
         self.page = {
           total: res.data.totalPages,
@@ -157,20 +157,17 @@ export default {
     pageChange (val) {
       let self = this
       self.page.currentPage = val
-      console.log(val)
       self.getList()
     },
     pageSizeChange (val) {
       let self = this;
       self.pagesize = val
-      console.log(val)
       self.getList()
     },
     handleClick () {
       this.getList()
     },
     handleCurrentChange (val) {
-      console.log(val)
       const self = this
       self.showUrl = val.resource.path
     },
