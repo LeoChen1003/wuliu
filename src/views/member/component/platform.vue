@@ -5,7 +5,8 @@
               :cell-style="cell">
       <el-table-column prop="auditAt"
                        :label="$t('member.dateOfSubmission')">
-        <template slot-scope="scope">
+        <template slot-scope="scope"
+                  v-if="scope.row.auditAt">
           {{scope.row.auditAt.slice(0,10) + ' ' +scope.row.auditAt.slice(11,19)}}
         </template>
       </el-table-column>
@@ -37,14 +38,15 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination style="text-align: center;margin-top:20px;"
+    <el-pagination style="margin-top:10px;text-align: center;margin-bottom:50px;"
                    background
                    :page-sizes="[1,5,10,20,50]"
-                   :page-size="20"
-                   :current-page.sync="page"
+                   :page-size="pagesize"
+                   @size-change="pageSizeChange"
+                   :current-page.sync="page.currentPage"
                    @current-change="pageChange"
                    layout="prev, pager, next, jumper"
-                   :total="pageTotal"></el-pagination>
+                   :total="page.total"></el-pagination>
     <el-dialog :title="$t('member.essentialData')"
                center
                top='0vh'
@@ -150,7 +152,14 @@
               <div v-for="(item,index) in credentials"
                    :key="index"
                    style="display:flex;justify-content:space-between;align-items:center;font-size:16px;cursor:pointer;margin-bottom:15px;">
-                <span>{{item.credentialsType}}</span>
+                <span v-if="item.credentialsType == 'affidavit'">{{$t('member.affidavit')}}</span>
+                <span v-else-if="item.credentialsType == 'transportation_license'">{{$t('member.transportationLicense')}}</span>
+                <span v-else-if="item.credentialsType == 'idcard'">{{$t('member.IDcard')}}</span>
+                <span v-else-if="item.credentialsType == 'house_particulars'">{{$t('member.houseParticulars')}}</span>
+                <span v-else-if="item.credentialsType == 'bank_account_copy'">{{$t('member.bangAccount')}}</span>
+                <span v-else-if="item.credentialsType == 'center_map'">{{$t('member.mapForDistributionCenters')}}</span>
+                <span v-else-if="item.credentialsType == 'truck_register_copy'">{{$t('member.carRegistration')}}</span>
+                <span v-else>{{item.credentialsType}}</span>
                 <el-image style="width: 25px; height: 25px"
                           src="https://cdn.withpush.cn/image/20191011/image-57c2bfd59cb6bdfdb08416c1e5ea11cc.png"
                           :preview-src-list="getSrcList(index)">
@@ -217,18 +226,21 @@ export default {
   data () {
     return {
       dataList: [],
-      page: 1,
+      page: {
+        total: 0,
+        currentPage: 1
+      },
       pagesize: 20,
-      pageTotal: 0,
       dialogVisible: false,
       infoForm: {},
+      applyType: '',
       typeList: [],
       credentials: [],
       curId: null,
       refuseVisible: false,
       reason: '',
       refuseLoading: false,
-      url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+      url: '',
       srcList: []
     };
   },
@@ -259,17 +271,24 @@ export default {
     getPlatformList () {
       let self = this
       platformList(self.auditStatus, {
-        page: self.page - 1,
+        page: self.page.currentPage - 1,
         pagesize: self.pagesize
       }).then(res => {
-        console.log(res)
         self.dataList = res.data.content
-        self.pageTotal = res.data.totalPages
+        self.page = {
+          total: res.data.totalPages,
+          currentPage: res.data.pageable.offset + 1
+        }
       })
     },
     pageChange (val) {
       let self = this
-      self.page = val
+      self.page.currentPage = val
+      self.getPlatformList()
+    },
+    pageSizeChange (val) {
+      let self = this;
+      self.pagesize = val
       self.getPlatformList()
     },
     toShow (row) {
@@ -340,11 +359,11 @@ export default {
     loadDialog_info (row) {
       const self = this;
       self.infoForm = row.site;
+      self.applyType = row.applyType
       self.credentials = row.credentials
       for (let x in self.credentials) {
         self.srcList.push(self.credentials[x].resource.path)
       }
-      console.log(self.srcList)
     },
   },
   created () {

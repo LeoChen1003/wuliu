@@ -2,7 +2,7 @@
   <div class="manage billing">
     <div class="statusHeader">
       <div class="status-txt">{{ $t('billing.billingStatus') }}</div>
-      <div class="timePicker">
+      <!-- <div class="timePicker">
         <el-date-picker v-model="value1"
                         type="daterange"
                         :range-separator="$t('placeholder.to')"
@@ -11,11 +11,11 @@
                         size="small" />
       </div>
       <el-button size="small"
-                 style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button>
+                 style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button> -->
       <el-button size="small"
                  type='primary'
                  style='width:150px;margin-left:50px;'
-                 @click="dialogVisible = true">{{ $t('billing.topUp') }}</el-button>
+                 @click="toTopup">{{ $t('billing.topUp') }}</el-button>
     </div>
     <div class="content">
       <div>
@@ -38,6 +38,7 @@
         <div class="center">
           <el-table :data="dataList"
                     highlight-current-row
+                    :cell-style="cell"
                     @current-change="handleCurrentChange"
                     border>
             <el-table-column prop="operateAt"
@@ -49,10 +50,36 @@
             <el-table-column prop="financeAccountType"
                              :label="$t('billing.type')"></el-table-column>
             <el-table-column prop="amount"
-                             :label="$t('billing.amount')"></el-table-column>
+                             :label="$t('billing.amount')">
+              <template slot-scope="scope">
+                {{scope.row.amount/100}}
+              </template>
+            </el-table-column>
+            <!-- <el-table-column width='80px;'>
+              <template slot-scope="scope">
+                <el-image style="width: 25px; height: 25px"
+                          src="https://cdn.withpush.cn/image/20191011/image-57c2bfd59cb6bdfdb08416c1e5ea11cc.png"
+                          :preview-src-list="[]">
+                </el-image>
+              </template>
+            </el-table-column> -->
           </el-table>
+          <el-pagination style="margin-top:10px;text-align: center;margin-bottom:50px;"
+                         background
+                         :page-sizes="[1,5,10,20,50]"
+                         :page-size="pagesize"
+                         @size-change="pageSizeChange"
+                         :current-page.sync="page.currentPage"
+                         @current-change="pageChange"
+                         layout="prev, pager, next, jumper"
+                         :total="page.total"></el-pagination>
         </div>
-        <div class="right" />
+        <el-card class="right"
+                 shadow="never">
+          <el-image :src='showUrl'
+                    v-if="showUrl">
+          </el-image>
+        </el-card>
       </div>
     </div>
     <el-dialog :title="$t('billing.topUp')"
@@ -90,8 +117,9 @@
           </el-form-item>
           <el-form-item prop='amount'
                         :label="$t('billing.amount')">
-            <el-input v-model="topUpform.amount"
+            <el-input v-model="amount"
                       type="number"
+                      @change="changeAmount"
                       class="inputWidth"></el-input>
           </el-form-item>
           <el-form-item prop='resource_id'
@@ -101,7 +129,9 @@
                          :action="baseUrl + '?credentials_type=top_up_copy&apply_type='+apply_type"
                          :headers="headers"
                          :limit="1"
-                         :on-success="uploadSuccess">
+                         ref="upload"
+                         :on-success="uploadSuccess"
+                         :on-remove="handleRemove">
                 <el-button size="small"
                            icon="el-icon-upload2"
                            type="primary">{{ $t('member.upload') }}
@@ -159,6 +189,7 @@ export default {
         resource_id: null,
         apply_type: localStorage.getItem('curRole')
       },
+      amount: null,
       dataList: [],
       apply_type: localStorage.getItem('curRole'),
       options: [{
@@ -181,6 +212,12 @@ export default {
         "authorization": getToken(),
         "locale": self.$store.getters.language
       },
+      showUrl: '',
+      page: {
+        total: 0,
+        currentPage: 1
+      },
+      pagesize: 20,
     };
   },
   // 监听属性 类似于data概念
@@ -192,16 +229,59 @@ export default {
     this.getTopUpList()
   },
   methods: {
+    cell ({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex == 3) {
+        return 'text-align:center;color:#168BD5;font-size:23px;'
+      }
+    },
     getTopUpList () {
       let self = this
       let applyType = localStorage.getItem('curRole')
-      topUpList(applyType, self.tabActive).then(res => {
+      topUpList(applyType, self.tabActive, {
+        page: self.page.currentPage - 1,
+        pagesize: self.pagesize
+      }).then(res => {
         console.log(res)
         self.dataList = res.data.content
+        self.page = {
+          total: res.data.totalPages,
+          currentPage: res.data.pageable.offset + 1
+        }
       })
+    },
+    pageChange (val) {
+      let self = this
+      self.page.currentPage = val
+      console.log(val)
+      self.getTopUpList()
+    },
+    pageSizeChange (val) {
+      let self = this;
+      self.pagesize = val
+      console.log(val)
+      self.getTopUpList()
     },
     handleClick () {
       this.getTopUpList()
+    },
+    toTopup () {
+      const self = this
+      self.dialogVisible = true
+      if (self.topUpform.resource_id) {
+        this.$refs.upload.clearFiles()
+      }
+      self.topUpform = {
+        fee_ype: 'FEE',
+        operate_at: '',
+        amount: null,
+        resource_id: null,
+        apply_type: localStorage.getItem('curRole')
+      }
+      self.amount = null
+    },
+    changeAmount () {
+      let self = this
+      self.topUpform.amount = self.amount * 100
     },
     toConfirm () {
       let self = this
@@ -228,8 +308,13 @@ export default {
         self.topUpform.resource_id = res.data.resource.id
       }
     },
+    handleRemove (file, fileList) {
+      console.log(file, fileList);
+    },
     handleCurrentChange (val) {
       console.log(val)
+      const self = this
+      self.showUrl = val.resource.path
     }
   }
 };
@@ -270,12 +355,19 @@ export default {
       padding-left: 20px;
       padding-top: 20px;
       width: 100%;
+      overflow: scroll;
       .center {
         width: 49%;
         margin-right: 1%;
       }
       .right {
         width: 49%;
+        padding: 0 10px;
+        // min-height: calc(100% - 50px);
+        // border: 2px solid #dfe6ec;
+        // display: flex;
+        // justify-content: center;
+        // align-items: center;
       }
     }
   }

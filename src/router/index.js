@@ -136,7 +136,7 @@ export const asyncRoutes = [
     name: '账单',
     meta: {
       title: 'billing',
-      roles: ['DEMAND', 'SUPPLY', 'HUB']
+      roles: ['DEMAND', 'SUPPLY', 'HUB', 'PLATFORM']
     },
     children: [
       {
@@ -145,14 +145,19 @@ export const asyncRoutes = [
         meta: { title: 'payableBill', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
       },
       {
+        path: 'topUp',
+        component: () => import('@/views/billing/topUp'),
+        meta: { title: 'topUp', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
+      },
+      {
         path: 'journal',
         component: () => import('@/views/billing/journal'),
         meta: { title: 'journal', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
       },
       {
-        path: 'topUp',
-        component: () => import('@/views/billing/topUp'),
-        meta: { title: 'topUp', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
+        path: 'platform',
+        component: () => import('@/views/billing/platform'),
+        meta: { title: 'billing', roles: ['PLATFORM'] }
       }
     ]
   },

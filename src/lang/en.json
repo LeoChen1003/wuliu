@@ -202,7 +202,10 @@
     "search": "search",
     "topUptype": "Type",
     "attachment": "Attachment",
-    "remarks": "Remarks"
+    "remarks": "Remarks",
+    "confirm": "confirm",
+    "reject": "reject",
+    "operation": "operation"
   },
   "home": {
     "button": "button"
@@ -280,6 +283,7 @@
   "confirm": {
     "tips": "Tips",
     "aysAgree": "Are you sure you agree?",
-    "aysActivate": "Are you sure activate?"
+    "aysActivate": "Are you sure activate?",
+    "aysConfirm": "Are you sure confirm?"
   }
 }

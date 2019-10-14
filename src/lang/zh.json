@@ -202,7 +202,10 @@
     "search": "搜索",
     "topUptype": "业务类型",
     "attachment": "附件",
-    "remarks": "备注"
+    "remarks": "备注",
+    "confirm": "确认",
+    "reject": "拒绝",
+    "operation": "操作"
   },
   "member": {
     "myData": "我的资料",
@@ -278,6 +281,7 @@
   "confirm": {
     "tips": "提示",
     "aysAgree": "是否确认同意？",
-    "aysActivate": "是否确认激活？"
+    "aysActivate": "是否确认激活？",
+    "aysConfirm": "是否确认？"
   }
 }
