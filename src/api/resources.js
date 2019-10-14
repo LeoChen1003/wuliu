@@ -51,3 +51,35 @@ export function truckEdit(data) {
     data
   })
 }
+
+// 列出当前所有线路
+export function getRoute() {
+  return request({
+    url: '/api/supply/ftl/my',
+    method: 'get'
+  })
+}
+
+// 列出当前所有省
+export function getProvince() {
+  return request({
+    url: '/misc/geo/province/list',
+    method: 'get'
+  })
+}
+
+// 列出当前所有市
+export function getCity() {
+  return request({
+    url: '/misc/geo/city/list',
+    method: 'get'
+  })
+}
+
+// 列出当前所有卡车类型
+export function getTruckTypes() {
+  return request({
+    url: '/misc/types/truck',
+    method: 'get'
+  })
+}
