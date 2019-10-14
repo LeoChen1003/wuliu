@@ -10,6 +10,7 @@
                         end-placeholder="结束日期"
                         value-format='yyyy-MM-dd'
                         size="small" />
+
       </div>
     </div>
     <div class="content">
@@ -124,17 +125,8 @@ export default {
       width: 100%;
       overflow: scroll;
       .center {
-        width: 49%;
+        width: 90%;
         margin-right: 1%;
-      }
-      .right {
-        width: 49%;
-        padding: 0 10px;
-        // min-height: calc(100% - 50px);
-        // border: 2px solid #dfe6ec;
-        // display: flex;
-        // justify-content: center;
-        // align-items: center;
       }
     }
   }
