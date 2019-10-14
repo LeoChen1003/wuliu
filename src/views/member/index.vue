@@ -203,6 +203,12 @@
                     :description="$t('member.goToDownload')"
                     :title="$t('member.applyStatusAccepted')"
                     type="success"></el-alert>
+          <el-alert v-else-if="applyStatus.demand.status == 'ACTIVATED'"
+                    class="rejectMsg"
+                    show-icon
+                    :closable="false"
+                    :title="$t('member.applyStatusAccepted')"
+                    type="success"></el-alert>
           <el-form label-width="200px"
                    :disabled="applyStatus.demand.status == 'ACCEPTED' || applyStatus.demand.status == 'ACTIVATED' || applyStatus.demand.status == 'DEFAULT'">
             <el-form-item :label="$t('member.affidavit')">
@@ -286,6 +292,7 @@
           <el-button type="primary"
                      style="margin-left:200px;"
                      @click="goToDownload"
+                     class="gotodownload"
                      v-if="applyStatus.demand.status == 'ACCEPTED'">{{$t('member.goToDownload')}}</el-button>
         </div>
       </el-tab-pane>
@@ -312,6 +319,12 @@
                     :closable="false"
                     @click="goToDownload"
                     :description="$t('member.goToDownload')"
+                    :title="$t('member.applyStatusAccepted')"
+                    type="success"></el-alert>
+          <el-alert v-else-if="applyStatus.supply.status == 'ACTIVATED'"
+                    class="rejectMsg"
+                    show-icon
+                    :closable="false"
                     :title="$t('member.applyStatusAccepted')"
                     type="success"></el-alert>
           <el-form label-width="200px"
@@ -519,6 +532,7 @@
           <el-button type="primary"
                      style="margin-left:200px;"
                      @click="goToDownload"
+                     class="gotodownload"
                      v-if="applyStatus.demand.status == 'ACCEPTED'">{{$t('member.goToDownload')}}</el-button>
         </div>
       </el-tab-pane>
@@ -586,18 +600,36 @@
             <el-table-column header-align="center"
                              align="center"
                              :label="$t('member.uploadContract')">
-              <template slot-scope="">
-                <el-upload :action="baseUrl + '?credentials_type=affidavit&apply_type=DEMAND'"
+              <template slot-scope="scope">
+                <el-upload :action="cBaseUrl + '?apply_type=' + scope.row.type"
                            :headers="headers"
-                           :file-list="fileList.demand.affidavit"
-                           :on-success="uploadSuccess"
-                           accept="image/*"
+                           :disabled="scope.row.status == 'ACTIVATED'"
+                           :file-list="fileList.contract[scope.row.type]"
+                           :on-success="uploadSuccess2"
+                           :show-file-list="false"
+                           accept=".pdf,image/*"
                            :on-change="handleChange">
                   <el-button size="small"
                              icon="el-icon-upload2"
+                             :disabled="scope.row.status == 'ACTIVATED'"
                              type="primary">{{ $t('member.upload') }}
                   </el-button>
                 </el-upload>
+              </template>
+            </el-table-column>
+            <el-table-column header-align="center"
+                             align="center"
+                             prop="prop"
+                             :label="$t('member.status')">
+              <template slot-scope="scope">
+                <div>
+                  <el-tag type="info"
+                          v-if="contractStatus[scope.row.type] == ''">{{ $t('member.waitUpload')}}</el-tag>
+                  <el-tag type="success"
+                          v-else-if="scope.row.status == 'ACTIVATED'">{{ $t('member.passed')}}</el-tag>
+                  <el-tag type="primary"
+                          v-else>{{ $t('member.underReview')}}</el-tag>
+                </div>
               </template>
             </el-table-column>
           </el-table>
@@ -625,6 +657,7 @@ export default {
       infoForm: {},
       typeList: [],
       baseUrl: process.env.VUE_APP_BASE_API + '/api/member/upload',
+      cBaseUrl: process.env.VUE_APP_BASE_API + '/api/member/contract/upload',
       headers: {
         "authorization": getToken(),
         "locale": this.$store.getters.language
@@ -645,6 +678,10 @@ export default {
           bank_account_copy: [],
           center_map: [],
           truck_register_copy: [],
+        },
+        contract: {
+          "DEMAND": [],
+          "SUPPLY": []
         }
       },
       applyList: {
@@ -659,7 +696,11 @@ export default {
           status: null
         }
       },
-      contractList: []
+      contractList: [],
+      contractStatus: {
+        "DEMAND": '',
+        "SUPPLY": ''
+      }
     }
   },
   watch: {
@@ -696,6 +737,7 @@ export default {
             status: i.auditStatus,
             rejectReason: i.rejectReason
           };
+          self.contractStatus[i.applyType] = i.contract;
         }
       })
     },
@@ -773,7 +815,6 @@ export default {
     },
     // 文件上传成功的处理
     uploadSuccess (res, file) {
-      console.log(file)
       if (res.status === 200) {
         let applyType = res.data.applyType; // 申请类型
         let credentialsType = res.data.credentialsType; // 文件类型
@@ -783,6 +824,11 @@ export default {
         }
         // self.loadData_list(self.tabActive);
       }
+    },
+    // 合同上传成功的处理
+    uploadSuccess2 (res, file) {
+      self.loadData();
+      self.$message.success(self.$t('member.uploadSuccess'))
     },
     // 文件删除时的处理
     handleRemove (file, fileList) {
@@ -887,7 +933,8 @@ export default {
   margin-left: 20px;
 }
 
-.submitBtn {
+.submitBtn,
+.gotodownload {
   width: 300px;
 }
 </style>
