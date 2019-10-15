@@ -5,14 +5,15 @@
               :cell-style="cell">
       <el-table-column prop="auditAt"
                        :label="$t('member.dateOfSubmission')">
-        <template slot-scope="scope">
+        <template slot-scope="scope"
+                  v-if="scope.row.auditAt">
           {{scope.row.auditAt.slice(0,10) + ' ' +scope.row.auditAt.slice(11,19)}}
         </template>
       </el-table-column>
       <el-table-column prop="phone"
                        :label="$t('member.platform_name')">
         <template slot-scope="scope">
-          {{scope.row.financeGranteeAccount.name}}
+          {{scope.row.financeGranteeAccount?scope.row.financeGranteeAccount.name:''}}
         </template>
       </el-table-column>
       <el-table-column prop="activeStatus"
@@ -21,11 +22,21 @@
                        :label="$t('member.partnerType')"></el-table-column>
       <el-table-column :label="$t('member.guarantee')">
         <template slot-scope="scope">
-          {{scope.row.financeGranteeAccount.currentBalance}}
+          {{scope.row.financeGranteeAccount?scope.row.financeGranteeAccount.currentBalance/100:null}}
         </template>
       </el-table-column>
       <el-table-column prop="contractNo"
-                       :label="$t('member.contract')"></el-table-column>
+                       :label="$t('member.contract')">
+        <template slot-scope="scope">
+          <div style="cursor: pointer;">
+            <el-link :href="scope.row.contract"
+                     target="_blank"
+                     type='primary'>
+              {{scope.row.contractNo}}
+            </el-link>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="auditStatus"
                        :label="$t('member.status')"></el-table-column>
       <el-table-column width='80px;'>
@@ -37,14 +48,15 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination style="text-align: center;margin-top:20px;"
+    <el-pagination style="margin-top:10px;text-align: center;margin-bottom:50px;"
                    background
                    :page-sizes="[1,5,10,20,50]"
-                   :page-size="20"
-                   :current-page.sync="page"
+                   :page-size="pagesize"
+                   @size-change="pageSizeChange"
+                   :current-page.sync="page.currentPage"
                    @current-change="pageChange"
                    layout="prev, pager, next, jumper"
-                   :total="pageTotal"></el-pagination>
+                   :total="page.total"></el-pagination>
     <el-dialog :title="$t('member.essentialData')"
                center
                top='0vh'
@@ -150,8 +162,15 @@
               <div v-for="(item,index) in credentials"
                    :key="index"
                    style="display:flex;justify-content:space-between;align-items:center;font-size:16px;cursor:pointer;margin-bottom:15px;">
-                <span>{{item.credentialsType}}</span>
-                <el-image style="width: 25px; height: 25px"
+                <span v-if="item.credentialsType == 'affidavit'">{{$t('member.affidavit')}}</span>
+                <span v-else-if="item.credentialsType == 'transportation_license'">{{$t('member.transportationLicense')}}</span>
+                <span v-else-if="item.credentialsType == 'idcard'">{{$t('member.IDcard')}}</span>
+                <span v-else-if="item.credentialsType == 'house_particulars'">{{$t('member.houseParticulars')}}</span>
+                <span v-else-if="item.credentialsType == 'bank_account_copy'">{{$t('member.bangAccount')}}</span>
+                <span v-else-if="item.credentialsType == 'center_map'">{{$t('member.mapForDistributionCenters')}}</span>
+                <span v-else-if="item.credentialsType == 'truck_register_copy'">{{$t('member.carRegistration')}}</span>
+                <el-image v-if="item.credentialsType != 'top_up_copy'"
+                          style="width: 25px; height: 25px"
                           src="https://cdn.withpush.cn/image/20191011/image-57c2bfd59cb6bdfdb08416c1e5ea11cc.png"
                           :preview-src-list="getSrcList(index)">
                 </el-image>
@@ -159,6 +178,19 @@
                    style="color:#51a9df;"></i> -->
               </div>
             </div>
+          </el-form-item>
+          <!-- <el-form-item :label="$t('member.contract')">
+
+          </el-form-item> -->
+          <el-form-item :label="$t('member.dc')"
+                        v-if="applyType == 'SUPPLY'">
+            <el-table :data="dcList"
+                      border>
+              <el-table-column prop="address"
+                               :label="$t('member.dcAddress')"></el-table-column>
+              <el-table-column prop="years"
+                               :label="$t('member.transportationExperience')"></el-table-column>
+            </el-table>
           </el-form-item>
           <el-form-item>
             <el-button type="primary"
@@ -203,7 +235,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { platformList, besuper, platformAccept, platformRefuse, platformActive } from '../../../api/member'
+import { platformList, platformAccept, platformRefuse, platformActive, dcInfo, appliedInfo } from '../../../api/member'
 
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -217,59 +249,60 @@ export default {
   data () {
     return {
       dataList: [],
-      page: 1,
+      page: {
+        total: 0,
+        currentPage: 1
+      },
       pagesize: 20,
-      pageTotal: 0,
       dialogVisible: false,
       infoForm: {},
+      applyType: '',
       typeList: [],
       credentials: [],
       curId: null,
       refuseVisible: false,
       reason: '',
       refuseLoading: false,
-      url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-      srcList: []
+      url: '',
+      srcList: [],
+      dcList: []
     };
   },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
   watch: {
-    typeList (n, o) {
-      const self = this;
-      let type = "";
-      for (let i of n) {
-        type += `${i},`;
-      }
-      type = type.substr(0, type.length - 1);
-      self.infoForm.chosenTypes = type;
-    }
   },
   methods: {
     getSrcList (index) {
-      console.log(index)
       return this.srcList.slice(index).concat(this.srcList.slice(0, index))
     },
     cell ({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex == 7) {
+      if (columnIndex == 7 || columnIndex == 5) {
         return 'text-align:center;color:#168BD5;font-size:23px;'
       }
     },
     getPlatformList () {
       let self = this
       platformList(self.auditStatus, {
-        page: self.page - 1,
+        page: self.page.currentPage - 1,
         pagesize: self.pagesize
       }).then(res => {
-        console.log(res)
         self.dataList = res.data.content
-        self.pageTotal = res.data.totalPages
+        self.page = {
+          total: res.data.totalPages,
+          currentPage: res.data.pageable.offset + 1
+        }
       })
     },
     pageChange (val) {
       let self = this
-      self.page = val
+      self.page.currentPage = val
+      self.getPlatformList()
+    },
+    pageSizeChange (val) {
+      let self = this;
+      self.pagesize = val
       self.getPlatformList()
     },
     toShow (row) {
@@ -277,6 +310,21 @@ export default {
       self.dialogVisible = true
       self.loadDialog_info(row)
       self.curId = row.id
+      if (row.applyType == 'SUPPLY') {
+        // dc信息
+        dcInfo(row.siteId).then(res => {
+          self.dcList = res.data
+          console.log(res)
+          console.log(self.dcList)
+        })
+      }
+      // 会员类型
+      appliedInfo(row.siteId).then(res => {
+        console.log(res)
+        for (let x in res.data) {
+          self.typeList.push(res.data[x].applyType)
+        }
+      })
     },
     // 同意
     toAccept () {
@@ -340,21 +388,19 @@ export default {
     loadDialog_info (row) {
       const self = this;
       self.infoForm = row.site;
+      self.applyType = row.applyType
       self.credentials = row.credentials
       for (let x in self.credentials) {
-        self.srcList.push(self.credentials[x].resource.path)
+        if (self.credentials[x].credentialsType != 'top_up_copy') {
+          self.srcList.push(self.credentials[x].resource.path)
+        }
       }
-      console.log(self.srcList)
     },
   },
   created () {
 
   },
   mounted () {
-    // besuper().then(res => {
-    //   console.log(res)
-
-    // })
     this.getPlatformList()
 
   },

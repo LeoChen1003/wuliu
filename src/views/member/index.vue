@@ -731,7 +731,6 @@ export default {
         self.typeList = self.$store.getters.userInfo.roleListStr.split(',');
       })
       getApplying().then(res => {
-        console.log(res)
         for (let i of res.data) {
           self.applyStatus[i.applyType.toLowerCase()] = {
             status: i.auditStatus,

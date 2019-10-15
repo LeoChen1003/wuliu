@@ -57,7 +57,6 @@ export const asyncRoutes = [
   {
     path: '/market',
     component: Layout,
-    redirect: '/market/index',
     name: '市场',
     meta: {
       title: 'tracking',
@@ -95,7 +94,6 @@ export const asyncRoutes = [
   {
     path: '/resources',
     component: Layout,
-    redirect: '/resources/truck',
     name: '资源管理',
     meta: {
       title: 'resources',
@@ -132,11 +130,10 @@ export const asyncRoutes = [
   {
     path: '/billing',
     component: Layout,
-    redirect: '/billing/payableBill',
     name: '账单',
     meta: {
       title: 'billing',
-      roles: ['DEMAND', 'SUPPLY', 'HUB']
+      roles: ['DEMAND', 'SUPPLY', 'HUB', 'PLATFORM']
     },
     children: [
       {
@@ -145,14 +142,19 @@ export const asyncRoutes = [
         meta: { title: 'payableBill', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
       },
       {
+        path: 'topUp',
+        component: () => import('@/views/billing/topUp'),
+        meta: { title: 'topUp', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
+      },
+      {
         path: 'journal',
         component: () => import('@/views/billing/journal'),
         meta: { title: 'journal', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
       },
       {
-        path: 'topUp',
-        component: () => import('@/views/billing/topUp'),
-        meta: { title: 'topUp', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
+        path: 'platform',
+        component: () => import('@/views/billing/platform'),
+        meta: { title: 'billing', roles: ['PLATFORM'] }
       }
     ]
   },

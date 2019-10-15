@@ -16,7 +16,7 @@ export function provinceList() {
   })
 }
 
-// 所有式
+// 所有市
 export function cityList() {
   return request({
     url: '/misc/geo/city/list',
@@ -24,11 +24,21 @@ export function cityList() {
   })
 }
 
-// 所有区
+// 所有包含区
 export function districtList(data) {
   return request({
     url: '/misc/geo/district/search',
     method: 'post',
     data
+  })
+}
+
+// 所有包含区
+export function districtFullList(data, data2) {
+  return request({
+    url: '/misc/geo/district/search/fullname',
+    method: 'post',
+    data,
+    params: data2
   })
 }
