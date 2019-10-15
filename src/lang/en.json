@@ -16,9 +16,9 @@
     "pleaseEnterTelNumber": "Please input the telephone number.",
     "pleaseEnterDetailAddress": "Please enter a detailed address.",
     "pleaseEnterRegion": "Please enter administrative region",
-    "Please enter the recipient": "Please enter the recipient's name",
     "pleaseEnterRecipieName": "Please enter the recipient's name",
-    "amount": "Amount"
+    "amount": "Amount",
+    "pleaseInput": "Please input"
   },
   "route": {
     "booking": "Booking",
@@ -135,7 +135,10 @@
     "fullTruckLoad": "Full truck load",
     "sharetruckLoad": "Share truck",
     "accountBalance": "Account balance",
-    "topUp": "Top up"
+    "topUp": "Top up",
+    "add": "add",
+    "aysDel": "Are you sure to delete？",
+    "delete": "delete"
   },
   "tracking": {
     "status": "Status",

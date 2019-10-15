@@ -15,7 +15,7 @@ export default {
     } else if (curRole == "SUPPLY") {
       next({ path: "/market/index" });
     } else if (curRole == "HUB") {
-      next({ path: "/billing" });
+      next({ path: "/billing/payableBill" });
     } else if (curRole == "PLATFORM") {
       next({ path: "/tracking/FTL" });
     } else {
