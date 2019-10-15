@@ -8,7 +8,16 @@
     "pleaseChoose": "请选择",
     "to": "至",
     "startDate": "开始日期",
-    "endDate": "结束日期"
+    "endDate": "结束日期",
+    "chooseDate": "选择日期",
+    "chooseTime": "选择时间",
+    "pleaseEnterLeywords": "请输入关键词",
+    "placeEnterSenderName": "请输入寄件人姓名",
+    "pleaseEnterTelNumber": "请输入联系电话",
+    "pleaseEnterDetailAddress": "请输入详细地址",
+    "pleaseEnterRegion": "请输入行政区域",
+    "pleaseEnterRecipieName": "请输入收件人姓名",
+    "amount": "金额"
   },
   "route": {
     "booking": "下单",
@@ -217,7 +226,12 @@
     "search": "搜索",
     "topUptype": "业务类型",
     "attachment": "附件",
-    "remarks": "备注"
+    "remarks": "备注",
+    "confirm": "确认",
+    "reject": "拒绝",
+    "operation": "操作",
+    "reasonsForRefusal": "拒绝原因",
+    "cancel": "取消"
   },
   "member": {
     "myData": "我的资料",
@@ -305,6 +319,7 @@
   "confirm": {
     "tips": "提示",
     "aysAgree": "是否确认同意？",
-    "aysActivate": "是否确认激活？"
+    "aysActivate": "是否确认激活？",
+    "aysConfirm": "是否确认？"
   }
 }

@@ -40,6 +40,7 @@ router.beforeEach(async(to, from, next) => {
       } else {
         try {
           await store.dispatch('user/getInfo')
+          console.log(to)
           const accessRoutes = await store.dispatch(
             'permission/generateRoutes',
             [localStorage.curRole]

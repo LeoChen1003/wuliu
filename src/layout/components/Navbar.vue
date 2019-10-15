@@ -82,7 +82,11 @@ export default {
 .el-menu {
   /* display: flex; */
 }
-.el-submenu {
+.el-submenu,
+.el-menu-item {
   width: 160px;
+}
+.nest-menu .el-menu-item {
+  width: 210px;
 }
 </style>

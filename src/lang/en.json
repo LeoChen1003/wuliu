@@ -8,7 +8,17 @@
     "pleaseChoose": "Please choose",
     "to": "to",
     "startDate": "Start date",
-    "endDate": "End date"
+    "endDate": "End date",
+    "chooseDate": "Selection date",
+    "chooseTime": "Selection time",
+    "pleaseEnterLeywords": "Please enter keywords",
+    "placeEnterSenderName": "Please enter the sender's name.",
+    "pleaseEnterTelNumber": "Please input the telephone number.",
+    "pleaseEnterDetailAddress": "Please enter a detailed address.",
+    "pleaseEnterRegion": "Please enter administrative region",
+    "Please enter the recipient": "Please enter the recipient's name",
+    "pleaseEnterRecipieName": "Please enter the recipient's name",
+    "amount": "Amount"
   },
   "route": {
     "booking": "Booking",
@@ -209,7 +219,12 @@
     "search": "search",
     "topUptype": "Type",
     "attachment": "Attachment",
-    "remarks": "Remarks"
+    "remarks": "Remarks",
+    "confirm": "confirm",
+    "reject": "reject",
+    "operation": "operation",
+    "reasonsForRefusal": "Reasons for refusal",
+    "cancel": "cancel"
   },
   "home": {
     "button": "button"
@@ -293,6 +308,7 @@
   "confirm": {
     "tips": "Tips",
     "aysAgree": "Are you sure you agree?",
-    "aysActivate": "Are you sure activate?"
+    "aysActivate": "Are you sure activate?",
+    "aysConfirm": "Are you sure confirm?"
   }
 }

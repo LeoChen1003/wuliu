@@ -148,7 +148,6 @@ export default {
     getDriverList () {
       let self = this
       driverList().then(res => {
-        console.log(res)
         self.dataList = res.data
       })
     },
@@ -166,7 +165,6 @@ export default {
       let self = this
       self.dialogVisible = true
       self.editType = 'edit'
-      console.log(row)
       self.detailform = {
         name: row.name,
         phone: row.phone,
@@ -202,7 +200,6 @@ export default {
       })
     },
     handleCurrentChange (val) {
-      console.log(val)
     }
   },
   created () { },

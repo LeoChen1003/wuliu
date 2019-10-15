@@ -76,7 +76,7 @@
                        class="inputWidth">
               <el-option v-for="item in categoryList"
                          :key="item.key"
-                         :label="item.value.slice(4)"
+                         :label="item.value"
                          :value="item.key">
               </el-option>
             </el-select>
@@ -87,7 +87,7 @@
                        class="inputWidth">
               <el-option v-for="item in subCategoryList"
                          :key="item.key"
-                         :label="item.value.slice(4)"
+                         :label="item.value"
                          :value="item.key">
               </el-option>
             </el-select>
@@ -220,7 +220,6 @@ export default {
     getTruckList () {
       let self = this
       truckList().then(res => {
-        console.log(res)
         self.dataList = res.data
       })
     },
@@ -247,7 +246,6 @@ export default {
         self.subCategoryList = res.data.subCategories
       })
       provinceList().then(res => {
-        console.log(res)
         self.provList = res.data
       })
     },
@@ -255,7 +253,6 @@ export default {
       let self = this
       self.dialogVisible = true
       self.editType = 'edit'
-      console.log(row)
       self.detailform = {
         category: row.category,
         subCategory: row.subCategory,

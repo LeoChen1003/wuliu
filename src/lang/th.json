@@ -8,7 +8,16 @@
     "pleaseChoose": "โปรดเลือก",
     "to": "ไปถึง",
     "startDate": "วันที่เริ่มต้น",
-    "endDate": "วันที่สิ้นสุด"
+    "endDate": "วันที่สิ้นสุด",
+    "chooseDate": "เลือกวันที่",
+    "chooseTime": "เลือกเวลา",
+    "pleaseEnterLeywords": "กรุณาใส่คำหลัก",
+    "placeEnterSenderName": "กรุณาใส่ชื่อผู้ส่ง",
+    "pleaseEnterTelNumber": "กรุณาใส่เบอร์ติดต่อ",
+    "pleaseEnterDetailAddress": "โปรดระบุที่อยู่รายละเอียด",
+    "pleaseEnterRegion": "โปรดระบุพื้นที่การบริหาร",
+    "pleaseEnterRecipieName": "กรุณาใส่ชื่อผู้รับ",
+    "amount": "ผลรวม"
   },
   "route": {
     "booking": "การจอง",
@@ -198,7 +207,12 @@
     "search": "ค้นหา",
     "topUptype": "ประเภทธุรกิจ",
     "attachment": "รูปถ่าย",
-    "remarks": "แสดงความคิดเห็น"
+    "remarks": "แสดงความคิดเห็น",
+    "confirm": "ยืนยัน",
+    "reject": "ปฏิเสธ",
+    "operation": "การดำเนินการ",
+    "reasonsForRefusal": "เหตุผลสำหรับการปฏิเสธ",
+    "cancel": "ยกเลิก"
   },
   "member": {
     "myData": "ข้อมูลของฉัน",
@@ -266,6 +280,7 @@
   "confirm": {
     "tips": "ทูลเกล้าฯถวาย",
     "aysAgree": "คุณแน่ใจนะว่าคุณเห็นด้วย？",
-    "aysActivate": "คุณแน่ใจนะว่าเปิดใช้งาน"
+    "aysActivate": "คุณแน่ใจนะว่าเปิดใช้งาน",
+    "aysConfirm": "คุณแน่ใจนะ?"
   }
 }

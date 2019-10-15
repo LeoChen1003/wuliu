@@ -2,58 +2,62 @@
   <div class="manage billing">
     <div class="statusHeader">
       <div class="status-txt">{{ $t('billing.account') }}</div>
+      <div class="timePicker">
+        <el-date-picker v-model="value1"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        value-format='yyyy-MM-dd'
+                        size="small" />
+        <el-button size="small"
+                   @click="searchIt"
+                   style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button>
+      </div>
     </div>
     <div class="content">
-      <el-tabs v-model="tabActive"
-               tab-position="left"
-               style="height:calc(100% - 50px);">
-        <el-tab-pane :label="$t('billing.gaurantee')">
-          <div class="timePicker">
-            <el-date-picker v-model="value1"
-                            type="daterange"
-                            range-separator="至"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            size="small" />
-          </div>
-          <div class="container">
-            <div class="center">
-              <el-table :data="[{},{},{}]"
-                        border>
-                <el-table-column :label="$t('billing.date')" />
-                <el-table-column :label="$t('billing.transactionType')" />
-                <el-table-column :label="$t('billing.documentNo')" />
-                <el-table-column :label="$t('billing.increase')" />
-                <el-table-column :label="$t('billing.decrease')" />
-                <el-table-column :label="$t('billing.balance')" />
-              </el-table>
-            </div>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane :label="$t('billing.freight')">
-          <div class="timePicker">
-            <el-date-picker v-model="value1"
-                            type="daterange"
-                            range-separator="至"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            size="small" />
-          </div>
-          <div class="container">
-            <div class="center">
-              <el-table :data="[{},{},{}]"
-                        border>
-                <el-table-column :label="$t('billing.date')" />
-                <el-table-column :label="$t('billing.transactionType')" />
-                <el-table-column :label="$t('billing.documentNo')" />
-                <el-table-column :label="$t('billing.increase')" />
-                <el-table-column :label="$t('billing.decrease')" />
-                <el-table-column :label="$t('billing.balance')" />
-              </el-table>
-            </div>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
+      <div>
+        <el-tabs v-model="tabActive"
+                 tab-position="left"
+                 @tab-click="handleClick"
+                 style="height:100%;">
+          <el-tab-pane name="GUARANTEE"
+                       :label="$t('billing.gaurantee')">
+
+          </el-tab-pane>
+          <el-tab-pane name="FEE"
+                       :label="$t('billing.freight')">
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+
+      <div class="container">
+        <div class="center">
+          <el-table :data="dataList"
+                    border>
+            <el-table-column prop="createdAt"
+                             :label="$t('billing.date')" />
+            <el-table-column prop="eventType"
+                             :label="$t('billing.transactionType')" />
+            <el-table-column :label="$t('billing.documentNo')" />
+            <el-table-column :label="$t('billing.increase')">
+              <template slot-scope="scope">
+                {{(scope.row.amountAfter-scope.row.amountBefore)>0?(scope.row.amountAfter-scope.row.amountBefore)/100:null}}
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('billing.decrease')">
+              <template slot-scope="scope">
+                {{(scope.row.amountAfter-scope.row.amountBefore)>0?null:(scope.row.amountBefore-scope.row.amountAfter)/100}}
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('billing.balance')">
+              <template slot-scope="scope">
+                {{scope.row.amount/100}}
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -61,14 +65,21 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
+import { journalList } from '../../api/billing'
+import { getTime, parseTime } from '../../utils/index'
+console.log(getTime('end'))
+var date = new Date().getTime();
+console.log([parseTime((new Date().getTime() - 3600 * 1000 * 24 * 30), '{y}-{m}-{d}'), parseTime(new Date().getTime(), '{y}-{m}-{d}')])
 
 export default {
   // import引入的组件需要注入到对象中才能使用
   components: {},
   data () {
     return {
-      tabActive: 0,
-      value1: []
+      tabActive: 'GUARANTEE',
+      applyType: localStorage.getItem('curRole'),
+      value1: [parseTime((new Date().getTime() - 3600 * 1000 * 24 * 30), '{y}-{m}-{d}'), parseTime(new Date().getTime(), '{y}-{m}-{d}')],
+      dataList: []
     };
   },
   // 监听属性 类似于data概念
@@ -76,25 +87,50 @@ export default {
   // 监控data中的数据变化
   watch: {},
   created () { },
-  mounted () { },
-  methods: {}
+  mounted () {
+    this.getJournalList()
+  },
+  methods: {
+    getJournalList () {
+      const self = this
+      journalList({
+        accountType: self.tabActive,
+        applyType: self.applyType,
+        fromDate: self.value1[0],
+        toDate: self.value1[1]
+      }).then(res => {
+        self.dataList = res.data.content
+      })
+    },
+    handleClick () {
+      this.getJournalList()
+    },
+    searchIt () {
+      this.getJournalList()
+    }
+  }
 };
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
 .manage {
-  height: 100%;
-  padding-top: 20px;
   box-sizing: border-box;
+  height: 100%;
   .statusHeader {
     display: flex;
+    padding: 0px 20px;
+    box-sizing: border-box;
+    height: 50px;
+    border-bottom: 2px solid #dfe4ed;
+    align-items: center;
     .status-txt {
-      height: 40px;
-      line-height: 40px;
-      padding-left: 40px;
-      margin-bottom: 10px;
-      width: 225px;
+      height: 50px;
+      line-height: 50px;
+      padding-left: 20px;
       font-size: 20px;
+      width: 216px;
+      box-sizing: border-box;
+      border-right: 2px solid #dfe4ed;
     }
   }
   .timePicker {
@@ -103,16 +139,47 @@ export default {
     padding-left: 30px;
   }
   .content {
-    height: 100%;
+    padding-left: 25px;
+    display: flex;
+    height: calc(100% - 50px);
     .container {
-      display: flex;
-      padding: 20px;
+      padding-left: 20px;
+      padding-top: 20px;
+      width: 100%;
+      overflow: scroll;
       .center {
-        width: 99%;
+        width: 90%;
         margin-right: 1%;
       }
     }
   }
+  .form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: -100px;
+  }
+}
+.inputWidth {
+  width: 350px;
 }
 </style>
+
+<style>
+.billing .el-tabs--left .el-tabs__header.is-left {
+  margin-right: 0px;
+  width: 211px;
+}
+.billing .el-tabs--left .el-tabs__active-bar.is-left {
+  width: 3px;
+}
+.billing .el-tabs--left .el-tabs__nav-wrap.is-left::after,
+.el-tabs--left .el-tabs__nav-wrap.is-right::after,
+.el-tabs--right .el-tabs__nav-wrap.is-left::after,
+.el-tabs--right .el-tabs__nav-wrap.is-right::after {
+  width: 3px;
+}
+</style>
+
 
