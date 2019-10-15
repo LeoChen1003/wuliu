@@ -53,10 +53,11 @@ export function truckEdit(data) {
 }
 
 // 列出当前所有线路
-export function getRoute() {
+export function getRoute(params) {
   return request({
     url: '/api/supply/ftl/my',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 
@@ -81,5 +82,23 @@ export function getTruckTypes() {
   return request({
     url: '/misc/types/truck',
     method: 'get'
+  })
+}
+
+// 提交新线路
+export function addRoute(data) {
+  return request({
+    url: '/api/supply/ftl/add',
+    method: 'post',
+    data
+  })
+}
+
+// 修改线路
+export function updateRoute(id, data) {
+  return request({
+    url: '/api/supply/ftl/update/' + id,
+    method: 'post',
+    data
   })
 }
