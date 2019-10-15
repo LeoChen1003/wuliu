@@ -10,8 +10,19 @@
                         :end-placeholder="$t('placeholder.endDate')"
                         size="small" />
       </div> -->
+      <el-input type="number"
+                v-model="amount"
+                style="margin-left:20px;width:200px;"
+                size="small"
+                :placeholder="$t('placeholder.amount')"></el-input>
       <el-button size="small"
-                 style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button>
+                 style='margin-left:10px;'
+                 icon="el-icon-search"
+                 @click="searchIt"
+                 type="primary">{{ $t('billing.search') }}</el-button>
+      <el-button size="small"
+                 @click="cancelIt"
+                 style='margin-left:10px;'>{{ $t('billing.cancel') }}</el-button>
     </div>
     <div class="content">
       <div>
@@ -130,6 +141,7 @@ export default {
         currentPage: 1
       },
       pagesize: 20,
+      amount: null
     };
   },
   // 监听属性 类似于data概念
@@ -143,9 +155,9 @@ export default {
   methods: {
     getList () {
       let self = this
-      billingList({ audit_status: self.tabActive }, {
+      billingList({ audit_status: self.tabActive, amount: self.amount ? self.amount * 100 : 0 }, {
         page: self.page.currentPage - 1,
-        pagesize: self.pagesize
+        pagesize: self.pagesize,
       }).then(res => {
         self.dataList = res.data.content
         self.page = {
@@ -154,13 +166,22 @@ export default {
         }
       })
     },
+    searchIt () {
+      const self = this
+      self.getList()
+    },
+    cancelIt () {
+      const self = this
+      self.amount = null
+      self.getList()
+    },
     pageChange (val) {
-      let self = this
+      const self = this
       self.page.currentPage = val
       self.getList()
     },
     pageSizeChange (val) {
-      let self = this;
+      const self = this;
       self.pagesize = val
       self.getList()
     },
@@ -173,7 +194,7 @@ export default {
     },
     // 确认
     toConfirm (id) {
-      let self = this
+      const self = this
       self
         .$confirm(this.$t('confirm.aysConfirm'), this.$t('confirm.tips'), {
           confirmButtonText: this.$t('billing.confirm'),
@@ -192,7 +213,7 @@ export default {
     },
     // 拒绝
     rejectIt () {
-      let self = this
+      const self = this
       self.refuseLoading = true
       billingReject({
         id: self.curId,

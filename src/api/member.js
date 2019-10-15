@@ -96,6 +96,22 @@ export function getDc(data) {
   })
 }
 
+// platform 获取dc
+export function dcInfo(site_id) {
+  return request({
+    url: 'api/member/info/dc/' + site_id,
+    method: 'get'
+  })
+}
+
+// platform 获取dc
+export function appliedInfo(site_id) {
+  return request({
+    url: 'api/platform/audit/applied/' + site_id,
+    method: 'get'
+  })
+}
+
 // 获取合同列表
 export function getContract() {
   return request({

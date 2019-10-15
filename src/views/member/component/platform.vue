@@ -182,6 +182,16 @@
           <!-- <el-form-item :label="$t('member.contract')">
 
           </el-form-item> -->
+          <el-form-item :label="$t('member.dc')"
+                        v-if="applyType == 'SUPPLY'">
+            <el-table :data="dcList"
+                      border>
+              <el-table-column prop="address"
+                               :label="$t('member.dcAddress')"></el-table-column>
+              <el-table-column prop="years"
+                               :label="$t('member.transportationExperience')"></el-table-column>
+            </el-table>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary"
                        class="submitBtn inp"
@@ -225,7 +235,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { platformList, platformAccept, platformRefuse, platformActive } from '../../../api/member'
+import { platformList, platformAccept, platformRefuse, platformActive, dcInfo, appliedInfo } from '../../../api/member'
 
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -254,22 +264,14 @@ export default {
       reason: '',
       refuseLoading: false,
       url: '',
-      srcList: []
+      srcList: [],
+      dcList: []
     };
   },
   //监听属性 类似于data概念
   computed: {},
   //监控data中的数据变化
   watch: {
-    typeList (n, o) {
-      const self = this;
-      let type = "";
-      for (let i of n) {
-        type += `${i},`;
-      }
-      type = type.substr(0, type.length - 1);
-      self.infoForm.chosenTypes = type;
-    }
   },
   methods: {
     getSrcList (index) {
@@ -308,6 +310,21 @@ export default {
       self.dialogVisible = true
       self.loadDialog_info(row)
       self.curId = row.id
+      if (row.applyType == 'SUPPLY') {
+        // dc信息
+        dcInfo(row.siteId).then(res => {
+          self.dcList = res.data
+          console.log(res)
+          console.log(self.dcList)
+        })
+      }
+      // 会员类型
+      appliedInfo(row.siteId).then(res => {
+        console.log(res)
+        for (let x in res.data) {
+          self.typeList.push(res.data[x].applyType)
+        }
+      })
     },
     // 同意
     toAccept () {

@@ -16,7 +16,8 @@
     "pleaseEnterTelNumber": "กรุณาใส่เบอร์ติดต่อ",
     "pleaseEnterDetailAddress": "โปรดระบุที่อยู่รายละเอียด",
     "pleaseEnterRegion": "โปรดระบุพื้นที่การบริหาร",
-    "pleaseEnterRecipieName": "กรุณาใส่ชื่อผู้รับ"
+    "pleaseEnterRecipieName": "กรุณาใส่ชื่อผู้รับ",
+    "amount": "ผลรวม"
   },
   "route": {
     "booking": "การจอง",
@@ -210,7 +211,8 @@
     "confirm": "ยืนยัน",
     "reject": "ปฏิเสธ",
     "operation": "การดำเนินการ",
-    "reasonsForRefusal": "เหตุผลสำหรับการปฏิเสธ"
+    "reasonsForRefusal": "เหตุผลสำหรับการปฏิเสธ",
+    "cancel": "ยกเลิก"
   },
   "member": {
     "myData": "ข้อมูลของฉัน",

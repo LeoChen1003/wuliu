@@ -16,7 +16,8 @@
     "pleaseEnterTelNumber": "请输入联系电话",
     "pleaseEnterDetailAddress": "请输入详细地址",
     "pleaseEnterRegion": "请输入行政区域",
-    "pleaseEnterRecipieName": "请输入收件人姓名"
+    "pleaseEnterRecipieName": "请输入收件人姓名",
+    "amount": "金额"
   },
   "route": {
     "booking": "下单",
@@ -214,7 +215,8 @@
     "confirm": "确认",
     "reject": "拒绝",
     "operation": "操作",
-    "reasonsForRefusal": "拒绝原因"
+    "reasonsForRefusal": "拒绝原因",
+    "cancel": "取消"
   },
   "member": {
     "myData": "我的资料",

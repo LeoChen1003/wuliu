@@ -17,7 +17,8 @@
     "pleaseEnterDetailAddress": "Please enter a detailed address.",
     "pleaseEnterRegion": "Please enter administrative region",
     "Please enter the recipient": "Please enter the recipient's name",
-    "pleaseEnterRecipieName": "Please enter the recipient's name"
+    "pleaseEnterRecipieName": "Please enter the recipient's name",
+    "amount": "Amount"
   },
   "route": {
     "booking": "Booking",
@@ -215,7 +216,8 @@
     "confirm": "confirm",
     "reject": "reject",
     "operation": "operation",
-    "reasonsForRefusal": "Reasons for refusal"
+    "reasonsForRefusal": "Reasons for refusal",
+    "cancel": "cancel"
   },
   "home": {
     "button": "button"
