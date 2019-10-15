@@ -130,7 +130,10 @@
     "fullTruckLoad": "โหลดเต็ม",
     "sharetruckLoad": "แบ่งปันรถบรรทุก",
     "accountBalance": "Account balance",
-    "topUp": "เติม"
+    "topUp": "เติม",
+    "add": "ใหม่",
+    "aysDel": "คุณแน่ใจว่าต้องการลบ？",
+    "delete": "ตัดออก"
   },
   "tracking": {
     "status": "สภาพ",

@@ -238,7 +238,7 @@ export default {
         self.dataList = res.data.content
         self.page = {
           total: res.data.totalPages,
-          currentPage: res.data.pageable.offset + 1
+          currentPage: res.data.number + 1
         }
       })
     },
@@ -253,6 +253,7 @@ export default {
       self.getTopUpList()
     },
     handleClick () {
+      this.showUrl = ''
       this.getTopUpList()
     },
     toTopup () {
@@ -301,7 +302,9 @@ export default {
     },
     handleCurrentChange (val) {
       const self = this
-      self.showUrl = val.resource.path
+      if (val) {
+        self.showUrl = val.resource.path
+      }
     }
   }
 };
@@ -350,6 +353,7 @@ export default {
       .right {
         width: 49%;
         padding: 0 10px;
+        overflow: scroll;
         // min-height: calc(100% - 50px);
         // border: 2px solid #dfe6ec;
         // display: flex;

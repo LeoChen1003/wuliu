@@ -8,3 +8,21 @@ export function ftlLine(data) {
     data
   })
 }
+
+// ftlLine
+export function ftlCharge(data) {
+  return request({
+    url: '/api/demand/order/ftl/charge',
+    method: 'post',
+    data
+  })
+}
+
+// ftlLine
+export function placeOrder(data) {
+  return request({
+    url: '/api/demand/order/list',
+    method: 'post',
+    data
+  })
+}

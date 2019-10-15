@@ -162,7 +162,7 @@ export default {
         self.dataList = res.data.content
         self.page = {
           total: res.data.totalPages,
-          currentPage: res.data.pageable.offset + 1
+          currentPage: res.data.number + 1
         }
       })
     },

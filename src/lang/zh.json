@@ -17,7 +17,8 @@
     "pleaseEnterDetailAddress": "请输入详细地址",
     "pleaseEnterRegion": "请输入行政区域",
     "pleaseEnterRecipieName": "请输入收件人姓名",
-    "amount": "金额"
+    "amount": "金额",
+    "pleaseInput": "请输入"
   },
   "route": {
     "booking": "下单",
@@ -134,7 +135,10 @@
     "fullTruckLoad": "包车",
     "sharetruckLoad": "拼车",
     "accountBalance": "账户余额",
-    "topUp": "充值"
+    "topUp": "充值",
+    "add": "新增",
+    "aysDel": "你确定删除？",
+    "delete": "删除"
   },
   "tracking": {
     "status": "订单状态",

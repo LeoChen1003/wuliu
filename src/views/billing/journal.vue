@@ -56,6 +56,15 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination style="margin-top:10px;text-align: center;margin-bottom:50px;"
+                         background
+                         :page-sizes="[1,5,10,20,50]"
+                         :page-size="pagesize"
+                         @size-change="pageSizeChange"
+                         :current-page.sync="page.currentPage"
+                         @current-change="pageChange"
+                         layout="prev, pager, next, jumper"
+                         :total="page.total"></el-pagination>
         </div>
       </div>
     </div>
@@ -79,7 +88,12 @@ export default {
       tabActive: 'GUARANTEE',
       applyType: localStorage.getItem('curRole'),
       value1: [parseTime((new Date().getTime() - 3600 * 1000 * 24 * 30), '{y}-{m}-{d}'), parseTime(new Date().getTime(), '{y}-{m}-{d}')],
-      dataList: []
+      dataList: [],
+      page: {
+        total: 0,
+        currentPage: 1
+      },
+      pagesize: 20,
     };
   },
   // 监听属性 类似于data概念
@@ -97,9 +111,15 @@ export default {
         accountType: self.tabActive,
         applyType: self.applyType,
         fromDate: self.value1[0],
-        toDate: self.value1[1]
+        toDate: self.value1[1],
+        page: self.page.currentPage - 1,
+        pagesize: self.pagesize
       }).then(res => {
         self.dataList = res.data.content
+        self.page = {
+          total: res.data.totalPages,
+          currentPage: res.data.number + 1
+        }
       })
     },
     handleClick () {
@@ -107,7 +127,17 @@ export default {
     },
     searchIt () {
       this.getJournalList()
-    }
+    },
+    pageChange (val) {
+      let self = this
+      self.page.currentPage = val
+      self.getJournalList()
+    },
+    pageSizeChange (val) {
+      let self = this;
+      self.pagesize = val
+      self.getJournalList()
+    },
   }
 };
 </script>

@@ -103,14 +103,22 @@
         <el-table :data="tableList"
                   border
                   style="width: 97%;margin-left:20px;">
-          <el-table-column :label="$t('booking.supply')"></el-table-column>
-          <el-table-column :label="$t('booking.route')"></el-table-column>
+          <el-table-column :label="$t('booking.supply')">
+            <template slot-scope="scope">
+              {{scope.row.site? scope.row.site.companyName:''}}
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('booking.route')">
+            <template slot-scope="scope">
+              {{scope.row.site? scope.row.site.companyName:''}}
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('booking.price')">
             <template slot-scope="scope">
               {{scope.row.charge/100}}
             </template>
           </el-table-column>
-          <el-table-column width='100'>
+          <el-table-column width='150'>
             <template slot-scope="scope">
               <el-button @click="toBooking">{{$t('booking.placeOrder')}}</el-button>
             </template>
