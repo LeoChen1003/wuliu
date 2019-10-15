@@ -28,7 +28,8 @@ export const asyncRoutes = [
   {
     path: '/booking',
     component: Layout,
-    name: '下单',
+    redirect: '/booking',
+    name: 'booking',
     meta: {
       title: 'booking',
       roles: ['DEMAND']
@@ -57,7 +58,8 @@ export const asyncRoutes = [
   {
     path: '/market',
     component: Layout,
-    name: '市场',
+    redirect: '/market',
+    name: 'market',
     meta: {
       title: 'tracking',
       roles: ['SUPPLY']
@@ -72,8 +74,9 @@ export const asyncRoutes = [
   },
   {
     path: '/tracking',
+    redirect: '/tracking',
     component: Layout,
-    name: '订单跟踪',
+    name: 'tracking',
     meta: {
       title: 'tracking',
       roles: ['DEMAND', 'SUPPLY', 'PLATFORM']
@@ -93,8 +96,9 @@ export const asyncRoutes = [
   },
   {
     path: '/resources',
+    redirect: '/resources',
     component: Layout,
-    name: '资源管理',
+    name: 'resources',
     meta: {
       title: 'resources',
       roles: ['SUPPLY']
@@ -129,8 +133,9 @@ export const asyncRoutes = [
   },
   {
     path: '/billing',
+    redirect: '/billing',
     component: Layout,
-    name: '账单',
+    name: 'billing',
     meta: {
       title: 'billing',
       roles: ['DEMAND', 'SUPPLY', 'HUB', 'PLATFORM']
@@ -160,7 +165,9 @@ export const asyncRoutes = [
   },
   {
     path: '/member',
+    redirect: '/member',
     component: Layout,
+    name: 'member',
     meta: {
       title: 'member'
     },
@@ -212,6 +219,11 @@ const router = createRouter()
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
+}
+
+router.$addRoutes = params => {
+  router.matcher = new Router({ mode: 'history' }).matcher
+  router.addRoutes(params)
 }
 
 export default router

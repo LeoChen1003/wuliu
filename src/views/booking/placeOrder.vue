@@ -229,7 +229,7 @@
         </el-col>
         <el-col :span="7">
           <vxe-table highlight-hover-row
-                     :data="tableData">
+                     :data="[]">
             <vxe-table-column field="num"
                               title="item"></vxe-table-column>
             <vxe-table-column field="sex"
