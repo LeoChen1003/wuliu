@@ -182,7 +182,22 @@
     "registrationPlace": "保险政策",
     "HAS_INSURANCE": "有",
     "DO_NOT_HAS_INSURANCE": "没有",
-    "cancel": "取消"
+    "cancel": "取消",
+    "route": "路线",
+    "cutOffTime": "截止时间",
+    "price": "报价（泰铢）",
+    "distance_KM": "公里数",
+    "edit": "编辑",
+    "origin": "始发地",
+    "destination": "目的地",
+    "truckSubType": "车厢类型",
+    "humanWorkDay": "工作时长（日）",
+    "moneyPerDay": "每日工资（泰铢）",
+    "supportLoading": "装卸货服务",
+    "require": "需要",
+    "notRequired": "不需要",
+    "closed": "关闭",
+    "activated": "激活"
   },
   "billing": {
     "billingStatus": "结算状态",
@@ -295,7 +310,11 @@
     "reason": "理由",
     "cancel": "取消",
     "qualificationInformation": "资质信息",
-    "activate": "激活"
+    "activate": "激活",
+    "waitUpload": "待上传",
+    "underReview": "审核中",
+    "passed": "已通过",
+    "uploadSuccess": "上传成功"
   },
   "confirm": {
     "tips": "提示",

@@ -183,7 +183,14 @@
     "registrationPlace": "Registration place",
     "HAS_INSURANCE": "Have",
     "DO_NOT_HAS_INSURANCE": "Don't have",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "price": "Price(฿)",
+    "origin": "Origin",
+    "destination": "Destination",
+    "require": "Require",
+    "notRequired": "Not required",
+    "activated": "Activated",
+    "closed": "Closed"
   },
   "billing": {
     "billingStatus": "Billing status",
@@ -291,7 +298,12 @@
     "reason": "reason",
     "cancel": "cancel",
     "qualificationInformation": "Qualification information",
-    "activate": "activate"
+    "activate": "activate",
+    "waitUpload": "Waiting for upload",
+    "download": "Download",
+    "underReview": "Under review",
+    "passed": "Passed",
+    "uploadSuccess": "Upload success"
   },
   "confirm": {
     "tips": "Tips",
