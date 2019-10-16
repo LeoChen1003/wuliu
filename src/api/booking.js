@@ -1,11 +1,13 @@
 import request from '@/utils/request'
+import requestJSON from '@/utils/requestJSON'
 
 // ftlLine
-export function ftlLine(data) {
+export function ftlLine(data, data2) {
   return request({
     url: '/api/demand/order/search/ftlLine',
     method: 'post',
-    data
+    data,
+    params: data2
   })
 }
 
@@ -20,7 +22,7 @@ export function ftlCharge(data) {
 
 // ftlLine
 export function placeOrder(data) {
-  return request({
+  return requestJSON({
     url: '/api/demand/order/list',
     method: 'post',
     data

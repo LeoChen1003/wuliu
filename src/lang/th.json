@@ -17,7 +17,11 @@
     "pleaseEnterDetailAddress": "โปรดระบุที่อยู่รายละเอียด",
     "pleaseEnterRegion": "โปรดระบุพื้นที่การบริหาร",
     "pleaseEnterRecipieName": "กรุณาใส่ชื่อผู้รับ",
-    "amount": "ผลรวม"
+    "amount": "ผลรวม",
+    "administrativeDivision": "เขตการบริหาร",
+    "width": "Width",
+    "length": "Length",
+    "height": "Height"
   },
   "route": {
     "booking": "การจอง",
@@ -114,10 +118,10 @@
     "shareTruck": "แชร์รถบรรทุก",
     "cargoType": "Cargo type",
     "commodity": "Commodity",
-    "qty": "Qty",
+    "qty": "จำนวน",
     "unit": "Unit",
-    "size": "Size",
-    "weight": "Weight",
+    "size": "มิติ",
+    "weight": " น้ำหนัก/PCS(kg)",
     "cargoShape": "รูปร่างสินค้า",
     "myQuotaion": "ใบเสนอราคาของฉัน(฿)",
     "cargoList": "รายการขนส่งสินค้า",
@@ -133,7 +137,10 @@
     "topUp": "เติม",
     "add": "ใหม่",
     "aysDel": "คุณแน่ใจว่าต้องการลบ？",
-    "delete": "ตัดออก"
+    "delete": "ตัดออก",
+    "transitTime": "เวลาขนส่ง",
+    "feight": " ค่าขนส่ง",
+    "totalamt": "ผลรวม"
   },
   "tracking": {
     "status": "สภาพ",

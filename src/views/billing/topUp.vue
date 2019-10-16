@@ -50,7 +50,7 @@
                              :label="$t('billing.type')"></el-table-column>
             <el-table-column :label="$t('billing.amount')">
               <template slot-scope="scope">
-                {{scope.row.amount/100}}
+                {{scope.row.amount}}
               </template>
             </el-table-column>
             <el-table-column prop="remarks"
@@ -273,7 +273,7 @@ export default {
     },
     changeAmount () {
       let self = this
-      self.topUpform.amount = self.amount * 100
+      self.topUpform.amount = self.amount
     },
     toConfirm () {
       let self = this

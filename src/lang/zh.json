@@ -18,7 +18,11 @@
     "pleaseEnterRegion": "请输入行政区域",
     "pleaseEnterRecipieName": "请输入收件人姓名",
     "amount": "金额",
-    "pleaseInput": "请输入"
+    "pleaseInput": "请输入",
+    "administrativeDivision": "行政区域",
+    "width": "宽度",
+    "length": "长度",
+    "height": "高度"
   },
   "route": {
     "booking": "下单",
@@ -119,10 +123,10 @@
     "shareTruck": "同意拼车？",
     "cargoType": "货物类型",
     "commodity": "商品",
-    "qty": "Qty",
-    "unit": "Unit",
-    "size": "Size",
-    "weight": "Weight",
+    "qty": "件数",
+    "unit": "单位",
+    "size": "尺寸",
+    "weight": "单件重量",
     "cargoShape": "货物形状",
     "myQuotaion": "我的报价(泰铢)",
     "cargoList": "货物清单",
@@ -138,7 +142,11 @@
     "topUp": "充值",
     "add": "新增",
     "aysDel": "你确定删除？",
-    "delete": "删除"
+    "delete": "删除",
+    "viewValuation": "查看计价",
+    "transitTime": "运输时间",
+    "feight": "货运",
+    "totalamt": "总金额"
   },
   "tracking": {
     "status": "订单状态",

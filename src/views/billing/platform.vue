@@ -59,7 +59,7 @@
             <el-table-column prop="amount"
                              :label="$t('billing.amount')">
               <template slot-scope="scope">
-                {{scope.row.amount/100}}
+                {{scope.row.amount}}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.operation')"
@@ -155,7 +155,7 @@ export default {
   methods: {
     getList () {
       let self = this
-      billingList({ audit_status: self.tabActive, amount: self.amount ? self.amount * 100 : 0 }, {
+      billingList({ audit_status: self.tabActive, amount: self.amount ? self.amount : 0 }, {
         page: self.page.currentPage - 1,
         pagesize: self.pagesize,
       }).then(res => {

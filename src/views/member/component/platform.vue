@@ -22,7 +22,7 @@
                        :label="$t('member.partnerType')"></el-table-column>
       <el-table-column :label="$t('member.guarantee')">
         <template slot-scope="scope">
-          {{scope.row.financeGranteeAccount?scope.row.financeGranteeAccount.currentBalance/100:null}}
+          {{scope.row.financeGranteeAccount?scope.row.financeGranteeAccount.currentBalance:null}}
         </template>
       </el-table-column>
       <el-table-column prop="contractNo"

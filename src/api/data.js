@@ -8,6 +8,30 @@ export function truckType() {
   })
 }
 
+// 货物属性
+export function goodsProperty() {
+  return request({
+    url: '/misc/property/list',
+    method: 'get'
+  })
+}
+
+// 寄件人列表
+export function senderList() {
+  return request({
+    url: '/api/demand/order/search/sender/list',
+    method: 'get'
+  })
+}
+
+// 运输公司列表
+export function transportList() {
+  return request({
+    url: '/api/demand/order/search/transport/list',
+    method: 'get'
+  })
+}
+
 // 所有省份
 export function provinceList() {
   return request({
