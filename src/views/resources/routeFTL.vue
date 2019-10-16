@@ -147,10 +147,10 @@
         </el-form-item>
         <el-form-item :label="$t('resources.price')"
                       prop="charge"
-                      @mousewheel.native.prevent
-                      type="number"
                       required>
-          <el-input v-model="form.charge"></el-input>
+          <el-input v-model="form.charge"
+                    @mousewheel.native.prevent
+                    type="number"></el-input>
         </el-form-item>
         <el-form-item :label="$t('resources.supportLoading')"
                       prop="supportLoading"
