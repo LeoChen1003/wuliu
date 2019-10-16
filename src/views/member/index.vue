@@ -328,7 +328,7 @@
                     :title="$t('member.applyStatusAccepted')"
                     type="success"></el-alert>
           <el-form label-width="200px"
-                   :disabled="applyStatus.supply.status == 'ACCEPTED' || applyStatus.supply.status == 'ACTIVATED' ">
+                   :disabled="applyStatus.supply.status == 'ACCEPTED' || applyStatus.supply.status == 'ACTIVATED' || applyStatus.supply.status == 'DEFAULT'">
             <el-form-item :label="$t('member.affidavit')">
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=affidavit&apply_type=SUPPLY'"

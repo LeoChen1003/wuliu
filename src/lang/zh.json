@@ -157,7 +157,7 @@
     "intransit": "运输中",
     "documentTobereturned": "待返回文件",
     "completed": "已完成",
-    "tracking": "运单号",
+    "tracking": "物流单号",
     "deliveryPoint": "派件地址",
     "supply": "运输公司",
     "remarks": "备注",
@@ -165,7 +165,18 @@
     "confirm": "确认",
     "KPI": "KPI",
     "truckType": "车型",
-    "quotation": "报价(฿)"
+    "quotation": "报价(฿)",
+    "cargo_VAS": "货物&服务",
+    "price": "价格（泰铢）",
+    "pickupPoint": "揽件点",
+    "ETD": "交货时间",
+    "releaseAReturnTruck": "发布返程卡车",
+    "edit": "编辑",
+    "origin": "始发地",
+    "destination": "目的地",
+    "availableCapacity": "可用容量",
+    "payload": "最大承重（kg）",
+    "cutoffTime": "截止时间"
   },
   "resources": {
     "add": "添加",

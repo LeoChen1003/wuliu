@@ -165,7 +165,18 @@
     "confirm": "Confirm",
     "KPI": "KPI",
     "truckType": "Truck type",
-    "quotation": "Quotation(฿)"
+    "quotation": "Quotation(฿)",
+    "cargo_VAS": "Cargo & VAS",
+    "price": " Price(฿)",
+    "pickupPoint": "Pickup point",
+    "ETD": "ETD",
+    "releaseAReturnTruck": "Release a return truck",
+    "edit": "Edit",
+    "origin": "Origin",
+    "destination": "Destination",
+    "availableCapacity": "Available capacity(m³)",
+    "payload": "Payload(kg)",
+    "cutoffTime": " Cutoff time"
   },
   "resources": {
     "add": "Add",
