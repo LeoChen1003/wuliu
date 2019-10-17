@@ -165,7 +165,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { ftlLine } from '../../api/booking';
-import { truckType, districtFullList } from '../../api/data'
+import { getTruckType, findDistrictFullList } from '../../api/data'
 import Search from '@/components/HeaderSearch';
 
 export default {
@@ -255,7 +255,7 @@ export default {
   created () { },
   mounted () {
     const self = this
-    truckType().then(res => {
+    getTruckType().then(res => {
       self.categoryList = res.data.categories
       self.subCategoryList = res.data.subCategories
     })
@@ -304,7 +304,7 @@ export default {
     },
     getdistrictFullList (query, page) {
       const self = this
-      districtFullList({
+      findDistrictFullList({
         name: query
       }, {
         page: page
