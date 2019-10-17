@@ -18,7 +18,11 @@
     "pleaseEnterRegion": "Please enter administrative region",
     "pleaseEnterRecipieName": "Please enter the recipient's name",
     "amount": "Amount",
-    "pleaseInput": "Please input"
+    "pleaseInput": "Please input",
+    "administrativeDivision": "Administrative division",
+    "width": "Width",
+    "length": "Length",
+    "height": "Height"
   },
   "route": {
     "booking": "Booking",
@@ -122,7 +126,7 @@
     "qty": "Qty",
     "unit": "Unit",
     "size": "Size",
-    "weight": "Weight",
+    "weight": "Weight/PCS (kg)",
     "cargoShape": "Cargo shape",
     "myQuotaion": "My quotaion(฿)",
     "cargoList": "Cargo list",
@@ -138,7 +142,12 @@
     "topUp": "Top up",
     "add": "add",
     "aysDel": "Are you sure to delete？",
-    "delete": "delete"
+    "delete": "delete",
+    "viewValuation": "View valuation",
+    "transitTime": "Transit time",
+    "feight": "Freight",
+    "totalamt": "Total amt",
+    "amount": "amount"
   },
   "tracking": {
     "status": "Status",

@@ -45,6 +45,7 @@ export const asyncRoutes = [
         path: 'placeOrder',
         component: () => import('@/views/booking/placeOrder'),
         name: 'placeOrder',
+        hidden: true,
         meta: { title: 'placeOrder', roles: ['DEMAND'] }
       },
       {

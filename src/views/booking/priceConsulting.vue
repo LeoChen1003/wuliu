@@ -5,12 +5,15 @@
               style="height:100%;"
               class="searchBox">
         <div>
-          <el-form ref="form"
+          <el-form ref="searchform"
                    :model="searchForm"
+                   :rules="searchRules"
                    label-position="top"
+                   :show-message="false"
                    size="small"
                    label-width="80px">
-            <el-form-item :label="$t('booking.logisiticsType')">
+            <el-form-item prop="logisticType"
+                          :label="$t('booking.logisiticsType')">
               <el-select v-model="logisticType"
                          class="inputWidth">
                 <el-option v-for="item in logisticTypeOption"
@@ -19,7 +22,8 @@
                            :value="item.value" />
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('booking.pickupPoint')">
+            <el-form-item prop="pickUpRegion"
+                          :label="$t('booking.pickupPoint')">
               <el-select v-model="searchForm.pickUpRegion"
                          filterable
                          remote
@@ -37,7 +41,8 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('booking.pickupTime')">
+            <el-form-item prop="pickUpDate"
+                          :label="$t('booking.pickupTime')">
               <div style="display:flex;"
                    class="inputWidth">
                 <el-date-picker v-model="searchForm.pickUpDate"
@@ -52,7 +57,8 @@
                 </el-time-picker>
               </div>
             </el-form-item>
-            <el-form-item :label="$t('booking.deliveryPoint')">
+            <el-form-item prop="deliveryRegion"
+                          :label="$t('booking.deliveryPoint')">
               <el-select v-model="searchForm.deliveryRegion"
                          filterable
                          remote
@@ -70,7 +76,8 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('booking.truckType')">
+            <el-form-item prop="truckCategory"
+                          :label="$t('booking.truckType')">
               <el-select v-model="searchForm.truckCategory"
                          :placeholder="$t('placeholder.pleaseChoose')"
                          style="width:45%;">
@@ -105,25 +112,50 @@
                   style="width: 97%;margin-left:20px;">
           <el-table-column :label="$t('booking.supply')">
             <template slot-scope="scope">
-              {{scope.row.site? scope.row.site.companyName:''}}
+              <div class="table_supply">
+                <div class="item">{{scope.row.site? scope.row.site.companyName :''}}</div>
+                <div class="item">
+                  <div>{{$t('booking.loading')}}/{{$t('booking.unloading')}} : <i :class="scope.row.supportLoading == 1?'el-icon-check':'el-icon-close'"></i></div>
+                </div>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('booking.route')">
+          <el-table-column width="250"
+                           :label="$t('booking.route')">
             <template slot-scope="scope">
-              {{scope.row.site? scope.row.site.companyName:''}}
+              <div>
+                {{ scope.row.fromProvince }} --> {{ scope.row.toCity }}
+              </div>
+              <div>
+                {{$t('booking.transitTime')}} :
+              </div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('booking.price')">
+          <el-table-column width="250"
+                           :label="$t('booking.price')">
             <template slot-scope="scope">
-              {{scope.row.charge/100}}
+              <div>{{$t('booking.feight')}} : {{scope.row.charge}}</div>
+              <div v-if="scope.row.supportLoading == 1">{{$t('booking.loading')}}/{{$t('booking.unloading')}} : {{scope.row.loadingOrUnloadingHumanWorkDay*scope.row.moneyPerDay}}</div>
+              <div>{{$t('booking.documentReturn')}} :{{documentReturn}}</div>
+              <div>{{$t('booking.totalamt')}} :</div>
             </template>
           </el-table-column>
-          <el-table-column width='150'>
+          <el-table-column width='95'>
             <template slot-scope="scope">
-              <el-button @click="toBooking">{{$t('booking.placeOrder')}}</el-button>
+              <el-button type="primary"
+                         @click="toBooking(scope.row)">{{$t('booking.placeOrder')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination style="margin-top:10px;text-align: center;margin-bottom:50px;"
+                       background
+                       :page-sizes="[1,5,10,20,50]"
+                       :page-size="pagesize"
+                       @size-change="pageSizeChange"
+                       :current-page.sync="page.currentPage"
+                       @current-change="pageChange"
+                       layout="prev, pager, next, jumper"
+                       :total="page.total"></el-pagination>
       </el-col>
     </el-row>
   </div>
@@ -134,6 +166,7 @@
 // 例如：import 《组件名称》 from '《组件路径》';
 import { ftlLine } from '../../api/booking';
 import { truckType, districtFullList } from '../../api/data'
+import Search from '@/components/HeaderSearch';
 
 export default {
   // import引入的组件需要注入到对象中才能使用
@@ -160,15 +193,29 @@ export default {
     }
   },
   data () {
+    const self = this
+    const validatorTruck = (rule, value, callback) => {
+      if (!value || !self.searchForm.truckSubCategory) {
+        callback(new Error(''));
+      } else {
+        callback();
+      }
+    };
     return {
       searchForm: {
-        truckCategory: '',
-        truckSubCategory: '',
-        pickUpDate: '',
-        deliveryRegion: '',
-        pickUpRegion: ''
+        truckCategory: 'WHEEL4',
+        truckSubCategory: 'Corral',
+        pickUpDate: '2019-10-16',
+        deliveryRegion: 'TH040201',
+        pickUpRegion: 'TH010702'
       },
-      time: '',
+      searchRules: {
+        deliveryRegion: [{ required: true, }],
+        pickUpRegion: [{ required: true, }],
+        pickUpDate: [{ required: true, }],
+        truckCategory: [{ required: true, validator: validatorTruck }],
+      },
+      time: '00:00:00',
       options: [],
       logisticType: 'FTL',
       logisticTypeOption: [
@@ -191,8 +238,14 @@ export default {
       delRegionList: [],
       delQuery: '',
       isLast: false,
-      page: 0,
-      curSelect: ''
+      regionPage: 0,
+      curSelect: '',
+      page: {
+        total: 0,
+        currentPage: 1
+      },
+      pagesize: 20,
+      documentReturn: 10
     };
   },
   // 监听属性 类似于data概念
@@ -208,8 +261,17 @@ export default {
     })
   },
   methods: {
-    toBooking () {
-      this.$router.push("/booking/placeOrder");
+    toBooking (row) {
+      const self = this
+      let consultInfo = {}
+      consultInfo.data = row
+      consultInfo.pickUpRegionList = self.pickUpRegionList
+      consultInfo.delRegionList = self.delRegionList
+      consultInfo.searchForm = self.searchForm
+      consultInfo.logisticType = self.logisticType
+      consultInfo.time = self.time
+      localStorage.setItem('consultInfo', JSON.stringify(consultInfo))
+      this.$router.push('/booking/placeOrder');
     },
     pickUpMethod (query) {
       const self = this
@@ -223,7 +285,7 @@ export default {
         self.loading = true;
         setTimeout(() => {
           self.loading = false;
-          self.getdistrictFullList(query, self.page)
+          self.getdistrictFullList(query, self.regionPage)
         }, 200);
       } else {
         self.regionList = [];
@@ -232,15 +294,13 @@ export default {
     loadmore () {
       const self = this
       if (!self.isLast) {
-        self.page += 1
+        self.regionPage += 1
         if (self.curSelect == 'pk') {
-          self.getdistrictFullList(self.pickUpQuery, self.page);
+          self.getdistrictFullList(self.pickUpQuery, self.regionPage);
         } else {
-          self.getdistrictFullList(self.delQuery, self.page);
+          self.getdistrictFullList(self.delQuery, self.regionPage);
         }
       }
-
-
     },
     getdistrictFullList (query, page) {
       const self = this
@@ -275,25 +335,48 @@ export default {
         self.delQuery = ''
         self.curSelect = 'del'
       }
-      self.page = 0
+      self.regionPage = 0
       self.isLast = false
     },
     // 搜索
     searchSupply () {
-      const self = this
-      self.searchloading = true
-      if (self.time) {
-        self.searchForm.pickUpDate += ' ' + self.time
-      }
-      if (self.logisticType == 'FTL') {
-        ftlLine(self.searchForm).then(res => {
-          self.searchloading = false
-          self.tableList = res.data.content
-        }).catch(el => {
-          self.searchloading = false
-        })
-      }
-    }
+      console.log(this.$refs.searchform)
+      this.$refs.searchform.validate(valid => {
+        console.log(valid)
+        if (valid) {
+          const self = this
+          self.searchloading = true
+          if (self.time) {
+            self.searchForm.pickUpDate += ' ' + self.time
+          }
+          if (self.logisticType == 'FTL') {
+            ftlLine(self.searchForm, {
+              page: self.page.currentPage - 1,
+              pagesize: self.pagesize
+            }).then(res => {
+              self.searchloading = false
+              self.tableList = res.data.content
+              self.page = {
+                total: res.data.totalPages,
+                currentPage: res.data.number + 1
+              }
+            }).catch(el => {
+              self.searchloading = false
+            })
+          }
+        }
+      })
+    },
+    pageChange (val) {
+      let self = this
+      self.page.currentPage = val
+      self.searchSupply()
+    },
+    pageSizeChange (val) {
+      let self = this;
+      self.pagesize = val
+      self.searchSupply()
+    },
   }
 };
 </script>
@@ -305,6 +388,16 @@ export default {
   padding-left: 20px;
   .searchBox {
     border-right: 2px solid #dfe4ed;
+  }
+  .table_supply {
+    display: flex;
+    align-items: center;
+    .item {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
   }
 }
 .inputWidth {

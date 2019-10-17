@@ -1,5 +1,4 @@
 import axios from 'axios'
-import qs from 'qs'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
@@ -11,12 +10,6 @@ const service = axios.create({
   timeout: 10000 // request timeout
 })
 
-service.defaults.transformRequest = [
-  function(data) {
-    // 数据序列化
-    return qs.stringify(data)
-  }
-]
 // request interceptor
 service.interceptors.request.use(
   config => {
@@ -27,7 +20,6 @@ service.interceptors.request.use(
       // please modify it according to the actual situation
       config.headers['Authorization'] = getToken()
     }
-
     config.headers['Locale'] = store.state.app.language
     return config
   },
