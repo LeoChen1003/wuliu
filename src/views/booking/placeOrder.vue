@@ -363,7 +363,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { ftlCharge, placeOrder } from '../../api/booking'
-import { truckType, districtFullList, goodsProperty, senderList, transportList, myAccount } from '../../api/data'
+import { getTruckType, findDistrictFullList, getGoodsProperty, getSenderList, getTransportList, myAccount } from '../../api/data'
 
 export default {
   directives: {
@@ -547,7 +547,7 @@ export default {
     const self = this
     console.log(JSON.parse(localStorage.getItem('consultInfo')))
     // 卡车类型
-    truckType().then(res => {
+    getTruckType().then(res => {
       self.categoryList = res.data.categories
       self.subCategoryList = res.data.subCategories
     })
@@ -572,18 +572,18 @@ export default {
       })
     }
     // 货物属性
-    goodsProperty().then(res => {
+    getGoodsProperty().then(res => {
       self.propertyTypeList = res.data.propertyType
       self.sizeTypeList = res.data.sizeType
       self.unitList = res.data.unit
     })
     // 寄件人列表 
-    senderList().then(res => {
+    getSenderList().then(res => {
       console.log(res)
       self.senderList = res.data
     })
     // 运输公司列表 
-    transportList().then(res => {
+    getTransportList().then(res => {
       self.supplyList = res.data
     })
     // 会员余额
@@ -631,7 +631,7 @@ export default {
     },
     getdistrictFullList (query, page) {
       const self = this
-      districtFullList({
+      findDistrictFullList({
         name: query
       }, {
         page: page

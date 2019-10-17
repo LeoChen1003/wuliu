@@ -214,7 +214,8 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getRoute, getProvince, getCity, getTruckTypes, addRoute, updateRoute } from '@/api/resources'
+import { getProvinceList, getCityList, getTruckType } from '@/api/data'
+import { getRoute, addRoute, updateRoute } from '@/api/resources'
 
 let self;
 export default {
@@ -264,13 +265,13 @@ export default {
           cb();
         }
       });
-      getProvince().then(res => {
+      getProvinceList().then(res => {
         self.provinceList = res.data;
       });
-      getCity().then(res => {
+      getCityList().then(res => {
         self.cityList = res.data;
       });
-      getTruckTypes().then(res => {
+      getTruckType().then(res => {
         self.truckTypes = res.data;
         let truckObj = new Object();
         for (let i of res.data.categories) {
