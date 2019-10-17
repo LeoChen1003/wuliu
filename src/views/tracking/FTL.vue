@@ -4,6 +4,7 @@
       <el-button type="primary">{{$t('tracking.releaseAReturnTruck')}}</el-button>
     </div>
     <div style="display:flex;box-sizing:border-box;padding:0 20px;">
+      <!-- 导航 -->
       <div style="height:100%;">
         <div class="statusText">{{ $t('billing.billingStatus') }}</div>
         <el-tabs v-model="tabActive"
@@ -55,17 +56,55 @@
           </el-tab-pane>
         </el-tabs>
       </div>
+      <!-- 表格 -->
       <div class="container">
-        <el-table :data="[{},{},{}]"
+        <el-table :data="data.content"
                   border>
-          <el-table-column :label="$t('tracking.tracking')"></el-table-column>
-          <el-table-column :label="$t('tracking.cargo_VAS')"></el-table-column>
-          <el-table-column :label="$t('tracking.deliveryPoint')"></el-table-column>
-          <el-table-column :label="$t('tracking.price')"></el-table-column>
-          <el-table-column :label="$t('tracking.pickupPoint')"></el-table-column>
+          <el-table-column :label="$t('tracking.tracking')"
+                           prop="orderNo"></el-table-column>
+          <el-table-column :label="$t('tracking.cargo_VAS')">
+            <template slot-scope="scope">
+              <el-card v-for="(item,index) in scope.row.propertyList"
+                       :key="index">
+                <div>{{propertyObj[item.propertyType]}}</div>
+                <div>{{item.number}} {{unitObj[item.unit]}} {{item.name}} {{sizeObj[item.sizeType]}}</div>
+              </el-card>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('tracking.deliveryPoint')">
+            <template slot-scope="scope">
+              <div>{{scope.row.receiverAddress.name}} {{scope.row.receiverAddress.mobile}}</div>
+              <div>{{scope.row.receiverAddress.addressDetail}}</div>
+              <div>{{scope.row.receiverAddress.province}} {{scope.row.receiverAddress.city}} {{scope.row.receiverAddress.district}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('tracking.price')">
+            <template slot-scope="scope">
+              <div>
+                {{ scope.row.payAmount }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('tracking.pickupPoint')">
+            <template slot-scope="scope">
+              <div>{{scope.row.senderAddress.name}} {{scope.row.senderAddress.mobile}}</div>
+              <div>{{scope.row.senderAddress.addressDetail}}</div>
+              <div>{{scope.row.senderAddress.province}} {{scope.row.senderAddress.city}} {{scope.row.senderAddress.district}}</div>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('tracking.ETD')"></el-table-column>
           <el-table-column></el-table-column>
         </el-table>
+        <div style="text-align:center;margin:20px 0;">
+          <el-pagination background
+                         :page-size.sync="data.size"
+                         :page-count="data.totalPages"
+                         :total="data.totalElements"
+                         :current-page.sync="data.number + 1"
+                         @current-change="pageChange"
+                         layout="total, prev, pager, next, jumper">
+          </el-pagination>
+        </div>
       </div>
     </div>
 
@@ -154,8 +193,8 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import { getTruckType, getProvinceList, getCityList } from '../../api/data'
-import { addRoute, updateRoute } from '@/api/resources'
+import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty } from '../../api/data'
+import { orderShop } from '../../api/tracking.js'
 
 let self;
 export default {
@@ -163,9 +202,11 @@ export default {
   components: {},
   data () {
     return {
-      tabActive: '1',
+      orderList: [],
+      data: {},
+      tabActive: '0',
       printeDialog: false,
-      editDialog: true,
+      editDialog: false,
       form: {
         category: '',
         subCategory: '',
@@ -189,7 +230,11 @@ export default {
         start: '00:00',
         step: '00:15',
         end: '23:45'
-      }
+      },
+      serveObj: {},
+      propertyObj: {},
+      sizeObj: {},
+      unitObj: {}
     };
   },
   // 监听属性 类似于data概念
@@ -200,24 +245,61 @@ export default {
     self = this;
   },
   mounted () {
+    getProvinceList().then(res => {
+      self.provinceList = res.data;
+    });
+    getCityList().then(res => {
+      self.cityList = res.data;
+    });
+    getTruckType().then(res => {
+      self.truckTypes = res.data;
+      let truckObj = new Object();
+      for (let i of res.data.categories) {
+        truckObj[i.key] = i.value;
+      }
+      self.truckObj = truckObj;
+    });
+    getExtraServer().then(res => {
+      let serveObj = new Object();
+      for (let i of res.data) {
+        serveObj[i.key] = i.trans;
+      }
+      self.serveObj = serveObj;
+    })
+    getGoodsProperty().then(res => {
+      let propertyObj = new Object();
+      let sizeObj = new Object();
+      let unitObj = new Object();
+      for (let i of res.data.propertyType) {
+        propertyObj[i.key] = i.trans;
+      }
+      for (let i of res.data.sizeType) {
+        sizeObj[i.key] = i.trans;
+      }
+      for (let i of res.data.unit) {
+        unitObj[i.key] = i.trans;
+      }
+      self.propertyObj = propertyObj;
+      self.sizeObj = sizeObj;
+      self.unitObj = unitObj;
+    })
     self.loadData();
   },
   methods: {
-    loadData () {
-      getProvinceList().then(res => {
-        self.provinceList = res.data;
-      });
-      getCityList().then(res => {
-        self.cityList = res.data;
-      });
-      getTruckType().then(res => {
-        self.truckTypes = res.data;
-        let truckObj = new Object();
-        for (let i of res.data.categories) {
-          truckObj[i.key] = i.value;
+    loadData (cb) {
+      orderShop().then(res => {
+        self.data = res.data;
+        if (cb) {
+          cb();
         }
-        self.truckObj = truckObj;
-      });
+      })
+    },
+    pageChange (e) {
+      getRoute({
+        page: e - 1,
+      }).then(res => {
+        self.data = res.data;
+      })
     },
   }
 };
