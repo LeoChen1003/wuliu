@@ -56,6 +56,14 @@ export function getCityList() {
   })
 }
 
+// 省份分区
+export function getProvinceArea() {
+  return request({
+    url: '/misc/geo/area/province',
+    method: 'get'
+  })
+}
+
 // 所有包含区
 export function findDistrictList(data) {
   return request({
@@ -72,5 +80,13 @@ export function findDistrictFullList(data, data2) {
     method: 'post',
     data,
     params: data2
+  })
+}
+
+// 收费服务翻译
+export function getExtraServer() {
+  return request({
+    url: '/misc/types/extra/service',
+    method: 'get'
   })
 }
