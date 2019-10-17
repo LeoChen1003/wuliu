@@ -140,7 +140,8 @@
     "delete": "ตัดออก",
     "transitTime": "เวลาขนส่ง",
     "feight": " ค่าขนส่ง",
-    "totalamt": "ผลรวม"
+    "totalamt": "ผลรวม",
+    "amount": "amount"
   },
   "tracking": {
     "status": "สภาพ",

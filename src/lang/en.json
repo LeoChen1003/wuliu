@@ -146,7 +146,8 @@
     "viewValuation": "View valuation",
     "transitTime": "Transit time",
     "feight": "Freight",
-    "totalamt": "Total amt"
+    "totalamt": "Total amt",
+    "amount": "amount"
   },
   "tracking": {
     "status": "Status",

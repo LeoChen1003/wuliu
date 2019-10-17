@@ -117,10 +117,12 @@
             <el-checkbox v-model="unloading"
                          class="inputWidth inputBottom"
                          style="margin-left: 10px;"
+                         :disabled="consultInfo.data.supportLoading == 0"
                          :label="$t('booking.unloading')"
                          border></el-checkbox>
             <el-checkbox v-model="loading"
                          class="inputWidth inputBottom"
+                         :disabled="consultInfo.data.supportLoading == 0"
                          :label="$t('booking.loading')"
                          border></el-checkbox>
             <el-checkbox v-model="documentReturn"
@@ -131,7 +133,7 @@
                          class="inputWidth inputBottom"
                          :label="$t('booking.liability')"
                          border></el-checkbox>
-            <el-input placeholder="请输入内容"
+            <el-input :placeholder="$t('placeholder.amount')"
                       type="number"
                       v-if="liability"
                       style="margin-left:10px;"
@@ -139,7 +141,7 @@
                       class="inputWidth">
               <el-select v-model="liabilitySelect"
                          slot="append"
-                         placeholder="请选择">
+                         :placeholder="$t('placeholder.pleaseChoose')">
                 <el-option label="PCS"
                            value="PCS"></el-option>
                 <el-option label="Shipment"
@@ -296,16 +298,20 @@
                      style="margin-bottom:10px;"
                      icon="el-icon-s-order">{{$t('booking.viewValuation')}}</el-button> -->
           <el-table :data="amountList"
+                    ref="amountTable"
+                    show-summary
+                    :sum-text="$t('booking.totalamt')"
                     border>
-            <el-table-column prop="key"
+            <el-table-column prop="label"
                              label="item"></el-table-column>
             <el-table-column prop="amount"
                              label="Amount"></el-table-column>
+
           </el-table>
           <el-form-item :label="$t('booking.accountBalance')"
                         style="margin-top:30px;">
             <div style="display:flex;justify-content:space-between;">
-              <el-tag style="width:100px;text-align:center;">1500</el-tag>
+              <el-tag style="width:100px;text-align:center;">{{currentBalance}}</el-tag>
               <el-button style="width:150px;"
                          type="primary">{{$t('booking.topUp')}}</el-button>
             </div>
@@ -357,7 +363,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { ftlCharge, placeOrder } from '../../api/booking'
-import { truckType, districtFullList, goodsProperty, senderList, transportList } from '../../api/data'
+import { truckType, districtFullList, goodsProperty, senderList, transportList, myAccount } from '../../api/data'
 
 export default {
   directives: {
@@ -366,13 +372,6 @@ export default {
         // 获取element-ui定义好的scroll盒子
         const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap');
         SELECTWRAP_DOM.addEventListener('scroll', function () {
-          /**
-          * scrollHeight 获取元素内容高度(只读)
-          * scrollTop 获取或者设置元素的偏移值,常用于, 计算滚动条的位置, 当一个元素的容器没有产生垂直方向的滚动条, 那它的scrollTop的值默认为0.
-          * clientHeight 读取元素的可见高度(只读)
-          * 如果元素滚动到底, 下面等式返回true, 没有则返回false:
-          * ele.scrollHeight - ele.scrollTop === ele.clientHeight;
-          */
           const condition = this.scrollHeight - this.scrollTop <= this.clientHeight;
           if (condition) {
             binding.value();
@@ -451,10 +450,7 @@ export default {
       shareTruck: false,
       cargoShape: '1',
       cargoShapeList: [{}, {}, {}, {}, {}, {}, {}, {}],
-      amountList: [{
-        key: self.$t('booking.feight'),
-        value: 0
-      }],
+      amountList: [],
       sizeDialog: false,
       size_width: null,
       size_length: null,
@@ -470,7 +466,8 @@ export default {
         }
       ],
       senderList: [],
-
+      consultInfo: {},
+      currentBalance: null
     };
   },
   // 监听属性 类似于data概念
@@ -491,9 +488,61 @@ export default {
       if (self.shareTruck) {
         self.bookingForm.chargeList[0].chargeIntro = val
       }
+    },
+    documentReturn (val) {
+      const self = this
+      if (val) {
+        self.amountList.push({
+          key: 'RETURN_DOCUMENT',
+          amount: 10,
+          label: self.$t('booking.documentReturn'),
+        })
+      } else {
+        self.amountWatch('RETURN_DOCUMENT')
+      }
+    },
+    loading (val) {
+      const self = this
+      if (val) {
+        self.amountList.push({
+          key: 'LOADING',
+          amount: self.consultInfo.data.loadingOrUnloadingHumanWorkDay * self.consultInfo.data.moneyPerDay,
+          label: self.$t('booking.loading'),
+        })
+      } else {
+        self.amountWatch('LOADING')
+      }
+    },
+    unloading (val) {
+      const self = this
+      if (val) {
+        self.amountList.push({
+          key: 'UNLOADING',
+          amount: self.consultInfo.data.loadingOrUnloadingHumanWorkDay * self.consultInfo.data.moneyPerDay,
+          label: self.$t('booking.unloading'),
+        })
+      } else {
+        self.amountWatch('UNLOADING')
+      }
+    },
+    liability (val) {
+      const self = this
+      if (val) {
+        self.amountList.push({
+          key: 'INSURANCE',
+          amount: 0,
+          label: self.$t('booking.liability'),
+        })
+      } else {
+        self.amountWatch('INSURANCE')
+      }
     }
   },
-  created () { },
+  created () {
+    const self = this
+    let consultInfo = JSON.parse(localStorage.getItem('consultInfo'))
+    self.consultInfo = consultInfo
+  },
   mounted () {
     const self = this
     console.log(JSON.parse(localStorage.getItem('consultInfo')))
@@ -502,7 +551,7 @@ export default {
       self.categoryList = res.data.categories
       self.subCategoryList = res.data.subCategories
     })
-    let consultInfo = JSON.parse(localStorage.getItem('consultInfo'))
+    let consultInfo = self.consultInfo
     if (consultInfo) {
       let booking = self.bookingForm
       self.pickUpRegionList = consultInfo.pickUpRegionList
@@ -516,6 +565,11 @@ export default {
       booking.transportInfo.carriage = consultInfo.searchForm.truckSubCategory
       booking.transportInfo.companyName = consultInfo.data.site.companyName
       booking.transportInfo.ftlLineId = consultInfo.data.id
+      self.amountList.push({
+        label: self.$t('booking.feight'),
+        amount: consultInfo.data.charge,
+        key: 'FREIGHT'
+      })
     }
     // 货物属性
     goodsProperty().then(res => {
@@ -532,8 +586,20 @@ export default {
     transportList().then(res => {
       self.supplyList = res.data
     })
+    // 会员余额
+    myAccount(localStorage.getItem('curRole')).then(res => {
+      self.currentBalance = res.data.currentBalance
+    })
   },
   methods: {
+    amountWatch (name) {
+      const self = this
+      for (let x in self.amountList) {
+        if (self.amountList[x].key == name) {
+          self.amountList.splice(x, 1)
+        }
+      }
+    },
     pickUpMethod (query) {
       const self = this
       console.log(query)

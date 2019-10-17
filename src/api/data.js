@@ -24,6 +24,14 @@ export function senderList() {
   })
 }
 
+// ftlLine
+export function myAccount(applyType) {
+  return request({
+    url: 'api/member/finance/account/my/' + applyType,
+    method: 'get'
+  })
+}
+
 // 运输公司列表
 export function transportList() {
   return request({

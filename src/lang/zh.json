@@ -146,7 +146,8 @@
     "viewValuation": "查看计价",
     "transitTime": "运输时间",
     "feight": "货运",
-    "totalamt": "总金额"
+    "totalamt": "总金额",
+    "amount": "金额"
   },
   "tracking": {
     "status": "订单状态",
