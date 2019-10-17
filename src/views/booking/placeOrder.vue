@@ -313,6 +313,7 @@
             <div style="display:flex;justify-content:space-between;">
               <el-tag style="width:100px;text-align:center;">{{currentBalance}}</el-tag>
               <el-button style="width:150px;"
+                         @click="toTopUp"
                          type="primary">{{$t('booking.topUp')}}</el-button>
             </div>
           </el-form-item>
@@ -731,6 +732,10 @@ export default {
         value: size
       })
       self.bookingForm.propertyList[self.sizeCurIndex].sizeType = size
+    },
+    toTopUp () {
+      const self = this
+      self.$router.replace('/billing/topUp')
     }
   }
 };
