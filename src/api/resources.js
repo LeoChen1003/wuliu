@@ -61,30 +61,6 @@ export function getRoute(params) {
   })
 }
 
-// 列出当前所有省
-export function getProvince() {
-  return request({
-    url: '/misc/geo/province/list',
-    method: 'get'
-  })
-}
-
-// 列出当前所有市
-export function getCity() {
-  return request({
-    url: '/misc/geo/city/list',
-    method: 'get'
-  })
-}
-
-// 列出当前所有卡车类型
-export function getTruckTypes() {
-  return request({
-    url: '/misc/types/truck',
-    method: 'get'
-  })
-}
-
 // 提交新线路
 export function addRoute(data) {
   return request({

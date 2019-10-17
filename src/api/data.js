@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 卡车类型
-export function truckType() {
+export function getTruckType() {
   return request({
     url: '/misc/types/truck',
     method: 'get'
@@ -9,7 +9,7 @@ export function truckType() {
 }
 
 // 货物属性
-export function goodsProperty() {
+export function getGoodsProperty() {
   return request({
     url: '/misc/property/list',
     method: 'get'
@@ -17,7 +17,7 @@ export function goodsProperty() {
 }
 
 // 寄件人列表
-export function senderList() {
+export function getSenderList() {
   return request({
     url: '/api/demand/order/search/sender/list',
     method: 'get'
@@ -33,7 +33,7 @@ export function myAccount(applyType) {
 }
 
 // 运输公司列表
-export function transportList() {
+export function getTransportList() {
   return request({
     url: '/api/demand/order/search/transport/list',
     method: 'get'
@@ -41,7 +41,7 @@ export function transportList() {
 }
 
 // 所有省份
-export function provinceList() {
+export function getProvinceList() {
   return request({
     url: '/misc/geo/province/list',
     method: 'get'
@@ -49,7 +49,7 @@ export function provinceList() {
 }
 
 // 所有市
-export function cityList() {
+export function getCityList() {
   return request({
     url: '/misc/geo/city/list',
     method: 'get'
@@ -57,7 +57,7 @@ export function cityList() {
 }
 
 // 所有包含区
-export function districtList(data) {
+export function findDistrictList(data) {
   return request({
     url: '/misc/geo/district/search',
     method: 'post',
@@ -66,7 +66,7 @@ export function districtList(data) {
 }
 
 // 所有包含区
-export function districtFullList(data, data2) {
+export function findDistrictFullList(data, data2) {
   return request({
     url: '/misc/geo/district/search/fullname',
     method: 'post',
