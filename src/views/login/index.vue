@@ -438,7 +438,7 @@ export default {
             .dispatch("user/login", this.loginForm)
             .then(() => {
               this.$store.dispatch('user/getInfo')
-              this.$router.push({
+              this.$router.replace({
                 path: this.redirect || "/",
                 query: this.otherQuery
               });

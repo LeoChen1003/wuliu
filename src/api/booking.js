@@ -20,10 +20,19 @@ export function ftlCharge(data) {
   })
 }
 
-// ftlLine
+// 下单
 export function placeOrder(data) {
   return requestJSON({
     url: '/api/demand/order/list',
+    method: 'post',
+    data
+  })
+}
+
+// 发布需求
+export function releaseOrder(data) {
+  return requestJSON({
+    url: '/api/demand/order/demand',
     method: 'post',
     data
   })

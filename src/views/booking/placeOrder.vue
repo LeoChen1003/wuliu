@@ -1,12 +1,26 @@
 <template>
   <div class="manage booking">
-    <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:15px;">
-      <el-button style="width:150px;"
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+      <div style="display:flex;width:80%;">
+        <el-alert class="rejectMsg"
+                  show-icon
+                  :closable="false"
+                  :title="`${$t('title.TheCurrentlySelectedSupplyIs')} ${consultInfo.data.site.companyName}，${$t('title.TomodifyPleaseClickButton')}`"
+                  type="info"></el-alert>
+        <el-button style="width:200px;margin-left:20px;"
+                   size="small"
+                   @click="goBack"
+                   type="info">{{$t('booking.returnConsulting')}}</el-button>
+      </div>
+      <el-button style="width:200px;"
                  @click="todoIt"
+                 :loading="todoLoading"
                  type="primary">{{$t('booking.placeOrder')}}</el-button>
     </div>
     <el-form ref="bookingform"
              :model="bookingForm"
+             :rules="bookingRules"
+             :show-message="false"
              label-position="top"
              size="small">
       <el-row class="itemRow">
@@ -23,16 +37,18 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('booking.sender')">
-            <el-select v-model="bookingForm.senderAddress.name"
+            <el-select v-model="senderIndex"
+                       @change="(val)=>senderSelect(val)"
                        :placeholder="$t('placeholder.pleaseChoose')"
                        class="inputWidth">
-              <el-option v-for="item in senderList"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value" />
+              <el-option v-for="(item,index) in senderList"
+                         :key="item.id"
+                         :label="item.name"
+                         :value="index" />
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('booking.pickupTime')">
+          <el-form-item prop="senderAddress"
+                        :label="$t('booking.pickupTime')">
             <div class="inputWidth"
                  style="display:flex;">
               <el-date-picker v-model="bookingForm.senderAddress.pickAt"
@@ -44,14 +60,16 @@
               </el-date-picker>
               <el-time-picker v-model="time"
                               disabled
-                              value-format='HH-MM-dd'
+                              format="HH:mm:ss"
+                              value-format='HH:mm:ss'
                               :placeholder="$t('placeholder.chooseTime')">
               </el-time-picker>
             </div>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item :label="$t('booking.pickupPoint')">
+          <el-form-item prop="senderAddress"
+                        :label="$t('booking.pickupPoint')">
             <el-input :placeholder="$t('placeholder.placeEnterSenderName')"
                       v-model="bookingForm.senderAddress.name"
                       class="inputWidth inputBottom"></el-input>
@@ -81,7 +99,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item :label="$t('booking.destination')">
+          <el-form-item prop="receiverAddress"
+                        :label="$t('booking.destination')">
             <el-input :placeholder="$t('placeholder.pleaseEnterRecipieName')"
                       v-model="bookingForm.receiverAddress.name"
                       class="inputWidth inputBottom"></el-input>
@@ -130,6 +149,7 @@
                          :label="$t('booking.documentReturn')"
                          border></el-checkbox>
             <el-checkbox v-model="liability"
+                         disabled
                          class="inputWidth inputBottom"
                          :label="$t('booking.liability')"
                          border></el-checkbox>
@@ -197,6 +217,7 @@
               <el-radio :label="false"
                         border>{{$t('booking.fullTruckLoad')}}</el-radio>
               <el-radio :label="true"
+                        disabled
                         border>{{$t('booking.sharetruckLoad')}}</el-radio>
             </el-radio-group>
           </el-form-item>
@@ -212,85 +233,87 @@
         </el-col>
       </el-row>
       <el-row class="itemRow"
+              type="flex"
               :gutter="40">
         <el-col :span="15">
-          <el-button type="primary"
-                     @click="pushIt"
-                     style="margin-bottom:10px;"
-                     icon="el-icon-circle-plus-outline">{{$t('booking.add')}}</el-button>
-          <el-table border
-                    :data="bookingForm.propertyList">
-            <el-table-column prop="propertyType"
-                             :label="$t('booking.cargoType')">
-              <template slot-scope="scope">
-                <el-select v-model="scope.row.propertyType"
-                           :placeholder="$t('placeholder.pleaseChoose')">
-                  <el-option v-for="item in propertyTypeList"
-                             :key="item.key"
-                             :label="item.value"
-                             :value="item.key"></el-option>
-                </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column prop="name"
-                             :label="$t('booking.commodity')">
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.name"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column prop="number"
-                             :label="$t('booking.qty')">
-              <template slot-scope="scope">
-                <el-input type="number"
-                          v-model="scope.row.number"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column prop="unit"
-                             :label="$t('booking.unit')">
-              <template slot-scope="scope">
-                <el-select :placeholder="$t('placeholder.pleaseChoose')"
-                           v-model="scope.row.unit">
-                  <el-option v-for="item in unitList"
-                             :key="item.key"
-                             :label="item.value"
-                             :value="item.key"></el-option>
-                </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column prop="sizeType"
-                             :label="$t('booking.size')">
-              <template slot-scope="scope">
-                <el-select v-model="scope.row.sizeType"
-                           @change="(val)=>sizeSelect(val,scope.$index)"
-                           :placeholder="$t('placeholder.pleaseChoose')">
-                  <el-option v-for="item in sizeTypeList"
-                             :key="item.key"
-                             :label="item.value"
-                             :value="item.key"></el-option>
+          <!-- <el-form-item prop="propertyList">
+            <el-button type="primary"
+                       @click="pushIt"
+                       style="margin-bottom:10px;"
+                       icon="el-icon-circle-plus-outline">{{$t('booking.add')}}</el-button>
+            <el-table border
+                      :data="bookingForm.propertyList">
+              <el-table-column prop="propertyType"
+                               :label="$t('booking.cargoType')">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.propertyType"
+                             :placeholder="$t('placeholder.pleaseChoose')">
+                    <el-option v-for="item in propertyTypeList"
+                               :key="item.key"
+                               :label="item.trans"
+                               :value="item.key"></el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column prop="name"
+                               :label="$t('booking.commodity')">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.name"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column prop="number"
+                               :label="$t('booking.qty')">
+                <template slot-scope="scope">
+                  <el-input type="number"
+                            v-model="scope.row.number"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column prop="unit"
+                               :label="$t('booking.unit')">
+                <template slot-scope="scope">
+                  <el-select :placeholder="$t('placeholder.pleaseChoose')"
+                             v-model="scope.row.unit">
+                    <el-option v-for="item in unitList"
+                               :key="item.key"
+                               :label="item.trans"
+                               :value="item.key"></el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column prop="sizeType"
+                               :label="$t('booking.size')">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.sizeType"
+                             @change="(val)=>sizeSelect(val,scope.$index)"
+                             :placeholder="$t('placeholder.pleaseChoose')">
+                    <el-option v-for="item in sizeTypeList"
+                               :key="item.key"
+                               :label="item.trans"
+                               :value="item.key"></el-option>
 
-                </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column prop="weightOfEach"
-                             :label="$t('booking.weight')">
-              <template slot-scope="scope">
-                <el-input type="number"
-                          v-model="scope.row.weightOfEach"></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column width="50">
-              <template slot-scope="scope">
-                <div class="table-op">
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column prop="weightOfEach"
+                               :label="$t('booking.weight')">
+                <template slot-scope="scope">
+                  <el-input type="number"
+                            v-model="scope.row.weightOfEach"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column width="50">
+                <template slot-scope="scope">
+                  <div class="table-op">
 
-                  <div @click="delIt(scope.row,scope.$index)">
-                    <i class="el-icon-delete"
-                       style="color:#F25C5C;"></i>
+                    <div @click="delIt(scope.row,scope.$index)">
+                      <i class="el-icon-delete"
+                         style="color:#F25C5C;"></i>
+                    </div>
                   </div>
-                </div>
-              </template>
-            </el-table-column>
-
-          </el-table>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-form-item> -->
         </el-col>
         <el-col :span="7">
           <!-- <el-button type="primary"
@@ -314,7 +337,7 @@
               <el-tag style="width:100px;text-align:center;">{{currentBalance}}</el-tag>
               <el-button style="width:150px;"
                          @click="toTopUp"
-                         type="primary">{{$t('booking.topUp')}}</el-button>
+                         type="info">{{$t('booking.topUp')}}</el-button>
             </div>
           </el-form-item>
         </el-col>
@@ -365,6 +388,7 @@
 // 例如：import 《组件名称》 from '《组件路径》';
 import { ftlCharge, placeOrder } from '../../api/booking'
 import { getTruckType, findDistrictFullList, getGoodsProperty, getSenderList, getTransportList, myAccount } from '../../api/data'
+import path from 'path';
 
 export default {
   directives: {
@@ -385,6 +409,29 @@ export default {
   components: {},
   data () {
     const self = this
+    const validatorSenderAddress = (rule, value, callback) => {
+      if (!value.pickAt || !value.name || !value.mobile || !value.addressDetail || !value.code) {
+        callback(new Error(''));
+      } else {
+        callback();
+      }
+    };
+    const validatorReceiverAddress = (rule, value, callback) => {
+      if (!value.name || !value.mobile || !value.addressDetail || !value.code) {
+        callback(new Error(''));
+      } else {
+        callback();
+      }
+    };
+    const validatorPropertyList = (rule, value, callback) => {
+      for (let x in value) {
+        if (!value[x].propertyType || !value[x].name || !value[x].number || !value[x].unit || !value[x].sizeType || !value[x].weightOfEach) {
+          callback(new Error(''));
+        } else {
+          callback();
+        }
+      }
+    };
     return {
       bookingForm: {
         orderInfo: {
@@ -418,14 +465,21 @@ export default {
             money: 0
           }
         ],
-        propertyList: [{
-          propertyType: '',
-          name: '',
-          number: null,
-          unit: '',
-          sizeType: '',
-          weightOfEach: null
-        }]
+        propertyList: [
+          //   {
+          //   propertyType: '',
+          //   name: '',
+          //   number: null,
+          //   unit: '',
+          //   sizeType: '',
+          //   weightOfEach: null
+          // }
+        ]
+      },
+      bookingRules: {
+        senderAddress: [{ required: true, trigger: 'blur', validator: validatorSenderAddress }],
+        receiverAddress: [{ required: true, trigger: 'blur', validator: validatorReceiverAddress }],
+        propertyList: [{ required: true, trigger: 'change', validator: validatorPropertyList }],
       },
       documentReturn: false,
       liability: false,
@@ -467,8 +521,10 @@ export default {
         }
       ],
       senderList: [],
+      senderIndex: null,
       consultInfo: {},
-      currentBalance: null
+      currentBalance: null,
+      todoLoading: false
     };
   },
   // 监听属性 类似于data概念
@@ -476,7 +532,6 @@ export default {
   // 监控data中的数据变化
   watch: {
     shareTruck (val) {
-      console.log(val)
       const self = this
       if (val) {
         self.bookingForm.chargeList[0].chargeIntro = self.cargoShape
@@ -546,7 +601,6 @@ export default {
   },
   mounted () {
     const self = this
-    console.log(JSON.parse(localStorage.getItem('consultInfo')))
     // 卡车类型
     getTruckType().then(res => {
       self.categoryList = res.data.categories
@@ -580,7 +634,6 @@ export default {
     })
     // 寄件人列表 
     getSenderList().then(res => {
-      console.log(res)
       self.senderList = res.data
     })
     // 运输公司列表 
@@ -603,7 +656,6 @@ export default {
     },
     pickUpMethod (query) {
       const self = this
-      console.log(query)
       if (query !== '') {
         if (self.curSelect == 'pk') {
           self.pickUpQuery = query
@@ -666,13 +718,38 @@ export default {
       self.page = 0
       self.isLast = false
     },
+    // 选择寄件人
+    senderSelect (val) {
+      console.log(val)
+      const self = this
+      self.bookingForm.senderAddress.name = self.senderList[val].name
+      self.bookingForm.senderAddress.mobile = self.senderList[val].mobile
+      self.bookingForm.senderAddress.addressDetail = self.senderList[val].addressDetail
+    },
     // 下单
     todoIt () {
       const self = this
-      // self.bookingForm.senderAddress.pickAt += " " + self.time ? self.time : '00:00:00'
-      console.log(self.bookingForm)
-      placeOrder(self.bookingForm).then(res => {
-
+      this.$refs.bookingform.validate(valid => {
+        if (valid) {
+          self.todoLoading = true
+          console.log(self.bookingForm)
+          for (let x in self.amountList) {
+            if (self.amountList[x].key != 'FREIGHT') {
+              self.bookingForm.chargeList.push({
+                chargeType: self.amountList[x].key,
+                chargeIntro: self.amountList[x].key == 'INSURANCE' ? self.liabilitySelect : '',
+                money: self.amountList[x].amount
+              })
+            }
+          }
+          placeOrder(self.bookingForm).then(res => {
+            self.todoLoading = false
+            self.$message.success(res.message)
+            self.$router.replace('/tracking/FTL')
+          }).catch(el => {
+            self.todoLoading = false
+          })
+        }
       })
     },
     viewIt () {
@@ -688,7 +765,6 @@ export default {
         truckCategory: transportInfo.carType,
         truckSubCategory: transportInfo.carriage,
       }).then(res => {
-        console.log(res)
         self.amountList = res.data
       })
     },
@@ -717,8 +793,7 @@ export default {
     },
     sizeSelect (val, index) {
       const self = this
-      console.log(val)
-      if (val == 'extra_size') {
+      if (val == 'EXTRA_SIZE') {
         self.sizeDialog = true
         self.sizeCurIndex = index
       }
@@ -729,13 +804,18 @@ export default {
       let size = self.size_length + '*' + self.size_width + '*' + self.size_height
       self.sizeTypeList.push({
         key: size,
-        value: size
+        value: size,
+        trans: size
       })
       self.bookingForm.propertyList[self.sizeCurIndex].sizeType = size
     },
     toTopUp () {
       const self = this
       self.$router.replace('/billing/topUp')
+    },
+    goBack () {
+      const self = this
+      self.$router.replace({ path: '/booking/priceConsulting', query: { return: 1 } })
     }
   }
 };

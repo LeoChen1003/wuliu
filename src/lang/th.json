@@ -141,7 +141,9 @@
     "transitTime": "เวลาขนส่ง",
     "feight": " ค่าขนส่ง",
     "totalamt": "ผลรวม",
-    "amount": "amount"
+    "amount": "amount",
+    "returnConsulting": "ปรึกษาเรื่องผลตอบแทน",
+    "releaseToMarket": "ปล่อยความต้องการ"
   },
   "tracking": {
     "status": "สภาพ",
@@ -293,5 +295,9 @@
     "aysAgree": "คุณแน่ใจนะว่าคุณเห็นด้วย？",
     "aysActivate": "คุณแน่ใจนะว่าเปิดใช้งาน",
     "aysConfirm": "คุณแน่ใจนะ?"
+  },
+  "title": {
+    "TomodifyPleaseClickButton": "To modify, please click the back button",
+    "TheCurrentlySelectedSupplyIs": "The currently selected supply is"
   }
 }

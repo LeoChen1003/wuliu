@@ -24,7 +24,6 @@ const messages = {
     ...elementThLocale
   }
 }
-console.log(elementZhLocale)
 export function getLanguage() {
   const chooseLanguage = Cookies.get('language')
   if (chooseLanguage) return chooseLanguage

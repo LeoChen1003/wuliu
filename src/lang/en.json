@@ -147,7 +147,9 @@
     "transitTime": "Transit time",
     "feight": "Freight",
     "totalamt": "Total amt",
-    "amount": "amount"
+    "amount": "amount",
+    "returnConsulting": "Return consulting",
+    "releaseToMarket": "Release to market"
   },
   "tracking": {
     "status": "Status",
@@ -333,5 +335,9 @@
     "aysAgree": "Are you sure you agree?",
     "aysActivate": "Are you sure activate?",
     "aysConfirm": "Are you sure confirm?"
+  },
+  "title": {
+    "TheCurrentlySelectedSupplyIs": "The currently selected supply is",
+    "TomodifyPleaseClickButton": "To modify, please click the back button"
   }
 }
