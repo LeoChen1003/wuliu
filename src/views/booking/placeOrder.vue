@@ -456,7 +456,8 @@ export default {
           companyName: '',
           ftlLineId: '',
           carType: '',
-          carriage: ''
+          carriage: '',
+          supplyId: null
         },
         chargeList: [
           {
@@ -620,6 +621,7 @@ export default {
       booking.transportInfo.carriage = consultInfo.searchForm.truckSubCategory
       booking.transportInfo.companyName = consultInfo.data.site.companyName
       booking.transportInfo.ftlLineId = consultInfo.data.id
+      booking.transportInfo.supplyId = consultInfo.data.siteId
       self.amountList.push({
         label: self.$t('booking.feight'),
         amount: consultInfo.data.charge,
@@ -737,7 +739,7 @@ export default {
             if (self.amountList[x].key != 'FREIGHT') {
               self.bookingForm.chargeList.push({
                 chargeType: self.amountList[x].key,
-                chargeIntro: self.amountList[x].key == 'INSURANCE' ? self.liabilitySelect : '',
+                chargeIntro: self.amountList[x].key == 'INSURANCE' ? self.liabilitySelect : 'true',
                 money: self.amountList[x].amount
               })
             }

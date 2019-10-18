@@ -451,8 +451,8 @@ export default {
       },
       releaseRules: {
         orderInfo: [{ required: true, trigger: 'blur', validator: validatorOrderInfo }],
-        senderAddress: [{ required: true, trigger: 'blur', validator: validatorSenderAddress }],
-        receiverAddress: [{ required: true, trigger: 'blur', validator: validatorReceiverAddress }],
+        senderAddress: [{ required: true, trigger: 'change', validator: validatorSenderAddress }],
+        receiverAddress: [{ required: true, trigger: 'change', validator: validatorReceiverAddress }],
         propertyList: [{ required: true, trigger: 'change', validator: validatorPropertyList }],
         transportInfo: [{ required: true, trigger: 'change', validator: validatorTransportInfo }],
         pickAt: [{ required: true, trigger: 'blur', validator: validatorpickAt }],
@@ -687,7 +687,7 @@ export default {
           for (let x in self.amountList) {
             self.releaseForm.chargeList.push({
               chargeType: self.amountList[x].key,
-              chargeIntro: self.amountList[x].key == 'INSURANCE' ? self.liabilitySelect : '',
+              chargeIntro: self.amountList[x].key == 'INSURANCE' ? self.liabilitySelect : 'true',
               money: self.amountList[x].key == 'INSURANCE' ? self.liabilityCon : 0
             })
           }
