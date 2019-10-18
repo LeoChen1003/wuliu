@@ -179,7 +179,9 @@
     "destination": "Destination",
     "availableCapacity": "Available capacity(m³)",
     "payload": "Payload(kg)",
-    "cutoffTime": " Cutoff time"
+    "cutoffTime": " Cutoff time",
+    "route": "Route",
+    "cargo": "Cargo"
   },
   "resources": {
     "add": "Add",
@@ -339,5 +341,14 @@
   "title": {
     "TheCurrentlySelectedSupplyIs": "The currently selected supply is",
     "TomodifyPleaseClickButton": "To modify, please click the back button"
+  },
+  "market": {
+    "origin": "Origin",
+    "destinaiton": "Destinaiton",
+    "pickupDate": "Pickup date",
+    "truckType": "Truck type",
+    "confirm": "Confirm",
+    "search": "Search",
+    "pickupTime": "Pickup time"
   }
 }
