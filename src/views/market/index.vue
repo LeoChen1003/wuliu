@@ -6,7 +6,7 @@
                label-width="110px"
                :model="searchForm">
         <el-form-item :label="$t('market.origin')">
-          <el-select v-model="searchForm.fromProvinceCode"
+          <el-select v-model="searchForm.pickUpRegion"
                      clearable
                      filterable
                      placeholder="province">
@@ -17,7 +17,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('market.destinaiton')">
-          <el-select v-model="searchForm.toProvinceCode"
+          <el-select v-model="searchForm.deliveryRegion"
                      clearable
                      filterable
                      placeholder="province">
@@ -28,12 +28,13 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('market.pickupDate')">
-          <el-date-picker v-model="searchForm.pickupDate"
+          <el-date-picker v-model="searchForm.pickUpDate"
+                          value-format='yyyy-MM-dd'
                           type="date">
           </el-date-picker>
         </el-form-item>
         <el-form-item :label="$t('market.truckType')">
-          <el-select v-model="searchForm.truckType"
+          <el-select v-model="searchForm.truckCategory"
                      filterable
                      class="formSelect"
                      placeholder="Truck type">
@@ -44,7 +45,8 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">{{$t('market.search')}}</el-button>
+          <el-button type="primary"
+                     @click="searchIt">{{$t('market.search')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -271,10 +273,11 @@ export default {
       unitObj: {},
       truckObj: {},
       searchForm: {
-        fromProvinceCode: '',
-        toProvinceCode: '',
-        pickupDate: '',
-        truckType: ''
+        pickUpRegion: '',
+        deliveryRegion: '',
+        pickUpDate: '',
+        truckCategory: '',
+        page: 0
       },
       quotePriceDialog: false,
       quotePriceCon: {
@@ -365,7 +368,9 @@ export default {
   },
   methods: {
     loadData (cb) {
-      orderShop().then(res => {
+      const self = this
+      self.searchForm.pickUpDate = self.searchForm.pickUpDate ? self.searchForm.pickUpDate + ' 00:00:00' : ''
+      orderShop(self.searchForm).then(res => {
         self.data = res.data;
         if (cb) {
           cb();
@@ -373,11 +378,8 @@ export default {
       })
     },
     pageChange (e) {
-      getRoute({
-        page: e - 1,
-      }).then(res => {
-        self.data = res.data;
-      })
+      self.searchForm.page = e - 1
+      self.loadData()
     },
     toquotePrice (row) {
       const self = this
@@ -410,6 +412,11 @@ export default {
       }).catch(() => {
         self.confirmLoading = false
       })
+    },
+    searchIt () {
+      const self = this
+      self.data = {}
+      self.loadData()
     }
   }
 };

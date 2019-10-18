@@ -205,11 +205,11 @@ export default {
     };
     return {
       searchForm: {
-        truckCategory: 'WHEEL4',
-        truckSubCategory: 'Corral',
-        pickUpDate: '2019-10-16',
-        deliveryRegion: 'TH040201',
-        pickUpRegion: 'TH010702'
+        truckCategory: '',
+        truckSubCategory: '',
+        pickUpDate: '',
+        deliveryRegion: '',
+        pickUpRegion: ''
       },
       searchRules: {
         deliveryRegion: [{ required: true, }],
