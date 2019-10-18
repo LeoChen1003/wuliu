@@ -2,6 +2,7 @@
   <div class="wrapper">
     <div class="searchBox">
       <el-form ref="searchForm"
+               :show-message="false"
                label-width="110px"
                :model="searchForm">
         <el-form-item :label="$t('market.origin')">
@@ -82,7 +83,12 @@
           </template>
         </el-table-column>
         <el-table-column :label="$t('tracking.price')"></el-table-column>
-        <el-table-column></el-table-column>
+        <el-table-column>
+          <template slot-scope="scope">
+            <el-button type="primary"
+                       @click="toquotePrice(scope.row)">{{$t('market.quoteAPrice')}}</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <div style="text-align:center;margin:20px 0;">
         <el-pagination background
@@ -95,6 +101,147 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog :title="$t('market.quoteAPrice')"
+               :visible.sync="quotePriceDialog"
+               top='1vh'
+               center
+               width="60%">
+      <el-form :model="quotePriceCon"
+               size="small"
+               label-position="top"
+               :show-message="false">
+        <div style="display:flex;">
+          <div style="width:50%;">
+            <el-form-item :label="$t('booking.sender')">
+              <el-input v-model="quotePriceCon.senderAddress.name"
+                        class="inp"
+                        disabled></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('booking.pickupPoint')">
+              <el-input v-model="quotePriceCon.senderAddress.name"
+                        class="inp"
+                        disabled></el-input>
+              <el-input v-model="quotePriceCon.senderAddress.mobile"
+                        class="inp"
+                        disabled></el-input>
+              <el-input v-model="quotePriceCon.senderAddress.addressDetail"
+                        class="inp"
+                        disabled></el-input>
+              <el-input v-model="quotePriceCon.senderAddress.fullName"
+                        class="inp"
+                        disabled></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('booking.pickupTime')">
+              <el-date-picker v-model="quotePriceCon.senderAddress.pickAt"
+                              class="inp"
+                              disabled
+                              type="datetime">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item :label="$t('booking.deliveryPoint')">
+              <el-input v-model="quotePriceCon.receiverAddress.name"
+                        class="inp"
+                        disabled></el-input>
+              <el-input v-model="quotePriceCon.receiverAddress.mobile"
+                        class="inp"
+                        disabled></el-input>
+              <el-input v-model="quotePriceCon.receiverAddress.addressDetail"
+                        class="inp"
+                        disabled></el-input>
+              <el-input v-model="quotePriceCon.receiverAddress.fullName"
+                        class="inp"
+                        disabled></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('booking.truckType')">
+              <el-select v-model="quotePriceCon.transport.carType"
+                         class="inp"
+                         disabled
+                         :placeholder="$t('placeholder.pleaseChoose')">
+                <el-option v-for="item in truckTypes.categories"
+                           :key="item.key"
+                           :label="item.value"
+                           :value="item.key" />
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('booking.shareTruck')">
+              <el-radio-group v-model="shareTruck"
+                              disabled>
+                <el-radio :label="false">{{$t('booking.fullTruckLoad')}}</el-radio>
+                <el-radio :label="true">{{$t('booking.sharetruckLoad')}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </div>
+          <div style="width:50%;">
+            <el-form-item :label="$t('booking.valueAddedService')">
+              <el-tag v-for="item in quotePriceCon.chargeList"
+                      :key="item.id"
+                      v-if="item.chargeType!='CARPOOL'"
+                      type="info"
+                      style="margin-right:5px;">
+                {{  serveObj[item.chargeType]}}
+              </el-tag>
+            </el-form-item>
+            <el-form-item :label="$t('booking.referenceNo')">
+              <el-input v-model="quotePriceCon.outNumber"
+                        disabled
+                        class="inp" />
+            </el-form-item>
+            <el-form-item :label="$t('booking.remarks')">
+              <el-input v-model="quotePriceCon.remark"
+                        disabled
+                        type="textarea"
+                        class="inp" />
+            </el-form-item>
+            <el-form-item :label="$t('market.demandPrice')">
+              <el-input v-model="quotePriceCon.settlementAmount"
+                        disabled
+                        class="inp" />
+            </el-form-item>
+            <el-form-item :label="$t('booking.myQuotaion')">
+              <el-input v-model="quotePriceForm.money"
+                        class="inp" />
+            </el-form-item>
+            <el-form-item :label="$t('market.licencePlate')">
+              <el-select v-model="quotePriceForm.truck_id"
+                         @change="truckSelect"
+                         class="inp">
+                <el-option v-for="item in truckData"
+                           :key="item.id"
+                           :label="item.plate"
+                           :value="item.id" />
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('market.truckType')">
+              <el-select v-model="quotePriceForm.category"
+                         class="inp"
+                         :placeholder="$t('placeholder.pleaseChoose')">
+                <el-option v-for="item in truckTypes.categories"
+                           :key="item.key"
+                           :label="item.value"
+                           :value="item.key" />
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('market.loaderType')">
+              <el-select v-model="quotePriceForm.subCategory"
+                         class="inp"
+                         :placeholder="$t('placeholder.pleaseChoose')">
+                <el-option v-for="item in truckTypes.subCategories"
+                           :key="item.key"
+                           :label="item.value"
+                           :value="item.key" />
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary"
+                         class="inp"
+                         :loading="confirmLoading"
+                         style="margin-top:30px;"
+                         @click="quotePriceConfirm">{{$t('booking.confirm')}}</el-button>
+            </el-form-item>
+          </div>
+        </div>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -102,7 +249,8 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getProvinceArea } from '../../api/data'
-import { orderShop } from '../../api/market.js'
+import { orderShop, quoteOrder } from '../../api/market.js'
+import { truckList } from "../../api/resources";
 
 let self;
 export default {
@@ -121,12 +269,50 @@ export default {
       propertyObj: {},
       sizeObj: {},
       unitObj: {},
+      truckObj: {},
       searchForm: {
         fromProvinceCode: '',
         toProvinceCode: '',
         pickupDate: '',
         truckType: ''
-      }
+      },
+      quotePriceDialog: false,
+      quotePriceCon: {
+        lineType: 'FTL',
+        outNumber: '',
+        remark: '',
+        senderAddress: {
+          pickAt: '',
+          name: '',
+          mobile: '',
+          addressDetail: '',
+          code: '',
+        },
+        receiverAddress: {
+          name: '',
+          mobile: '',
+          addressDetail: '',
+          code: '',
+        },
+        transport: {
+          companyName: '',
+          ftlLineId: '',
+          carType: '',
+          carriage: '',
+          supplyId: null
+        },
+        chargeList: [],
+        propertyList: []
+      },
+      quotePriceForm: {
+        money: null,
+        truck_id: null,
+        category: '',
+        subCategory: ''
+      },
+      shareTruck: false,
+      truckData: [],
+      confirmLoading: false
     };
   },
   // 监听属性 类似于data概念
@@ -193,6 +379,38 @@ export default {
         self.data = res.data;
       })
     },
+    toquotePrice (row) {
+      const self = this
+      self.quotePriceDialog = true
+      self.quotePriceCon = row
+      self.shareTruck = row.chargeList[0].chargeIntro == 'false' ? false : true
+      truckList().then(res => {
+        self.truckData = res.data
+      })
+    },
+    truckSelect (val) {
+      const self = this
+      self.truckData.forEach((item) => {
+        if (item.id == val) {
+          self.quotePriceForm.category = item.category
+          self.quotePriceForm.subCategory = item.subCategory
+          return
+        }
+      })
+    },
+    // 报价抢单
+    quotePriceConfirm () {
+      const self = this
+      self.confirmLoading = true
+      quoteOrder(self.quotePriceCon.id, self.quotePriceForm).then(res => {
+        self.$message.success(res.message)
+        self.confirmLoading = false
+        self.quotePriceDialog = false
+        self.loadData();
+      }).catch(() => {
+        self.confirmLoading = false
+      })
+    }
   }
 };
 </script>
@@ -211,5 +429,9 @@ export default {
 
 .container {
   width: 100%;
+}
+
+.inp {
+  width: 300px;
 }
 </style>

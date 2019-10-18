@@ -161,8 +161,10 @@
     "print": "Print",
     "confirm": "Confirm",
     "KPI": "KPI",
-    "truckType": "Truck type",
-    "quotation": "Quotation(฿)"
+    "truckType": " ประเภทรถบรรทุก",
+    "quotation": "Quotation(฿)",
+    "price": "ราคา (฿)",
+    "route": "เส้นทาง"
   },
   "resources": {
     "add": "เพิ่ม",
@@ -299,5 +301,17 @@
   "title": {
     "TomodifyPleaseClickButton": "To modify, please click the back button",
     "TheCurrentlySelectedSupplyIs": "The currently selected supply is"
+  },
+  "market": {
+    "quoteAPrice": "เสนอราคา",
+    "pickupTime": "วันที่/เวลาเข้ารับสินค้า",
+    "search": "ค้นหา",
+    "truckType": "กลุ่มรถ",
+    "pickupDate": "วันที่ เข้ารับสินค้า",
+    "destinaiton": "จังหวัดปลายทาง",
+    "origin": "ต้นทาง",
+    "demandPrice": "ราคา(฿)",
+    "licencePlate": "ป้ายทะเบียนรถ",
+    "loaderType": "ประเภทกระบะบรรทุก"
   }
 }
