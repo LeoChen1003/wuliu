@@ -147,7 +147,9 @@
     "transitTime": "运输时间",
     "feight": "货运",
     "totalamt": "总金额",
-    "amount": "金额"
+    "amount": "金额",
+    "returnConsulting": "返回咨询",
+    "releaseToMarket": "发布需求"
   },
   "tracking": {
     "status": "订单状态",
@@ -345,5 +347,9 @@
     "aysAgree": "是否确认同意？",
     "aysActivate": "是否确认激活？",
     "aysConfirm": "是否确认？"
+  },
+  "title": {
+    "TheCurrentlySelectedSupplyIs": "当前选择的运输公司为",
+    "TomodifyPleaseClickButton": "如需修改请点击返回"
   }
 }

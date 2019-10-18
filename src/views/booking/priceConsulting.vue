@@ -1,8 +1,8 @@
 <template>
   <div class="manage">
-    <el-row style="height:100%;">
+    <el-row style="height:calc(100vh - 104px);">
       <el-col :span="6"
-              style="height:100%;"
+              style="height:100%;overflow:scroll;"
               class="searchBox">
         <div>
           <el-form ref="searchform"
@@ -52,7 +52,8 @@
                                 :placeholder="$t('placeholder.chooseDate')">
                 </el-date-picker>
                 <el-time-picker v-model="time"
-                                value-format='HH-MM-dd'
+                                format="HH:mm:ss"
+                                value-format='HH:mm:ss'
                                 :placeholder="$t('placeholder.chooseTime')">
                 </el-time-picker>
               </div>
@@ -106,7 +107,8 @@
           </el-form>
         </div>
       </el-col>
-      <el-col :span="18">
+      <el-col :span="18"
+              style="height:100%;overflow:scroll;">
         <el-table :data="tableList"
                   border
                   style="width: 97%;margin-left:20px;">
@@ -127,7 +129,7 @@
                 {{ scope.row.fromProvince }} --> {{ scope.row.toCity }}
               </div>
               <div>
-                {{$t('booking.transitTime')}} :
+                {{$t('booking.transitTime')}} : {{scope.row.transitTime}}days
               </div>
             </template>
           </el-table-column>
@@ -137,7 +139,7 @@
               <div>{{$t('booking.feight')}} : {{scope.row.charge}}</div>
               <div v-if="scope.row.supportLoading == 1">{{$t('booking.loading')}}/{{$t('booking.unloading')}} : {{scope.row.loadingOrUnloadingHumanWorkDay*scope.row.moneyPerDay}}</div>
               <div>{{$t('booking.documentReturn')}} :{{documentReturn}}</div>
-              <div>{{$t('booking.totalamt')}} :</div>
+              <div>{{$t('booking.totalamt')}} : {{10+scope.row.charge+(scope.row.supportLoading == 1?scope.row.loadingOrUnloadingHumanWorkDay*scope.row.moneyPerDay:0)}}</div>
             </template>
           </el-table-column>
           <el-table-column width='95'>
@@ -259,6 +261,16 @@ export default {
       self.categoryList = res.data.categories
       self.subCategoryList = res.data.subCategories
     })
+    if (self.$route.query.return == 1) {
+      let consultInfo = JSON.parse(localStorage.getItem('consultInfo'))
+      console.log(consultInfo)
+      self.searchForm = consultInfo.searchForm
+      self.logisticType = consultInfo.logisticType
+      self.time = consultInfo.time
+      self.pickUpRegionList = consultInfo.pickUpRegionList
+      self.delRegionList = consultInfo.delRegionList
+      self.searchSupply()
+    }
   },
   methods: {
     toBooking (row) {
@@ -271,7 +283,7 @@ export default {
       consultInfo.logisticType = self.logisticType
       consultInfo.time = self.time
       localStorage.setItem('consultInfo', JSON.stringify(consultInfo))
-      this.$router.push('/booking/placeOrder');
+      this.$router.replace('/booking/placeOrder');
     },
     pickUpMethod (query) {
       const self = this
@@ -340,9 +352,7 @@ export default {
     },
     // 搜索
     searchSupply () {
-      console.log(this.$refs.searchform)
       this.$refs.searchform.validate(valid => {
-        console.log(valid)
         if (valid) {
           const self = this
           self.searchloading = true
@@ -402,5 +412,9 @@ export default {
 }
 .inputWidth {
   width: 90%;
+}
+::-webkit-scrollbar {
+  /*隐藏滚轮*/
+  display: none;
 }
 </style>

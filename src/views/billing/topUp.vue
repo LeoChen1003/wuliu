@@ -84,6 +84,7 @@
         <el-form ref="topUpform"
                  :model="topUpform"
                  :rules="topUpRules"
+                 :show-message="false"
                  class="form"
                  label-position='left'
                  label-width="160px">

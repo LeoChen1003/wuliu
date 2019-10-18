@@ -14,6 +14,7 @@ export const constantRoutes = [
   },
   {
     path: '/',
+    name: 'home',
     component: () => import('@/views/home/index'),
     hidden: true
   },
@@ -223,7 +224,7 @@ export function resetRouter() {
 }
 
 router.$addRoutes = params => {
-  router.matcher = new Router({ mode: 'history' }).matcher
+  router.matcher = new Router().matcher
   router.addRoutes(params)
 }
 
