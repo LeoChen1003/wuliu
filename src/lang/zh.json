@@ -179,7 +179,9 @@
     "destination": "目的地",
     "availableCapacity": "可用容量",
     "payload": "最大承重（kg）",
-    "cutoffTime": "截止时间"
+    "cutoffTime": "截止时间",
+    "route": "路线",
+    "cargo": "货物"
   },
   "resources": {
     "add": "添加",
@@ -351,5 +353,17 @@
   "title": {
     "TheCurrentlySelectedSupplyIs": "当前选择的运输公司为",
     "TomodifyPleaseClickButton": "如需修改请点击返回"
+  },
+  "market": {
+    "origin": "始发地",
+    "destinaiton": "目的地",
+    "pickupDate": "揽件日期",
+    "truckType": "卡车类型",
+    "search": "搜索",
+    "pickupTime": "揽件时间",
+    "quoteAPrice": "报价抢单",
+    "demandPrice": "需求方的报价(฿)",
+    "licencePlate": "车牌号",
+    "loaderType": "车型类型"
   }
 }

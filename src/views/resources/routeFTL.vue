@@ -179,7 +179,15 @@
                       v-if="form.supportLoading">
           <el-input v-model="form.moneyPerDay"
                     type="number"
-                    @mousewheel.native.prevent></el-input>
+                    @mousewheel.native.prevent>
+          </el-input>
+        </el-form-item>
+        <el-form-item :label="$t('booking.transitTime')"
+                      required
+                      prop="transitTime">
+          <el-input v-model="form.transitTime"
+                    type="number"
+                    @mousewheel.native.prevent> <template slot="append">days</template></el-input>
         </el-form-item>
         <el-form-item :label="$t('resources.cutOffTime')"
                       prop="finishedAt">
@@ -236,6 +244,7 @@ export default {
         supportLoading: '',
         humanWorkDay: '',
         moneyPerDay: '',
+        transitTime: '',
         status: '',
       },
       provinceList: [],
