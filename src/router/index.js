@@ -171,7 +171,8 @@ export const asyncRoutes = [
     component: Layout,
     name: 'member',
     meta: {
-      title: 'member'
+      title: 'member',
+      roles: ['DEMAND', 'SUPPLY', 'HUB', 'PLATFORM']
     },
     children: [
       {

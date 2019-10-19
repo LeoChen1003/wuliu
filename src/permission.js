@@ -29,16 +29,7 @@ router.beforeEach(async(to, from, next) => {
       // determine whether the user has obtained his permission roles through getInfo
       const hasRoles = store.getters.curRole && store.getters.curRole.length > 0
       if (hasRoles) {
-        await store.dispatch('user/getInfo')
-        const accessRoutes = await store.dispatch('permission/generateRoutes', [
-          localStorage.curRole
-        ])
-        resetRouter()
-        router.addRoutes(accessRoutes)
-        router.options.routes = store.getters.permission_routes
-        next()
-      } else {
-        try {
+        if (from.path === '/login') {
           await store.dispatch('user/getInfo')
           const accessRoutes = await store.dispatch(
             'permission/generateRoutes',
@@ -47,7 +38,29 @@ router.beforeEach(async(to, from, next) => {
           resetRouter()
           router.addRoutes(accessRoutes)
           router.options.routes = store.getters.permission_routes
-          next({ path: to.redirectedFrom })
+          console.log(router)
+          console.log(to)
+          console.log('aaa')
+          next()
+        } else {
+          next()
+        }
+      } else {
+        try {
+          if (store.getters.permission_routes.length === 0) {
+            await store.dispatch('user/getInfo')
+            const accessRoutes = await store.dispatch(
+              'permission/generateRoutes',
+              [localStorage.curRole]
+            )
+            resetRouter()
+            router.addRoutes(accessRoutes)
+            router.options.routes = store.getters.permission_routes
+            next({ path: to.redirectedFrom })
+          } else {
+            next()
+          }
+          NProgress.done()
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
