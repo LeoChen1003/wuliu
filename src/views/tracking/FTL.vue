@@ -9,46 +9,47 @@
         <div class="statusText">{{ $t('billing.billingStatus') }}</div>
         <el-tabs v-model="tabActive"
                  tab-position="left"
+                 @tab-click="tabChange"
                  style="height:calc(100% - 50px);">
           <el-tab-pane label="1">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.Pending')}}<sub class="badge">1</sub></div>
+                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge">{{orderStatus.DEMMANDACCEPT}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane label="2">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge">1</sub></div>
+                <div class="text">{{$t('tracking.toBeconfirmedOrderbySupply')}}<sub class="badge red">{{orderStatus.SUPPLYACCEPT}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane label="3">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.toBeconfirmedOrderbySupply')}}<sub class="badge">1</sub></div>
+                <div class="text">{{$t('tracking.tobePickedUp')}}<sub class="badge red">{{orderStatus.WILLPICK}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane label="4">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.tobePickedUp')}}<sub class="badge">1</sub></div>
+                <div class="text">{{$t('tracking.intransit')}}<sub class="badge">{{orderStatus.SENDING}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane label="5">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.intransit')}}<sub class="badge">1</sub></div>
+                <div class="text">{{$t('tracking.documentTobereturned')}}<sub class="badge">{{orderStatus.WILLRETURN}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane label="6">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.documentTobereturned')}}<sub class="badge">1</sub></div>
+                <div class="text">{{$t('tracking.completed')}}<sub class="badge">{{orderStatus.COMPLETE}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
@@ -60,8 +61,13 @@
       <div class="container">
         <el-table :data="data.content"
                   border>
-          <el-table-column :label="$t('tracking.tracking')"
-                           prop="orderNo"></el-table-column>
+          <el-table-column :label="$t('tracking.tracking')">
+            <template slot-scope="scope">
+              <div>{{scope.row.orderNo}}</div>
+              <div>{{scope.row.outNumber}}</div>
+              <div>{{scope.row.createdAt}}</div>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('tracking.cargo_VAS')">
             <template slot-scope="scope">
               <el-card v-for="(item,index) in scope.row.propertyList"
@@ -81,7 +87,7 @@
           <el-table-column :label="$t('tracking.price')">
             <template slot-scope="scope">
               <div>
-                {{ scope.row.payAmount }}
+                {{ scope.row.settlementAmount }}
               </div>
             </template>
           </el-table-column>
@@ -92,8 +98,17 @@
               <div>{{scope.row.senderAddress.province}} {{scope.row.senderAddress.city}} {{scope.row.senderAddress.district}}</div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('tracking.ETD')"></el-table-column>
-          <el-table-column></el-table-column>
+          <!-- <el-table-column :label="$t('tracking.ETD')"></el-table-column> -->
+          <el-table-column>
+            <template slot-scope="scope">
+              <div>
+                <!-- <el-button v-if="scope.row.status == '1' || scope.row.status == '2'"
+                           type="primary">{{$t('tracking.print')}}</el-button> -->
+                <el-button v-if="scope.row.status == '2'"
+                           type="primary">{{$t('tracking.confirm')}}</el-button>
+              </div>
+            </template>
+          </el-table-column>
         </el-table>
         <div style="text-align:center;margin:20px 0;">
           <el-pagination background
@@ -187,6 +202,30 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <el-dialog :title="$t('tracking.confirmOrder')"
+               width="600px"
+               :visible.sync="confirmDialog">
+      <el-form label-width="130px">
+        <el-form-item :label="$t('tracking.trackingNo')">
+
+        </el-form-item>
+        <el-form-item :label="$t('tracking.logisticType')">
+
+        </el-form-item>
+        <el-form-item :label="$t('tracking.destination')">
+
+        </el-form-item>
+        <el-form-item :label="$t('tracking.qty')">
+
+        </el-form-item>
+        <el-form-item :label="$t('tracking.driver')">
+
+        </el-form-item>
+        <el-form-item :label="$t('tracking.plateLicense')">
+
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -194,7 +233,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty } from '../../api/data'
-import { orderShop } from '../../api/tracking.js'
+import { getOrder, getOrderStatus, confirmOrder } from '../../api/tracking.js'
 
 let self;
 export default {
@@ -207,6 +246,7 @@ export default {
       tabActive: '0',
       printeDialog: false,
       editDialog: false,
+      confirmDialog: false,
       form: {
         category: '',
         subCategory: '',
@@ -234,7 +274,16 @@ export default {
       serveObj: {},
       propertyObj: {},
       sizeObj: {},
-      unitObj: {}
+      unitObj: {},
+      orderStatus: {
+        COMPLETE: 0,
+        DEMMANDACCEPT: 0,
+        SENDING: 0,
+        SUPPLYACCEPT: 0,
+        WAITTING: 0,
+        WILLPICK: 0,
+        WILLRETURN: 0,
+      }
     };
   },
   // 监听属性 类似于data概念
@@ -287,12 +336,17 @@ export default {
   },
   methods: {
     loadData (cb) {
-      orderShop().then(res => {
+      getOrder({
+        status: 1,
+      }).then(res => {
         self.data = res.data;
         if (cb) {
           cb();
         }
-      })
+      }),
+        getOrderStatus().then(res => {
+          self.orderStatus = res.data;
+        })
     },
     pageChange (e) {
       getRoute({
@@ -301,6 +355,19 @@ export default {
         self.data = res.data;
       })
     },
+    tabChange (e) {
+      let label = e.label;
+      getOrder({
+        status: label
+      }).then(res => {
+        self.data = res.data;
+      })
+    },
+    confirmIt (id, truckId, driverId) {
+      confirmOrder(id, truckId, driverId).then(res => {
+
+      })
+    }
   }
 };
 </script>
@@ -341,8 +408,11 @@ export default {
 
   .badge {
     font-size: 12px;
-    color: red;
     margin-left: 5px;
+  }
+
+  .red {
+    color: red;
   }
 }
 .formSelect {

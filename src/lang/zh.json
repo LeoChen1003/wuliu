@@ -181,7 +181,13 @@
     "payload": "最大承重（kg）",
     "cutoffTime": "截止时间",
     "route": "路线",
-    "cargo": "货物"
+    "cargo": "货物",
+    "confirmOrder": "确认订单",
+    "trackingNo": "物流单号",
+    "logisticType": "物流类型",
+    "qty": "件数",
+    "driver": "司机",
+    "plateLicense": "车牌号"
   },
   "resources": {
     "add": "添加",
