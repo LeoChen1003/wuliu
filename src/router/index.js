@@ -85,9 +85,14 @@ export const asyncRoutes = [
     },
     children: [
       {
+        path: 'demandFTL',
+        component: () => import('@/views/tracking/demandFTL'),
+        meta: { title: 'FTLNotHUB', roles: ['DEMAND'] }
+      },
+      {
         path: 'FTL',
         component: () => import('@/views/tracking/FTL'),
-        meta: { title: 'FTLNotHUB', roles: ['DEMAND', 'SUPPLY', 'PLATFORM'] }
+        meta: { title: 'FTLNotHUB', roles: ['SUPPLY', 'PLATFORM'] }
       },
       {
         path: 'LTL',
