@@ -4,78 +4,140 @@
       <el-button @click="add"
                  type="primary">添加</el-button>
     </div>
-    <el-table border
-              :data="data.content">
-      <el-table-column header-align="center"
-                       align="center"
-                       :label="$t('resources.route')">
-        <template slot-scope="scope">
-          <div>
-            <!-- 获取一行数据 -->
-            {{ scope.row.fromProvince }} --> {{ scope.row.toCity }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column header-align="center"
-                       align="center"
-                       :label="$t('resources.status')">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status == 'ACTIVE' ? 'status' : 'info'">{{scope.row.status}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column header-align="center"
-                       align="center"
-                       :label="$t('resources.distance_KM')">
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.miles }}KM
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column header-align="center"
-                       align="center"
-                       :label="$t('resources.truckType')">
-        <template slot-scope="scope">
-          <div>
-            {{ truckObj[scope.row.category] }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column header-align="center"
-                       align="center"
-                       :label="$t('resources.price')">
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.charge }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column header-align="center"
-                       align="center"
-                       :label="$t('resources.cutOffTime')">
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.finishedAt }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column header-align="center"
-                       align="center">
-        <template slot-scope="scope">
-          <el-button type="primary"
-                     @click="edit(scope.row)">{{$t('resources.edit')}}</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div style="text-align:center;margin:20px 0;">
-      <el-pagination background
-                     :page-size.sync="data.size"
-                     :page-count="data.totalPages"
-                     :total="data.totalElements"
-                     :current-page.sync="data.number + 1"
-                     @current-change="pageChange"
-                     layout="total, prev, pager, next, jumper">
-      </el-pagination>
+    <div class="container">
+      <div class="table-box">
+        <el-table border
+                  highlight-current-row
+                  :data="data.content">
+          <el-table-column header-align="center"
+                           align="center"
+                           :label="$t('resources.route')">
+            <template slot-scope="scope">
+              <div>
+                <!-- 获取一行数据 -->
+                {{ scope.row.fromProvince }} --> {{ scope.row.toCity }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column header-align="center"
+                           align="center"
+                           :label="$t('resources.truckType')">
+            <template slot-scope="scope">
+              <div>
+                {{ truckObj[scope.row.category] }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column header-align="center"
+                           align="center"
+                           :label="$t('resources.cutOffTime')">
+            <template slot-scope="scope">
+              <div>
+                {{ scope.row.finishedAt }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column header-align="center"
+                           align="center"
+                           :label="$t('resources.status')">
+            <template slot-scope="scope">
+              <el-tag :type="scope.row.status == 'ACTIVE' ? 'status' : 'info'">{{scope.row.status}}</el-tag>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div style="text-align:center;margin:20px 0;">
+          <el-pagination background
+                         :page-size.sync="data.size"
+                         :page-count="data.totalPages"
+                         :total="data.totalElements"
+                         :current-page.sync="data.number + 1"
+                         @current-change="pageChange"
+                         layout="total, prev, pager, next, jumper">
+          </el-pagination>
+        </div>
+      </div>
+      <div class="table-box">
+        <el-tabs v-model="detailTab"
+                 @tab-click="detailTabClick">
+          <el-tab-pane name="1"
+                       :label="$t('resources.price_2')">
+            <div>
+              <el-table border>
+                <el-table-column header-align="center"
+                                 align="center"
+                                 :label="$t('resources.dst')">
+                  <template>
+                    <div>
+
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column header-align="center"
+                                 align="center"
+                                 :label="$t('resources.distance')">
+                  <template>
+                    <div>
+
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column header-align="center"
+                                 align="center"
+                                 :label="$t('resources.transitTime')">
+                  <template>
+                    <div>
+
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column header-align="center"
+                                 align="center"
+                                 :label="$t('resources.price')">
+                  <template>
+                    <div>
+
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane :label="$t('resources.availableDate')"
+                       name="2">
+            <div>
+              <div class="date-header">
+                <el-select v-model="date.year"
+                           placeholder="">
+                  <el-option v-for="item in dateInfo.years"
+                             :key="item"
+                             :label="item"
+                             :value="item">
+                  </el-option>
+                </el-select>
+                <el-select v-model="date.month"
+                           placeholder="">
+                  <el-option v-for="item in dateInfo.months"
+                             :key="item"
+                             :label="item"
+                             :value="item">
+                  </el-option>
+                </el-select>
+                <el-button @click="refc"
+                           type="primary">反选</el-button>
+              </div>
+              <div class="date-list">
+                <div class="day-item"
+                     v-for="(item,index) in dateList"
+                     :key="index">
+                  <el-tag class="day"
+                          :effect="item.status ? 'dark' : 'plain'"
+                          @click="tapDay(item)">{{item.day}}</el-tag>
+                </div>
+              </div>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
     </div>
     <!-- 编辑框 -->
     <el-dialog :visible.sync="editDialog"
@@ -259,7 +321,37 @@ export default {
         start: '00:00',
         step: '00:15',
         end: '23:45'
-      }
+      },
+      detailTab: '1',
+      date: {
+        year: '',
+        month: ''
+      },
+      dateInfo: {
+        years: [2567, 2568, 2569],
+        months: [1, 2, 3, 4, 5, 6, 7]
+      },
+      dateList: [
+        { day: 1, status: false },
+        { day: 2, status: false },
+        { day: 3, status: false },
+        { day: 4, status: false },
+        { day: 5, status: false },
+        { day: 6, status: false },
+        { day: 7, status: false },
+        { day: 8, status: false },
+        { day: 9, status: false },
+        { day: 10, status: false },
+        { day: 11, status: false },
+        { day: 12, status: false },
+        { day: 13, status: false },
+        { day: 14, status: false },
+        { day: 15, status: false },
+        { day: 16, status: false },
+        { day: 17, status: false },
+        { day: 18, status: false },
+        { day: 19, status: false },
+      ]
     };
   },
   //监听属性 类似于data概念
@@ -342,6 +434,19 @@ export default {
           return false;
         }
       });
+    },
+    detailTabClick () {
+
+    },
+    tapDay (day) {
+      day.status = !day.status;
+    },
+    refc () {
+      let arr = JSON.parse(JSON.stringify(self.dateList));
+      for (let i of arr) {
+        i.status = !i.status;
+      }
+      self.dateList = arr;
     }
   },
   created () {
@@ -359,8 +464,42 @@ export default {
   padding: 20px;
 }
 
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table-box {
+  width: 49%;
+}
+
 .formSelect {
   width: 100%;
+}
+
+.date-header {
+  display: flex;
+
+  div {
+    margin-right: 10px;
+  }
+}
+
+.date-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.day-item {
+  width: 12%;
+  margin: 2% 2% 0 0;
+
+  .day {
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.1s;
+  }
 }
 </style>
 <style>

@@ -1,8 +1,8 @@
 <template>
   <div class="manage">
-    <div class="statusHeader">
+    <!-- <div class="statusHeader">
       <el-button type="primary">{{$t('tracking.releaseAReturnTruck')}}</el-button>
-    </div>
+    </div> -->
     <div style="display:flex;box-sizing:border-box;padding:0 20px;">
       <!-- 导航 -->
       <div style="height:100%;">
@@ -59,7 +59,25 @@
       </div>
       <!-- 表格 -->
       <div class="container">
+        <div class="container-header">
+          <div>
+            <el-select v-model="searchForm.province"
+                       filterable
+                       class="formSelect"
+                       :placeholder="$t('tracking.destination')">
+              <el-option v-for="(item,index) in provinceList"
+                         :key='index'
+                         :label="item.name"
+                         :value="item.code"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <el-input prefix-icon="el-icon-search"></el-input>
+          </div>
+          <el-button type="primary">{{$t('tracking.search')}}</el-button>
+        </div>
         <el-table :data="data.content"
+                  v-loading="loading"
                   border>
           <el-table-column :label="$t('tracking.tracking')">
             <template slot-scope="scope">
@@ -101,10 +119,11 @@
           <!-- <el-table-column :label="$t('tracking.ETD')"></el-table-column> -->
           <el-table-column>
             <template slot-scope="scope">
-              <div>
+              <div style="text-align:center;">
                 <!-- <el-button v-if="scope.row.status == '1' || scope.row.status == '2'"
                            type="primary">{{$t('tracking.print')}}</el-button> -->
                 <el-button v-if="scope.row.status == '2'"
+                           @click="confirmB(scope.row)"
                            type="primary">{{$t('tracking.confirm')}}</el-button>
               </div>
             </template>
@@ -204,25 +223,46 @@
     </el-dialog>
     <el-dialog :title="$t('tracking.confirmOrder')"
                width="600px"
+               v-if="orderInfo"
                :visible.sync="confirmDialog">
       <el-form label-width="130px">
         <el-form-item :label="$t('tracking.trackingNo')">
-
+          <div>{{orderInfo.orderNo}}</div>
         </el-form-item>
         <el-form-item :label="$t('tracking.logisticType')">
-
+          <div>{{orderInfo.lineType}}</div>
         </el-form-item>
         <el-form-item :label="$t('tracking.destination')">
-
+          <div>{{orderInfo.receiverAddress.city}} {{orderInfo.receiverAddress.district}}</div>
         </el-form-item>
         <el-form-item :label="$t('tracking.qty')">
-
+          <div>{{orderInfo.orderNo}}</div>
         </el-form-item>
         <el-form-item :label="$t('tracking.driver')">
-
+          <el-select v-model="confirmForm.driverId"
+                     filterable>
+            <el-option v-for="item in td.drivers"
+                       :key="item.value"
+                       :label="item.name"
+                       :value="item.id">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item :label="$t('tracking.plateLicense')">
-
+          <el-select v-model="confirmForm.truckId"
+                     filterable>
+            <el-option v-for="item in td.trucks"
+                       :key="item.value"
+                       :label="item.plate"
+                       :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary"
+                     :loading="confirmLoading"
+                     :disabled="confirmForm.truckId == '' || confirmForm.driverId == ''"
+                     @click="confirmIt">{{$t('tracking.confirm')}}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -232,7 +272,7 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty } from '../../api/data'
+import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getSupplyTD } from '../../api/data'
 import { getOrder, getOrderStatus, confirmOrder } from '../../api/tracking.js'
 
 let self;
@@ -283,6 +323,17 @@ export default {
         WAITTING: 0,
         WILLPICK: 0,
         WILLRETURN: 0,
+      },
+      orderInfo: null,
+      td: {},
+      confirmForm: {
+        dirverId: '',
+        truckId: ''
+      },
+      loading: false,
+      confirmLoading: false,
+      searchForm: {
+        province: ""
       }
     };
   },
@@ -332,39 +383,61 @@ export default {
       self.sizeObj = sizeObj;
       self.unitObj = unitObj;
     })
+    getSupplyTD().then(res => {
+      self.td = res.data;
+    })
     self.loadData();
   },
   methods: {
     loadData (cb) {
+      self.loading = true;
+      let page = self.data.number ? self.data.number : 0;
       getOrder({
-        status: 1,
+        status: parseInt(self.tabActive) + 1,
+        page: page,
       }).then(res => {
         self.data = res.data;
+        self.loading = false;
         if (cb) {
           cb();
         }
-      }),
-        getOrderStatus().then(res => {
-          self.orderStatus = res.data;
-        })
+      });
+      getOrderStatus().then(res => {
+        self.orderStatus = res.data;
+      })
     },
     pageChange (e) {
-      getRoute({
+      self.loading = true;
+      getOrder({
+        status: parseInt(self.tabActive) + 1,
         page: e - 1,
       }).then(res => {
         self.data = res.data;
-      })
+        self.loading = false;
+      });
     },
     tabChange (e) {
       let label = e.label;
-      getOrder({
-        status: label
-      }).then(res => {
-        self.data = res.data;
-      })
+      self.data.number = 0;
+      self.loadData();
     },
-    confirmIt (id, truckId, driverId) {
-      confirmOrder(id, truckId, driverId).then(res => {
+    confirmB (item) {
+      console.log(item)
+      self.orderInfo = item;
+      self.confirmDialog = true;
+    },
+    confirmIt () {
+      self.confirmLoading = true;
+      confirmOrder(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(res => {
+        self.loadData(() => {
+          self.confirmDialog = false;
+          self.confirmForm = {
+            dirverId: '',
+            truckId: ''
+          }
+          self.$message.success(self.$t('tracking.successful'))
+          self.confirmLoading = false;
+        });
 
       })
     }
@@ -384,10 +457,12 @@ export default {
 }
 
 .statusText {
+  height: 50px;
   border-bottom: 2px solid #dfe4ed;
   margin-right: 9px;
   box-sizing: border-box;
-  padding-bottom: 10px;
+  padding-bottom: 30px;
+  line-height: 50px;
 }
 
 .comfirmDialog {
@@ -400,6 +475,15 @@ export default {
 
 .container {
   width: 90%;
+}
+
+.container-header {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  div {
+    margin-right: 20px;
+  }
 }
 
 .tabLabel {
