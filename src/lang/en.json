@@ -181,7 +181,13 @@
     "payload": "Payload(kg)",
     "cutoffTime": " Cutoff time",
     "route": "Route",
-    "cargo": "Cargo"
+    "cargo": "Cargo",
+    "confirmOrder": "Confirm order",
+    "trackingNo": "Tracking No.",
+    "logisticType": "Logistic type",
+    "qty": "Qty",
+    "plateLicense": "Plate license",
+    "driver": "Driver"
   },
   "resources": {
     "add": "Add",

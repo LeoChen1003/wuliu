@@ -3,10 +3,11 @@
     <div class="searchBox">
       <el-form ref="searchForm"
                :show-message="false"
-               label-width="110px"
+               label-width="140px"
                :model="searchForm">
         <el-form-item :label="$t('market.origin')">
           <el-select v-model="searchForm.pickUpRegion"
+                     class="formSelect"
                      clearable
                      filterable
                      placeholder="province">
@@ -19,6 +20,7 @@
         <el-form-item :label="$t('market.destinaiton')">
           <el-select v-model="searchForm.deliveryRegion"
                      clearable
+                     class="formSelect"
                      filterable
                      placeholder="province">
             <el-option v-for="(item,index) in provinceList"
@@ -440,5 +442,9 @@ export default {
 
 .inp {
   width: 300px;
+}
+
+.formSelect {
+  width: 100%;
 }
 </style>
