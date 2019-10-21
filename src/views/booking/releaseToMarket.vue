@@ -189,7 +189,7 @@
                       class="inputWidth" />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <!-- <el-col :span="8">
           <el-form-item :label="$t('booking.shareTruck')">
             <el-radio-group v-model="shareTruck">
               <el-radio :label="false"
@@ -208,7 +208,7 @@
                       v-for="(item,index) in cargoShapeList"
                       :key="index"></el-radio>
           </el-form-item>
-        </el-col>
+        </el-col> -->
       </el-row>
       <!-- <el-row class="itemRow"
               :gutter="40">

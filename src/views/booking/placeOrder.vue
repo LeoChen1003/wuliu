@@ -212,7 +212,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item :label="$t('booking.shareTruck')">
+          <!-- <el-form-item :label="$t('booking.shareTruck')">
             <el-radio-group v-model="shareTruck">
               <el-radio :label="false"
                         border>{{$t('booking.fullTruckLoad')}}</el-radio>
@@ -229,14 +229,34 @@
                       style="margin-left:0px;"
                       v-for="(item,index) in cargoShapeList"
                       :key="index"></el-radio>
+          </el-form-item> -->
+          <el-table :data="amountList"
+                    ref="amountTable"
+                    show-summary
+                    :sum-text="$t('booking.totalamt')"
+                    border>
+            <el-table-column prop="label"
+                             label="item"></el-table-column>
+            <el-table-column prop="amount"
+                             label="Amount"></el-table-column>
+
+          </el-table>
+          <el-form-item :label="$t('booking.accountBalance')"
+                        style="margin-top:30px;">
+            <div style="display:flex;justify-content:space-between;">
+              <el-tag style="width:100px;text-align:center;">{{currentBalance}}</el-tag>
+              <el-button style="width:150px;"
+                         @click="toTopUp"
+                         type="info">{{$t('booking.topUp')}}</el-button>
+            </div>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row class="itemRow"
+      <!-- <el-row class="itemRow"
               type="flex"
               :gutter="40">
         <el-col :span="15">
-          <!-- <el-form-item prop="propertyList">
+          <el-form-item prop="propertyList">
             <el-button type="primary"
                        @click="pushIt"
                        style="margin-bottom:10px;"
@@ -313,13 +333,13 @@
                 </template>
               </el-table-column>
             </el-table>
-          </el-form-item> -->
+          </el-form-item>
         </el-col>
         <el-col :span="7">
-          <!-- <el-button type="primary"
+          <el-button type="primary"
                      @click="viewIt"
                      style="margin-bottom:10px;"
-                     icon="el-icon-s-order">{{$t('booking.viewValuation')}}</el-button> -->
+                     icon="el-icon-s-order">{{$t('booking.viewValuation')}}</el-button>
           <el-table :data="amountList"
                     ref="amountTable"
                     show-summary
@@ -341,7 +361,7 @@
             </div>
           </el-form-item>
         </el-col>
-      </el-row>
+      </el-row> -->
     </el-form>
     <el-dialog :visible.sync="sizeDialog"
                width="30%"
