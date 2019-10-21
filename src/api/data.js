@@ -90,3 +90,11 @@ export function getExtraServer() {
     method: 'get'
   })
 }
+
+// 获取supply的卡车和司机列表
+export function getSupplyTD() {
+  return request({
+    url: '/api/supply/list/my/td',
+    method: 'get'
+  })
+}

@@ -329,6 +329,22 @@
                     type="success"></el-alert>
           <el-form label-width="200px"
                    :disabled="applyStatus.supply.status == 'ACCEPTED' || applyStatus.supply.status == 'ACTIVATED' || applyStatus.supply.status == 'DEFAULT'">
+            <el-form-item :label="$t('member.logo')">
+              <el-upload class="avatar-uploader"
+                         :action="baseUrl + '?credentials_type=logo&apply_type=SUPPLY'"
+                         :headers="headers"
+                         :show-file-list="false"
+                         :on-success="uploadSuccess"
+                         accept="image/*"
+                         :on-change="handleChange">
+                <img v-if="fileList.supply.logo[0]"
+                     :src="fileList.supply.logo[0].url"
+                     class="avatar">
+                <i v-else
+                   class="el-icon-plus avatar-uploader-icon"></i>
+                </el-button>
+              </el-upload>
+            </el-form-item>
             <el-form-item :label="$t('member.affidavit')">
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=affidavit&apply_type=SUPPLY'"
@@ -678,6 +694,7 @@ export default {
           bank_account_copy: [],
           center_map: [],
           truck_register_copy: [],
+          logo: []
         },
         contract: {
           "DEMAND": [],
@@ -817,10 +834,12 @@ export default {
       if (res.status === 200) {
         let applyType = res.data.applyType; // 申请类型
         let credentialsType = res.data.credentialsType; // 文件类型
-        self.fileList[self.tabActive.toLowerCase()][res.data.credentialsType][0] = {
+        self.fileList[self.tabActive.toLowerCase()][res.data.credentialsType] = [{
           name: res.data.resource.name,
           url: res.data.resource.path
-        }
+        }]
+        console.log(self.tabActive.toLowerCase())
+        console.log(res.data.credentialsType)
         // self.loadData_list(self.tabActive);
       }
     },
@@ -953,5 +972,31 @@ export default {
 
 .rejectMsg {
   margin-bottom: 20px;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>
