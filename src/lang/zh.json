@@ -235,7 +235,8 @@
     "closed": "关闭",
     "activated": "激活",
     "price_2": "价格",
-    "availableDate": "有效日期"
+    "availableDate": "有效日期",
+    "inverse": "反选"
   },
   "billing": {
     "billingStatus": "订单状态",

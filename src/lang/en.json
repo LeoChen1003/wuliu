@@ -230,7 +230,8 @@
     "availableDate": "Available date",
     "dst": "Dst",
     "transitTime": "Transit time",
-    "distance": "Distance"
+    "distance": "Distance",
+    "inverse": "Inverse"
   },
   "billing": {
     "billingStatus": "Billing status",

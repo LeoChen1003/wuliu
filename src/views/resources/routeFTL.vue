@@ -2,7 +2,7 @@
   <div class='wrapper'>
     <div style="margin-bottom:20px;">
       <el-button @click="add"
-                 type="primary">添加</el-button>
+                 type="primary">{{$t('resources.add')}}</el-button>
     </div>
     <div class="container">
       <div class="table-box">
@@ -107,31 +107,34 @@
             <div>
               <div class="date-header">
                 <el-select v-model="date.year"
+                           @change="yearChange"
                            placeholder="">
-                  <el-option v-for="item in dateInfo.years"
-                             :key="item"
-                             :label="item"
-                             :value="item">
+                  <el-option v-for="item in dateInfo"
+                             :key="item.year"
+                             :label="item.year"
+                             :value="item.year">
                   </el-option>
                 </el-select>
                 <el-select v-model="date.month"
+                           @change="monthChange"
                            placeholder="">
-                  <el-option v-for="item in dateInfo.months"
+                  <el-option v-for="item in dateInfo[date.year].months"
                              :key="item"
                              :label="item"
                              :value="item">
                   </el-option>
                 </el-select>
                 <el-button @click="refc"
-                           type="primary">反选</el-button>
+                           type="primary">{{$t('resources.inverse')}}</el-button>
               </div>
-              <div class="date-list">
+              <div class="date-list"
+                   v-loading="dateLoading">
                 <div class="day-item"
                      v-for="(item,index) in dateList"
                      :key="index">
                   <el-tag class="day"
-                          :effect="item.status ? 'dark' : 'plain'"
-                          @click="tapDay(item)">{{item.day}}</el-tag>
+                          :effect="sendDateList['show_' + date.year + '_' + date.month + '_' + item] ? 'dark' : 'plain'"
+                          @click="tapDay(item)">{{item}}</el-tag>
                 </div>
               </div>
             </div>
@@ -285,7 +288,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import { getProvinceList, getCityList, getTruckType } from '@/api/data'
-import { getRoute, addRoute, updateRoute } from '@/api/resources'
+import { getRoute, addRoute, updateRoute, getBcYear, getBcDay } from '@/api/resources'
 
 let self;
 export default {
@@ -324,34 +327,13 @@ export default {
       },
       detailTab: '1',
       date: {
-        year: '',
+        year: '2019',
         month: ''
       },
-      dateInfo: {
-        years: [2567, 2568, 2569],
-        months: [1, 2, 3, 4, 5, 6, 7]
-      },
-      dateList: [
-        { day: 1, status: false },
-        { day: 2, status: false },
-        { day: 3, status: false },
-        { day: 4, status: false },
-        { day: 5, status: false },
-        { day: 6, status: false },
-        { day: 7, status: false },
-        { day: 8, status: false },
-        { day: 9, status: false },
-        { day: 10, status: false },
-        { day: 11, status: false },
-        { day: 12, status: false },
-        { day: 13, status: false },
-        { day: 14, status: false },
-        { day: 15, status: false },
-        { day: 16, status: false },
-        { day: 17, status: false },
-        { day: 18, status: false },
-        { day: 19, status: false },
-      ]
+      dateInfo: { 2019: { year: 2019, months: [] } },
+      dateList: [],
+      sendDateList: {},
+      dateLoading: false
     };
   },
   //监听属性 类似于data概念
@@ -380,6 +362,36 @@ export default {
         }
         self.truckObj = truckObj;
       });
+      // 生成可选日期
+      getBcYear().then(res => {
+        let year = res.data;
+        let date = new Date();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        let years = [year, year + 1]
+        let dateInfo = {};
+        for (let x in years) {
+          let months = [];
+          let m = 1;
+          if (x == 0) {
+            m = month
+          }
+          for (let y = m; y <= 12; y++) {
+            months.push(y)
+          }
+          dateInfo[years[x]] = {
+            year: years[x],
+            months: months,
+            start: x == 0 ? day : 1
+          }
+        }
+        self.dateInfo = dateInfo;
+        self.date = {
+          year: year,
+          month: month
+        }
+        self.getDay();
+      })
     },
     pageChange (e) {
       getRoute({
@@ -395,7 +407,6 @@ export default {
     },
     // 编辑按钮
     edit (item) {
-      console.log(item)
       self.editType = 'update';
       self.form = item;
       self.editDialog = true;
@@ -439,14 +450,43 @@ export default {
 
     },
     tapDay (day) {
-      day.status = !day.status;
-    },
-    refc () {
-      let arr = JSON.parse(JSON.stringify(self.dateList));
-      for (let i of arr) {
-        i.status = !i.status;
+      if (self.sendDateList['show_' + self.date.year + '_' + self.date.month + '_' + day]) {
+        console.log(self.sendDateList['show_' + self.date.year + '_' + self.date.month + '_' + day])
+        delete self.sendDateList['show_' + self.date.year + '_' + self.date.month + '_' + day]
+        console.log(self.sendDateList['show_' + self.date.year + '_' + self.date.month + '_' + day])
+      } else {
+        self.$set(self.sendDateList, ['show_' + self.date.year + '_' + self.date.month + '_' + day], {
+          "bcYear": self.date.year,
+          "month": self.date.month,
+          "day": day
+        })
       }
-      self.dateList = arr;
+      this.$forceUpdate();
+    },
+    // 反选
+    refc () {
+      for (let x in self.dateList) {
+        self.tapDay(self.dateList[x])
+      }
+    },
+    yearChange (e) {
+      console.log(e)
+    },
+    monthChange (e) {
+      self.getDay();
+    },
+    getDay () {
+      self.dateLoading = true;
+      getBcDay(self.date.year, self.date.month).then(res => {
+        let days = res.data;
+        let start = self.dateInfo[self.date.year].start;
+        let dateList = {};
+        for (let x = 1; x <= days; x++) {
+          dateList['show_' + self.date.year + '_' + self.date.month + '_' + x] = x
+        }
+        self.dateList = dateList;
+        self.dateLoading = false;
+      })
     }
   },
   created () {
