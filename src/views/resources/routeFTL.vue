@@ -493,6 +493,7 @@ export default {
 .day-item {
   width: 12%;
   margin: 2% 2% 0 0;
+  user-select: none;
 
   .day {
     width: 100%;
