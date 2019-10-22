@@ -252,9 +252,8 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getProvinceArea } from '../../api/data'
+import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getProvinceArea, getSupplyTD } from '../../api/data'
 import { orderShop, quoteOrder } from '../../api/market.js'
-import { truckList } from "../../api/resources";
 
 let self;
 export default {
@@ -388,8 +387,8 @@ export default {
       self.quotePriceDialog = true
       self.quotePriceCon = row
       self.shareTruck = row.chargeList[0].chargeIntro == 'false' ? false : true
-      truckList().then(res => {
-        self.truckData = res.data
+      getSupplyTD().then(res => {
+        self.truckData = res.data.trucks
       })
     },
     truckSelect (val) {

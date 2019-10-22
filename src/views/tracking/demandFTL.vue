@@ -76,8 +76,13 @@
           </el-table-column>
           <el-table-column :label="$t('tracking.supply')">
             <template slot-scope="scope">
-              <div>
-                {{ tabActive=='0'||tabActive=='1'?'':scope.row }}
+              <div v-if="!(tabActive=='0'||tabActive=='1') && scope.row.transport.supply">
+                <div>
+                  {{scope.row.transport.supply.companyName }}
+                </div>
+                <div>
+                  {{scope.row.transport.supply.contactMobile }}
+                </div>
               </div>
             </template>
           </el-table-column>
@@ -124,7 +129,7 @@
       </span>
     </el-dialog>
     <el-dialog :title="$t('tracking.confirm')"
-               width="600px"
+               width="50%"
                :visible.sync="confirmDialog"
                center>
       <el-table :data="quotedata"
@@ -134,21 +139,25 @@
         <el-table-column :label="$t('tracking.supply')">
           <template slot-scope="scope">
             <div>
-              {{ scope.row }}
+              {{ scope.row.supply.companyName }}
+            </div>
+            <div>
+              <img :src="scope.row.supply.companyLogo"
+                   alt="logo">
             </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('tracking.KPI')">
+        <!-- <el-table-column :label="$t('tracking.KPI')">
           <template slot-scope="scope">
             <div>
               {{ scope.row }}
             </div>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column :label="$t('tracking.truckType')">
           <template slot-scope="scope">
             <div>
-              {{ truckObj[scope.row.carType] }} {{scope.row.carriage}}
+              {{ truckObj[scope.row.carType] }} {{subtruckObj[scope.row.carriage]}}
             </div>
             <div>{{scope.row.plate}}</div>
           </template>
@@ -161,7 +170,7 @@
           </template>
         </el-table-column>
         <el-table-column width="55">
-          <template scope="scope">
+          <template slot-scope="scope">
             <el-radio class="radio"
                       v-model="radio"
                       :label="scope.$index">&nbsp;</el-radio>
@@ -224,6 +233,8 @@ export default {
       propertyObj: {},
       sizeObj: {},
       unitObj: {},
+      truckObj: {},
+      subtruckObj: {},
       radio: '',
       selected: {},
       curId: null
@@ -245,11 +256,17 @@ export default {
     });
     getTruckType().then(res => {
       self.truckTypes = res.data;
+      console.log(res)
       let truckObj = new Object();
+      let subtruckObj = new Object()
       for (let i of res.data.categories) {
         truckObj[i.key] = i.value;
       }
+      for (let i of res.data.subCategories) {
+        subtruckObj[i.key] = i.value;
+      }
       self.truckObj = truckObj;
+      self.subtruckObj = subtruckObj;
     });
     getExtraServer().then(res => {
       let serveObj = new Object();
@@ -302,6 +319,7 @@ export default {
       })
     },
     changeTab () {
+      this.data = {}
       this.loadData()
     },
     // 点击确认
@@ -323,6 +341,7 @@ export default {
       const self = this
       demandquoteConfirm(self.curId, self.selected.id).then(res => {
         self.confirmDialog = false
+        self.$message.success(res.message)
         self.loadData()
       })
     }
