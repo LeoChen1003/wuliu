@@ -187,7 +187,9 @@
     "logisticType": "Logistic type",
     "qty": "Qty",
     "plateLicense": "Plate license",
-    "driver": "Driver"
+    "driver": "Driver",
+    "successful": "Success",
+    "search": "Search"
   },
   "resources": {
     "add": "Add",
@@ -223,7 +225,12 @@
     "require": "Require",
     "notRequired": "Not required",
     "activated": "Activated",
-    "closed": "Closed"
+    "closed": "Closed",
+    "price_2": "Price",
+    "availableDate": "Available date",
+    "dst": "Dst",
+    "transitTime": "Transit time",
+    "distance": "Distance"
   },
   "billing": {
     "billingStatus": "Billing status",
@@ -336,7 +343,8 @@
     "download": "Download",
     "underReview": "Under review",
     "passed": "Passed",
-    "uploadSuccess": "Upload success"
+    "uploadSuccess": "Upload success",
+    "logo": "Logo"
   },
   "confirm": {
     "tips": "Tips",

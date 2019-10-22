@@ -187,7 +187,9 @@
     "logisticType": "物流类型",
     "qty": "件数",
     "driver": "司机",
-    "plateLicense": "车牌号"
+    "plateLicense": "车牌号",
+    "successful": "成功",
+    "search": "搜索"
   },
   "resources": {
     "add": "添加",
@@ -231,10 +233,12 @@
     "require": "需要",
     "notRequired": "不需要",
     "closed": "关闭",
-    "activated": "激活"
+    "activated": "激活",
+    "price_2": "价格",
+    "availableDate": "有效日期"
   },
   "billing": {
-    "billingStatus": "结算状态",
+    "billingStatus": "订单状态",
     "unpaid": "未结算",
     "paid": "已结算",
     "cancelled": "已取消",
@@ -348,7 +352,8 @@
     "waitUpload": "待上传",
     "underReview": "审核中",
     "passed": "已通过",
-    "uploadSuccess": "上传成功"
+    "uploadSuccess": "上传成功",
+    "logo": "Logo"
   },
   "confirm": {
     "tips": "提示",
