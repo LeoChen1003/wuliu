@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import requestJSON from '@/utils/requestJSON'
 
 // driver List
 export function driverList() {
@@ -63,7 +64,7 @@ export function getRoute(params) {
 
 // 提交新线路
 export function addRoute(data) {
-  return request({
+  return requestJSON({
     url: '/api/supply/ftl/add',
     method: 'post',
     data
@@ -72,7 +73,7 @@ export function addRoute(data) {
 
 // 修改线路
 export function updateRoute(id, data) {
-  return request({
+  return requestJSON({
     url: '/api/supply/ftl/update/' + id,
     method: 'post',
     data
@@ -88,9 +89,9 @@ export function getBcYear() {
 }
 
 // 获取当月天数
-export function getBcDay(year, mouth) {
+export function getBcDay(year, month) {
   return request({
-    url: `/misc/date/bc/days?bcYear=${year}&mouth=${mouth}`,
+    url: `/misc/date/bc/days?bcYear=${year}&month=${month}`,
     method: 'get'
   })
 }

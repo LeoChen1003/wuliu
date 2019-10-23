@@ -7,15 +7,16 @@
     <div class="container">
       <div class="table-box">
         <el-table border
+                  v-loading="loading"
                   highlight-current-row
+                  @current-change="tapRow"
                   :data="data.content">
           <el-table-column header-align="center"
                            align="center"
                            :label="$t('resources.route')">
             <template slot-scope="scope">
               <div>
-                <!-- 获取一行数据 -->
-                {{ scope.row.fromProvince }} --> {{ scope.row.toCity }}
+                {{ scope.row.fromProvince }} --> {{ scope.row.toProvinceName }}
               </div>
             </template>
           </el-table-column>
@@ -23,9 +24,8 @@
                            align="center"
                            :label="$t('resources.truckType')">
             <template slot-scope="scope">
-              <div>
-                {{ truckObj[scope.row.category] }}
-              </div>
+              <div>{{ truckObj[scope.row.category] }}</div>
+              <div>{{ scope.row.truck.plate }}</div>
             </template>
           </el-table-column>
           <el-table-column header-align="center"
@@ -57,47 +57,37 @@
         </div>
       </div>
       <div class="table-box">
-        <el-tabs v-model="detailTab"
-                 @tab-click="detailTabClick">
+        <el-button size="mini"
+                   icon="el-icon-edit"
+                   plain
+                   @click="edit"
+                   v-if="thisRow.id"
+                   class="editBtn">{{$t('resources.edit')}}</el-button>
+        <el-tabs v-model="detailTab">
           <el-tab-pane name="1"
                        :label="$t('resources.price_2')">
             <div>
-              <el-table border>
+              <el-table border
+                        :data="priceList">
                 <el-table-column header-align="center"
                                  align="center"
+                                 prop="toCity"
                                  :label="$t('resources.dst')">
-                  <template>
-                    <div>
-
-                    </div>
-                  </template>
                 </el-table-column>
                 <el-table-column header-align="center"
                                  align="center"
-                                 :label="$t('resources.distance')">
-                  <template>
-                    <div>
-
-                    </div>
-                  </template>
+                                 prop="miles"
+                                 :label="$t('resources.distance_KM')">
                 </el-table-column>
                 <el-table-column header-align="center"
                                  align="center"
+                                 prop="transitTime"
                                  :label="$t('resources.transitTime')">
-                  <template>
-                    <div>
-
-                    </div>
-                  </template>
                 </el-table-column>
                 <el-table-column header-align="center"
                                  align="center"
+                                 prop="charge"
                                  :label="$t('resources.price')">
-                  <template>
-                    <div>
-
-                    </div>
-                  </template>
                 </el-table-column>
               </el-table>
             </div>
@@ -106,8 +96,178 @@
                        name="2">
             <div>
               <div class="date-header">
+                <el-select v-model="showDate.year"
+                           @change="showDateChange"
+                           placeholder="">
+                  <el-option v-for="item in showDateInfo"
+                             :key="item.year"
+                             :label="item.year"
+                             :value="item.year">
+                  </el-option>
+                </el-select>
+                <el-select v-model="showDate.month"
+                           @change="showDateChange"
+                           placeholder="">
+                  <el-option v-for="item in showDateInfo[showDate.year].months"
+                             :key="item"
+                             :label="item"
+                             :value="item">
+                  </el-option>
+                </el-select>
+              </div>
+              <div class="date-list">
+                <div class="day-item"
+                     v-for="(item,index) in dateList_show"
+                     :key="index">
+                  <el-tag class="day"
+                          :effect="showDateList['show_' + showDate.year + '_' + showDate.month + '_' + item] ? 'dark' : 'plain'">{{item}}</el-tag>
+                </div>
+              </div>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+    </div>
+    <!-- 编辑框 -->
+    <el-dialog :visible.sync="editDialog"
+               :title="$t('resources.edit')"
+               :close-on-click-modal="false"
+               width="1000px">
+      <div class="edit-box">
+        <div class="edit-top">
+          <div class="edit-left">
+            <el-form :label-width="$store.getters.language == 'zh_CN' ? '150px' : '220px'"
+                     :show-message="false"
+                     :model="form"
+                     ref='form'>
+              <el-form-item :label="$t('resources.plateLicense')"
+                            prop="truckId"
+                            required>
+                <el-select v-model="form.truckId"
+                           class="formSelect"
+                           @change="choosePlate"
+                           filterable
+                           placeholder="province">
+                  <el-option v-for="(item,index) in tdList"
+                             :key='index'
+                             :label="item.plate"
+                             :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item :label="$t('resources.truckType')"
+                            prop="category"
+                            required>
+                <el-select v-model="form.category"
+                           disabled
+                           filterable
+                           class="formSelect"
+                           placeholder="Truck type">
+                  <el-option v-for="(item,index) in truckTypes.categories"
+                             :key='index'
+                             :label="item.value"
+                             :value="item.key"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item prop="subCategory"
+                            required>
+                <el-select v-model="form.subCategory"
+                           disabled
+                           filterable
+                           class="formSelect"
+                           placeholder="Truck sub type">
+                  <el-option v-for="(item,index) in truckTypes.subCategories"
+                             :key='index'
+                             :label="item.value"
+                             :value="item.key"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item :label="$t('resources.origin')"
+                            prop="fromProvinceCode"
+                            required>
+                <el-select v-model="form.fromProvinceCode"
+                           class="formSelect"
+                           filterable
+                           placeholder="province">
+                  <el-option v-for="(item,index) in provinceList"
+                             :key='index'
+                             :label="item.name"
+                             :value="item.code"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item :label="$t('resources.destination')"
+                            prop="toProvinceCode"
+                            required>
+                <el-select v-model="form.toProvinceCode"
+                           filterable
+                           @change="toProvinceCodeChange"
+                           class="formSelect"
+                           placeholder="city">
+                  <el-option v-for="(item,index) in provinceList"
+                             :key='index'
+                             :label="item.name"
+                             :value="item.code"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item :label="$t('resources.cutOffTime')"
+                            prop="finishedAt">
+                <el-time-select v-model="form.finishedAt"
+                                style="width:100%;"
+                                :picker-options="timeOptions"
+                                default-value="18:00">
+                </el-time-select>
+              </el-form-item>
+              <el-form-item :label="$t('resources.supportLoading')"
+                            prop="supportLoading"
+                            required>
+                <el-select class="formSelect"
+                           v-model="form.supportLoading">
+                  <el-option :label="$t('resources.require')"
+                             :value="1">
+                  </el-option>
+                  <el-option :label="$t('resources.notRequired')"
+                             :value="0">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item :label="$t('resources.humanWorkDay')"
+                            required
+                            prop="humanWorkDay"
+                            v-if="form.supportLoading">
+                <el-input v-model="form.humanWorkDay"
+                          @mousewheel.native.prevent
+                          type="number"></el-input>
+              </el-form-item>
+              <el-form-item :label="$t('resources.moneyPerDay')"
+                            required
+                            prop="supportLoading"
+                            v-if="form.supportLoading">
+                <el-input v-model="form.moneyPerDay"
+                          type="number"
+                          @mousewheel.native.prevent>
+                </el-input>
+              </el-form-item>
+              <el-form-item :label="$t('resources.status')"
+                            prop="status"
+                            required>
+                <el-select class="formSelect"
+                           v-model="form.status">
+                  <el-option :label="$t('resources.activated')"
+                             value="ACTIVE">
+                  </el-option>
+                  <el-option :label="$t('resources.closed')"
+                             value="CLOSED">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+          </div>
+          <div class="edit-right">
+            <div>
+              <div class="date-header">
+                <div>{{$t('resources.availableDate')}}</div>
                 <el-select v-model="date.year"
-                           @change="yearChange"
+                           @change="dateChange"
+                           style="width:150px;"
                            placeholder="">
                   <el-option v-for="item in dateInfo"
                              :key="item.year"
@@ -116,7 +276,8 @@
                   </el-option>
                 </el-select>
                 <el-select v-model="date.month"
-                           @change="monthChange"
+                           @change="dateChange"
+                           style="width:150px;"
                            placeholder="">
                   <el-option v-for="item in dateInfo[date.year].months"
                              :key="item"
@@ -138,148 +299,57 @@
                 </div>
               </div>
             </div>
-          </el-tab-pane>
-        </el-tabs>
+          </div>
+        </div>
+        <div class="edit-bottom">
+          <el-table :data="form.cityList"
+                    border
+                    v-loading="cityLoading"
+                    style="width: 100%">
+            <el-table-column :label="$t('resources.destination_Dsitrict')">
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.name }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('resources.distance_KM')">
+              <template slot-scope="scope">
+                <div>
+                  <el-input v-model="scope.row.miles"
+                            @mousewheel.native.prevent
+                            type="number"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('resources.transitTime')">
+              <template slot-scope="scope">
+                <div>
+                  <el-input v-model="scope.row.transitTime"
+                            @mousewheel.native.prevent
+                            type="number"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('resources.price')">
+              <template slot-scope="scope">
+                <div>
+                  <el-input v-model="scope.row.charge"
+                            @mousewheel.native.prevent
+                            type="number"></el-input>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
       </div>
-    </div>
-    <!-- 编辑框 -->
-    <el-dialog :visible.sync="editDialog"
-               :title="$t('resources.edit')"
-               :close-on-click-modal="false"
-               width="600px">
-      <el-form :label-width="$store.getters.language == 'zh_CN' ? '150px' : '220px'"
-               :show-message="false"
-               :model="form"
-               ref='form'>
-        <el-form-item :label="$t('resources.origin')"
-                      prop="fromProvinceCode"
-                      required>
-          <el-select v-model="form.fromProvinceCode"
-                     class="formSelect"
-                     filterable
-                     placeholder="province">
-            <el-option v-for="(item,index) in provinceList"
-                       :key='index'
-                       :label="item.name"
-                       :value="item.code"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('resources.destination')"
-                      prop="toCityCode"
-                      required>
-          <el-select v-model="form.toCityCode"
-                     filterable
-                     class="formSelect"
-                     placeholder="city">
-            <el-option v-for="(item,index) in cityList"
-                       :key='index'
-                       :label="item.name"
-                       :value="item.code"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('resources.distance_KM')"
-                      required
-                      @mousewheel.native.prevent
-                      type="number"
-                      prop="miles">
-          <el-input v-model="form.miles"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('resources.truckType')"
-                      prop="category"
-                      required>
-          <el-select v-model="form.category"
-                     filterable
-                     class="formSelect"
-                     placeholder="Truck type">
-            <el-option v-for="(item,index) in truckTypes.categories"
-                       :key='index'
-                       :label="item.value"
-                       :value="item.key"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('resources.truckSubType')"
-                      prop="subCategory"
-                      required>
-          <el-select v-model="form.subCategory"
-                     filterable
-                     class="formSelect"
-                     placeholder="Truck sub type">
-            <el-option v-for="(item,index) in truckTypes.subCategories"
-                       :key='index'
-                       :label="item.value"
-                       :value="item.key"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('resources.price')"
-                      prop="charge"
-                      required>
-          <el-input v-model="form.charge"
-                    @mousewheel.native.prevent
-                    type="number"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('resources.supportLoading')"
-                      prop="supportLoading"
-                      required>
-          <el-select class="formSelect"
-                     v-model="form.supportLoading">
-            <el-option :label="$t('resources.require')"
-                       :value="1">
-            </el-option>
-            <el-option :label="$t('resources.notRequired')"
-                       :value="0">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('resources.humanWorkDay')"
-                      required
-                      prop="humanWorkDay"
-                      v-if="form.supportLoading">
-          <el-input v-model="form.humanWorkDay"
-                    @mousewheel.native.prevent
-                    type="number"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('resources.moneyPerDay')"
-                      required
-                      prop="supportLoading"
-                      v-if="form.supportLoading">
-          <el-input v-model="form.moneyPerDay"
-                    type="number"
-                    @mousewheel.native.prevent>
-          </el-input>
-        </el-form-item>
-        <el-form-item :label="$t('booking.transitTime')"
-                      required
-                      prop="transitTime">
-          <el-input v-model="form.transitTime"
-                    type="number"
-                    @mousewheel.native.prevent> <template slot="append">days</template></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('resources.cutOffTime')"
-                      prop="finishedAt">
-          <el-time-select v-model="form.finishedAt"
-                          style="width:100%;"
-                          :picker-options="timeOptions"
-                          default-value="18:00">
-          </el-time-select>
-        </el-form-item>
-        <el-form-item :label="$t('resources.status')"
-                      prop="status"
-                      required>
-          <el-select class="formSelect"
-                     v-model="form.status">
-            <el-option :label="$t('resources.activated')"
-                       value="ACTIVE">
-            </el-option>
-            <el-option :label="$t('resources.closed')"
-                       value="CLOSED">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary"
-                     @click="confirmIt">{{$t('resources.confirm')}}</el-button>
-        </el-form-item>
-      </el-form>
+      <div slot="footer"
+           class="dialog-footer">
+        <el-button type="primary"
+                   @click="confirmIt">{{$t('resources.confirm')}}</el-button>
+        <el-button type="primary"
+                   @click="cancel">{{$t('resources.cancel')}}</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -287,7 +357,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getProvinceList, getCityList, getTruckType } from '@/api/data'
+import { getProvinceList, getCityList, getTruckType, getSupplyTD } from '@/api/data'
 import { getRoute, addRoute, updateRoute, getBcYear, getBcDay } from '@/api/resources'
 
 let self;
@@ -301,23 +371,25 @@ export default {
       form: {
         category: '',
         subCategory: '',
-        charge: '',
         finishedAt: '',
         fromProvinceCode: '',
-        toCityCode: '',
-        miles: '',
+        toProvinceCode: '',
         supportLoading: '',
         humanWorkDay: '',
         moneyPerDay: '',
-        transitTime: '',
-        status: '',
+        cityList: [],
+        dateList: [],
+        truckId: '',
+        status: ''
       },
       provinceList: [],
       cityList: [],
+      priceList: [],
       truckTypes: {
         categories: [],
         subCategories: []
       },
+      tdList: [],
       truckObj: {},
       editType: 'add',
       timeOptions: {
@@ -330,10 +402,20 @@ export default {
         year: '2019',
         month: ''
       },
+      showDate: {
+        year: '2019',
+        month: ''
+      },
       dateInfo: { 2019: { year: 2019, months: [] } },
+      showDateInfo: { 2019: { year: 2019, months: [] } },
       dateList: [],
+      dateList_show: [],
       sendDateList: {},
-      dateLoading: false
+      showDateList: {},
+      thisRow: {},
+      dateLoading: false,
+      cityLoading: false,
+      loading: false
     };
   },
   //监听属性 类似于data概念
@@ -342,8 +424,10 @@ export default {
   watch: {},
   methods: {
     loadData (cb) {
+      self.loading = true;
       getRoute().then(res => {
         self.data = res.data;
+        self.loading = false;
         if (cb) {
           cb();
         }
@@ -362,6 +446,9 @@ export default {
         }
         self.truckObj = truckObj;
       });
+      getSupplyTD().then(res => {
+        self.tdList = res.data.trucks;
+      })
       // 生成可选日期
       getBcYear().then(res => {
         let year = res.data;
@@ -369,7 +456,10 @@ export default {
         let month = date.getMonth() + 1;
         let day = date.getDate();
         let years = [year, year + 1]
+        let showYears = [year - 1, year, year + 1]
         let dateInfo = {};
+        let showDateInfo = {};
+        // 生成编辑可选日期
         for (let x in years) {
           let months = [];
           let m = 1;
@@ -385,19 +475,40 @@ export default {
             start: x == 0 ? day : 1
           }
         }
+        // 生成展示可选日期
+        for (let x in showYears) {
+          let months = [];
+          let m = 1;
+          for (let y = m; y <= 12; y++) {
+            months.push(y)
+          }
+          showDateInfo[showYears[x]] = {
+            year: showYears[x],
+            months: months,
+            start: x == 0 ? day : 1
+          }
+        }
         self.dateInfo = dateInfo;
+        self.showDateInfo = showDateInfo;
         self.date = {
           year: year,
           month: month
         }
-        self.getDay();
+        self.showDate = {
+          year: year,
+          month: month
+        }
+        self.getDay('edit');
+        self.getDay('show');
       })
     },
     pageChange (e) {
+      self.loading = true;
       getRoute({
         page: e - 1,
       }).then(res => {
         self.data = res.data;
+        self.loading = false;
       })
     },
     // 添加按钮
@@ -406,9 +517,41 @@ export default {
       self.editDialog = true;
     },
     // 编辑按钮
-    edit (item) {
+    edit () {
+      let item = self.thisRow;
       self.editType = 'update';
-      self.form = item;
+      let cityList = [];
+      for (let i of item.cityList) {
+        cityList.push({
+          "charge": i.charge,
+          "toCityCode": i.toCityCode,
+          "name": i.toCity,
+          "miles": i.miles,
+          "transitTime": i.transitTime
+        })
+      }
+      for (let i of item.dateList) {
+        self.$set(self.sendDateList, ['show_' + i.bcYear + '_' + i.month + '_' + i.day], {
+          "bcYear": i.bcYear,
+          "month": i.month,
+          "day": i.day
+        })
+      }
+      self.form = {
+        category: item.category,
+        subCategory: item.subCategory,
+        finishedAt: item.finishedAt,
+        fromProvinceCode: item.fromProvinceCode,
+        toProvinceCode: item.toProvinceCode,
+        supportLoading: item.supportLoading,
+        humanWorkDay: item.loadingOrUnloadingHumanWorkDay,
+        moneyPerDay: item.moneyPerDay,
+        cityList: cityList,
+        dateList: [],
+        truckId: item.truckId,
+        status: item.status
+      };
+      this.$forceUpdate();
       self.editDialog = true;
       self.thisId = item.id;
     },
@@ -417,27 +560,23 @@ export default {
       let form = JSON.parse(JSON.stringify(self.form));
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (form.miles == '') {
-            form.miles = 0;
+          if (form.supportLoading == 0) {
+            form.humanWorkDay = 0;
+            form.moneyPerDay = 0;
           }
-          if (form.humanWorkDay == '') {
-            form.humanWorkDay == 0;
-          }
-          if (form.moneyPerDay == '') {
-            form.moneyPerDay == 0;
+          for (let x in self.sendDateList) {
+            form.dateList.push(self.sendDateList[x])
           }
           if (self.editType == 'add') {
             addRoute(form).then(res => {
               self.loadData(() => {
-                self.editDialog = false;
-                this.$refs.form.resetFields();
+                self.resetForm();
               });
             })
           } else if (self.editType == 'update') {
             updateRoute(self.thisId, form).then(res => {
               self.loadData(() => {
-                self.editDialog = false;
-                this.$refs.form.resetFields();
+                self.resetForm();
               });
             })
           }
@@ -446,14 +585,19 @@ export default {
         }
       });
     },
-    detailTabClick () {
-
+    cancel () {
+      self.resetForm();
+    },
+    resetForm () {
+      self.editDialog = false;
+      self.form.cityList = [];
+      self.form.dateList = [];
+      self.sendDateList = [];
+      this.$refs.form.resetFields();
     },
     tapDay (day) {
       if (self.sendDateList['show_' + self.date.year + '_' + self.date.month + '_' + day]) {
-        console.log(self.sendDateList['show_' + self.date.year + '_' + self.date.month + '_' + day])
         delete self.sendDateList['show_' + self.date.year + '_' + self.date.month + '_' + day]
-        console.log(self.sendDateList['show_' + self.date.year + '_' + self.date.month + '_' + day])
       } else {
         self.$set(self.sendDateList, ['show_' + self.date.year + '_' + self.date.month + '_' + day], {
           "bcYear": self.date.year,
@@ -469,24 +613,84 @@ export default {
         self.tapDay(self.dateList[x])
       }
     },
-    yearChange (e) {
-      console.log(e)
+    dateChange (e) {
+      self.getDay('edit');
     },
-    monthChange (e) {
-      self.getDay();
+    showDateChange (e) {
+      self.getDay('show');
     },
-    getDay () {
-      self.dateLoading = true;
-      getBcDay(self.date.year, self.date.month).then(res => {
-        let days = res.data;
-        let start = self.dateInfo[self.date.year].start;
-        let dateList = {};
-        for (let x = 1; x <= days; x++) {
-          dateList['show_' + self.date.year + '_' + self.date.month + '_' + x] = x
+    getDay (type) {
+      if (type == 'edit') {
+        self.dateLoading = true;
+        getBcDay(self.date.year, self.date.month).then(res => {
+          let days = res.data;
+          let start = self.dateInfo[self.date.year].start;
+          let dateList = {};
+          for (let x = 1; x <= days; x++) {
+            dateList['show_' + self.date.year + '_' + self.date.month + '_' + x] = x
+          }
+          self.dateList = dateList;
+          self.dateLoading = false;
+        })
+      } else {
+        getBcDay(self.showDate.year, self.showDate.month).then(res => {
+          let days = res.data;
+          let start = self.showDateInfo[self.showDate.year].start;
+          let showDateList = {};
+          for (let x = 1; x <= days; x++) {
+            showDateList['show_' + self.showDate.year + '_' + self.showDate.month + '_' + x] = x
+          }
+          self.dateList_show = showDateList;
+        })
+      }
+    },
+    // 目的地省改变
+    toProvinceCodeChange (e) {
+      self.cityLoading = true;
+      getCityList({
+        provinceCode: e
+      }).then(res => {
+        let cityList = [];
+        for (let i of res.data) {
+          cityList.push({
+            "charge": '',
+            "toCityCode": i.code,
+            "name": i.name,
+            "miles": '',
+            "transitTime": ''
+          })
         }
-        self.dateList = dateList;
-        self.dateLoading = false;
+        self.form.cityList = cityList;
+        self.cityLoading = false;
       })
+    },
+    choosePlate (e) {
+      for (let i of self.tdList) {
+        if (i.id == e) {
+          self.form.category = i.category;
+          self.form.subCategory = i.subCategory;
+        }
+      }
+    },
+    tapRow (row) {
+      if (row == null) {
+        self.priceList = [];
+        self.showDateList = {};
+        self.thisRow = {};
+        return
+      }
+      let dateList = {};
+      self.priceList = row.cityList;
+      for (let i of row.dateList) {
+        dateList['show_' + i.bcYear + '_' + i.month + '_' + i.day] = {
+          "bcYear": i.bcYear,
+          "month": i.month,
+          "day": i.day
+        }
+      }
+      self.showDateList = dateList;
+      self.thisRow = row;
+      this.$forceUpdate();
     }
   },
   created () {
@@ -511,6 +715,14 @@ export default {
 
 .table-box {
   width: 49%;
+  position: relative;
+
+  .editBtn {
+    position: absolute;
+    left: 150px;
+    z-index: 50;
+    top: 6px;
+  }
 }
 
 .formSelect {
@@ -519,6 +731,7 @@ export default {
 
 .date-header {
   display: flex;
+  align-items: center;
 
   div {
     margin-right: 10px;
@@ -537,9 +750,24 @@ export default {
 
   .day {
     width: 100%;
+    height: 50px;
+    font-size: 24px;
+    line-height: 50px;
     text-align: center;
     cursor: pointer;
     transition: all 0.1s;
+    border-width: 2px;
+  }
+}
+
+.edit-box {
+  .edit-top {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .edit-right {
+    width: 550px;
   }
 }
 </style>

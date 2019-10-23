@@ -222,8 +222,8 @@
     "price": "Price(฿)",
     "origin": "Origin",
     "destination": "Destination",
-    "require": "Require",
-    "notRequired": "Not required",
+    "require": "I can provide service",
+    "notRequired": "I con't provde service",
     "activated": "Activated",
     "closed": "Closed",
     "price_2": "Price",
@@ -231,7 +231,14 @@
     "dst": "Dst",
     "transitTime": "Transit time",
     "distance": "Distance",
-    "inverse": "Inverse"
+    "inverse": "Inverse",
+    "plateLicense": "Plate license",
+    "supportLoading": " Loading& unloading",
+    "humanWorkDay": "Workload/item",
+    "moneyPerDay": "Price/perday",
+    "destination_Dsitrict": "Destination(Dsitrict)",
+    "cutOffTime": "Cut off time",
+    "route": "Route"
   },
   "billing": {
     "billingStatus": "Billing status",

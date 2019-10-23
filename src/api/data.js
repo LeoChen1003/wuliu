@@ -49,10 +49,11 @@ export function getProvinceList() {
 }
 
 // 所有市
-export function getCityList() {
+export function getCityList(params) {
   return request({
     url: '/misc/geo/city/list',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 

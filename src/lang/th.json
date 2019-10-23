@@ -193,7 +193,21 @@
     "registrationPlace": "กรมธรรม์ประกันภัยความเสียหายต่อสินค้ารายปี",
     "HAS_INSURANCE": "มี",
     "DO_NOT_HAS_INSURANCE": "ไม่",
-    "cancel": "ยกเลิก"
+    "cancel": "ยกเลิก",
+    "destination_Dsitrict": "จังหวัดปลายทาง",
+    "distance_KM": "ระยะทาง (KM)",
+    "transitTime": "เวลาขนส่ง",
+    "price": "6 ล้อคอก (บาท)",
+    "cutOffTime": "เส้นตาย",
+    "supportLoading": "กำลังโหลดและขนถ่าย",
+    "humanWorkDay": "จำนวนงาน",
+    "moneyPerDay": "ใบเสนอราคาบัญชี",
+    "origin": "ต้นทาง",
+    "destination": "ปลายทาง",
+    "plateLicense": "ป้ายทะเบียนรถ",
+    "availableDate": "วันที่ใช้ได้",
+    "dst": "ปลายทาง",
+    "route": "เส้นทาง"
   },
   "billing": {
     "billingStatus": "สถานะการเรียกเก็บเงิน",
