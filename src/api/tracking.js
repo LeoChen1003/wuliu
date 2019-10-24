@@ -9,6 +9,14 @@ export function getOrder(params) {
   })
 }
 
+// 订单进度
+export function getOrderLog(id) {
+  return request({
+    url: `/api/supply/order/${id}/log`,
+    method: 'get'
+  })
+}
+
 // 获取订单数量
 export function getOrderStatus() {
   return request({

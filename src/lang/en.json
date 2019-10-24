@@ -189,7 +189,8 @@
     "plateLicense": "Plate license",
     "driver": "Driver",
     "successful": "Success",
-    "search": "Search"
+    "search": "Search",
+    "orderLog": "Order log"
   },
   "resources": {
     "add": "Add",

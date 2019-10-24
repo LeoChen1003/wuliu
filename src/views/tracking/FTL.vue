@@ -14,7 +14,7 @@
           <el-tab-pane label="1">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge">{{orderStatus.DEMMANDACCEPT}}</sub></div>
+                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge">{{orderStatus.DEMANDACCEPT}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
@@ -81,9 +81,12 @@
                   border>
           <el-table-column :label="$t('tracking.tracking')">
             <template slot-scope="scope">
-              <div>{{scope.row.orderNo}}</div>
-              <div>{{scope.row.outNumber}}</div>
-              <div>{{scope.row.createdAt}}</div>
+              <el-button style="width:100%;"
+                         @click="orderLog(scope.row.id)">
+                <div>{{scope.row.orderNo}}</div>
+                <div>{{scope.row.outNumber}}</div>
+                <div>{{scope.row.createdAt}}</div>
+              </el-button>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.cargo_VAS')">
@@ -266,6 +269,16 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <el-dialog :title="$t('tracking.orderLog')"
+               :visible.sync="logDialog">
+      <el-timeline :reverse="true">
+        <el-timeline-item v-for="(item, index) in logs"
+                          :key="index"
+                          :timestamp="item.createdAt">
+          {{item.introduce}}
+        </el-timeline-item>
+      </el-timeline>
+    </el-dialog>
   </div>
 </template>
 
@@ -273,7 +286,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getSupplyTD } from '../../api/data'
-import { getOrder, getOrderStatus, confirmOrder } from '../../api/tracking.js'
+import { getOrder, getOrderStatus, confirmOrder, getOrderLog } from '../../api/tracking.js'
 
 let self;
 export default {
@@ -287,6 +300,7 @@ export default {
       printeDialog: false,
       editDialog: false,
       confirmDialog: false,
+      logDialog: false,
       form: {
         category: '',
         subCategory: '',
@@ -317,7 +331,7 @@ export default {
       unitObj: {},
       orderStatus: {
         COMPLETE: 0,
-        DEMMANDACCEPT: 0,
+        DEMANDACCEPT: 0,
         SENDING: 0,
         SUPPLYACCEPT: 0,
         WAITTING: 0,
@@ -332,9 +346,11 @@ export default {
       },
       loading: false,
       confirmLoading: false,
+      orderDialog: false,
       searchForm: {
         province: ""
-      }
+      },
+      logs: []
     };
   },
   // 监听属性 类似于data概念
@@ -440,6 +456,12 @@ export default {
         });
 
       })
+    },
+    orderLog (id) {
+      getOrderLog(id).then(res => {
+        self.logs = res.data;
+        self.logDialog = true;
+      })
     }
   }
 };
@@ -493,6 +515,7 @@ export default {
   .badge {
     font-size: 12px;
     margin-left: 5px;
+    color: #aaa;
   }
 
   .red {

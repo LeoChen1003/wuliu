@@ -194,6 +194,7 @@
               <el-input v-model="quotePriceCon.remark"
                         disabled
                         type="textarea"
+                        resize="none"
                         class="inp" />
             </el-form-item>
             <el-form-item :label="$t('market.demandPrice')">
@@ -218,6 +219,7 @@
             <el-form-item :label="$t('market.truckType')">
               <el-select v-model="quotePriceForm.category"
                          class="inp"
+                         disabled
                          :placeholder="$t('placeholder.pleaseChoose')">
                 <el-option v-for="item in truckTypes.categories"
                            :key="item.key"
@@ -228,6 +230,7 @@
             <el-form-item :label="$t('market.loaderType')">
               <el-select v-model="quotePriceForm.subCategory"
                          class="inp"
+                         disabled
                          :placeholder="$t('placeholder.pleaseChoose')">
                 <el-option v-for="item in truckTypes.subCategories"
                            :key="item.key"
@@ -316,7 +319,7 @@ export default {
       },
       shareTruck: false,
       truckData: [],
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
   // 监听属性 类似于data概念

@@ -112,17 +112,25 @@
         <el-table :data="tableList"
                   border
                   style="width: 97%;margin-left:20px;">
-          <el-table-column :label="$t('booking.supply')">
+          <el-table-column :label="$t('booking.supply')"
+                           align="center">
             <template slot-scope="scope">
-              <div class="table_supply">
-                <div class="item">{{scope.row.site? scope.row.site.companyName :''}}</div>
-                <div class="item">
-                  <div>{{$t('booking.loading')}}/{{$t('booking.unloading')}} : <i :class="scope.row.supportLoading == 1?'el-icon-check':'el-icon-close'"></i></div>
+              <div>
+                <div>{{scope.row.site? scope.row.site.companyName :''}}</div>
+                <div>
+                  <div>
+                    <el-rate v-model="3.5"
+                             disabled
+                             text-color="#ff9900"
+                             score-template="{value}">
+                    </el-rate>
+                  </div>
                 </div>
               </div>
             </template>
           </el-table-column>
           <el-table-column width="250"
+                           align="center"
                            :label="$t('booking.route')">
             <template slot-scope="scope">
               <div>
@@ -133,7 +141,18 @@
               </div>
             </template>
           </el-table-column>
+          <el-table-column header-align="center"
+                           align="center"
+                           :label="$t('booking.valueAddedService')">
+            <template slot-scope="scope">
+              <div>
+                <div>{{$t('booking.loading')}}/{{$t('booking.unloading')}} : <i :class="scope.row.supportLoading == 1?'el-icon-check':'el-icon-close'"></i></div>
+                <div>{{$t('booking.loading')}}/{{$t('booking.unloading')}} : <i :class="scope.row.supportLoading == 1?'el-icon-check':'el-icon-close'"></i></div>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column width="250"
+                           align="center"
                            :label="$t('booking.price')">
             <template slot-scope="scope">
               <div>{{$t('booking.feight')}} : {{scope.row.charge}}</div>

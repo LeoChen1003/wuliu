@@ -189,7 +189,8 @@
     "driver": "司机",
     "plateLicense": "车牌号",
     "successful": "成功",
-    "search": "搜索"
+    "search": "搜索",
+    "orderLog": "订单日志"
   },
   "resources": {
     "add": "添加",

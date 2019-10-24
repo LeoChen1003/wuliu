@@ -18,7 +18,7 @@
           <el-tab-pane label="2">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge">{{statusCount.DEMMANDACCEPT}}</sub></div>
+                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge red">{{statusCount.DEMANDACCEPT}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
@@ -60,12 +60,21 @@
         </el-tabs>
       </div>
       <!-- 表格 -->
-      <div class="container">
+      <div class="container"
+           v-loading="tableLoading">
         <el-table :data="data.content"
                   style="width:98%;"
                   border>
-          <el-table-column :label="$t('tracking.tracking')"
-                           prop="orderNo"></el-table-column>
+          <el-table-column :label="$t('tracking.tracking')">
+            <template slot-scope="scope">
+              <el-button style="width:100%;"
+                         @click="orderLog(scope.row.id)">
+                <div>{{scope.row.orderNo}}</div>
+                <div>{{scope.row.outNumber}}</div>
+                <div>{{scope.row.createdAt}}</div>
+              </el-button>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
             <template slot-scope="scope"
                       v-if="scope.row.receiverAddress">
@@ -136,6 +145,14 @@
                 highlight-current-row
                 @row-click="showRow"
                 border>
+        <!-- <el-table-column width="55">
+          <template slot-scope="scope">
+            <div style="width:100%;text-align:center;">
+              <el-radio class="radio"
+                        v-model="radio"></el-radio>
+            </div>
+          </template>
+        </el-table-column> -->
         <el-table-column :label="$t('tracking.supply')">
           <template slot-scope="scope">
             <div>
@@ -169,20 +186,24 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column width="55">
-          <template slot-scope="scope">
-            <el-radio class="radio"
-                      v-model="radio"
-                      :label="scope.$index">&nbsp;</el-radio>
-          </template>
-        </el-table-column>
-
       </el-table>
       <span slot="footer"
             class="dialog-footer">
         <el-button @click="confirmDialog = false">取 消</el-button>
-        <el-button @click="confirmIt">{{$t('tracking.confirm')}}</el-button>
+        <el-button :disabled="radio == ''"
+                   type="primary"
+                   @click="confirmIt">{{$t('tracking.confirm')}}</el-button>
       </span>
+    </el-dialog>
+    <el-dialog :title="$t('tracking.orderLog')"
+               :visible.sync="logDialog">
+      <el-timeline :reverse="true">
+        <el-timeline-item v-for="(item, index) in logs"
+                          :key="index"
+                          :timestamp="item.createdAt">
+          {{item.introduce}}
+        </el-timeline-item>
+      </el-timeline>
     </el-dialog>
   </div>
 </template>
@@ -191,7 +212,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty } from '../../api/data'
-import { demandOrderList, demandStatusCount, demandquoteList, demandquoteConfirm } from '../../api/tracking.js'
+import { demandOrderList, demandStatusCount, demandquoteList, demandquoteConfirm, getOrderLog } from '../../api/tracking.js'
 
 let self;
 export default {
@@ -205,6 +226,7 @@ export default {
       statusCount: [],
       printeDialog: false,
       confirmDialog: false,
+      logDialog: false,
       form: {
         category: '',
         subCategory: '',
@@ -237,7 +259,9 @@ export default {
       subtruckObj: {},
       radio: '',
       selected: {},
-      curId: null
+      curId: null,
+      tableLoading: false,
+      logs: []
     };
   },
   // 监听属性 类似于data概念
@@ -297,9 +321,11 @@ export default {
   },
   methods: {
     loadData (cb) {
-      const self = this
+      const self = this;
+      self.tableLoading = true;
       demandOrderList({ status: self.tabActive }).then(res => {
         self.data = res.data;
+        self.tableLoading = false;
         if (cb) {
           cb();
         }
@@ -340,9 +366,16 @@ export default {
     confirmIt () {
       const self = this
       demandquoteConfirm(self.curId, self.selected.id).then(res => {
-        self.confirmDialog = false
         self.$message.success(res.message)
         self.loadData()
+        self.radio = '';
+        self.confirmDialog = false
+      })
+    },
+    orderLog (id) {
+      getOrderLog(id).then(res => {
+        self.logs = res.data;
+        self.logDialog = true;
       })
     }
   }
@@ -385,8 +418,12 @@ export default {
 
   .badge {
     font-size: 12px;
-    color: red;
     margin-left: 5px;
+    color: #aaa;
+  }
+
+  .red {
+    color: red;
   }
 }
 .formSelect {
