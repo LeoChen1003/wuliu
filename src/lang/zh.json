@@ -168,7 +168,7 @@
     "confirm": "确认",
     "KPI": "KPI",
     "truckType": "车型",
-    "quotation": "报价(฿)",
+    "quotation": "报价（泰铢）",
     "cargo_VAS": "货物&服务",
     "price": "价格（泰铢）",
     "pickupPoint": "揽件点",
@@ -190,7 +190,10 @@
     "plateLicense": "车牌号",
     "successful": "成功",
     "search": "搜索",
-    "orderLog": "订单日志"
+    "orderLog": "订单日志",
+    "rating": "Rating",
+    "remark": "备注",
+    "ratingIsRequired": "评分不能为空"
   },
   "resources": {
     "add": "添加",
@@ -241,7 +244,8 @@
     "plateLicense": "车牌号",
     "destination_Dsitrict": "目的地(市)",
     "transitTime": "运输天数",
-    "dst": "目的地(市)"
+    "dst": "目的地(市)",
+    "distance": "距离"
   },
   "billing": {
     "billingStatus": "订单状态",
@@ -286,7 +290,7 @@
     "relevantdocument_supply": "相关文件（运输公司）",
     "relevantdocument_HUB": "相关文件（货运站）",
     "myContract": "我的会员合同",
-    "register": "Register",
+    "register": "注册",
     "enterData": "Enter data",
     "submitApplication": "Submit application",
     "downloadContract": "下载合同",
@@ -381,6 +385,7 @@
     "quoteAPrice": "报价抢单",
     "demandPrice": "需求方的报价(฿)",
     "licencePlate": "车牌号",
-    "loaderType": "车型类型"
+    "loaderType": "车型类型",
+    "confirm": "确认"
   }
 }

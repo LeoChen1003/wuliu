@@ -134,10 +134,10 @@
                            :label="$t('booking.route')">
             <template slot-scope="scope">
               <div>
-                {{ scope.row.fromProvince }} --> {{ scope.row.toCity }}
+                {{ scope.row.fromProvince }} --> {{ scope.row.toProvinceName }}
               </div>
               <div>
-                {{$t('booking.transitTime')}} : {{scope.row.transitTime}}days
+                {{$t('booking.transitTime')}} : {{scope.row.transitTime}}
               </div>
             </template>
           </el-table-column>
@@ -156,9 +156,9 @@
                            :label="$t('booking.price')">
             <template slot-scope="scope">
               <div>{{$t('booking.feight')}} : {{scope.row.charge}}</div>
-              <div v-if="scope.row.supportLoading == 1">{{$t('booking.loading')}}/{{$t('booking.unloading')}} : {{scope.row.loadingOrUnloadingHumanWorkDay*scope.row.moneyPerDay}}</div>
+              <div v-if="scope.row.supportLoading == 1">{{$t('booking.loading')}}/{{$t('booking.unloading')}} : {{scope.row.loadingOrUnloadingHumanWorkDay * scope.row.moneyPerDay}}</div>
               <div>{{$t('booking.documentReturn')}} :{{documentReturn}}</div>
-              <div>{{$t('booking.totalamt')}} : {{10+scope.row.charge+(scope.row.supportLoading == 1?scope.row.loadingOrUnloadingHumanWorkDay*scope.row.moneyPerDay:0)}}</div>
+              <div>{{$t('booking.totalamt')}} : {{10 + scope.row.charge + (scope.row.supportLoading == 1 ? scope.row.loadingOrUnloadingHumanWorkDay * scope.row.moneyPerDay : 0)}}</div>
             </template>
           </el-table-column>
           <el-table-column width='95'>

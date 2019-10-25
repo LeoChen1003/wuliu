@@ -190,7 +190,10 @@
     "driver": "Driver",
     "successful": "Success",
     "search": "Search",
-    "orderLog": "Order log"
+    "orderLog": "Order log",
+    "rating": "Rating",
+    "remark": "Remark",
+    "ratingIsRequired": "Rating is required"
   },
   "resources": {
     "add": "Add",
@@ -239,7 +242,10 @@
     "moneyPerDay": "Price/perday",
     "destination_Dsitrict": "Destination(Dsitrict)",
     "cutOffTime": "Cut off time",
-    "route": "Route"
+    "route": "Route",
+    "distance_KM": "Distance(KM)",
+    "edit": "Edit",
+    "truckSubType": "Truck sub Type"
   },
   "billing": {
     "billingStatus": "Billing status",
@@ -324,8 +330,8 @@
     "carRegistration": "Car Registration",
     "cargoInsurance": " Cargo Insurance",
     "dc": "DC",
-    "have": "have",
-    "notHave": "not have",
+    "have": "Have",
+    "notHave": "Not have",
     "dcAddress": "DC Address",
     "transportationExperience": "Transportation experience",
     "functionalArea": " Functional area",
@@ -353,7 +359,9 @@
     "underReview": "Under review",
     "passed": "Passed",
     "uploadSuccess": "Upload success",
-    "logo": "Logo"
+    "logo": "Logo",
+    "saveSuccess": "Successful",
+    "type": "Type"
   },
   "confirm": {
     "tips": "Tips",

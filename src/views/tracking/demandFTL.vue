@@ -104,9 +104,19 @@
           </el-table-column>
           <el-table-column v-if="tabActive != '0'">
             <template slot-scope="scope">
-              <el-button type="primary"
-                         v-if="tabActive == '1'"
-                         @click="toShowConfirm(scope.row)">{{$t('tracking.confirm')}}</el-button>
+              <div style="text-align:center;">
+                <el-button type="primary"
+                           v-if="scope.row.status == '1'"
+                           @click="toShowConfirm(scope.row)">{{$t('tracking.confirm')}}</el-button>
+                <el-button type="primary"
+                           v-if="scope.row.status == '6' && scope.row.rating == null"
+                           @click="rating(scope.row)">{{$t('tracking.rating')}}</el-button>
+                <el-rate v-if="scope.row.status == '6' && scope.row.rating"
+                         disabled
+                         v-model="scope.row.rating.rating / 2">
+                </el-rate>
+              </div>
+
             </template>
           </el-table-column>
         </el-table>
@@ -190,7 +200,7 @@
       <span slot="footer"
             class="dialog-footer">
         <el-button @click="confirmDialog = false">取 消</el-button>
-        <el-button :disabled="radio == ''"
+        <el-button :disabled="radio === ''"
                    type="primary"
                    @click="confirmIt">{{$t('tracking.confirm')}}</el-button>
       </span>
@@ -205,6 +215,25 @@
         </el-timeline-item>
       </el-timeline>
     </el-dialog>
+    <el-dialog :title="$t('tracking.rating')"
+               :visible.sync="ratingDialog"
+               width="500px">
+      <div style="text-align:center;">
+        <el-rate style="margin-bottom:20px;"
+                 v-model="ratingForm.rating">
+        </el-rate>
+        <el-input v-model="ratingForm.remark"
+                  type="textarea"
+                  :placeholder="$t('tracking.remark')"
+                  resize="none"></el-input>
+      </div>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="ratingDialog = false">取 消</el-button>
+        <el-button type="primary"
+                   @click="ratingConfirm">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -212,7 +241,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty } from '../../api/data'
-import { demandOrderList, demandStatusCount, demandquoteList, demandquoteConfirm, getOrderLog } from '../../api/tracking.js'
+import { demandOrderList, demandStatusCount, demandquoteList, demandquoteConfirm, getOrderLog, orderRating } from '../../api/tracking.js'
 
 let self;
 export default {
@@ -227,6 +256,7 @@ export default {
       printeDialog: false,
       confirmDialog: false,
       logDialog: false,
+      ratingDialog: false,
       form: {
         category: '',
         subCategory: '',
@@ -261,7 +291,12 @@ export default {
       selected: {},
       curId: null,
       tableLoading: false,
-      logs: []
+      logs: [],
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      ratingForm: {
+        rating: 0,
+        remark: ''
+      }
     };
   },
   // 监听属性 类似于data概念
@@ -377,6 +412,24 @@ export default {
         self.logs = res.data;
         self.logDialog = true;
       })
+    },
+    rating (item) {
+      console.log(item)
+      self.thisId = item.id;
+      self.ratingForm.rating = 0;
+      self.ratingForm.remark = '';
+      self.ratingDialog = true;
+    },
+    ratingConfirm () {
+      console.log(self.ratingForm)
+      if (self.ratingForm.rating == 0) {
+        return self.$message.warning(self.$t('tracking.ratingIsRequired'))
+      }
+      orderRating(self.thisId, self.ratingForm.rating * 2, self.ratingForm.remark)
+        .then(res => {
+          self.ratingDialog = false;
+          self.loadData();
+        })
     }
   }
 };

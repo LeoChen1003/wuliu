@@ -72,3 +72,27 @@ export function demandquoteConfirm(id, quoteId) {
     }
   })
 }
+
+// 评分
+export function orderRating(id, rating, remark) {
+  return request({
+    url: `/api/demand/order/score/${id}`,
+    method: 'post',
+    data: {
+      rating: rating,
+      remark: remark
+    }
+  })
+}
+
+// 待取件状态设置
+export function updateOrderInfo(id, truck_id, driver_id) {
+  return request({
+    url: `/api/supply/order/update/ftl/info/${id}`,
+    method: 'post',
+    data: {
+      truck_id: truck_id,
+      driver_id: driver_id
+    }
+  })
+}

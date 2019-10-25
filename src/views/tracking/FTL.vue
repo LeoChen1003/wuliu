@@ -128,6 +128,9 @@
                 <el-button v-if="scope.row.status == '2'"
                            @click="confirmB(scope.row)"
                            type="primary">{{$t('tracking.confirm')}}</el-button>
+                <el-button v-if="scope.row.status == '3' && scope.row.transport.driverName == null"
+                           @click="confirmB(scope.row)"
+                           type="primary">{{$t('tracking.confirm')}}</el-button>
               </div>
             </template>
           </el-table-column>
@@ -286,7 +289,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getSupplyTD } from '../../api/data'
-import { getOrder, getOrderStatus, confirmOrder, getOrderLog } from '../../api/tracking.js'
+import { getOrder, getOrderStatus, confirmOrder, getOrderLog, updateOrderInfo } from '../../api/tracking.js'
 
 let self;
 export default {
@@ -438,24 +441,37 @@ export default {
       self.loadData();
     },
     confirmB (item) {
-      console.log(item)
       self.orderInfo = item;
       self.confirmDialog = true;
     },
     confirmIt () {
       self.confirmLoading = true;
-      confirmOrder(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(res => {
-        self.loadData(() => {
-          self.confirmDialog = false;
-          self.confirmForm = {
-            dirverId: '',
-            truckId: ''
-          }
-          self.$message.success(self.$t('tracking.successful'))
-          self.confirmLoading = false;
-        });
+      if (self.orderInfo.status == 1) {
+        confirmOrder(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(res => {
+          self.loadData(() => {
+            self.confirmDialog = false;
+            self.confirmForm = {
+              dirverId: '',
+              truckId: ''
+            }
+            self.$message.success(self.$t('tracking.successful'))
+            self.confirmLoading = false;
+          });
+        })
+      } else if (self.orderInfo.status == 3) {
+        updateOrderInfo(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(res => {
+          self.loadData(() => {
+            self.confirmDialog = false;
+            self.confirmForm = {
+              dirverId: '',
+              truckId: ''
+            }
+            self.$message.success(self.$t('tracking.successful'))
+            self.confirmLoading = false;
+          });
+        })
+      }
 
-      })
     },
     orderLog (id) {
       getOrderLog(id).then(res => {

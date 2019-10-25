@@ -75,7 +75,7 @@
     "memberType": "ประเภทสมาชิก",
     "mobilePhoneNo": "เบอร์โทรศัพท์",
     "messageCode": "รหัสยืนยัน",
-    "sendMessage": "Send message",
+    "sendMessage": "ส่งข้อความ",
     "graphCaptcha": "รหัสการตรวจสอบกราฟิก",
     "email": "จดหมายอิเล็กทรอนิกส์",
     "regName": "ชื่อบัญชี",
@@ -93,7 +93,9 @@
     "rule_password_length": "ความยาวของรหัสผ่านควรอยู่ระหว่าง 6-20",
     "captcha_required": "ต้องระบุกราฟกราฟ",
     "resetPassword": "ตั้งค่ารหัสผ่านใหม่",
-    "resetSuccess": "ตั้งค่าความสำเร็จ"
+    "resetSuccess": "ตั้งค่าความสำเร็จ",
+    "rule_email": "ต้องระบุอีเมล",
+    "smsSend": "ส่งข้อความแล้ว"
   },
   "home": {
     "button": "th"
@@ -164,7 +166,20 @@
     "truckType": " ประเภทรถบรรทุก",
     "quotation": "Quotation(฿)",
     "price": "ราคา (฿)",
-    "route": "เส้นทาง"
+    "route": "เส้นทาง",
+    "rating": "Rating",
+    "ETD": "ETD",
+    "cargo": "Cargo",
+    "cargo_VAS": "Cargo & VAS",
+    "cutoffTime": "เส้นตาย",
+    "destination": "ปลายทาง",
+    "driver": "คนขับรถ",
+    "origin": "ต้นทาง",
+    "plateLicense": "ป้ายทะเบียนรถ",
+    "qty": "Qty",
+    "remark": "หมายเหตุ",
+    "search": "ค้นหา",
+    "successful": "ความสำเร็จ"
   },
   "resources": {
     "add": "เพิ่ม",
@@ -207,7 +222,11 @@
     "plateLicense": "ป้ายทะเบียนรถ",
     "availableDate": "วันที่ใช้ได้",
     "dst": "ปลายทาง",
-    "route": "เส้นทาง"
+    "route": "เส้นทาง",
+    "activated": "Activated",
+    "closed": "Closed",
+    "distance": "ระยะทาง",
+    "price_2": "ราคา"
   },
   "billing": {
     "billingStatus": "สถานะการเรียกเก็บเงิน",
@@ -252,10 +271,10 @@
     "relevantdocument_supply": "เอกสารที่เกี่ยวข้อง(ผู้ขนส่ง)",
     "relevantdocument_HUB": "เอกสารที่เกี่ยวข้อง(ศูนย์แลกเปลี่ยนสินค้า)",
     "myContract": "สัญญาของฉัน",
-    "register": "Register",
+    "register": "สมัครสมาชิก",
     "enterData": "Enter data",
     "submitApplication": "Submit application",
-    "downloadContract": "Download contract",
+    "downloadContract": "ดาวน์โหลดสัญญา",
     "payGuaranteeMoney": "Pay guarantee money",
     "sendContractBackToPlatform": "Send contract back to  platform",
     "onlieTraining": "Onlie training",
@@ -305,7 +324,14 @@
     "cancel": "ยกเลิก",
     "qualificationInformation": "ข้อมูลคุณสมบัติ",
     "activate": "กระตุ้น",
-    "logo": "Logo"
+    "logo": "Logo",
+    "save": "บันทึก",
+    "download": "ดาวน์โหลด",
+    "functionalArea": "ขนาดพื้นที่ใช้สอย",
+    "submitDemand": "ส่งใบสมัคร",
+    "submitHUB": "ส่งใบสมัคร",
+    "submitSupply": "ส่งใบสมัคร",
+    "type": "ชนิด"
   },
   "confirm": {
     "tips": "ทูลเกล้าฯถวาย",
@@ -327,6 +353,7 @@
     "origin": "ต้นทาง",
     "demandPrice": "ราคา(฿)",
     "licencePlate": "ป้ายทะเบียนรถ",
-    "loaderType": "ประเภทกระบะบรรทุก"
+    "loaderType": "ประเภทกระบะบรรทุก",
+    "confirm": "ยืนยัน"
   }
 }
