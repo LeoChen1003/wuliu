@@ -15,7 +15,8 @@
                  size="small">
           <div class="login-header">
             <img src="../../assets/image/logo.png"
-                 alt="logo" />
+                 alt="logo"
+                 class="logo" />
             <LangSelect :toggle-lang="true"
                         class="langBtn" />
           </div>
@@ -31,6 +32,7 @@
           </div>
           <el-form-item prop="username"
                         :label="$t('login.username')">
+            <span slot="label"><i class="el-icon-user loginIcon"></i></span>
             <el-input ref="username"
                       v-model="loginForm.username"
                       :placeholder="$t('placeholder.pleaseEnterYourLoginAccount')"
@@ -42,6 +44,7 @@
           </el-form-item>
           <el-form-item prop="password"
                         :label="$t('login.password')">
+            <span slot="label"><i class="el-icon-lock loginIcon"></i></span>
             <el-input ref="password"
                       v-model="loginForm.password"
                       :placeholder="$t('placeholder.pleaseInputPassword')"
@@ -590,26 +593,31 @@ export default {
     top: 50%;
     right: 50%;
     transform: translate(40%, -60%);
+
     .login-form {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+
     .login-header {
       width: 100%;
       display: flex;
       align-items: center;
       margin-bottom: 30px;
       position: relative;
+
       img {
         position: absolute;
         left: 50%;
       }
+
       .langBtn {
         position: absolute;
         right: 15px;
       }
     }
+
     .choseTab {
       width: 100%;
       padding-left: 130px;
@@ -619,16 +627,19 @@ export default {
       justify-content: space-between;
       color: #333333;
       font-size: 14px;
+
       div {
         width: 75px;
         text-align: center;
         cursor: pointer;
       }
+
       .isActive {
         font-weight: bold;
         color: rgb(22, 155, 213);
       }
     }
+
     .atPassword {
       display: flex;
       justify-content: space-between;
@@ -638,6 +649,7 @@ export default {
       color: #169bd5;
       font-size: 14px;
     }
+
     .inputWidth {
       width: 300px;
     }
@@ -649,9 +661,11 @@ export default {
     margin-bottom: 5%;
     right: 50%;
     transform: translate(50%, 0);
+
     .regCheck {
       margin-top: 20px;
     }
+
     .regItem {
       display: flex;
       justify-content: space-between;
@@ -661,23 +675,35 @@ export default {
         width: 150px;
       }
     }
+
     .btnBox {
       width: 100%;
       margin-top: 30px;
       text-align: center;
     }
+
     .reg-form {
       margin-top: 20px;
       box-sizing: border-box;
     }
+
     .inputWidth {
       width: 300px;
     }
   }
+
   .forgot {
     .el-steps {
       justify-content: center;
     }
   }
+}
+
+.logo {
+  width: 110px;
+}
+
+.loginIcon {
+  font-size: 20px;
 }
 </style>

@@ -3,7 +3,6 @@
     <div class="searchBox">
       <el-form ref="searchForm"
                :show-message="false"
-               label-width="140px"
                :model="searchForm">
         <el-form-item :label="$t('market.origin')">
           <el-select v-model="searchForm.pickUpRegion"
@@ -30,10 +29,13 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('market.pickupDate')">
-          <el-date-picker v-model="searchForm.pickUpDate"
-                          value-format='yyyy-MM-dd'
-                          type="date">
-          </el-date-picker>
+          <el-cascader v-model="dateCascader"
+                       class="innerInp"
+                       :options="options"
+                       :props="props"
+                       separator='-'
+                       style="margin-right:5px;"
+                       @change="dateChange"></el-cascader>
         </el-form-item>
         <el-form-item :label="$t('market.truckType')">
           <el-select v-model="searchForm.truckCategory"
@@ -53,6 +55,7 @@
       </el-form>
     </div>
     <div class="container">
+
       <el-table :data="data.content"
                 border>
         <el-table-column :label="$t('market.pickupTime')">
@@ -89,8 +92,10 @@
         <el-table-column :label="$t('tracking.price')"></el-table-column>
         <el-table-column>
           <template slot-scope="scope">
-            <el-button type="primary"
-                       @click="toquotePrice(scope.row)">{{$t('market.quoteAPrice')}}</el-button>
+            <div style="text-align:center;">
+              <el-button type="primary"
+                         @click="toquotePrice(scope.row)">{{$t('market.quoteAPrice')}}</el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -194,6 +199,7 @@
               <el-input v-model="quotePriceCon.remark"
                         disabled
                         type="textarea"
+                        resize="none"
                         class="inp" />
             </el-form-item>
             <el-form-item :label="$t('market.demandPrice')">
@@ -203,6 +209,8 @@
             </el-form-item>
             <el-form-item :label="$t('booking.myQuotaion')">
               <el-input v-model="quotePriceForm.money"
+                        @mousewheel.native.prevent
+                        type="number"
                         class="inp" />
             </el-form-item>
             <el-form-item :label="$t('market.licencePlate')">
@@ -218,6 +226,7 @@
             <el-form-item :label="$t('market.truckType')">
               <el-select v-model="quotePriceForm.category"
                          class="inp"
+                         disabled
                          :placeholder="$t('placeholder.pleaseChoose')">
                 <el-option v-for="item in truckTypes.categories"
                            :key="item.key"
@@ -228,6 +237,7 @@
             <el-form-item :label="$t('market.loaderType')">
               <el-select v-model="quotePriceForm.subCategory"
                          class="inp"
+                         disabled
                          :placeholder="$t('placeholder.pleaseChoose')">
                 <el-option v-for="item in truckTypes.subCategories"
                            :key="item.key"
@@ -252,7 +262,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getProvinceArea, getSupplyTD } from '../../api/data'
+import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getProvinceArea, getSupplyTD, getBcYear, getBcDay } from '../../api/data'
 import { orderShop, quoteOrder } from '../../api/market.js'
 
 let self;
@@ -316,7 +326,55 @@ export default {
       },
       shareTruck: false,
       truckData: [],
-      confirmLoading: false
+      confirmLoading: false,
+      dateCascader: '',
+      options: [],
+      props: {
+        lazy: true,
+        lazyLoad (node, resolve) {
+          let year = self.bcYear;
+          let date = new Date();
+          let month = node.label == year ? date.getMonth() + 1 : 1;
+          let day = date.getDate();
+          let options = [];
+          if (node.level == 0) {
+            getBcYear().then(res => {
+              self.bcYear = res.data;
+              let years = [{
+                label: self.bcYear,
+                value: self.bcYear
+              }, {
+                label: self.bcYear + 1,
+                value: self.bcYear + 1
+              }]
+              resolve(years);
+            })
+          } else if (node.level == 1) {
+            let months = [];
+            for (let y = month; y <= 12; y++) {
+              months.push({
+                label: y,
+                value: y
+              })
+            }
+            resolve(months)
+          } else if (node.level == 2) {
+            getBcDay(node.parent.value, node.value).then(res => {
+              let days = res.data;
+              let dateList = [];
+              let d = (node.parent.value == self.bcYear && node.value == date.getMonth() + 1) ? day : 1;
+              for (let x = d; x <= days; x++) {
+                dateList.push({
+                  label: x,
+                  value: x,
+                  leaf: true
+                })
+              }
+              resolve(dateList)
+            })
+          }
+        }
+      }
     };
   },
   // 监听属性 类似于data概念
@@ -418,6 +476,10 @@ export default {
       const self = this
       self.data = {}
       self.loadData()
+    },
+    dateChange (e) {
+      let self = this;
+      self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
     }
   }
 };
@@ -430,8 +492,8 @@ export default {
   display: flex;
 }
 .searchBox {
-  // box-sizing: border-box;
-  padding-right: 10px;
+  box-sizing: border-box;
+  padding-right: 24px;
   height: 100%;
 }
 

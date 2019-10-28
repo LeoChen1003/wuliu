@@ -8,49 +8,49 @@
                  tab-position="left"
                  @tab-click="changeTab"
                  style="height:calc(100% - 50px);">
-          <el-tab-pane label="0">
+          <el-tab-pane name="WAITTING">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">{{$t('tracking.Pending')}}<sub class="badge">{{statusCount.WAITTING}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane label="2">
+          <el-tab-pane name="WAIT_DEMAND_TO_ACCEPT">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge">{{statusCount.DEMMANDACCEPT}}</sub></div>
+                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge red">{{statusCount.WAIT_DEMAND_TO_ACCEPT}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="WAIT_SUPPLY_TO_ACCEPT">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.toBeconfirmedOrderbySupply')}}<sub class="badge">{{statusCount.SUPPLYACCEPT}}</sub></div>
+                <div class="text">{{$t('tracking.toBeconfirmedOrderbySupply')}}<sub class="badge">{{statusCount.WAIT_SUPPLY_TO_ACCEPT}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="WILL_PICK">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.tobePickedUp')}}<sub class="badge">{{statusCount.WILLPICK}}</sub></div>
+                <div class="text">{{$t('tracking.tobePickedUp')}}<sub class="badge">{{statusCount.WILL_PICK}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="SENDING">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">{{$t('tracking.intransit')}}<sub class="badge">{{statusCount.SENDING}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="WILL_RETURN">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.documentTobereturned')}}<sub class="badge">{{statusCount.WILLRETURN}}</sub></div>
+                <div class="text">{{$t('tracking.documentTobereturned')}}<sub class="badge">{{statusCount.WILL_RETURN}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="COMPLETE">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">{{$t('tracking.completed')}}<sub class="badge">{{statusCount.COMPLETE}}</sub></div>
@@ -60,12 +60,21 @@
         </el-tabs>
       </div>
       <!-- 表格 -->
-      <div class="container">
+      <div class="container"
+           v-loading="tableLoading">
         <el-table :data="data.content"
                   style="width:98%;"
                   border>
-          <el-table-column :label="$t('tracking.tracking')"
-                           prop="orderNo"></el-table-column>
+          <el-table-column :label="$t('tracking.tracking')">
+            <template slot-scope="scope">
+              <el-button style="width:100%;"
+                         @click="orderLog(scope.row.id)">
+                <div>{{scope.row.orderNo}}</div>
+                <div>{{scope.row.outNumber}}</div>
+                <div>{{scope.row.createdAt}}</div>
+              </el-button>
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
             <template slot-scope="scope"
                       v-if="scope.row.receiverAddress">
@@ -93,11 +102,21 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column v-if="tabActive != '0'">
+          <el-table-column v-if="tabActive != 'WAITTING'">
             <template slot-scope="scope">
-              <el-button type="primary"
-                         v-if="tabActive == '1'"
-                         @click="toShowConfirm(scope.row)">{{$t('tracking.confirm')}}</el-button>
+              <div style="text-align:center;">
+                <el-button type="primary"
+                           v-if="scope.row.status == 'WAIT_DEMAND_TO_ACCEPT'"
+                           @click="toShowConfirm(scope.row)">{{$t('tracking.confirm')}}</el-button>
+                <el-button type="primary"
+                           v-if="scope.row.status == 'COMPLETE' && scope.row.rating == null"
+                           @click="rating(scope.row)">{{$t('tracking.rating')}}</el-button>
+                <el-rate v-if="scope.row.status == 'COMPLETE' && scope.row.rating"
+                         disabled
+                         v-model="scope.row.rating.rating / 2">
+                </el-rate>
+              </div>
+
             </template>
           </el-table-column>
         </el-table>
@@ -136,6 +155,14 @@
                 highlight-current-row
                 @row-click="showRow"
                 border>
+        <!-- <el-table-column width="55">
+          <template slot-scope="scope">
+            <div style="width:100%;text-align:center;">
+              <el-radio class="radio"
+                        v-model="radio"></el-radio>
+            </div>
+          </template>
+        </el-table-column> -->
         <el-table-column :label="$t('tracking.supply')">
           <template slot-scope="scope">
             <div>
@@ -169,19 +196,42 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column width="55">
-          <template slot-scope="scope">
-            <el-radio class="radio"
-                      v-model="radio"
-                      :label="scope.$index">&nbsp;</el-radio>
-          </template>
-        </el-table-column>
-
       </el-table>
       <span slot="footer"
             class="dialog-footer">
         <el-button @click="confirmDialog = false">取 消</el-button>
-        <el-button @click="confirmIt">{{$t('tracking.confirm')}}</el-button>
+        <el-button :disabled="radio === ''"
+                   type="primary"
+                   @click="confirmIt">{{$t('tracking.confirm')}}</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :title="$t('tracking.orderLog')"
+               :visible.sync="logDialog">
+      <el-timeline :reverse="true">
+        <el-timeline-item v-for="(item, index) in logs"
+                          :key="index"
+                          :timestamp="item.createdAt">
+          {{item.introduce}}
+        </el-timeline-item>
+      </el-timeline>
+    </el-dialog>
+    <el-dialog :title="$t('tracking.rating')"
+               :visible.sync="ratingDialog"
+               width="500px">
+      <div style="text-align:center;">
+        <el-rate style="margin-bottom:20px;"
+                 v-model="ratingForm.rating">
+        </el-rate>
+        <el-input v-model="ratingForm.remark"
+                  type="textarea"
+                  :placeholder="$t('tracking.remark')"
+                  resize="none"></el-input>
+      </div>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="ratingDialog = false">取 消</el-button>
+        <el-button type="primary"
+                   @click="ratingConfirm">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -191,7 +241,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty } from '../../api/data'
-import { demandOrderList, demandStatusCount, demandquoteList, demandquoteConfirm } from '../../api/tracking.js'
+import { demandOrderList, demandStatusCount, demandquoteList, demandquoteConfirm, getOrderLog, orderRating } from '../../api/tracking.js'
 
 let self;
 export default {
@@ -201,10 +251,12 @@ export default {
     return {
       data: {},
       quotedata: [],
-      tabActive: '0',
+      tabActive: 'WAITTING',
       statusCount: [],
       printeDialog: false,
       confirmDialog: false,
+      logDialog: false,
+      ratingDialog: false,
       form: {
         category: '',
         subCategory: '',
@@ -237,7 +289,14 @@ export default {
       subtruckObj: {},
       radio: '',
       selected: {},
-      curId: null
+      curId: null,
+      tableLoading: false,
+      logs: [],
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      ratingForm: {
+        rating: 0,
+        remark: ''
+      }
     };
   },
   // 监听属性 类似于data概念
@@ -297,9 +356,11 @@ export default {
   },
   methods: {
     loadData (cb) {
-      const self = this
+      const self = this;
+      self.tableLoading = true;
       demandOrderList({ status: self.tabActive }).then(res => {
         self.data = res.data;
+        self.tableLoading = false;
         if (cb) {
           cb();
         }
@@ -312,7 +373,7 @@ export default {
       })
     },
     pageChange (e) {
-      getRoute({
+      demandOrderList({
         page: e - 1,
       }).then(res => {
         self.data = res.data;
@@ -340,10 +401,35 @@ export default {
     confirmIt () {
       const self = this
       demandquoteConfirm(self.curId, self.selected.id).then(res => {
-        self.confirmDialog = false
         self.$message.success(res.message)
         self.loadData()
+        self.radio = '';
+        self.confirmDialog = false
       })
+    },
+    orderLog (id) {
+      getOrderLog(id).then(res => {
+        self.logs = res.data;
+        self.logDialog = true;
+      })
+    },
+    rating (item) {
+      console.log(item)
+      self.thisId = item.id;
+      self.ratingForm.rating = 0;
+      self.ratingForm.remark = '';
+      self.ratingDialog = true;
+    },
+    ratingConfirm () {
+      console.log(self.ratingForm)
+      if (self.ratingForm.rating == 0) {
+        return self.$message.warning(self.$t('tracking.ratingIsRequired'))
+      }
+      orderRating(self.thisId, self.ratingForm.rating * 2, self.ratingForm.remark)
+        .then(res => {
+          self.ratingDialog = false;
+          self.loadData();
+        })
     }
   }
 };
@@ -377,6 +463,7 @@ export default {
 
 .container {
   width: 90%;
+  margin-top: 28px;
 }
 
 .tabLabel {
@@ -385,8 +472,12 @@ export default {
 
   .badge {
     font-size: 12px;
-    color: red;
     margin-left: 5px;
+    color: #aaa;
+  }
+
+  .red {
+    color: red;
   }
 }
 .formSelect {

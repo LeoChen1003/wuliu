@@ -1,11 +1,16 @@
 <template>
-  <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
+  <div :class="classObj"
+       class="app-wrapper">
+    <div v-if="device==='mobile'&&sidebar.opened"
+         class="drawer-bg"
+         @click="handleClickOutside" />
     <!-- <sidebar class="sidebar-container" /> -->
-    <div :class="{hasTagsView:needTagsView}" class="main-container">
+    <div :class="{hasTagsView:needTagsView}"
+         class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
-        <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+        <breadcrumb id="breadcrumb-container"
+                    class="breadcrumb-container" />
         <!-- <tags-view v-if="needTagsView" /> -->
       </div>
       <app-main />
@@ -43,7 +48,7 @@ export default {
       needTagsView: state => state.settings.tagsView,
       fixedHeader: state => state.settings.fixedHeader
     }),
-    classObj() {
+    classObj () {
       return {
         hideSidebar: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
@@ -53,7 +58,7 @@ export default {
     }
   },
   methods: {
-    handleClickOutside() {
+    handleClickOutside () {
       this.$store.dispatch("app/closeSideBar", { withoutAnimation: false });
     }
   }

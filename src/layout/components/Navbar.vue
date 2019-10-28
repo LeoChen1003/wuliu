@@ -9,7 +9,7 @@
     <div class="right">
       <img src="../../assets/image/logo.png"
            alt="logo"
-           style="margin-right:20px;" />
+           class="logo" />
       <sidebar class />
     </div>
     <div class="left">
@@ -19,7 +19,16 @@
       <el-button @click="logout"
                  type="text"
                  style="color:#333;margin-right:15px;">{{$t('layout.logout')}}</el-button>
-      <LangSelect :toggleLang="true"></LangSelect>
+      <el-popover placement="bottom-start"
+                  width="160">
+        <div>
+          <LangSelect :toggleLang="true"></LangSelect>
+
+        </div>
+        <i slot="reference"
+           class="el-icon-setting"></i>
+      </el-popover>
+
     </div>
   </div>
 </template>
@@ -64,7 +73,7 @@ export default {
   height: 50px;
   width: 100%;
   overflow: hidden;
-  background: #fff;
+  background: #ffea33;
   display: flex;
   justify-content: space-between;
   padding: 0 15px;
@@ -88,5 +97,10 @@ export default {
 }
 .nest-menu .el-menu-item {
   width: 210px;
+}
+
+.logo {
+  width: 100px;
+  margin-right: 20px;
 }
 </style>

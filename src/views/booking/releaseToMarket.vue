@@ -679,7 +679,6 @@ export default {
     // 下单
     todoIt () {
       const self = this
-      console.log(self.releaseForm)
       this.$refs.releaseform.validate(valid => {
         if (valid) {
           self.todoLoading = true

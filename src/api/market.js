@@ -17,3 +17,11 @@ export function quoteOrder(order_id, data) {
     data
   })
 }
+
+// 订单进度
+export function getOrderLog(id) {
+  return request({
+    url: `/api/supply/order/${id}/log`,
+    method: 'get'
+  })
+}
