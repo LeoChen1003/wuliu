@@ -5,48 +5,48 @@
     </div> -->
     <div style="display:flex;box-sizing:border-box;padding:0 20px;">
       <!-- 导航 -->
-      <div style="height:100%;">
+      <div style="height:100%;padding-right:18px;">
         <div class="statusText">{{ $t('billing.billingStatus') }}</div>
         <el-tabs v-model="tabActive"
                  tab-position="left"
                  @tab-click="tabChange"
                  style="height:calc(100% - 50px);">
-          <el-tab-pane label="1">
+          <el-tab-pane name="WAIT_DEMAND_TO_ACCEPT">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge">{{orderStatus.DEMANDACCEPT}}</sub></div>
+                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge">{{orderStatus.WAIT_DEMAND_TO_ACCEPT}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane label="2">
+          <el-tab-pane name="WAIT_SUPPLY_TO_ACCEPT">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.toBeconfirmedOrderbySupply')}}<sub class="badge red">{{orderStatus.SUPPLYACCEPT}}</sub></div>
+                <div class="text">{{$t('tracking.toBeconfirmedOrderbySupply')}}<sub class="badge red">{{orderStatus.WAIT_SUPPLY_TO_ACCEPT}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane label="3">
+          <el-tab-pane name="WILL_PICK">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.tobePickedUp')}}<sub class="badge red">{{orderStatus.WILLPICK}}</sub></div>
+                <div class="text">{{$t('tracking.tobePickedUp')}}<sub class="badge red">{{orderStatus.WILL_PICK}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane label="4">
+          <el-tab-pane name="SENDING">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">{{$t('tracking.intransit')}}<sub class="badge">{{orderStatus.SENDING}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane label="5">
+          <el-tab-pane name="WILL_RETURN">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.documentTobereturned')}}<sub class="badge">{{orderStatus.WILLRETURN}}</sub></div>
+                <div class="text">{{$t('tracking.documentTobereturned')}}<sub class="badge">{{orderStatus.WILL_RETURN}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane label="6">
+          <el-tab-pane name="COMPLETE">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">{{$t('tracking.completed')}}<sub class="badge">{{orderStatus.COMPLETE}}</sub></div>
@@ -125,10 +125,10 @@
               <div style="text-align:center;">
                 <!-- <el-button v-if="scope.row.status == '1' || scope.row.status == '2'"
                            type="primary">{{$t('tracking.print')}}</el-button> -->
-                <el-button v-if="scope.row.status == '2'"
+                <el-button v-if="scope.row.status == 'WAIT_SUPPLY_TO_ACCEPT'"
                            @click="confirmB(scope.row)"
                            type="primary">{{$t('tracking.confirm')}}</el-button>
-                <el-button v-if="scope.row.status == '3' && scope.row.transport.driverName == null"
+                <el-button v-if="scope.row.status == 'WILL_PICK' && scope.row.transport.driverName == null"
                            @click="confirmB(scope.row)"
                            type="primary">{{$t('tracking.confirm')}}</el-button>
               </div>
@@ -299,7 +299,7 @@ export default {
     return {
       orderList: [],
       data: {},
-      tabActive: '0',
+      tabActive: 'WAIT_DEMAND_TO_ACCEPT',
       printeDialog: false,
       editDialog: false,
       confirmDialog: false,
@@ -334,12 +334,12 @@ export default {
       unitObj: {},
       orderStatus: {
         COMPLETE: 0,
-        DEMANDACCEPT: 0,
+        WAIT_DEMAND_TO_ACCEPT: 0,
         SENDING: 0,
-        SUPPLYACCEPT: 0,
+        WAIT_SUPPLY_TO_ACCEPT: 0,
         WAITTING: 0,
-        WILLPICK: 0,
-        WILLRETURN: 0,
+        WILL_PICK: 0,
+        WILL_RETURN: 0,
       },
       orderInfo: null,
       td: {},
@@ -412,7 +412,7 @@ export default {
       self.loading = true;
       let page = self.data.number ? self.data.number : 0;
       getOrder({
-        status: parseInt(self.tabActive) + 1,
+        status: self.tabActive,
         page: page,
       }).then(res => {
         self.data = res.data;
@@ -428,7 +428,7 @@ export default {
     pageChange (e) {
       self.loading = true;
       getOrder({
-        status: parseInt(self.tabActive) + 1,
+        status: self.tabActive,
         page: e - 1,
       }).then(res => {
         self.data = res.data;
@@ -446,7 +446,7 @@ export default {
     },
     confirmIt () {
       self.confirmLoading = true;
-      if (self.orderInfo.status == 1) {
+      if (self.orderInfo.status == 'WAIT_DEMAND_TO_ACCEPT') {
         confirmOrder(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(res => {
           self.loadData(() => {
             self.confirmDialog = false;
@@ -458,7 +458,7 @@ export default {
             self.confirmLoading = false;
           });
         })
-      } else if (self.orderInfo.status == 3) {
+      } else if (self.orderInfo.status == 'WILL_PICK') {
         updateOrderInfo(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(res => {
           self.loadData(() => {
             self.confirmDialog = false;

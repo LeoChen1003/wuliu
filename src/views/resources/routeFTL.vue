@@ -186,8 +186,7 @@
                             required>
                 <el-select v-model="form.fromProvinceCode"
                            class="formSelect"
-                           filterable
-                           placeholder="province">
+                           filterable>
                   <el-option v-for="(item,index) in provinceList"
                              :key='index'
                              :label="item.name"
@@ -199,9 +198,9 @@
                             required>
                 <el-select v-model="form.toProvinceCode"
                            filterable
+                           multiple
                            @change="toProvinceCodeChange"
-                           class="formSelect"
-                           placeholder="city">
+                           class="formSelect">
                   <el-option v-for="(item,index) in provinceList"
                              :key='index'
                              :label="item.name"
@@ -285,8 +284,8 @@
                              :value="item">
                   </el-option>
                 </el-select>
-                <el-button @click="refc"
-                           type="primary">{{$t('resources.inverse')}}</el-button>
+                <el-button @click="checkAll"
+                           type="primary">{{ allChecked ? $t('resources.deselectAll') : $t('resources.checkAll') }}</el-button>
               </div>
               <div class="date-list"
                    v-loading="dateLoading">
@@ -355,8 +354,8 @@
 </template>
 
 <script>
-import { getProvinceList, getCityList, getTruckType, getSupplyTD } from '@/api/data'
-import { getRoute, addRoute, updateRoute, getBcYear, getBcDay } from '@/api/resources'
+import { getProvinceList, getCityList, getTruckType, getSupplyTD, getBcYear, getBcDay } from '@/api/data'
+import { getRoute, addRoute, updateRoute } from '@/api/resources'
 
 let self;
 export default {
@@ -371,7 +370,7 @@ export default {
         subCategory: '',
         finishedAt: '',
         fromProvinceCode: '',
-        toProvinceCode: '',
+        toProvinceCode: [],
         supportLoading: '',
         humanWorkDay: '',
         moneyPerDay: '',
@@ -413,7 +412,8 @@ export default {
       thisRow: {},
       dateLoading: false,
       cityLoading: false,
-      loading: false
+      loading: false,
+      allChecked: false
     };
   },
   //监听属性 类似于data概念
@@ -512,6 +512,9 @@ export default {
     // 添加按钮
     add () {
       self.editType = 'add';
+      if (self.$refs.form) {
+        self.resetForm();
+      }
       self.editDialog = true;
     },
     // 编辑按钮
@@ -588,8 +591,20 @@ export default {
     },
     resetForm () {
       self.editDialog = false;
-      self.form.cityList = [];
-      self.form.dateList = [];
+      self.form = {
+        category: '',
+        subCategory: '',
+        finishedAt: '',
+        fromProvinceCode: '',
+        toProvinceCode: [],
+        supportLoading: '',
+        humanWorkDay: '',
+        moneyPerDay: '',
+        cityList: [],
+        dateList: [],
+        truckId: '',
+        status: ''
+      }
       self.sendDateList = [];
       this.$refs.form.resetFields();
     },
@@ -605,8 +620,8 @@ export default {
       }
       this.$forceUpdate();
     },
-    // 反选
-    refc () {
+    // 全选/取消全选
+    checkAll () {
       for (let x in self.dateList) {
         self.tapDay(self.dateList[x])
       }
@@ -616,6 +631,14 @@ export default {
     },
     showDateChange (e) {
       self.getDay('show');
+    },
+    checkAllCheck () {
+      for (let x in self.dateList) {
+        if (!self.showDateList[x]) {
+          console.log(x)
+          return self.checkAll = false;
+        }
+      }
     },
     getDay (type) {
       if (type == 'edit') {
@@ -628,6 +651,7 @@ export default {
             dateList['show_' + self.date.year + '_' + self.date.month + '_' + x] = x
           }
           self.dateList = dateList;
+          self.checkAllCheck();
           self.dateLoading = false;
         })
       } else {
@@ -644,10 +668,12 @@ export default {
     },
     // 目的地省改变
     toProvinceCodeChange (e) {
+      let params = '';
+      for (let x in e) {
+        params += `${x == 0 ? '' : '&'}provinceCodes=${e[x]}`
+      }
       self.cityLoading = true;
-      getCityList({
-        provinceCode: e
-      }).then(res => {
+      getCityList(params).then(res => {
         let cityList = [];
         for (let i of res.data) {
           cityList.push({
@@ -767,12 +793,5 @@ export default {
   .edit-right {
     width: 550px;
   }
-}
-</style>
-<style>
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none !important;
-  margin: 0;
 }
 </style>

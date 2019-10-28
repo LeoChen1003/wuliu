@@ -51,9 +51,8 @@ export function getProvinceList() {
 // 所有市
 export function getCityList(params) {
   return request({
-    url: '/misc/geo/city/list',
+    url: '/misc/geo/city/list?' + params,
     method: 'get',
-    params
   })
 }
 
@@ -96,6 +95,22 @@ export function getExtraServer() {
 export function getSupplyTD() {
   return request({
     url: '/api/supply/list/my/td',
+    method: 'get'
+  })
+}
+
+// 获取佛历年
+export function getBcYear() {
+  return request({
+    url: '/misc/date/bc/year',
+    method: 'get'
+  })
+}
+
+// 获取当月天数
+export function getBcDay(year, month) {
+  return request({
+    url: `/misc/date/bc/days?bcYear=${year}&month=${month}`,
     method: 'get'
   })
 }

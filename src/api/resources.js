@@ -79,19 +79,3 @@ export function updateRoute(id, data) {
     data
   })
 }
-
-// 获取佛历年
-export function getBcYear() {
-  return request({
-    url: '/misc/date/bc/year',
-    method: 'get'
-  })
-}
-
-// 获取当月天数
-export function getBcDay(year, month) {
-  return request({
-    url: `/misc/date/bc/days?bcYear=${year}&month=${month}`,
-    method: 'get'
-  })
-}

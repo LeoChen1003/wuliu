@@ -8,49 +8,49 @@
                  tab-position="left"
                  @tab-click="changeTab"
                  style="height:calc(100% - 50px);">
-          <el-tab-pane label="0">
+          <el-tab-pane name="WAITTING">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">{{$t('tracking.Pending')}}<sub class="badge">{{statusCount.WAITTING}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane label="2">
+          <el-tab-pane name="WAIT_DEMAND_TO_ACCEPT">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge red">{{statusCount.DEMANDACCEPT}}</sub></div>
+                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge red">{{statusCount.WAIT_DEMAND_TO_ACCEPT}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="WAIT_SUPPLY_TO_ACCEPT">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.toBeconfirmedOrderbySupply')}}<sub class="badge">{{statusCount.SUPPLYACCEPT}}</sub></div>
+                <div class="text">{{$t('tracking.toBeconfirmedOrderbySupply')}}<sub class="badge">{{statusCount.WAIT_SUPPLY_TO_ACCEPT}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="WILL_PICK">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.tobePickedUp')}}<sub class="badge">{{statusCount.WILLPICK}}</sub></div>
+                <div class="text">{{$t('tracking.tobePickedUp')}}<sub class="badge">{{statusCount.WILL_PICK}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="SENDING">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">{{$t('tracking.intransit')}}<sub class="badge">{{statusCount.SENDING}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="WILL_RETURN">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.documentTobereturned')}}<sub class="badge">{{statusCount.WILLRETURN}}</sub></div>
+                <div class="text">{{$t('tracking.documentTobereturned')}}<sub class="badge">{{statusCount.WILL_RETURN}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="COMPLETE">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">{{$t('tracking.completed')}}<sub class="badge">{{statusCount.COMPLETE}}</sub></div>
@@ -102,16 +102,16 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column v-if="tabActive != '0'">
+          <el-table-column v-if="tabActive != 'WAITTING'">
             <template slot-scope="scope">
               <div style="text-align:center;">
                 <el-button type="primary"
-                           v-if="scope.row.status == '1'"
+                           v-if="scope.row.status == 'WAIT_DEMAND_TO_ACCEPT'"
                            @click="toShowConfirm(scope.row)">{{$t('tracking.confirm')}}</el-button>
                 <el-button type="primary"
-                           v-if="scope.row.status == '6' && scope.row.rating == null"
+                           v-if="scope.row.status == 'COMPLETE' && scope.row.rating == null"
                            @click="rating(scope.row)">{{$t('tracking.rating')}}</el-button>
-                <el-rate v-if="scope.row.status == '6' && scope.row.rating"
+                <el-rate v-if="scope.row.status == 'COMPLETE' && scope.row.rating"
                          disabled
                          v-model="scope.row.rating.rating / 2">
                 </el-rate>
@@ -251,7 +251,7 @@ export default {
     return {
       data: {},
       quotedata: [],
-      tabActive: '0',
+      tabActive: 'WAITTING',
       statusCount: [],
       printeDialog: false,
       confirmDialog: false,
@@ -373,7 +373,7 @@ export default {
       })
     },
     pageChange (e) {
-      getRoute({
+      demandOrderList({
         page: e - 1,
       }).then(res => {
         self.data = res.data;
@@ -463,6 +463,7 @@ export default {
 
 .container {
   width: 90%;
+  margin-top: 28px;
 }
 
 .tabLabel {

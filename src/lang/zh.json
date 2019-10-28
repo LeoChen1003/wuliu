@@ -155,7 +155,7 @@
     "status": "订单状态",
     "Pending": "待运输公司抢单",
     "toBeconfirmedOrderbyDemand": "待需求方确认",
-    "toBeconfirmedOrderbySupply": "待运输公司确定订单",
+    "toBeconfirmedOrderbySupply": "待运输公司确认订单",
     "tobePickedUp": "待运输公司取件",
     "intransit": "运输中",
     "documentTobereturned": "待返回文件",
@@ -245,7 +245,9 @@
     "destination_Dsitrict": "目的地(市)",
     "transitTime": "运输天数",
     "dst": "目的地(市)",
-    "distance": "距离"
+    "distance": "距离",
+    "deselectAll": "取消全选",
+    "checkAll": "全选"
   },
   "billing": {
     "billingStatus": "订单状态",

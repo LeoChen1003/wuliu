@@ -15,7 +15,8 @@
                  size="small">
           <div class="login-header">
             <img src="../../assets/image/logo.png"
-                 alt="logo" />
+                 alt="logo"
+                 class="logo" />
             <LangSelect :toggle-lang="true"
                         class="langBtn" />
           </div>
@@ -696,6 +697,10 @@ export default {
       justify-content: center;
     }
   }
+}
+
+.logo {
+  width: 110px;
 }
 
 .loginIcon {

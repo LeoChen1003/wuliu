@@ -9,7 +9,7 @@
     <div class="right">
       <img src="../../assets/image/logo.png"
            alt="logo"
-           style="margin-right:20px;" />
+           class="logo" />
       <sidebar class />
     </div>
     <div class="left">
@@ -73,7 +73,7 @@ export default {
   height: 50px;
   width: 100%;
   overflow: hidden;
-  background: #fff;
+  background: #ffea33;
   display: flex;
   justify-content: space-between;
   padding: 0 15px;
@@ -97,5 +97,10 @@ export default {
 }
 .nest-menu .el-menu-item {
   width: 210px;
+}
+
+.logo {
+  width: 100px;
+  margin-right: 20px;
 }
 </style>
