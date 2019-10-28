@@ -19,7 +19,16 @@
       <el-button @click="logout"
                  type="text"
                  style="color:#333;margin-right:15px;">{{$t('layout.logout')}}</el-button>
-      <LangSelect :toggleLang="true"></LangSelect>
+      <el-popover placement="bottom-start"
+                  width="160">
+        <div>
+          <LangSelect :toggleLang="true"></LangSelect>
+
+        </div>
+        <i slot="reference"
+           class="el-icon-setting"></i>
+      </el-popover>
+
     </div>
   </div>
 </template>

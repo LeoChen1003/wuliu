@@ -1,20 +1,13 @@
 <template>
-  <el-dropdown trigger="click"
-               class="international"
-               @command="handleSetLanguage">
-    <div>
-      <svg-icon class-name="international-icon"
-                icon-class="language" />
-    </div>
-    <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item :disabled="language==='zh_CN'"
-                        command="zh_CN">中文</el-dropdown-item>
-      <el-dropdown-item :disabled="language==='en_US'"
-                        command="en_US">English</el-dropdown-item>
-      <el-dropdown-item :disabled="language==='th_TH'"
-                        command="th_TH">ไทย</el-dropdown-item>
-    </el-dropdown-menu>
-  </el-dropdown>
+  <el-select v-model="language"
+             @change="handleSetLanguage">
+    <el-option label="English"
+               value="en_US"></el-option>
+    <el-option label="中文"
+               value="zh_CN"></el-option>
+    <el-option label="ไทย"
+               value="th_TH"></el-option>
+  </el-select>
 </template>
 
 <script>

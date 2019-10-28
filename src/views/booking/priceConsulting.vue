@@ -37,7 +37,7 @@
                 <el-option v-for="item in pickUpRegionList"
                            :key="item.fullname"
                            :label="item.fullname"
-                           :value="item.code">
+                           :value="item.provinceCode">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -73,7 +73,7 @@
                 <el-option v-for="item in delRegionList"
                            :key="item.fullname"
                            :label="item.fullname"
-                           :value="item.code">
+                           :value="item.cityCode">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -371,15 +371,18 @@ export default {
     },
     // 搜索
     searchSupply () {
+      let self = this;
+      console.log(self.searchForm)
       this.$refs.searchform.validate(valid => {
+        let searchForm = JSON.parse(JSON.stringify(self.searchForm));
         if (valid) {
-          const self = this
           self.searchloading = true
+
           if (self.time) {
-            self.searchForm.pickUpDate += ' ' + self.time
+            searchForm.pickUpDate += ' ' + self.time
           }
           if (self.logisticType == 'FTL') {
-            ftlLine(self.searchForm, {
+            ftlLine(searchForm, {
               page: self.page.currentPage - 1,
               pagesize: self.pagesize
             }).then(res => {
