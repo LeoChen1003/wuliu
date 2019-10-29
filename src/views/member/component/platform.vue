@@ -3,12 +3,12 @@
     <el-table :data="dataList"
               border
               :cell-style="cell">
-      <el-table-column prop="auditAt"
+      <el-table-column prop="createdAt"
                        :label="$t('member.dateOfSubmission')">
-        <template slot-scope="scope"
+        <!-- <template slot-scope="scope"
                   v-if="scope.row.auditAt">
           {{scope.row.auditAt.slice(0,10) + ' ' +scope.row.auditAt.slice(11,19)}}
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column prop="phone"
                        :label="$t('member.platform_name')">

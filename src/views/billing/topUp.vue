@@ -220,7 +220,7 @@ export default {
       topUpRules: {
         fee_ype: [{ required: true }],
         operate_at: [
-          { required: true, trigger: "change", validator: validateTimeAt }
+          { required: true, trigger: "blur", validator: validateTimeAt }
         ],
         amount: [{ required: true, trigger: 'blur' }],
         resource_id: [{ required: true }]
@@ -249,6 +249,7 @@ export default {
       self.topUpform.operate_at = val + ` ${t}`
     },
     time (val) {
+      let t = val ? val : '00:00:00'
       self.topUpform.operate_at = self.time_at + ` ${val}`
     }
   },
