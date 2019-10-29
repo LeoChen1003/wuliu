@@ -10,7 +10,6 @@ import getPageTitle from '@/utils/get-page-title'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
-
 router.beforeEach(async (to, from, next) => {
   // start progress bar
   NProgress.start()
@@ -35,7 +34,7 @@ router.beforeEach(async (to, from, next) => {
               localStorage.curRole = res.roles[0].name.toUpperCase()
             } else {
               let arr = res.chosenRoles.split(',')
-              localStorage.curRole = arr[0];
+              localStorage.curRole = arr[0]
             }
           })
           const accessRoutes = await store.dispatch(
@@ -47,6 +46,7 @@ router.beforeEach(async (to, from, next) => {
           router.options.routes = store.getters.permission_routes
           next()
         } else {
+          
           next()
         }
       } else {

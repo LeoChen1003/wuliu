@@ -9,15 +9,21 @@
       <el-option label="ไทย"
                  value="th_TH"></el-option>
     </el-select>
-    <el-button type="primary"
-               :key='index'
-               v-for="(item,index) in roles">
-      {{item}}
-    </el-button>
+    <div class="btnWrapper">
+      <el-button type="primary"
+                 class="versionBtn"
+                 :key='index'
+                 @click="changeVer(item)"
+                 size="mini"
+                 v-for="(item,index) in roles">
+        {{item}}
+      </el-button>
+    </div>
   </div>
 </template>
 
 <script>
+
 export default {
   computed: {
     language () {
@@ -35,7 +41,28 @@ export default {
       //   message: 'Switch Language Success',
       //   type: 'success'
       // })
+    },
+    changeVer (ver) {
+      let self = this;
+      console.log(ver)
+      self.$store.dispatch(
+        'user/chooseRole',
+        ver
+      )
+      localStorage.curRole = ver;
+      self.$router.push('/home')
     }
   },
 }
 </script>
+<style scope lang="scss">
+.btnWrapper {
+  box-sizing: border-box;
+  padding-top: 10px;
+}
+
+.versionBtn {
+  width: 100%;
+  margin: 0 0 5px 0 !important;
+}
+</style>
