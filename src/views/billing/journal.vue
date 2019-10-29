@@ -3,13 +3,14 @@
     <div class="statusHeader">
       <div class="status-txt">{{ $t('billing.account') }}</div>
       <div class="timePicker">
-        <el-date-picker v-model="value1"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        value-format='yyyy-MM-dd'
-                        size="small" />
+        <bcTime @changeBCtime="changeBCtimeFrom"
+                :timeType="'all'"
+                :dateDefault='fromDateDeFault'></bcTime>
+        <span style="margin:0 5px;">至</span>
+        <bcTime @changeBCtime="changeBCtimeTo"
+                :dateDefault='toDateDeFault'
+                style="margin-left:5px;"
+                :timeType="'all'"></bcTime>
         <el-button size="small"
                    @click="searchIt"
                    style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button>
@@ -75,19 +76,21 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { journalList } from '../../api/billing'
-import { getTime, parseTime } from '../../utils/index'
-console.log(getTime('end'))
-var date = new Date().getTime();
-console.log([parseTime((new Date().getTime() - 3600 * 1000 * 24 * 30), '{y}-{m}-{d}'), parseTime(new Date().getTime(), '{y}-{m}-{d}')])
-
+import { getTime, parseTime, getLastMonthTime } from '../../utils/index'
+import bcTime from "@/components/bcTime";
+let self
 export default {
   // import引入的组件需要注入到对象中才能使用
-  components: {},
+  components: {
+    bcTime
+  },
   data () {
     return {
       tabActive: 'GUARANTEE',
       applyType: localStorage.getItem('curRole'),
-      value1: [parseTime((new Date().getTime() - 3600 * 1000 * 24 * 30), '{y}-{m}-{d}'), parseTime(new Date().getTime(), '{y}-{m}-{d}')],
+      // value1: [parseTime((new Date().getTime() - 3600 * 1000 * 24 * 30), '{y}-{m}-{d}'), parseTime(new Date().getTime(), '{y}-{m}-{d}')],
+      fromDate: getLastMonthTime(new Date()),
+      toDate: parseTime(new Date().getTime(), '{y}-{m}-{d}'),
       dataList: [],
       page: {
         total: 0,
@@ -97,10 +100,22 @@ export default {
     };
   },
   // 监听属性 类似于data概念
-  computed: {},
+  computed: {
+    fromDateDeFault () {
+      console.log(self.fromDate.split('-'))
+      return self.fromDate.split('-')
+    },
+    toDateDeFault () {
+      console.log(self.toDate.split('-'))
+      return self.toDate.split('-')
+    },
+
+  },
   // 监控data中的数据变化
   watch: {},
-  created () { },
+  created () {
+    self = this
+  },
   mounted () {
     this.getJournalList()
   },
@@ -110,8 +125,8 @@ export default {
       journalList({
         accountType: self.tabActive,
         applyType: self.applyType,
-        fromDate: self.value1[0],
-        toDate: self.value1[1],
+        fromDate: self.fromDate,
+        toDate: self.toDate,
         page: self.page.currentPage - 1,
         pagesize: self.pagesize
       }).then(res => {
@@ -138,6 +153,16 @@ export default {
       self.pagesize = val
       self.getJournalList()
     },
+    changeBCtimeFrom (time) {
+      const self = this
+      self.fromDate = time
+      console.log(time)
+    },
+    changeBCtimeTo (time) {
+      const self = this
+      self.toDate = time
+      console.log(time)
+    }
   }
 };
 </script>
@@ -167,6 +192,8 @@ export default {
     height: 42px;
     line-height: 40px;
     padding-left: 30px;
+    display: flex;
+    align-items: center;
   }
   .content {
     padding-left: 25px;
