@@ -129,7 +129,7 @@ export const asyncRoutes = [
       {
         path: 'routeLTL',
         component: () => import('@/views/resources/routeLTL'),
-        meta: { title: 'routeFTL', roles: ['SUPPLY'] }
+        meta: { title: 'routeLTL', roles: ['SUPPLY'] }
       },
       {
         path: 'planningLTL',

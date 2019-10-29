@@ -45,14 +45,16 @@
                           :label="$t('booking.pickupTime')">
               <div style="display:flex;"
                    class="inputWidth">
-                <el-date-picker v-model="searchForm.pickUpDate"
-                                type="date"
-                                value-format='yyyy-MM-dd'
-                                style="margin-right:5px;"
-                                :placeholder="$t('placeholder.chooseDate')">
-                </el-date-picker>
+                <el-cascader v-model="dateCascader"
+                             class="innerInp"
+                             :options="options"
+                             :props="props"
+                             separator='-'
+                             style="margin-right:5px;"
+                             @change="dateChange"></el-cascader>
                 <el-time-picker v-model="time"
                                 format="HH:mm:ss"
+                                class="innerInp"
                                 value-format='HH:mm:ss'
                                 :placeholder="$t('placeholder.chooseTime')">
                 </el-time-picker>
@@ -79,30 +81,30 @@
             </el-form-item>
             <el-form-item prop="truckCategory"
                           :label="$t('booking.truckType')">
-              <el-select v-model="searchForm.truckCategory"
-                         :placeholder="$t('placeholder.pleaseChoose')"
-                         style="width:45%;">
-                <el-option v-for="item in categoryList"
-                           :key="item.key"
-                           :label="item.value"
-                           :value="item.key" />
-              </el-select>
-              <el-select v-model="searchForm.truckSubCategory"
-                         :placeholder="$t('placeholder.pleaseChoose')"
-                         style="width:45%;">
-                <el-option v-for="item in subCategoryList"
-                           :key="item.key"
-                           :label="item.value"
-                           :value="item.key" />
-              </el-select>
+              <div class="inputWidth">
+                <el-select v-model="searchForm.truckCategory"
+                           class="innerInp"
+                           :placeholder="$t('placeholder.pleaseChoose')">
+                  <el-option v-for="item in categoryList"
+                             :key="item.key"
+                             :label="item.value"
+                             :value="item.key" />
+                </el-select>
+                <el-select v-model="searchForm.truckSubCategory"
+                           class="innerInp"
+                           :placeholder="$t('placeholder.pleaseChoose')">
+                  <el-option v-for="item in subCategoryList"
+                             :key="item.key"
+                             :label="item.value"
+                             :value="item.key" />
+                </el-select>
+              </div>
             </el-form-item>
             <el-form-item>
-              <div style="display:flex;justify-content:center;align-items:center;width:90%;margin-top:20px;">
-                <el-button type="primary"
-                           @click="searchSupply"
-                           :loading="searchloading"
-                           class="inputWidth">{{ $t('booking.searchSupply') }}</el-button>
-              </div>
+              <el-button type="primary"
+                         @click="searchSupply"
+                         style="width:100%;"
+                         :loading="searchloading">{{ $t('booking.searchSupply') }}</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -111,35 +113,56 @@
               style="height:100%;overflow:scroll;">
         <el-table :data="tableList"
                   border
-                  style="width: 97%;margin-left:20px;">
-          <el-table-column :label="$t('booking.supply')">
+                  style="width: 97%;">
+          <el-table-column :label="$t('booking.supply')"
+                           align="center">
             <template slot-scope="scope">
-              <div class="table_supply">
-                <div class="item">{{scope.row.site? scope.row.site.companyName :''}}</div>
-                <div class="item">
-                  <div>{{$t('booking.loading')}}/{{$t('booking.unloading')}} : <i :class="scope.row.supportLoading == 1?'el-icon-check':'el-icon-close'"></i></div>
+              <div>
+                <div>{{scope.row.supply ? scope.row.supply.name : ''}}</div>
+                <div>
+                  <div>
+                    <el-rate v-model="3.5"
+                             disabled
+                             text-color="#ff9900"
+                             score-template="{value}">
+                    </el-rate>
+                  </div>
                 </div>
               </div>
             </template>
           </el-table-column>
           <el-table-column width="250"
+                           align="center"
                            :label="$t('booking.route')">
             <template slot-scope="scope">
               <div>
-                {{ scope.row.fromProvince }} --> {{ scope.row.toCity }}
+                {{ scope.row.fromProvince }} --> {{ scope.row.toProvinceName }}
               </div>
               <div>
-                {{$t('booking.transitTime')}} : {{scope.row.transitTime}}days
+                <!-- {{$t('booking.transitTime')}} :  -->
+                {{scope.row.transitTime}} days
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column header-align="center"
+                           align="center"
+                           :label="$t('booking.valueAddedService')">
+            <template slot-scope="scope">
+              <div>
+                <div>{{$t('booking.loading')}}/{{$t('booking.unloading')}} : <i :class="scope.row.supportLoading == 1?'el-icon-check':'el-icon-close'"></i></div>
+                <div>{{$t('booking.documentReturn')}} : <i class="el-icon-check"></i></div>
               </div>
             </template>
           </el-table-column>
           <el-table-column width="250"
+                           align="center"
                            :label="$t('booking.price')">
             <template slot-scope="scope">
-              <div>{{$t('booking.feight')}} : {{scope.row.charge}}</div>
-              <div v-if="scope.row.supportLoading == 1">{{$t('booking.loading')}}/{{$t('booking.unloading')}} : {{scope.row.loadingOrUnloadingHumanWorkDay*scope.row.moneyPerDay}}</div>
+              {{scope.row.charge}}
+              <!-- <div>{{$t('booking.feight')}} : {{scope.row.charge}}</div>
+              <div v-if="scope.row.supportLoading == 1">{{$t('booking.loading')}}/{{$t('booking.unloading')}} : {{scope.row.loadingOrUnloadingHumanWorkDay * scope.row.moneyPerDay}}</div>
               <div>{{$t('booking.documentReturn')}} :{{documentReturn}}</div>
-              <div>{{$t('booking.totalamt')}} : {{10+scope.row.charge+(scope.row.supportLoading == 1?scope.row.loadingOrUnloadingHumanWorkDay*scope.row.moneyPerDay:0)}}</div>
+              <div>{{$t('booking.totalamt')}} : {{10 + scope.row.charge + (scope.row.supportLoading == 1 ? scope.row.loadingOrUnloadingHumanWorkDay * scope.row.moneyPerDay : 0)}}</div> -->
             </template>
           </el-table-column>
           <el-table-column width='95'>
@@ -167,7 +190,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { ftlLine } from '../../api/booking';
-import { getTruckType, findDistrictFullList } from '../../api/data'
+import { getTruckType, findDistrictFullList, getBcYear, getBcDay } from '../../api/data'
 import Search from '@/components/HeaderSearch';
 
 export default {
@@ -247,7 +270,55 @@ export default {
         currentPage: 1
       },
       pagesize: 20,
-      documentReturn: 10
+      documentReturn: 10,
+      bcYear: '',
+      dateCascader: '',
+      props: {
+        lazy: true,
+        lazyLoad (node, resolve) {
+          let year = self.bcYear;
+          let date = new Date();
+          let month = node.label == year ? date.getMonth() + 1 : 1;
+          let day = date.getDate();
+          let options = [];
+          if (node.level == 0) {
+            getBcYear().then(res => {
+              self.bcYear = res.data;
+              let years = [{
+                label: self.bcYear,
+                value: self.bcYear
+              }, {
+                label: self.bcYear + 1,
+                value: self.bcYear + 1
+              }]
+              resolve(years);
+            })
+          } else if (node.level == 1) {
+            let months = [];
+            for (let y = month; y <= 12; y++) {
+              months.push({
+                label: y,
+                value: y
+              })
+            }
+            resolve(months)
+          } else if (node.level == 2) {
+            getBcDay(node.parent.value, node.value).then(res => {
+              let days = res.data;
+              let dateList = [];
+              let d = (node.parent.value == self.bcYear && node.value == date.getMonth() + 1) ? day : 1;
+              for (let x = d; x <= days; x++) {
+                dateList.push({
+                  label: x,
+                  value: x,
+                  leaf: true
+                })
+              }
+              resolve(dateList)
+            })
+          }
+        }
+      }
     };
   },
   // 监听属性 类似于data概念
@@ -263,7 +334,6 @@ export default {
     })
     if (self.$route.query.return == 1) {
       let consultInfo = JSON.parse(localStorage.getItem('consultInfo'))
-      console.log(consultInfo)
       self.searchForm = consultInfo.searchForm
       self.logisticType = consultInfo.logisticType
       self.time = consultInfo.time
@@ -287,7 +357,6 @@ export default {
     },
     pickUpMethod (query) {
       const self = this
-      console.log(query)
       if (query !== '') {
         if (self.curSelect == 'pk') {
           self.pickUpQuery = query
@@ -352,15 +421,17 @@ export default {
     },
     // 搜索
     searchSupply () {
+      let self = this;
       this.$refs.searchform.validate(valid => {
+        let searchForm = JSON.parse(JSON.stringify(self.searchForm));
         if (valid) {
-          const self = this
           self.searchloading = true
+
           if (self.time) {
-            self.searchForm.pickUpDate += ' ' + self.time
+            searchForm.pickUpDate += ' ' + self.time
           }
           if (self.logisticType == 'FTL') {
-            ftlLine(self.searchForm, {
+            ftlLine(searchForm, {
               page: self.page.currentPage - 1,
               pagesize: self.pagesize
             }).then(res => {
@@ -387,6 +458,10 @@ export default {
       self.pagesize = val
       self.searchSupply()
     },
+    dateChange (e) {
+      let self = this;
+      self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
+    }
   }
 };
 </script>
@@ -397,7 +472,8 @@ export default {
   box-sizing: border-box;
   padding-left: 20px;
   .searchBox {
-    border-right: 2px solid #dfe4ed;
+    padding-right: 24px;
+    box-sizing: border-box;
   }
   .table_supply {
     display: flex;
@@ -411,10 +487,17 @@ export default {
   }
 }
 .inputWidth {
-  width: 90%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
 }
 ::-webkit-scrollbar {
   /*隐藏滚轮*/
   display: none;
+}
+
+.innerInp {
+  width: 48%;
 }
 </style>

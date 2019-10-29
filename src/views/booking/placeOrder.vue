@@ -5,7 +5,7 @@
         <el-alert class="rejectMsg"
                   show-icon
                   :closable="false"
-                  :title="`${$t('title.TheCurrentlySelectedSupplyIs')} ${consultInfo.data.site.companyName}，${$t('title.TomodifyPleaseClickButton')}`"
+                  :title="`${$t('title.TheCurrentlySelectedSupplyIs')} ${consultInfo.data.supply.name}，${$t('title.TomodifyPleaseClickButton')}`"
                   type="info"></el-alert>
         <el-button style="width:200px;margin-left:20px;"
                    size="small"
@@ -619,6 +619,7 @@ export default {
     const self = this
     let consultInfo = JSON.parse(localStorage.getItem('consultInfo'))
     self.consultInfo = consultInfo
+    console.log(consultInfo)
   },
   mounted () {
     const self = this
@@ -629,19 +630,20 @@ export default {
     })
     let consultInfo = self.consultInfo
     if (consultInfo) {
-      let booking = self.bookingForm
-      self.pickUpRegionList = consultInfo.pickUpRegionList
-      self.delRegionList = consultInfo.delRegionList
-      booking.orderInfo.lineType = consultInfo.logisticType
-      booking.senderAddress.code = consultInfo.searchForm.pickUpRegion
-      booking.senderAddress.pickAt = consultInfo.searchForm.pickUpDate
-      self.time = consultInfo.time
-      booking.receiverAddress.code = consultInfo.searchForm.deliveryRegion
-      booking.transportInfo.carType = consultInfo.searchForm.truckCategory
-      booking.transportInfo.carriage = consultInfo.searchForm.truckSubCategory
-      booking.transportInfo.companyName = consultInfo.data.site.companyName
-      booking.transportInfo.ftlLineId = consultInfo.data.id
-      booking.transportInfo.supplyId = consultInfo.data.siteId
+      let booking = self.bookingForm;
+      self.pickUpRegionList = consultInfo.pickUpRegionList;
+      self.delRegionList = consultInfo.delRegionList;
+      booking.orderInfo.lineType = consultInfo.logisticType;
+      booking.senderAddress.code = consultInfo.searchForm.pickUpRegion;
+      booking.senderAddress.pickAt = consultInfo.searchForm.pickUpDate;
+      self.time = consultInfo.time;
+      booking.receiverAddress.code = consultInfo.searchForm.deliveryRegion;
+      booking.transportInfo.carType = consultInfo.searchForm.truckCategory;
+      booking.transportInfo.carriage = consultInfo.searchForm.truckSubCategory;
+      booking.transportInfo.companyName = consultInfo.data.supply.name;
+      booking.transportInfo.ftlLineId = consultInfo.data.ftlLineId;
+      booking.transportInfo.ftlLineInstanceId = consultInfo.data.id;
+      booking.transportInfo.supplyId = consultInfo.data.supplyId;
       self.amountList.push({
         label: self.$t('booking.feight'),
         amount: consultInfo.data.charge,
@@ -754,7 +756,6 @@ export default {
       this.$refs.bookingform.validate(valid => {
         if (valid) {
           self.todoLoading = true
-          console.log(self.bookingForm)
           for (let x in self.amountList) {
             if (self.amountList[x].key != 'FREIGHT') {
               self.bookingForm.chargeList.push({
@@ -764,6 +765,7 @@ export default {
               })
             }
           }
+          self.bookingForm.senderAddress.pickAt += ` ${self.time}`;
           placeOrder(self.bookingForm).then(res => {
             self.todoLoading = false
             self.$message.success(res.message)

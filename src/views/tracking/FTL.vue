@@ -5,48 +5,48 @@
     </div> -->
     <div style="display:flex;box-sizing:border-box;padding:0 20px;">
       <!-- 导航 -->
-      <div style="height:100%;">
+      <div style="height:100%;padding-right:18px;">
         <div class="statusText">{{ $t('billing.billingStatus') }}</div>
         <el-tabs v-model="tabActive"
                  tab-position="left"
                  @tab-click="tabChange"
                  style="height:calc(100% - 50px);">
-          <el-tab-pane label="1">
+          <el-tab-pane name="WAIT_DEMAND_TO_ACCEPT">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge">{{orderStatus.DEMMANDACCEPT}}</sub></div>
+                <div class="text">{{$t('tracking.toBeconfirmedOrderbyDemand')}}<sub class="badge">{{orderStatus.WAIT_DEMAND_TO_ACCEPT}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane label="2">
+          <el-tab-pane name="WAIT_SUPPLY_TO_ACCEPT">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.toBeconfirmedOrderbySupply')}}<sub class="badge red">{{orderStatus.SUPPLYACCEPT}}</sub></div>
+                <div class="text">{{$t('tracking.toBeconfirmedOrderbySupply')}}<sub class="badge red">{{orderStatus.WAIT_SUPPLY_TO_ACCEPT}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane label="3">
+          <el-tab-pane name="WILL_PICK">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.tobePickedUp')}}<sub class="badge red">{{orderStatus.WILLPICK}}</sub></div>
+                <div class="text">{{$t('tracking.tobePickedUp')}}<sub class="badge red">{{orderStatus.WILL_PICK}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane label="4">
+          <el-tab-pane name="SENDING">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">{{$t('tracking.intransit')}}<sub class="badge">{{orderStatus.SENDING}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane label="5">
+          <el-tab-pane name="WILL_RETURN">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('tracking.documentTobereturned')}}<sub class="badge">{{orderStatus.WILLRETURN}}</sub></div>
+                <div class="text">{{$t('tracking.documentTobereturned')}}<sub class="badge">{{orderStatus.WILL_RETURN}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane label="6">
+          <el-tab-pane name="COMPLETE">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">{{$t('tracking.completed')}}<sub class="badge">{{orderStatus.COMPLETE}}</sub></div>
@@ -81,9 +81,12 @@
                   border>
           <el-table-column :label="$t('tracking.tracking')">
             <template slot-scope="scope">
-              <div>{{scope.row.orderNo}}</div>
-              <div>{{scope.row.outNumber}}</div>
-              <div>{{scope.row.createdAt}}</div>
+              <el-button style="width:100%;"
+                         @click="orderLog(scope.row.id)">
+                <div>{{scope.row.orderNo}}</div>
+                <div>{{scope.row.outNumber}}</div>
+                <div>{{scope.row.createdAt}}</div>
+              </el-button>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.cargo_VAS')">
@@ -122,7 +125,10 @@
               <div style="text-align:center;">
                 <!-- <el-button v-if="scope.row.status == '1' || scope.row.status == '2'"
                            type="primary">{{$t('tracking.print')}}</el-button> -->
-                <el-button v-if="scope.row.status == '2'"
+                <el-button v-if="scope.row.status == 'WAIT_SUPPLY_TO_ACCEPT'"
+                           @click="confirmB(scope.row)"
+                           type="primary">{{$t('tracking.confirm')}}</el-button>
+                <el-button v-if="scope.row.status == 'WILL_PICK' && scope.row.transport.driverName == null"
                            @click="confirmB(scope.row)"
                            type="primary">{{$t('tracking.confirm')}}</el-button>
               </div>
@@ -266,6 +272,16 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <el-dialog :title="$t('tracking.orderLog')"
+               :visible.sync="logDialog">
+      <el-timeline :reverse="true">
+        <el-timeline-item v-for="(item, index) in logs"
+                          :key="index"
+                          :timestamp="item.createdAt">
+          {{item.introduce}}
+        </el-timeline-item>
+      </el-timeline>
+    </el-dialog>
   </div>
 </template>
 
@@ -273,7 +289,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getSupplyTD } from '../../api/data'
-import { getOrder, getOrderStatus, confirmOrder } from '../../api/tracking.js'
+import { getOrder, getOrderStatus, confirmOrder, getOrderLog, updateOrderInfo } from '../../api/tracking.js'
 
 let self;
 export default {
@@ -283,10 +299,11 @@ export default {
     return {
       orderList: [],
       data: {},
-      tabActive: '0',
+      tabActive: 'WAIT_DEMAND_TO_ACCEPT',
       printeDialog: false,
       editDialog: false,
       confirmDialog: false,
+      logDialog: false,
       form: {
         category: '',
         subCategory: '',
@@ -317,12 +334,12 @@ export default {
       unitObj: {},
       orderStatus: {
         COMPLETE: 0,
-        DEMMANDACCEPT: 0,
+        WAIT_DEMAND_TO_ACCEPT: 0,
         SENDING: 0,
-        SUPPLYACCEPT: 0,
+        WAIT_SUPPLY_TO_ACCEPT: 0,
         WAITTING: 0,
-        WILLPICK: 0,
-        WILLRETURN: 0,
+        WILL_PICK: 0,
+        WILL_RETURN: 0,
       },
       orderInfo: null,
       td: {},
@@ -332,9 +349,11 @@ export default {
       },
       loading: false,
       confirmLoading: false,
+      orderDialog: false,
       searchForm: {
         province: ""
-      }
+      },
+      logs: []
     };
   },
   // 监听属性 类似于data概念
@@ -393,7 +412,7 @@ export default {
       self.loading = true;
       let page = self.data.number ? self.data.number : 0;
       getOrder({
-        status: parseInt(self.tabActive) + 1,
+        status: self.tabActive,
         page: page,
       }).then(res => {
         self.data = res.data;
@@ -409,7 +428,7 @@ export default {
     pageChange (e) {
       self.loading = true;
       getOrder({
-        status: parseInt(self.tabActive) + 1,
+        status: self.tabActive,
         page: e - 1,
       }).then(res => {
         self.data = res.data;
@@ -422,23 +441,42 @@ export default {
       self.loadData();
     },
     confirmB (item) {
-      console.log(item)
       self.orderInfo = item;
       self.confirmDialog = true;
     },
     confirmIt () {
       self.confirmLoading = true;
-      confirmOrder(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(res => {
-        self.loadData(() => {
-          self.confirmDialog = false;
-          self.confirmForm = {
-            dirverId: '',
-            truckId: ''
-          }
-          self.$message.success(self.$t('tracking.successful'))
-          self.confirmLoading = false;
-        });
+      if (self.orderInfo.status == 'WAIT_DEMAND_TO_ACCEPT') {
+        confirmOrder(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(res => {
+          self.loadData(() => {
+            self.confirmDialog = false;
+            self.confirmForm = {
+              dirverId: '',
+              truckId: ''
+            }
+            self.$message.success(self.$t('tracking.successful'))
+            self.confirmLoading = false;
+          });
+        })
+      } else if (self.orderInfo.status == 'WILL_PICK') {
+        updateOrderInfo(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(res => {
+          self.loadData(() => {
+            self.confirmDialog = false;
+            self.confirmForm = {
+              dirverId: '',
+              truckId: ''
+            }
+            self.$message.success(self.$t('tracking.successful'))
+            self.confirmLoading = false;
+          });
+        })
+      }
 
+    },
+    orderLog (id) {
+      getOrderLog(id).then(res => {
+        self.logs = res.data;
+        self.logDialog = true;
       })
     }
   }
@@ -493,6 +531,7 @@ export default {
   .badge {
     font-size: 12px;
     margin-left: 5px;
+    color: #aaa;
   }
 
   .red {

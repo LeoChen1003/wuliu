@@ -189,7 +189,11 @@
     "plateLicense": "Plate license",
     "driver": "Driver",
     "successful": "Success",
-    "search": "Search"
+    "search": "Search",
+    "orderLog": "Order log",
+    "rating": "Rating",
+    "remark": "Remark",
+    "ratingIsRequired": "Rating is required"
   },
   "resources": {
     "add": "Add",
@@ -222,15 +226,26 @@
     "price": "Price(฿)",
     "origin": "Origin",
     "destination": "Destination",
-    "require": "Require",
-    "notRequired": "Not required",
+    "require": "I can provide service",
+    "notRequired": "I con't provde service",
     "activated": "Activated",
     "closed": "Closed",
     "price_2": "Price",
     "availableDate": "Available date",
     "dst": "Dst",
     "transitTime": "Transit time",
-    "distance": "Distance"
+    "distance": "Distance",
+    "inverse": "Inverse",
+    "plateLicense": "Plate license",
+    "supportLoading": " Loading& unloading",
+    "humanWorkDay": "Workload/item",
+    "moneyPerDay": "Price/perday",
+    "destination_Dsitrict": "Destination(Dsitrict)",
+    "cutOffTime": "Cut off time",
+    "route": "Route",
+    "distance_KM": "Distance(KM)",
+    "edit": "Edit",
+    "truckSubType": "Truck sub Type"
   },
   "billing": {
     "billingStatus": "Billing status",
@@ -315,8 +330,8 @@
     "carRegistration": "Car Registration",
     "cargoInsurance": " Cargo Insurance",
     "dc": "DC",
-    "have": "have",
-    "notHave": "not have",
+    "have": "Have",
+    "notHave": "Not have",
     "dcAddress": "DC Address",
     "transportationExperience": "Transportation experience",
     "functionalArea": " Functional area",
@@ -344,7 +359,9 @@
     "underReview": "Under review",
     "passed": "Passed",
     "uploadSuccess": "Upload success",
-    "logo": "Logo"
+    "logo": "Logo",
+    "saveSuccess": "Successful",
+    "type": "Type"
   },
   "confirm": {
     "tips": "Tips",
