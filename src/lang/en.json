@@ -245,7 +245,9 @@
     "route": "Route",
     "distance_KM": "Distance(KM)",
     "edit": "Edit",
-    "truckSubType": "Truck sub Type"
+    "truckSubType": "Truck sub Type",
+    "reset": "Reset password",
+    "successful": "Successful"
   },
   "billing": {
     "billingStatus": "Billing status",
