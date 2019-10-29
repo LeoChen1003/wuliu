@@ -11,7 +11,7 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // start progress bar
   NProgress.start()
   // set page title
@@ -30,7 +30,14 @@ router.beforeEach(async(to, from, next) => {
       const hasRoles = store.getters.curRole && store.getters.curRole.length > 0
       if (hasRoles) {
         if (from.path === '/login') {
-          await store.dispatch('user/getInfo')
+          await store.dispatch('user/getInfo').then(res => {
+            if (res.roles.length != 0) {
+              localStorage.curRole = res.roles[0].name.toUpperCase()
+            } else {
+              let arr = res.chosenRoles.split(',')
+              localStorage.curRole = arr[0];
+            }
+          })
           const accessRoutes = await store.dispatch(
             'permission/generateRoutes',
             [localStorage.curRole]
@@ -38,9 +45,6 @@ router.beforeEach(async(to, from, next) => {
           resetRouter()
           router.addRoutes(accessRoutes)
           router.options.routes = store.getters.permission_routes
-          console.log(router)
-          console.log(to)
-          console.log('aaa')
           next()
         } else {
           next()
