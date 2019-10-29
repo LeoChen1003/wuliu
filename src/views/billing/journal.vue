@@ -40,7 +40,8 @@
                              :label="$t('billing.date')" />
             <el-table-column prop="eventType"
                              :label="$t('billing.transactionType')" />
-            <el-table-column :label="$t('billing.documentNo')" />
+            <el-table-column prop="sn"
+                             :label="$t('billing.documentNo')" />
             <el-table-column :label="$t('billing.increase')">
               <template slot-scope="scope">
                 {{(scope.row.amountAfter-scope.row.amountBefore)>0?(scope.row.amountAfter-scope.row.amountBefore):null}}

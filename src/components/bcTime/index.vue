@@ -26,7 +26,7 @@ export default {
   },
   data () {
     return {
-      // dateCascader: [],
+      dateCascader: [],
       options: [],
       props: {
         lazy: true,
@@ -76,16 +76,6 @@ export default {
       }
     }
   },
-  computed: {
-    dateCascader: {
-      get () {
-        return self.dateDefault.map(Number)
-      },
-      set () {
-        return self.dateDefault.map(Number)
-      }
-    }
-  },
   methods: {
     dateChange (e) {
       let time = `${e[0]}-${e[1]}-${e[2]}`;
@@ -95,6 +85,7 @@ export default {
   },
   created () {
     self = this
+    self.dateCascader = self.dateDefault.map(Number)
   },
   mounted () {
   }
