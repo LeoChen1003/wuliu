@@ -568,6 +568,14 @@ export default {
           for (let x in self.sendDateList) {
             form.dateList.push(self.sendDateList[x])
           }
+          let toProvinceCodes = '';
+          for (let i of form.toProvinceCode) {
+            toProvinceCodes += i + ',';
+          }
+          console.log(toProvinceCodes)
+          toProvinceCodes = toProvinceCodes.substring(0, toProvinceCodes.lastIndexOf(','));
+          form['toProvinceCodes'] = toProvinceCodes;
+          console.log(form)
           if (self.editType == 'add') {
             addRoute(form).then(res => {
               self.loadData(() => {
@@ -619,12 +627,26 @@ export default {
         })
       }
       this.$forceUpdate();
+      self.checkAllCheck();
     },
     // 全选/取消全选
     checkAll () {
-      for (let x in self.dateList) {
-        self.tapDay(self.dateList[x])
+      if (self.allChecked) {
+        for (let x in self.dateList) {
+          delete self.sendDateList['show_' + self.date.year + '_' + self.date.month + '_' + self.dateList[x]]
+        }
+        self.allChecked = false;
+      } else {
+        for (let x in self.dateList) {
+          self.$set(self.sendDateList, ['show_' + self.date.year + '_' + self.date.month + '_' + self.dateList[x]], {
+            "bcYear": self.date.year,
+            "month": self.date.month,
+            "day": self.dateList[x]
+          })
+        }
+        self.allChecked = true;
       }
+      this.$forceUpdate();
     },
     dateChange (e) {
       self.getDay('edit');
@@ -632,14 +654,18 @@ export default {
     showDateChange (e) {
       self.getDay('show');
     },
+    // 检测是否全选
     checkAllCheck () {
+      let allChecked = true;
       for (let x in self.dateList) {
-        if (!self.showDateList[x]) {
-          console.log(x)
-          return self.checkAll = false;
+        if (!self.sendDateList[x]) {
+          allChecked = false;
+          break;
         }
       }
+      self.allChecked = allChecked;
     },
+    // 获取有效天
     getDay (type) {
       if (type == 'edit') {
         self.dateLoading = true;
@@ -669,8 +695,12 @@ export default {
     // 目的地省改变
     toProvinceCodeChange (e) {
       let params = '';
-      for (let x in e) {
-        params += `${x == 0 ? '' : '&'}provinceCodes=${e[x]}`
+      if (e.length == 0) {
+        params = 'provinceCodes=emptyCode'
+      } else {
+        for (let x in e) {
+          params += `${x == 0 ? '' : '&'}provinceCodes=${e[x]}`
+        }
       }
       self.cityLoading = true;
       getCityList(params).then(res => {

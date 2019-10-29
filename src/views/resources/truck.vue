@@ -54,7 +54,7 @@
     </el-row>
     <el-dialog :title="$t('resources.truck')"
                :visible.sync="dialogVisible"
-               width="60%"
+               width="700px"
                center>
       <div>
         <el-form ref="detailform"
@@ -103,6 +103,13 @@
                          :value="item.code">
               </el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item prop="mobile"
+                        :label="$t('resources.phone')">
+            <el-input v-model="detailform.mobile"
+                      @mousewheel.native.prevent
+                      type="number"
+                      class="inputWidth"></el-input>
           </el-form-item>
           <el-form-item prop="status"
                         :label="$t('resources.status')">
@@ -181,7 +188,8 @@ export default {
         insuranceStatus: 'HAS_INSURANCE',
         plate: '',
         registerAtRegion: '',
-        status: 'ACTIVE'
+        status: 'ACTIVE',
+        mobile: ''
       },
       options: [{
         value: 'ACTIVE',
@@ -200,7 +208,8 @@ export default {
         insuranceStatus: [{ required: true, trigger: "change" }],
         category: [{ required: true, trigger: "change" }],
         subCategory: [{ required: true, trigger: "change" }],
-        status: [{ required: true, trigger: "change" }]
+        status: [{ required: true, trigger: "change" }],
+        mobile: [{ required: true, trigger: "change" }]
       },
       loading: false,
       activeTab: 'first',
@@ -225,7 +234,6 @@ export default {
     },
     toAdd () {
       let self = this
-      self.dialogVisible = true
       self.editType = 'add'
       self.detailform = {
         category: '',
@@ -235,8 +243,13 @@ export default {
         insuranceStatus: 'HAS_INSURANCE',
         plate: '',
         registerAtRegion: '',
-        status: 'ACTIVE'
+        status: 'ACTIVE',
+        mobile: ''
       }
+      if (self.$refs.detailform) {
+        self.$refs.detailform.resetFields();
+      }
+      self.dialogVisible = true
       self.getData()
     },
     getData () {
@@ -261,7 +274,8 @@ export default {
         insuranceStatus: row.insuranceStatus,
         plate: row.plate,
         registerAtRegion: row.registerAtRegion,
-        status: row.activeStatus
+        status: row.activeStatus,
+        mobile: row.mobile
       }
       self.curEditId = row.id
       self.getData()
