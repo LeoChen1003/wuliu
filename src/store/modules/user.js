@@ -80,7 +80,6 @@ const actions = {
 
   chooseRole({ commit }, role) {
     return new Promise(resolve => {
-      console.log(role)
       commit('SET_CURROLE', [role])
       localStorage.setItem('curRole', role)
       resolve()

@@ -1,13 +1,20 @@
 <template>
-  <el-select v-model="language"
-             @change="handleSetLanguage">
-    <el-option label="English"
-               value="en_US"></el-option>
-    <el-option label="中文"
-               value="zh_CN"></el-option>
-    <el-option label="ไทย"
-               value="th_TH"></el-option>
-  </el-select>
+  <div>
+    <el-select v-model="language"
+               @change="handleSetLanguage">
+      <el-option label="English"
+                 value="en_US"></el-option>
+      <el-option label="中文"
+                 value="zh_CN"></el-option>
+      <el-option label="ไทย"
+                 value="th_TH"></el-option>
+    </el-select>
+    <el-button type="primary"
+               :key='index'
+               v-for="(item,index) in roles">
+      {{item}}
+    </el-button>
+  </div>
 </template>
 
 <script>
@@ -15,6 +22,9 @@ export default {
   computed: {
     language () {
       return this.$store.getters.language
+    },
+    roles () {
+      return this.$store.getters.userInfo.chosenRoles.split(',');
     }
   },
   methods: {
@@ -26,6 +36,6 @@ export default {
       //   type: 'success'
       // })
     }
-  }
+  },
 }
 </script>

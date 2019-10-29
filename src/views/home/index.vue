@@ -9,6 +9,7 @@ import store from "@/store";
 
 export default {
   beforeRouteEnter (to, from, next) {
+    let self = this;
     let curRole = localStorage.getItem('curRole')
     if (curRole == "DEMAND") {
       next({ path: "/booking/priceConsulting" });

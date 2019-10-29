@@ -17,10 +17,8 @@
             <img src="../../assets/image/logo.png"
                  alt="logo"
                  class="logo" />
-            <LangSelect :toggle-lang="true"
-                        class="langBtn" />
           </div>
-          <div class="choseTab">
+          <!-- <div class="choseTab">
             <div :class="curTab=='DEMAND'?'isActive':''"
                  @click="choseTab('DEMAND')">{{ $t('login.demand') }}</div>
             <div :class="curTab=='SUPPLY'?'isActive':''"
@@ -29,7 +27,7 @@
                  @click="choseTab('HUB')">{{ $t('login.hub') }}</div>
             <div :class="curTab=='PLATFORM'?'isActive':''"
                  @click="choseTab('PLATFORM')">{{ $t('login.platform') }}</div>
-          </div>
+          </div> -->
           <el-form-item prop="username"
                         :label="$t('login.username')">
             <span slot="label"><i class="el-icon-user loginIcon"></i></span>
@@ -360,7 +358,7 @@ export default {
     return {
       loginForm: {
         username: "aoaoao",
-        password: "123123123"
+        password: "aoaoao"
       },
       loginRules: {
         name: [{ required: true, trigger: "blur", validator: validateName }],
