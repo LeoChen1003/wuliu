@@ -354,14 +354,19 @@
     "cancel": "cancel",
     "qualificationInformation": "Qualification information",
     "activate": "activate",
-    "waitUpload": "Waiting for upload",
+    "waitUpload": "To be uploaded",
     "download": "Download",
     "underReview": "Under review",
     "passed": "Passed",
     "uploadSuccess": "Upload success",
     "logo": "Logo",
     "saveSuccess": "Successful",
-    "type": "Type"
+    "type": "Type",
+    "applyStatusAccepted": "Audited pass",
+    "applyStatusDefault": "Your application is under review",
+    "applyStatusRejected": "Audited not pass",
+    "goToDownload": "Download contract",
+    "uploadContract": "Upload contract"
   },
   "confirm": {
     "tips": "Tips",
