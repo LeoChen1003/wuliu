@@ -30,7 +30,7 @@ export default {
       return this.$store.getters.language
     },
     roles () {
-      return this.$store.getters.userInfo.chosenRoles.split(',');
+      return this.$store.getters.userInfo.chosenRoles ? this.$store.getters.userInfo.chosenRoles.split(',') : [];
     }
   },
   methods: {

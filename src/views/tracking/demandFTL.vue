@@ -169,8 +169,9 @@
               {{ scope.row.supply.companyName }}
             </div>
             <div>
-              <img :src="scope.row.supply.companyLogo"
-                   alt="logo">
+              <el-image style="width: 50px;"
+                        :src="scope.row.supply.companyLogo"
+                        fit="contain"></el-image>
             </div>
           </template>
         </el-table-column>

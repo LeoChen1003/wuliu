@@ -102,12 +102,26 @@
           </el-form-item>
           <el-form-item prop='operate_at'
                         :label="$t('billing.date')">
-            <el-date-picker v-model="topUpform.operate_at"
+            <!-- <el-date-picker v-model="topUpform.operate_at"
                             type="datetime"
                             class="inputWidth"
                             value-format='yyyy-MM-dd HH:mm:ss'
                             :placeholder="$t('placeholder.pleaseChoose')">
-            </el-date-picker>
+            </el-date-picker> -->
+            <div style="display:flex;align-items:center;justify-content:space-between;"
+                 class="inputWidth">
+              <bcTime @changeBCtime="changeBCtime"
+                      :dateDefault="[]"
+                      style="width:50%;"
+                      :timeType="'all'"></bcTime>
+              <el-time-picker v-model="time"
+                              format="HH:mm:ss"
+                              class="innerInp"
+                              style="width:45%;"
+                              value-format='HH:mm:ss'
+                              :placeholder="$t('placeholder.chooseTime')">
+              </el-time-picker>
+            </div>
           </el-form-item>
           <el-form-item prop='amount'
                         :label="$t('billing.amount')">
@@ -166,12 +180,21 @@
 // 例如：import 《组件名称》 from '《组件路径》';
 import { topUpList, topUp } from "../../api/billing"
 import { getToken } from '@/utils/auth'
+import bcTime from "@/components/bcTime";
 
+let self
 export default {
   // import引入的组件需要注入到对象中才能使用
-  components: {},
+  components: { bcTime },
   data () {
     const self = this;
+    const validateTimeAt = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error());
+      } else {
+        callback();
+      }
+    };
     return {
       tabActive: 'DEFAULT',
       dialogVisible: false,
@@ -197,7 +220,7 @@ export default {
       topUpRules: {
         fee_ype: [{ required: true }],
         operate_at: [
-          { required: true, trigger: "change" }
+          { required: true, trigger: "change", validator: validateTimeAt }
         ],
         amount: [{ required: true, trigger: 'blur' }],
         resource_id: [{ required: true }]
@@ -213,13 +236,25 @@ export default {
         currentPage: 1
       },
       pagesize: 20,
+      time_at: '',
+      time: ''
     };
   },
   // 监听属性 类似于data概念
   computed: {},
   // 监控data中的数据变化
-  watch: {},
-  created () { },
+  watch: {
+    time_at (val) {
+      let t = self.time ? self.time : '00:00:00'
+      self.topUpform.operate_at = val + ` ${t}`
+    },
+    time (val) {
+      self.topUpform.operate_at = self.time_at + ` ${val}`
+    }
+  },
+  created () {
+    self = this
+  },
   mounted () {
     this.getTopUpList()
   },
@@ -256,6 +291,11 @@ export default {
     handleClick () {
       this.showUrl = ''
       this.getTopUpList()
+    },
+    changeBCtime (time) {
+      const self = this
+      self.time_at = time
+      console.log(time)
     },
     toTopup () {
       const self = this

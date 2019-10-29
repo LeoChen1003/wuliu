@@ -1,6 +1,36 @@
 /**
  * Created by PanJiaChen on 16/11/18.
  */
+export function getLastMonthTime(date) {
+  //  1    2    3    4    5    6    7    8    9   10    11   12月
+  var daysInMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+  var strYear = date.getFullYear() + 543
+  var strDay = date.getDate()
+  var strMonth = date.getMonth() + 1
+  // 一、解决闰年平年的二月份天数   //平年28天、闰年29天//能被4整除且不能被100整除的为闰年,或能被100整除且能被400整除
+  if ((strYear % 4 === 0 && strYear % 100 !== 0) || strYear % 400 === 0) {
+    daysInMonth[2] = 29
+  }
+  if (strMonth - 1 === 0) {
+    // 二、解决跨年问题
+    strYear -= 1
+    strMonth = 12
+  } else {
+    strMonth -= 1
+  }
+  //  strDay = daysInMonth[strMonth] >= strDay ? strDay : daysInMonth[strMonth];
+  strDay = Math.min(strDay, daysInMonth[strMonth]) // 三、前一个月日期不一定和今天同一号，例如3.31的前一个月日期是2.28；9.30前一个月日期是8.30
+
+  if (strMonth < 10) {
+    // 给个位数的月、日补零
+    strMonth = '0' + strMonth
+  }
+  if (strDay < 10) {
+    strDay = '0' + strDay
+  }
+  var datastr = strYear + '-' + strMonth + '-' + strDay
+  return datastr
+}
 
 /**
  * Parse the time to string
@@ -17,16 +47,16 @@ export function parseTime(time, cFormat) {
   if (typeof time === 'object') {
     date = time
   } else {
-    if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
+    if (typeof time === 'string' && /^[0-9]+$/.test(time)) {
       time = parseInt(time)
     }
-    if ((typeof time === 'number') && (time.toString().length === 10)) {
+    if (typeof time === 'number' && time.toString().length === 10) {
       time = time * 1000
     }
     date = new Date(time)
   }
   const formatObj = {
-    y: date.getFullYear(),
+    y: date.getFullYear() + 543,
     m: date.getMonth() + 1,
     d: date.getDate(),
     h: date.getHours(),
@@ -37,7 +67,9 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value]
+    }
     if (result.length > 0 && value < 10) {
       value = '0' + value
     }
@@ -119,7 +151,7 @@ export function byteLength(str) {
     const code = str.charCodeAt(i)
     if (code > 0x7f && code <= 0x7ff) s++
     else if (code > 0x7ff && code <= 0xffff) s += 2
-    if (code >= 0xDC00 && code <= 0xDFFF) i--
+    if (code >= 0xdc00 && code <= 0xdfff) i--
   }
   return s
 }
