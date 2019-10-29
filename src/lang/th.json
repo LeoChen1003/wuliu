@@ -244,7 +244,8 @@
     "edit": "แก้ไข",
     "notRequired": "ไม่บริการ",
     "require": "บริการ",
-    "truckSubType": "ประเภทรถบรรทุก"
+    "truckSubType": "ประเภทรถบรรทุก",
+    "reset": "รีเซ็ตรหัสผ่าน"
   },
   "billing": {
     "billingStatus": "สถานะการเรียกเก็บเงิน",
