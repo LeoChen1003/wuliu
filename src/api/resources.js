@@ -79,3 +79,14 @@ export function updateRoute(id, data) {
     data
   })
 }
+
+// 重置密码
+export function resetPassword(id) {
+  return request({
+    url: `/api/supply/trucks/reset`,
+    method: 'post',
+    data: {
+      id: id
+    }
+  })
+}

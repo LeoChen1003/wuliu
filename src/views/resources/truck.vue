@@ -141,11 +141,13 @@
           <div v-if="detailform.insuranceStatus == 'HAS_INSURANCE'">
             <el-form-item prop='insuranceExpiredAt'
                           :label="$t('resources.expireDate')">
-              <el-date-picker v-model="detailform.insuranceExpiredAt"
-                              type="date"
-                              :placeholder="$t('placeholder.pleaseChoose')"
-                              value-format="yyyy-MM-dd">
-              </el-date-picker>
+              <el-cascader v-model="dateCascader"
+                           class="innerInp"
+                           :options="options"
+                           :props="props"
+                           separator='-'
+                           style="margin-right:5px;"
+                           @change="dateChange"></el-cascader>
             </el-form-item>
             <el-form-item prop='insuranceAmount'
                           :label="$t('resources.IinsuranceValue')">
@@ -161,6 +163,13 @@
                        class="inputWidth"
                        @click="toConfirm">{{$t('resources.confirm')}}</el-button>
           </el-form-item>
+          <el-form-item v-if="editType == 'edit'">
+            <el-button type="primary"
+                       style="margin-bottom:20px;"
+                       :loading="resetLoading"
+                       class="inputWidth"
+                       @click="reset">{{$t('resources.reset')}}</el-button>
+          </el-form-item>
         </el-form>
       </div>
     </el-dialog>
@@ -170,8 +179,8 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { truckList, truckAdd, truckEdit } from "../../api/resources";
-import { getTruckType, getProvinceList } from "../../api/data";
+import { truckList, truckAdd, truckEdit, resetPassword } from "../../api/resources";
+import { getTruckType, getProvinceList, getBcYear, getBcDay } from "../../api/data";
 
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -212,8 +221,57 @@ export default {
         mobile: [{ required: true, trigger: "change" }]
       },
       loading: false,
+      resetLoading: false,
       activeTab: 'first',
-      curEditId: null
+      curEditId: null,
+      dateCascader: '',
+      options: [],
+      props: {
+        lazy: true,
+        lazyLoad (node, resolve) {
+          let year = self.bcYear;
+          let date = new Date();
+          let month = node.label == year ? date.getMonth() + 1 : 1;
+          let day = date.getDate();
+          let options = [];
+          if (node.level == 0) {
+            getBcYear().then(res => {
+              self.bcYear = res.data;
+              let years = []
+              for (let x = 0; x < 20; x++) {
+                years.push({
+                  label: self.bcYear + x,
+                  value: self.bcYear + x
+                })
+              }
+              resolve(years);
+            })
+          } else if (node.level == 1) {
+            let months = [];
+            for (let y = month; y <= 12; y++) {
+              months.push({
+                label: y,
+                value: y
+              })
+            }
+            resolve(months)
+          } else if (node.level == 2) {
+            getBcDay(node.parent.value, node.value).then(res => {
+              let days = res.data;
+              let dateList = [];
+              let d = (node.parent.value == self.bcYear && node.value == date.getMonth() + 1) ? day : 1;
+              for (let x = d; x <= days; x++) {
+                dateList.push({
+                  label: x,
+                  value: x,
+                  leaf: true
+                })
+              }
+              resolve(dateList)
+            })
+          }
+        }
+      }
     };
   },
   //监听属性 类似于data概念
@@ -277,6 +335,7 @@ export default {
         status: row.activeStatus,
         mobile: row.mobile
       }
+      self.dateCascader = row.insuranceExpiredAt.split(' ')[0].split('-');
       self.curEditId = row.id
       self.getData()
     },
@@ -310,6 +369,18 @@ export default {
     },
     handleCurrentChange (val) {
       console.log(val)
+    },
+    dateChange (e) {
+      let self = this;
+      self.detailform.insuranceExpiredAt = `${e[0]}-${e[1]}-${e[2]}`;
+    },
+    reset () {
+      let self = this;
+      self.resetLoading = true;
+      resetPassword(self.curEditId).then(res => {
+        self.$message.success(self.$t('resources.successful'))
+        self.resetLoading = false;
+      })
     }
   },
   created () { },
