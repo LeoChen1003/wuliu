@@ -168,7 +168,7 @@
             <div>
               {{ scope.row.supply.companyName }}
             </div>
-            <div>
+            <div v-if="scope.row.supply.companyLogo">
               <el-image style="width: 50px;"
                         :src="scope.row.supply.companyLogo"
                         fit="contain"></el-image>

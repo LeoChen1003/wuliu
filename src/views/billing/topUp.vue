@@ -319,6 +319,8 @@ export default {
     },
     toConfirm () {
       let self = this
+      console.log(self.time_at)
+      console.log(self.topUpform)
       this.$refs.topUpform.validate(valid => {
         if (valid) {
           self.loading = true
