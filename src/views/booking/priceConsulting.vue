@@ -79,8 +79,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item prop="truckCategory"
-                          :label="$t('booking.truckType')">
+            <el-form-item :label="$t('booking.truckType')">
               <div class="inputWidth">
                 <el-select v-model="searchForm.truckCategory"
                            class="innerInp"

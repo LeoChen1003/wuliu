@@ -1,61 +1,73 @@
 <template>
   <div class="wrapper">
-    <div class="searchBox">
-      <el-form ref="searchForm"
-               :show-message="false"
-               :model="searchForm">
-        <el-form-item :label="$t('market.origin')">
-          <el-select v-model="searchForm.pickUpRegion"
-                     class="formSelect"
-                     clearable
-                     filterable
-                     placeholder="province">
-            <el-option v-for="(item,index) in provinceList"
-                       :key='index'
-                       :label="item.name"
-                       :value="item.code"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('market.destinaiton')">
-          <el-select v-model="searchForm.deliveryRegion"
-                     clearable
-                     class="formSelect"
-                     filterable
-                     placeholder="province">
-            <el-option v-for="(item,index) in provinceList"
-                       :key='index'
-                       :label="item.name"
-                       :value="item.code"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('market.pickupDate')">
-          <el-cascader v-model="dateCascader"
-                       class="innerInp"
-                       :options="options"
-                       :props="props"
-                       separator='-'
-                       style="margin-right:5px;"
-                       @change="dateChange"></el-cascader>
-        </el-form-item>
-        <el-form-item :label="$t('market.truckType')">
-          <el-select v-model="searchForm.truckCategory"
-                     filterable
-                     class="formSelect"
-                     placeholder="Truck type">
-            <el-option v-for="(item,index) in truckTypes.categories"
-                       :key='index'
-                       :label="item.value"
-                       :value="item.key"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary"
-                     @click="searchIt">{{$t('market.search')}}</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
     <div class="container">
-
+      <div class="searchBox">
+        <el-form ref="searchForm"
+                 inline
+                 :show-message="false"
+                 :model="searchForm">
+          <el-form-item :label="$t('market.origin')">
+            <div class="form-item">
+              <el-button size="mini"
+                         @click="showProDialog('origin')"
+                         style="margin-right:5px;"
+                         icon="el-icon-more"></el-button>
+              <el-select v-model="searchForm.pickUpRegion"
+                         class="formSelect"
+                         clearable
+                         filterable
+                         placeholder="province">
+                <el-option v-for="(item,index) in provinceList"
+                           :key='index'
+                           :label="item.name"
+                           :value="item.code"></el-option>
+              </el-select>
+            </div>
+          </el-form-item>
+          <el-form-item :label="$t('market.destinaiton')">
+            <div class="form-item">
+              <el-button size="mini"
+                         @click="showProDialog('destinaiton')"
+                         style="margin-right:5px;"
+                         icon="el-icon-more"></el-button>
+              <el-select v-model="searchForm.deliveryRegion"
+                         clearable
+                         class="formSelect"
+                         filterable
+                         placeholder="province">
+                <el-option v-for="(item,index) in provinceList"
+                           :key='index'
+                           :label="item.name"
+                           :value="item.code"></el-option>
+              </el-select>
+            </div>
+          </el-form-item>
+          <el-form-item :label="$t('market.pickupDate')">
+            <el-cascader v-model="dateCascader"
+                         class="innerInp"
+                         :options="options"
+                         :props="props"
+                         separator='-'
+                         style="margin-right:5px;"
+                         @change="dateChange"></el-cascader>
+          </el-form-item>
+          <el-form-item :label="$t('market.truckType')">
+            <el-select v-model="searchForm.truckCategory"
+                       filterable
+                       class="formSelect"
+                       placeholder="Truck type">
+              <el-option v-for="(item,index) in truckTypes.categories"
+                         :key='index'
+                         :label="item.value"
+                         :value="item.key"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary"
+                       @click="searchIt">{{$t('market.search')}}</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
       <el-table :data="data.content"
                 border>
         <el-table-column :label="$t('market.pickupTime')">
@@ -256,6 +268,40 @@
         </div>
       </el-form>
     </el-dialog>
+    <el-dialog :visible.sync="proDialog"
+               ภาคเหนือ
+               :close-on-click-modal="false"
+               width="600px">
+      <el-tabs tabPosition="left"
+               v-model="proActive">
+        <el-tab-pane :label="$t('booking.bangkokSuburb')"
+                     name="1">
+
+        </el-tab-pane>
+        <el-tab-pane :label="$t('booking.central')"
+                     name="2">
+
+        </el-tab-pane>
+        <el-tab-pane :label="$t('booking.northern')"
+                     name="3">
+
+        </el-tab-pane>
+        <el-tab-pane :label="$t('booking.southern')"
+                     name="4">
+
+        </el-tab-pane>
+        <el-tab-pane :label="$t('booking.northeastern')"
+                     name="5">
+
+        </el-tab-pane>
+      </el-tabs>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="proDialog = false">取 消</el-button>
+        <el-button type="primary"
+                   @click="proDialog = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -271,6 +317,8 @@ export default {
   components: {},
   data () {
     return {
+      proDialog: false,
+      proActive: '1',
       data: {},
       provinceList: [],
       cityList: [],
@@ -374,7 +422,8 @@ export default {
             })
           }
         }
-      }
+      },
+      proType: 'origin'
     };
   },
   // 监听属性 类似于data概念
@@ -427,7 +476,6 @@ export default {
   },
   methods: {
     loadData (cb) {
-      const self = this
       self.searchForm.pickUpDate = self.searchForm.pickUpDate ? self.searchForm.pickUpDate + ' 00:00:00' : ''
       orderShop(self.searchForm).then(res => {
         self.data = res.data;
@@ -441,7 +489,6 @@ export default {
       self.loadData()
     },
     toquotePrice (row) {
-      const self = this
       self.quotePriceDialog = true
       self.quotePriceCon = row
       self.shareTruck = row.chargeList[0].chargeIntro == 'false' ? false : true
@@ -450,7 +497,6 @@ export default {
       })
     },
     truckSelect (val) {
-      const self = this
       self.truckData.forEach((item) => {
         if (item.id == val) {
           self.quotePriceForm.category = item.category
@@ -461,7 +507,6 @@ export default {
     },
     // 报价抢单
     quotePriceConfirm () {
-      const self = this
       self.confirmLoading = true
       quoteOrder(self.quotePriceCon.id, self.quotePriceForm).then(res => {
         self.$message.success(res.message)
@@ -473,13 +518,15 @@ export default {
       })
     },
     searchIt () {
-      const self = this
       self.data = {}
       self.loadData()
     },
     dateChange (e) {
-      let self = this;
       self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
+    },
+    showProDialog (type) {
+      self.proType = type;
+      self.proDialog = true;
     }
   }
 };
@@ -492,9 +539,17 @@ export default {
   display: flex;
 }
 .searchBox {
-  box-sizing: border-box;
-  padding-right: 24px;
-  height: 100%;
+  // box-sizing: border-box;
+  // padding-right: 24px;
+  // height: 100%;
+
+  .form-item {
+    display: flex;
+  }
+
+  .formSelect {
+    width: 100%;
+  }
 }
 
 .container {
@@ -503,9 +558,5 @@ export default {
 
 .inp {
   width: 300px;
-}
-
-.formSelect {
-  width: 100%;
 }
 </style>

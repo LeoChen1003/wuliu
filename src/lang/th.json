@@ -149,7 +149,12 @@
     "amount": "ยอดเงิน",
     "returnConsulting": "ปรึกษาเรื่องผลตอบแทน",
     "releaseToMarket": "ปล่อยความต้องการ",
-    "viewValuation": "ดูการคิดค่าขนส่ง"
+    "viewValuation": "ดูการคิดค่าขนส่ง",
+    "bangkokSuburb": "กรุงเทพและปริมณฑล",
+    "central": "ภาคกลาง",
+    "southern": " ภาคใต้",
+    "northern": "ภาคเหนือ",
+    "northeastern": " ตะวันออกเฉียงเหนือ"
   },
   "tracking": {
     "status": "สภาพ",

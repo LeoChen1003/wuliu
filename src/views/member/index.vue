@@ -91,10 +91,10 @@
                           :label="$t('member.memberType')">
               <el-checkbox-group v-model="typeList"
                                  @change="typeListChange">
-                <el-checkbox label="DEMAND">
+                <el-checkbox label="DEMAND" :disabled="applyStatus.demand.status == 'ACCEPTED' || applyStatus.demand.status == 'ACTIVATED'">
                   {{ $t('member.demand') }} ผู้ใช้บริการว่าจ้างขนส่งสินค้า ผ่านการให้บริการของ แพลตฟอร์ม
                 </el-checkbox>
-                <el-checkbox label="SUPPLY">
+                <el-checkbox label="SUPPLY" :disabled="applyStatus.supply.status == 'ACCEPTED' || applyStatus.supply.status == 'ACTIVATED'">
                   {{ $t('member.supply') }} ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า
                   เพื่อนำส่งผู้รับปลายทาง โดยผ่านการบริการของแพลตฟอร์ม
                 </el-checkbox>
@@ -745,7 +745,7 @@ export default {
     loadData_info () {
       getInfo().then(res => {
         self.infoForm = res.data;
-        self.typeList = self.$store.getters.userInfo.roleListStr.split(',');
+        self.typeList = self.$store.getters.userInfo.chosenRoles.split(',');
       })
       getApplying().then(res => {
         for (let i of res.data) {
