@@ -16,10 +16,11 @@
           {{scope.row.site?(scope.row.site.type == 'PERSONAL'?scope.row.site.humanName:scope.row.site.companyName):''}}
         </template>
       </el-table-column>
-      <el-table-column :label="$t('member.userName')">
-        <template slot-scope="scope">
+      <el-table-column prop="userName"
+                       :label="$t('member.userName')">
+        <!-- <template slot-scope="scope">
           {{scope.row.financeGranteeAccount?scope.row.financeGranteeAccount.name:''}}
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column prop="applyType"
                        :label="$t('member.partnerType')"></el-table-column>
