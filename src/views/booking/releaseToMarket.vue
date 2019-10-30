@@ -40,12 +40,15 @@
                         :label="$t('booking.pickupTime')">
             <div class="inputWidth"
                  style="display:flex;">
-              <el-date-picker v-model="releaseForm.senderAddress.pickAt"
+              <!-- <el-date-picker v-model="releaseForm.senderAddress.pickAt"
                               type="date"
                               value-format='yyyy-MM-dd'
                               style="margin-right:5px;"
                               :placeholder="$t('placeholder.chooseDate')">
-              </el-date-picker>
+              </el-date-picker> -->
+              <bcTime @changeBCtime="changeBCtime"
+                      :dateDefault="[]"
+                      style="margin-right:5px;"></bcTime>
               <el-time-picker v-model="time"
                               format="HH:mm:ss"
                               value-format='HH:mm:ss'
@@ -342,6 +345,7 @@
 // 例如：import 《组件名称》 from '《组件路径》';
 import { releaseOrder } from '../../api/booking'
 import { getTruckType, findDistrictFullList, getGoodsProperty, getSenderList, getTransportList } from '../../api/data'
+import bcTime from "@/components/bcTime";
 
 export default {
   directives: {
@@ -359,7 +363,7 @@ export default {
     }
   },
   // import引入的组件需要注入到对象中才能使用
-  components: {},
+  components: { bcTime },
   data () {
     const self = this
     const validatorOrderInfo = (rule, value, callback) => {
@@ -377,7 +381,8 @@ export default {
       }
     };
     const validatorpickAt = (rule, value, callback) => {
-      if (!self.releaseForm.senderAddress.pickAt) {
+      console.log(self.releaseForm.senderAddress.pickAt)
+      if (!self.time_at) {
         callback(new Error(''));
       } else {
         callback();
@@ -400,7 +405,7 @@ export default {
       }
     };
     const validatorTransportInfo = (rule, value, callback) => {
-      if (!value.carType || !value.carriage) {
+      if (!value.carType) {
         callback(new Error(''));
       } else {
         callback();
@@ -455,7 +460,7 @@ export default {
         receiverAddress: [{ required: true, trigger: 'change', validator: validatorReceiverAddress }],
         propertyList: [{ required: true, trigger: 'change', validator: validatorPropertyList }],
         transportInfo: [{ required: true, trigger: 'change', validator: validatorTransportInfo }],
-        pickAt: [{ required: true, trigger: 'blur', validator: validatorpickAt }],
+        pickAt: [{ required: true, trigger: 'change', validator: validatorpickAt }],
       },
       documentReturn: false,
       liability: false,
@@ -463,7 +468,7 @@ export default {
       liabilitySelect: 'PCS',
       loading: false,
       unloading: false,
-      time: '00:00:00',
+      time: '',
       searchloading: false,
       pickUpQuery: '',
       pickUpRegionList: [],
@@ -497,7 +502,8 @@ export default {
       ],
       senderList: [],
       senderIndex: null,
-      todoLoading: false
+      todoLoading: false,
+      time_at: ''
     };
   },
   // 监听属性 类似于data概念
@@ -568,6 +574,16 @@ export default {
         self.amountWatch('INSURANCE')
       }
     },
+    time_at (val) {
+      const self = this
+      let t = self.time ? self.time : '00:00:00'
+      self.releaseForm.senderAddress.pickAt = val + ` ${t}`
+    },
+    time (val) {
+      const self = this
+      let t = val ? val : '00:00:00'
+      self.releaseForm.senderAddress.pickAt = self.time_at + ` ${val}`
+    }
   },
   created () { },
   mounted () {
@@ -598,6 +614,11 @@ export default {
           self.amountList.splice(x, 1)
         }
       }
+    },
+    changeBCtime (time) {
+      const self = this
+      self.time_at = time
+      console.log(time)
     },
     pickUpMethod (query) {
       const self = this
@@ -679,10 +700,11 @@ export default {
     // 下单
     todoIt () {
       const self = this
+      console.log(self.releaseForm)
       this.$refs.releaseform.validate(valid => {
         if (valid) {
           self.todoLoading = true
-          self.releaseForm.senderAddress.pickAt += ' ' + self.time
+          // self.releaseForm.senderAddress.pickAt += ' ' + self.time
           for (let x in self.amountList) {
             self.releaseForm.chargeList.push({
               chargeType: self.amountList[x].key,

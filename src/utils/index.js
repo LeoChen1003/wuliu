@@ -4,7 +4,7 @@
 export function getLastMonthTime(date) {
   //  1    2    3    4    5    6    7    8    9   10    11   12月
   var daysInMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-  var strYear = date.getFullYear() + 543
+  var strYear = date.getFullYear() + 543 // 输出佛历年
   var strDay = date.getDate()
   var strMonth = date.getMonth() + 1
   // 一、解决闰年平年的二月份天数   //平年28天、闰年29天//能被4整除且不能被100整除的为闰年,或能被100整除且能被400整除
@@ -56,7 +56,7 @@ export function parseTime(time, cFormat) {
     date = new Date(time)
   }
   const formatObj = {
-    y: date.getFullYear() + 543,
+    y: date.getFullYear() + 543, // 佛历年
     m: date.getMonth() + 1,
     d: date.getDate(),
     h: date.getHours(),
