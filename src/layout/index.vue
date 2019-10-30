@@ -100,9 +100,9 @@ export default {
   transition: width 0.28s;
 }
 
-.hideSidebar .fixed-header {
-  width: calc(100% - 54px);
-}
+// .hideSidebar .fixed-header {
+//   width: calc(100% - 54px);
+// }
 
 .mobile .fixed-header {
   width: 100%;

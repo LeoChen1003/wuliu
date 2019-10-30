@@ -149,7 +149,12 @@
     "totalamt": "Total amt",
     "amount": "amount",
     "returnConsulting": "Return consulting",
-    "releaseToMarket": "Release to market"
+    "releaseToMarket": "Release to market",
+    "bangkokSuburb": "Bangkok & suburb",
+    "central": "Central",
+    "southern": "Southern",
+    "northern": "Northern",
+    "northeastern": "Northeastern"
   },
   "tracking": {
     "status": "Status",
