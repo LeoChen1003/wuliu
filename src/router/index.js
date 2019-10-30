@@ -151,7 +151,12 @@ export const asyncRoutes = [
       {
         path: 'payableBill',
         component: () => import('@/views/billing/payableBill'),
-        meta: { title: 'payableBill', roles: ['DEMAND', 'SUPPLY', 'HUB'] }
+        meta: { title: 'payableBill', roles: ['DEMAND'] }
+      },
+      {
+        path: 'receivable',
+        component: () => import('@/views/billing/receivable'),
+        meta: { title: 'receivable', roles: ['SUPPLY'] }
       },
       {
         path: 'topUp',

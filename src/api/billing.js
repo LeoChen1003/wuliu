@@ -24,6 +24,22 @@ export function journalList(data) {
   })
 }
 
+export function supplyFinance(status, data) {
+  return request({
+    url: '/api/supply/finance/list/' + status,
+    method: 'get',
+    params: data
+  })
+}
+
+export function demandFinance(status, data) {
+  return request({
+    url: '/api/demand/finance/list/' + status,
+    method: 'get',
+    params: data
+  })
+}
+
 // platform  list
 export function billingList(data, data2) {
   return request({
