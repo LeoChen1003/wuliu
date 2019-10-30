@@ -149,7 +149,12 @@
     "totalamt": "总金额",
     "amount": "金额",
     "returnConsulting": "返回咨询",
-    "releaseToMarket": "发布需求"
+    "releaseToMarket": "发布需求",
+    "northern": "北部地区",
+    "central": "中部地区",
+    "bangkokSuburb": " 曼谷及周边",
+    "southern": "南部地区",
+    "northeastern": "东北部地区"
   },
   "tracking": {
     "status": "订单状态",

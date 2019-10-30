@@ -67,6 +67,29 @@
                    type="primary"
                    @click="toForgot">{{ $t('login.forgotPassword') }}</el-link>
         </div>
+        <div class="languageBox">
+          <div class="languageBox-item"
+               @click="changeLang('th_TH')"
+               :class="language == 'th_TH' ? 'actived' :''">
+            <img src="../../assets/image/th.png"
+                 class="banner">
+            <div class="county">ไทย</div>
+          </div>
+          <div class="languageBox-item"
+               @click="changeLang('zh_CN')"
+               :class="language == 'zh_CN' ? 'actived' :''">
+            <img src="../../assets/image/cn.png"
+                 class="banner">
+            <div class="county">中文</div>
+          </div>
+          <div class="languageBox-item"
+               @click="changeLang('en_US')"
+               :class="language == 'en_US' ? 'actived' :''">
+            <img src="../../assets/image/en.png"
+                 class="banner">
+            <div class="county">English</div>
+          </div>
+        </div>
       </div>
     </transition>
     <!-- 注册 -->
@@ -414,11 +437,20 @@ export default {
         key: "",
         inp: ""
       },
-      codeFreezeTime: 0
+      codeFreezeTime: 0,
     };
   },
   // 监听属性 类似于data概念
-  computed: {},
+  computed: {
+    language: {
+      get () {
+        return this.$store.getters.language
+      },
+      set () {
+
+      }
+    },
+  },
   // 监控data中的数据变化
   watch: {},
   created () { },
@@ -506,9 +538,7 @@ export default {
       } else if (self.captcha.inp == "") {
         return self.$message.warning(self.$t("login.captcha_required"));
       } else {
-        console.log(self.formType)
         let phone = self.formType == 'register' ? self.regForm.phone : self.formType == 'forget' ? self.forgotForm.phone : ''
-        console.log(phone)
         getMessageCode({
           key: self.captcha.key,
           verifyCode: self.captcha.inp,
@@ -520,6 +550,7 @@ export default {
             self.codeFreezeTime--;
             if (self.codeFreezeTime <= 0) {
               clearInterval(codeTimeInterval);
+              self.codeFreezeTime = 0;
             }
           }, 1000);
         });
@@ -579,6 +610,10 @@ export default {
           })
         }
       })
+    },
+    changeLang(lang){
+      this.$i18n.locale = lang
+      this.$store.dispatch('app/setLanguage', lang)
     }
   }
 };
@@ -641,7 +676,7 @@ export default {
     .atPassword {
       display: flex;
       justify-content: space-between;
-      padding-left: 130px;
+      padding-left: 120px;
       padding-right: 10px;
       box-sizing: border-box;
       color: #169bd5;
@@ -703,5 +738,34 @@ export default {
 
 .loginIcon {
   font-size: 20px;
+}
+
+.languageBox {
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding-left: 120px;
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+  line-height: 16px;
+
+  .languageBox-item {
+    width: 100px;
+    display: flex;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 10px;
+    justify-content: center;
+
+    .banner {
+      width: 24px;
+      height: 16px;
+      margin-right: 3px;
+    }
+  }
+
+  .actived {
+    border: 1px solid #409eff;
+  }
 }
 </style>

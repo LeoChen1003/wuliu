@@ -26,8 +26,13 @@
 
 export default {
   computed: {
-    language () {
-      return this.$store.getters.language
+    language: {
+      get () {
+        return this.$store.getters.language
+      },
+      set () {
+
+      }
     },
     roles () {
       return this.$store.getters.userInfo.chosenRoles ? this.$store.getters.userInfo.chosenRoles.split(',') : [];
@@ -44,7 +49,6 @@ export default {
     },
     changeVer (ver) {
       let self = this;
-      console.log(ver)
       self.$store.dispatch(
         'user/chooseRole',
         ver

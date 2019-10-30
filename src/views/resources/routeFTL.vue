@@ -71,8 +71,12 @@
                         :data="priceList">
                 <el-table-column header-align="center"
                                  align="center"
-                                 prop="toCity"
                                  :label="$t('resources.dst')">
+                  <template slot-scope="scope">
+                    <div>
+                      {{ scope.row.toCity }}-{{ scope.row.toProvince }}
+                    </div>
+                  </template>
                 </el-table-column>
                 <el-table-column header-align="center"
                                  align="center"
@@ -308,7 +312,7 @@
             <el-table-column :label="$t('resources.destination_Dsitrict')">
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.name }}
+                  {{ scope.row.name }}-{{scope.row.provinceName}}
                 </div>
               </template>
             </el-table-column>
@@ -413,7 +417,8 @@ export default {
       dateLoading: false,
       cityLoading: false,
       loading: false,
-      allChecked: false
+      allChecked: false,
+      proObj: {}
     };
   },
   //监听属性 类似于data概念
@@ -432,6 +437,11 @@ export default {
       });
       getProvinceList().then(res => {
         self.provinceList = res.data;
+        let proObj = new Object();
+        for (let i of res.data) {
+          proObj[i.code] = i.name;
+        }
+        self.proObj = proObj;
       });
       getCityList().then(res => {
         self.cityList = res.data;
@@ -528,7 +538,8 @@ export default {
           "toCityCode": i.toCityCode,
           "name": i.toCity,
           "miles": i.miles,
-          "transitTime": i.transitTime
+          "transitTime": i.transitTime,
+          "provinceName": i.toProvince
         })
       }
       for (let i of item.dateList) {
@@ -711,7 +722,8 @@ export default {
             "toCityCode": i.code,
             "name": i.name,
             "miles": '',
-            "transitTime": ''
+            "transitTime": '',
+            "provinceName": self.proObj[i.provinceCode]
           })
         }
         self.form.cityList = cityList;
