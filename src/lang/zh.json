@@ -198,7 +198,10 @@
     "orderLog": "订单日志",
     "rating": "Rating",
     "remark": "备注",
-    "ratingIsRequired": "评分不能为空"
+    "ratingIsRequired": "评分不能为空",
+    "reject": "拒绝",
+    "cancel": "取消",
+    "pleaseEnterTheRejectionReason": "请输入拒绝原因"
   },
   "resources": {
     "add": "添加",
@@ -395,6 +398,7 @@
     "demandPrice": "需求方的报价(฿)",
     "licencePlate": "车牌号",
     "loaderType": "车型类型",
-    "confirm": "确认"
+    "confirm": "确认",
+    "theSearchTermCannotBeEmpty": "搜索条件不能为空"
   }
 }

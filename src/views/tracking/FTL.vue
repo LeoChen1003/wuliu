@@ -128,6 +128,9 @@
                 <el-button v-if="scope.row.status == 'WAIT_SUPPLY_TO_ACCEPT'"
                            @click="confirmB(scope.row)"
                            type="primary">{{$t('tracking.confirm')}}</el-button>
+                <el-button v-if="scope.row.status == 'WAIT_SUPPLY_TO_ACCEPT'"
+                           @click="reject(scope.row)"
+                           type="primary">{{$t('tracking.reject')}}</el-button>
                 <el-button v-if="scope.row.status == 'WILL_PICK' && scope.row.transport.driverName == null"
                            @click="confirmB(scope.row)"
                            type="primary">{{$t('tracking.confirm')}}</el-button>
@@ -289,7 +292,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getSupplyTD } from '../../api/data'
-import { getOrder, getOrderStatus, confirmOrder, getOrderLog, updateOrderInfo } from '../../api/tracking.js'
+import { getOrder, getOrderStatus, confirmOrder, getOrderLog, updateOrderInfo, rejectOrder } from '../../api/tracking.js'
 
 let self;
 export default {
@@ -444,6 +447,18 @@ export default {
       self.orderInfo = item;
       self.confirmDialog = true;
     },
+    reject (item) {
+      self.$prompt(self.$t('tracking.pleaseEnterTheRejectionReason'), '', {
+        confirmButtonText: self.$t('tracking.confirm'),
+        cancelButtonText: self.$t('tracking.cancel'),
+      }).then(({ value }) => {
+        rejectOrder(item.id,value).then(res=>{
+          self.loadData();
+        })
+      }).catch(() => {
+        t
+      });
+    },
     confirmIt () {
       self.confirmLoading = true;
       if (self.orderInfo.status == 'WAIT_DEMAND_TO_ACCEPT') {
@@ -471,14 +486,13 @@ export default {
           });
         })
       }
-
     },
     orderLog (id) {
       getOrderLog(id).then(res => {
         self.logs = res.data;
         self.logDialog = true;
       })
-    }
+    },
   }
 };
 </script>

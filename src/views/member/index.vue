@@ -640,7 +640,7 @@
               <template slot-scope="scope">
                 <div>
                   <el-tag type="info"
-                          v-if="contractStatus[scope.row.type] == ''">{{ $t('member.waitUpload')}}</el-tag>
+                          v-if="contractStatus[scope.row.type] == '' || contractStatus[scope.row.type] == null">{{ $t('member.waitUpload')}}</el-tag>
                   <el-tag type="success"
                           v-else-if="scope.row.status == 'ACTIVATED'">{{ $t('member.passed')}}</el-tag>
                   <el-tag type="primary"

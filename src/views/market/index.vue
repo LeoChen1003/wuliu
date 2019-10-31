@@ -69,6 +69,7 @@
         </el-form>
       </div>
       <el-table :data="data.content"
+                v-loading="tableLoading"
                 border>
         <el-table-column :label="$t('market.pickupTime')">
           <template slot-scope="scope">
@@ -269,30 +270,19 @@
       </el-form>
     </el-dialog>
     <el-dialog :visible.sync="proDialog"
-               ภาคเหนือ
                :close-on-click-modal="false"
                width="600px">
       <el-tabs tabPosition="left"
                v-model="proActive">
-        <el-tab-pane :label="$t('booking.bangkokSuburb')"
-                     name="1">
-
-        </el-tab-pane>
-        <el-tab-pane :label="$t('booking.central')"
-                     name="2">
-
-        </el-tab-pane>
-        <el-tab-pane :label="$t('booking.northern')"
-                     name="3">
-
-        </el-tab-pane>
-        <el-tab-pane :label="$t('booking.southern')"
-                     name="4">
-
-        </el-tab-pane>
-        <el-tab-pane :label="$t('booking.northeastern')"
-                     name="5">
-
+        <el-tab-pane v-for="(item,index) in proArea"
+                     :key="index"
+                     :label="item.sortingNoTrans"
+                     :name="item.sortingNo">
+          <el-button type="primary"
+                     class="proItem"
+                     @click="tapPro(pro)"
+                     :key="proInd"
+                     v-for="(pro,proInd) in proArea[index].provinceList">{{pro.name}}</el-button>
         </el-tab-pane>
       </el-tabs>
       <span slot="footer"
@@ -318,7 +308,7 @@ export default {
   data () {
     return {
       proDialog: false,
-      proActive: '1',
+      proActive: 'B',
       data: {},
       provinceList: [],
       cityList: [],
@@ -423,7 +413,9 @@ export default {
           }
         }
       },
-      proType: 'origin'
+      proType: 'origin',
+      proArea: [],
+      tableLoading: false
     };
   },
   // 监听属性 类似于data概念
@@ -472,13 +464,18 @@ export default {
       self.sizeObj = sizeObj;
       self.unitObj = unitObj;
     })
+    getProvinceArea().then(res => {
+      self.proArea = res.data;
+    })
     self.loadData();
   },
   methods: {
     loadData (cb) {
-      self.searchForm.pickUpDate = self.searchForm.pickUpDate ? self.searchForm.pickUpDate + ' 00:00:00' : ''
+      self.tableLoading = true;
+      self.searchForm.pickUpDate = self.searchForm.pickUpDate ? self.searchForm.pickUpDate : ''
       orderShop(self.searchForm).then(res => {
         self.data = res.data;
+        self.tableLoading = false;
         if (cb) {
           cb();
         }
@@ -518,6 +515,9 @@ export default {
       })
     },
     searchIt () {
+      if (self.searchForm.pickUpRegion == '' || self.searchForm.deliveryRegion == '' || self.searchForm.pickUpDate == '') {
+        return self.$message.warning(self.$t('market.theSearchTermCannotBeEmpty'))
+      }
       self.data = {}
       self.loadData()
     },
@@ -527,6 +527,14 @@ export default {
     showProDialog (type) {
       self.proType = type;
       self.proDialog = true;
+    },
+    tapPro (pro) {
+      if (self.proType == 'origin') {
+        self.searchForm.pickUpRegion = pro.code;
+      } else {
+        self.searchForm.deliveryRegion = pro.code;
+      }
+      self.proDialog = false;
     }
   }
 };
@@ -558,5 +566,9 @@ export default {
 
 .inp {
   width: 300px;
+}
+
+.proItem {
+  margin: 0 10px 10px 0;
 }
 </style>

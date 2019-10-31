@@ -198,7 +198,10 @@
     "pickupPoint": "จุดรับสินค้า",
     "ratingIsRequired": "ต้องประเมินคะแนน",
     "releaseAReturnTruck": "ประกาศรถเที่ยวกลับ",
-    "trackingNo": "เลขที่ขนส่ง"
+    "trackingNo": "เลขที่ขนส่ง",
+    "reject": "ปฏิเสธ",
+    "cancel": "ยกเลิก",
+    "pleaseEnterTheRejectionReason": "โปรดป้อนเหตุผลในการปฏิเสธ"
   },
   "resources": {
     "add": "เพิ่ม",
@@ -391,6 +394,7 @@
     "demandPrice": "ราคา(฿)",
     "licencePlate": "ป้ายทะเบียนรถ",
     "loaderType": "ประเภทกระบะบรรทุก",
-    "confirm": "ยืนยัน"
+    "confirm": "ยืนยัน",
+    "theSearchTermCannotBeEmpty": "คำค้นหาต้องไม่ว่างเปล่า"
   }
 }

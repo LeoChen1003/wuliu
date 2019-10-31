@@ -198,7 +198,10 @@
     "orderLog": "Order log",
     "rating": "Rating",
     "remark": "Remark",
-    "ratingIsRequired": "Rating is required"
+    "ratingIsRequired": "Rating is required",
+    "reject": "Reject",
+    "cancel": "Cancel",
+    "pleaseEnterTheRejectionReason": "Please enter the rejection reason"
   },
   "resources": {
     "add": "Add",
@@ -396,6 +399,7 @@
     "quoteAPrice": "Quote a price",
     "demandPrice": "Demand's price(฿)",
     "licencePlate": "Licence plate",
-    "loaderType": "Loader type"
+    "loaderType": "Loader type",
+    "theSearchTermCannotBeEmpty": "The search term cannot be empty"
   }
 }

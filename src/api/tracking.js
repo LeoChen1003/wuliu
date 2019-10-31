@@ -37,6 +37,17 @@ export function confirmOrder(id, truck_id, driver_id) {
   })
 }
 
+// 拒绝订单
+export function rejectOrder(id, reason) {
+  return request({
+    url: '/api/supply/order/refuse/' + id,
+    method: 'post',
+    data: {
+      reason: reason
+    }
+  })
+}
+
 // 需求方订单列表
 export function demandOrderList(data) {
   return request({
