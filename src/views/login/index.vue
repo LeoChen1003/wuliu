@@ -218,6 +218,7 @@
                 <el-checkbox v-model="regArgee">I accept</el-checkbox>
                 <el-link :underline="false"
                          type="primary"
+                         @click="conditionsDialog = true"
                          class="argee">{{ $t('login.termAndConditions') }}</el-link>
               </el-form-item>
               <el-form-item>
@@ -322,6 +323,20 @@
         </el-card>
       </div>
     </transition>
+    <el-dialog :title="$t('login.termAndConditions')"
+               :visible.sync="conditionsDialog"
+               width="700px">
+      <iframe :src="conditionsUrl"
+              width="100%"
+              height="700px"
+              frameborder="0">
+      </iframe>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button type="primary"
+                   @click="conditionsDialog = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -438,6 +453,7 @@ export default {
         inp: ""
       },
       codeFreezeTime: 0,
+      conditionsDialog: false
     };
   },
   // 监听属性 类似于data概念
@@ -450,6 +466,12 @@ export default {
 
       }
     },
+    conditionsUrl: {
+      get () {
+        let type = this.language == 'en_US' ? 'en' : this.language == 'th_TH' ? 'th' : 'th';
+        return `http://wl.z.12zan.net/version-20191030-${type}.html`
+      }
+    }
   },
   // 监控data中的数据变化
   watch: {},
@@ -611,7 +633,7 @@ export default {
         }
       })
     },
-    changeLang(lang){
+    changeLang (lang) {
       this.$i18n.locale = lang
       this.$store.dispatch('app/setLanguage', lang)
     }

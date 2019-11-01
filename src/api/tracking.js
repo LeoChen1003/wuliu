@@ -25,6 +25,31 @@ export function getOrderStatus() {
   })
 }
 
+// 平台订单列表
+export function getOrderPF(params) {
+  return request({
+    url: '/api/platform/order/list',
+    method: 'get',
+    params
+  })
+}
+
+// 平台订单进度
+export function getOrderLogPF(id) {
+  return request({
+    url: `/api/platform/order/${id}/log`,
+    method: 'get'
+  })
+}
+
+// 平台获取订单数量
+export function getOrderStatusPF() {
+  return request({
+    url: '/api/platform/order/status/count',
+    method: 'get'
+  })
+}
+
 // 提交订单
 export function confirmOrder(id, truck_id, driver_id) {
   return request({

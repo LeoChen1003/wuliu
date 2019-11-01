@@ -201,7 +201,9 @@
     "ratingIsRequired": "评分不能为空",
     "reject": "拒绝",
     "cancel": "取消",
-    "pleaseEnterTheRejectionReason": "请输入拒绝原因"
+    "pleaseEnterTheRejectionReason": "请输入拒绝原因",
+    "canceled": "已拒绝",
+    "operation": "处理"
   },
   "resources": {
     "add": "添加",

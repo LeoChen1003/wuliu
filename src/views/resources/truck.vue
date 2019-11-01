@@ -224,7 +224,7 @@ export default {
       resetLoading: false,
       activeTab: 'first',
       curEditId: null,
-      dateCascader: '',
+      dateCascader: [],
       options: [],
       props: {
         lazy: true,
@@ -232,13 +232,13 @@ export default {
           let year = self.bcYear;
           let date = new Date();
           let month = node.label == year ? date.getMonth() + 1 : 1;
-          let day = date.getDate();
+          let day = date.getD
           let options = [];
           if (node.level == 0) {
             getBcYear().then(res => {
               self.bcYear = res.data;
               let years = []
-              for (let x = 0; x < 20; x++) {
+              for (let x = -1; x < 20; x++) {
                 years.push({
                   label: self.bcYear + x,
                   value: self.bcYear + x
@@ -248,7 +248,7 @@ export default {
             })
           } else if (node.level == 1) {
             let months = [];
-            for (let y = month; y <= 12; y++) {
+            for (let y = 1; y <= 12; y++) {
               months.push({
                 label: y,
                 value: y
@@ -259,8 +259,7 @@ export default {
             getBcDay(node.parent.value, node.value).then(res => {
               let days = res.data;
               let dateList = [];
-              let d = (node.parent.value == self.bcYear && node.value == date.getMonth() + 1) ? day : 1;
-              for (let x = d; x <= days; x++) {
+              for (let x = 1; x <= days; x++) {
                 dateList.push({
                   label: x,
                   value: x,
@@ -335,7 +334,7 @@ export default {
         status: row.activeStatus,
         mobile: row.mobile
       }
-      self.dateCascader = row.insuranceExpiredAt.split(' ')[0].split('-');
+      self.dateCascader = row.insuranceExpiredAt.split(' ')[0].split('-').map(Number);
       self.curEditId = row.id
       self.getData()
     },

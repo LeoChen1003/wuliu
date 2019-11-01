@@ -78,7 +78,7 @@
     "messageCode": "Message verification code",
     "sendMessage": "Send message",
     "graphCaptcha": "Graph captcha",
-    "email": "Email",
+    "email": "E-Mail",
     "regName": "User name",
     "regPassword": "Password",
     "confirmPassword": "Confirm password",
@@ -201,7 +201,9 @@
     "ratingIsRequired": "Rating is required",
     "reject": "Reject",
     "cancel": "Cancel",
-    "pleaseEnterTheRejectionReason": "Please enter the rejection reason"
+    "pleaseEnterTheRejectionReason": "Please enter the rejection reason",
+    "canceled": "Canceled",
+    "operation": "Operation"
   },
   "resources": {
     "add": "Add",

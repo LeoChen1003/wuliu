@@ -167,6 +167,7 @@
           <el-table-column width='95'>
             <template slot-scope="scope">
               <el-button type="primary"
+                         :disabled="!$store.getters.roles.Demand"
                          @click="toBooking(scope.row)">{{$t('booking.placeOrder')}}</el-button>
             </template>
           </el-table-column>
