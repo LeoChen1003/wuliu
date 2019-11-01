@@ -15,6 +15,13 @@
               </div>
             </span>
           </el-tab-pane>
+          <el-tab-pane name="CANCELED">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">{{$t('tracking.canceled')}}<sub class="badge">{{statusCount.CANCELED}}</sub></div>
+              </div>
+            </span>
+          </el-tab-pane>
           <el-tab-pane name="WAIT_DEMAND_TO_ACCEPT">
             <span slot="label">
               <div class="tabLabel">

@@ -4,6 +4,7 @@
       <el-button style="width:200px;"
                  @click="todoIt"
                  :loading="todoLoading"
+                 :disabled="!$store.getters.roles.Demand"
                  type="primary">{{$t('booking.releaseToMarket')}}</el-button>
     </div>
     <el-form ref="releaseform"

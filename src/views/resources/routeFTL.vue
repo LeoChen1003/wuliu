@@ -198,9 +198,9 @@
                 </el-select>
               </el-form-item>
               <el-form-item :label="$t('resources.destination')"
-                            prop="toProvinceCode"
+                            prop="toProvinceCodes"
                             required>
-                <el-select v-model="form.toProvinceCode"
+                <el-select v-model="form.toProvinceCodes"
                            filterable
                            multiple
                            @change="toProvinceCodeChange"
@@ -374,7 +374,7 @@ export default {
         subCategory: '',
         finishedAt: '',
         fromProvinceCode: '',
-        toProvinceCode: [],
+        toProvinceCodes: [],
         supportLoading: '',
         humanWorkDay: '',
         moneyPerDay: '',
@@ -443,9 +443,9 @@ export default {
         }
         self.proObj = proObj;
       });
-      getCityList().then(res => {
-        self.cityList = res.data;
-      });
+      // getCityList().then(res => {
+      //   self.cityList = res.data;
+      // });
       getTruckType().then(res => {
         self.truckTypes = res.data;
         let truckObj = new Object();
@@ -554,7 +554,7 @@ export default {
         subCategory: item.subCategory,
         finishedAt: item.finishedAt,
         fromProvinceCode: item.fromProvinceCode,
-        toProvinceCode: item.toProvinceCode,
+        toProvinceCodes: item.toProvinceCodes,
         supportLoading: item.supportLoading,
         humanWorkDay: item.loadingOrUnloadingHumanWorkDay,
         moneyPerDay: item.moneyPerDay,
@@ -579,14 +579,12 @@ export default {
           for (let x in self.sendDateList) {
             form.dateList.push(self.sendDateList[x])
           }
-          let toProvinceCodes = '';
-          for (let i of form.toProvinceCode) {
-            toProvinceCodes += i + ',';
+          let toProvinceCode = '';
+          for (let i of form.toProvinceCodes) {
+            toProvinceCode += i + ',';
           }
-          console.log(toProvinceCodes)
-          toProvinceCodes = toProvinceCodes.substring(0, toProvinceCodes.lastIndexOf(','));
-          form['toProvinceCodes'] = toProvinceCodes;
-          console.log(form)
+          toProvinceCode = toProvinceCode.substring(0, toProvinceCode.lastIndexOf(','));
+          form['toProvinceCode'] = toProvinceCode;
           if (self.editType == 'add') {
             addRoute(form).then(res => {
               self.loadData(() => {

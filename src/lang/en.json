@@ -78,7 +78,7 @@
     "messageCode": "Message verification code",
     "sendMessage": "Send message",
     "graphCaptcha": "Graph captcha",
-    "email": "Email",
+    "email": "E-Mail",
     "regName": "User name",
     "regPassword": "Password",
     "confirmPassword": "Confirm password",
@@ -198,7 +198,12 @@
     "orderLog": "Order log",
     "rating": "Rating",
     "remark": "Remark",
-    "ratingIsRequired": "Rating is required"
+    "ratingIsRequired": "Rating is required",
+    "reject": "Reject",
+    "cancel": "Cancel",
+    "pleaseEnterTheRejectionReason": "Please enter the rejection reason",
+    "canceled": "Canceled",
+    "operation": "Operation"
   },
   "resources": {
     "add": "Add",
@@ -396,6 +401,7 @@
     "quoteAPrice": "Quote a price",
     "demandPrice": "Demand's price(฿)",
     "licencePlate": "Licence plate",
-    "loaderType": "Loader type"
+    "loaderType": "Loader type",
+    "theSearchTermCannotBeEmpty": "The search term cannot be empty"
   }
 }

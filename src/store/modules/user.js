@@ -5,7 +5,12 @@ import router, { resetRouter } from '@/router'
 const state = {
   token: getToken(),
   userInfo: {},
-  curRole: []
+  curRole: [],
+  rules: {
+    Demand: false,
+    Supply: false,
+    Platform: false
+  }
 }
 
 const mutations = {
@@ -20,6 +25,9 @@ const mutations = {
   },
   SET_CURROLE: (state, curRole) => {
     state.curRole = curRole
+  },
+  SET_RULES: (state, roles) => {
+    state.roles = roles
   }
 }
 
@@ -50,7 +58,17 @@ const actions = {
           if (!data) {
             reject('Verification failed, please Login again.')
           }
+          let roles = {
+            Demand: false,
+            Supply: false,
+            Platform: false
+          }
+          for (let i of data.roles) {
+            roles[i.name] = true
+          }
           commit('SET_USERINFO', data)
+          commit('SET_RULES', roles)
+          console.log(roles)
           resolve(data)
         })
         .catch(error => {
