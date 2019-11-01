@@ -36,6 +36,9 @@
       <div class="container">
         <div class="center">
           <el-table :data="tableData"
+                    highlight-current-row
+                    v-loading="loading"
+                    @current-change="handleCurrentChange"
                     border>
             <el-table-column prop="createdAt"
                              :label="$t('billing.bookingTime')" />
@@ -55,10 +58,18 @@
                          :total="page.total"></el-pagination>
         </div>
         <div class="right">
-          <el-table :data="[{},{},{}]"
+          <el-table :data="detailData"
                     border>
-            <el-table-column :label="$t('billing.supply')" />
-            <el-table-column :label="$t('billing.amount')" />
+            <el-table-column :label="$t('billing.supply')">
+              <template slot-scope="scope">
+                {{scope.row.transport.supply?scope.row.transport.supply.companyName:''}}
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('billing.amount')">
+              <template slot-scope="scope">
+                {{$t('billing.freight')}}: {{scope.row.settlementAmount}}
+              </template>
+            </el-table-column>
           </el-table>
         </div>
       </div>
@@ -89,6 +100,8 @@ export default {
         currentPage: 1
       },
       pagesize: 20,
+      loading: false,
+      detailData: []
     };
   },
   // 监听属性 类似于data概念
@@ -128,6 +141,7 @@ export default {
       self.loadData()
     },
     loadData () {
+      self.loading = true
       demandFinance(self.tabActive, {
         start: self.fromDate + ' 00:00:00',
         end: self.toDate + ' 23:59:59',
@@ -139,6 +153,9 @@ export default {
           total: res.data.totalPages,
           currentPage: res.data.number + 1
         }
+        self.loading = false
+      }).catch(() => {
+        self.loading = false
       })
     },
     searchIt () {
@@ -146,6 +163,12 @@ export default {
     },
     handleClick () {
       self.loadData()
+    },
+    handleCurrentChange (val) {
+      const self = this
+      console.log(val)
+      self.detailData = []
+      self.detailData.push(val)
     }
   }
 };
