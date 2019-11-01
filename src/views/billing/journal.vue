@@ -44,17 +44,17 @@
                              :label="$t('billing.documentNo')" />
             <el-table-column :label="$t('billing.increase')">
               <template slot-scope="scope">
-                {{(scope.row.amountAfter-scope.row.amountBefore)>0?(scope.row.amountAfter-scope.row.amountBefore):null}}
+                {{(scope.row.amountAfter-scope.row.amountBefore)>0?(scope.row.amount):0}}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.decrease')">
               <template slot-scope="scope">
-                {{(scope.row.amountAfter-scope.row.amountBefore)>0?null:(scope.row.amountBefore-scope.row.amountAfter)}}
+                {{(scope.row.amountAfter-scope.row.amountBefore)>0?0:(scope.row.amount)}}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.balance')">
               <template slot-scope="scope">
-                {{scope.row.amount}}
+                {{scope.row.amountAfter}}
               </template>
             </el-table-column>
           </el-table>
