@@ -212,6 +212,22 @@
                       :key="index"></el-radio>
           </el-form-item>
         </el-col> -->
+        <el-col :span="8">
+          <el-form-item prop="receiveAt"
+                        :label="$t('booking.expectedDeliveryTime')">
+            <div class="inputWidth"
+                 style="display:flex;">
+              <bcTime @changeBCtime="changeBCtimeReceive"
+                      :dateDefault="[]"
+                      style="margin-right:5px;"></bcTime>
+              <el-time-picker v-model="receive_time"
+                              format="HH:mm:ss"
+                              value-format='HH:mm:ss'
+                              :placeholder="$t('placeholder.chooseTime')">
+              </el-time-picker>
+            </div>
+          </el-form-item>
+        </el-col>
       </el-row>
       <!-- <el-row class="itemRow"
               :gutter="40">
@@ -427,6 +443,7 @@ export default {
           code: '',
         },
         receiverAddress: {
+          receiveAt: '',
           name: '',
           mobile: '',
           addressDetail: '',
@@ -461,6 +478,7 @@ export default {
         propertyList: [{ required: true, trigger: 'change', validator: validatorPropertyList }],
         transportInfo: [{ required: true, trigger: 'change', validator: validatorTransportInfo }],
         pickAt: [{ required: true, trigger: 'change', validator: validatorpickAt }],
+        receiveAt: [{ required: true, trigger: 'change', validator: validatorpickAt }],
       },
       documentReturn: false,
       liability: false,
@@ -503,7 +521,9 @@ export default {
       senderList: [],
       senderIndex: null,
       todoLoading: false,
-      time_at: ''
+      time_at: '',
+      receive_time_at: '',
+      receive_time: ''
     };
   },
   // 监听属性 类似于data概念
@@ -576,13 +596,23 @@ export default {
     },
     time_at (val) {
       const self = this
-      let t = self.time ? self.time : '00:00:00'
+      let t = self.time ? self.time : '23:59:59'
       self.releaseForm.senderAddress.pickAt = val + ` ${t}`
     },
     time (val) {
       const self = this
-      let t = val ? val : '00:00:00'
+      let t = val ? val : '23:59:59'
       self.releaseForm.senderAddress.pickAt = self.time_at + ` ${val}`
+    },
+    receive_time_at (val) {
+      const self = this
+      let t = self.receive_time ? self.receive_time : '23:59:59'
+      self.releaseForm.receiverAddress.receiveAt = val + ` ${t}`
+    },
+    receive_time (val) {
+      const self = this
+      let t = val ? val : '23:59:59'
+      self.releaseForm.receiverAddress.receiveAt = self.receive_time_at + ` ${val}`
     }
   },
   created () { },
@@ -618,6 +648,11 @@ export default {
     changeBCtime (time) {
       const self = this
       self.time_at = time
+      console.log(time)
+    },
+    changeBCtimeReceive (time) {
+      const self = this
+      self.receive_time_at = time
       console.log(time)
     },
     pickUpMethod (query) {
