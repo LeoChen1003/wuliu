@@ -30,14 +30,26 @@
                  tab-position="left"
                  @tab-click="handleClick"
                  style="height:100%;">
-          <el-tab-pane name="DEFAULT"
-                       :label="$t('billing.toBeConfirmed')">
+          <el-tab-pane name="DEFAULT">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">{{$t('billing.toBeConfirmed')}}<sub class="badge red">{{statusCount.DEFAULT}}</sub></div>
+              </div>
+            </span>
           </el-tab-pane>
-          <el-tab-pane name="ACCEPT"
-                       :label="$t('billing.confirmed')">
+          <el-tab-pane name="ACCEPT">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">{{$t('billing.confirmed')}}<sub class="badge">{{statusCount.ACCEPT}}</sub></div>
+              </div>
+            </span>
           </el-tab-pane>
-          <el-tab-pane name="REJECTED"
-                       :label="$t('billing.rejected')">
+          <el-tab-pane name="REJECTED">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">{{$t('billing.rejected')}}<sub class="badge">{{statusCount.REJECTED}}</sub></div>
+              </div>
+            </span>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -118,7 +130,7 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import { billingList, billingAccept, billingReject } from "../../api/billing"
+import { billingList, billingAccept, billingReject, billplatformCount } from "../../api/billing"
 import { getToken } from '@/utils/auth'
 
 export default {
@@ -141,7 +153,8 @@ export default {
         currentPage: 1
       },
       pagesize: 20,
-      amount: null
+      amount: null,
+      statusCount: {}
     };
   },
   // 监听属性 类似于data概念
@@ -151,6 +164,7 @@ export default {
   created () { },
   mounted () {
     this.getList()
+    this.getCount()
   },
   methods: {
     getList () {
@@ -164,6 +178,12 @@ export default {
           total: res.data.totalPages,
           currentPage: res.data.number + 1
         }
+      })
+    },
+    getCount () {
+      const self = this
+      billplatformCount(self.apply_type).then(res => {
+        self.statusCount = res.data
       })
     },
     searchIt () {
@@ -296,6 +316,20 @@ export default {
 }
 .inp {
   width: 400px;
+}
+.tabLabel {
+  display: flex;
+  justify-content: flex-end;
+
+  .badge {
+    font-size: 12px;
+    margin-left: 5px;
+    color: #aaa;
+  }
+
+  .red {
+    color: red;
+  }
 }
 </style>
 

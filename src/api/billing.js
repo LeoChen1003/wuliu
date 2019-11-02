@@ -67,3 +67,37 @@ export function billingReject(data) {
     data
   })
 }
+
+// 充值各状态数量
+export function billTopUpCount(applyType) {
+  return request({
+    url: 'api/member/finance/status/count/' + applyType,
+    method: 'get'
+  })
+}
+
+// 平台充值各状态数量
+export function billplatformCount(applyType) {
+  return request({
+    url: 'api/platform/finance/apply/status/count',
+    method: 'get'
+  })
+}
+
+// demand账单
+export function billdemandCount(data) {
+  return request({
+    url: 'api/demand/finance/status/count',
+    method: 'get',
+    params: data
+  })
+}
+
+// supply账单
+export function billsupplyCount(data) {
+  return request({
+    url: 'api/supply/finance/status/count',
+    method: 'get',
+    params: data
+  })
+}
