@@ -116,7 +116,7 @@
             <el-select v-model="detailform.status"
                        :placeholder="$t('placeholder.pleaseChoose')"
                        class="inputWidth">
-              <el-option v-for="item in options"
+              <el-option v-for="item in optionsStatus"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
@@ -200,7 +200,7 @@ export default {
         status: 'ACTIVE',
         mobile: ''
       },
-      options: [{
+      optionsStatus: [{
         value: 'ACTIVE',
         label: 'ACTIVE'
       }, {

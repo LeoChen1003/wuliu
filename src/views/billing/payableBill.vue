@@ -22,14 +22,26 @@
                  tab-position="left"
                  @tab-click="handleClick"
                  style="height:calc(100% - 50px);">
-          <el-tab-pane name="WAIT_SETTLE"
-                       :label="$t('billing.unpaid')">
+          <el-tab-pane name="WAIT_SETTLE">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">{{$t('billing.unpaid')}}<sub class="badge red">{{statusCount.WAIT_SETTLE}}</sub></div>
+              </div>
+            </span>
           </el-tab-pane>
-          <el-tab-pane name="SETTLED"
-                       :label="$t('billing.paid')">
+          <el-tab-pane name="SETTLED">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">{{$t('billing.paid')}}<sub class="badge">{{statusCount.SETTLED}}</sub></div>
+              </div>
+            </span>
           </el-tab-pane>
-          <el-tab-pane name="CANCELED"
-                       :label="$t('billing.cancelled')">
+          <el-tab-pane name="CANCELED">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">{{$t('billing.cancelled')}}<sub class="badge">{{statusCount.CANCELED}}</sub></div>
+              </div>
+            </span>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -81,7 +93,7 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import { demandFinance } from '../../api/billing'
+import { demandFinance, billdemandCount } from '../../api/billing'
 import { getTime, parseTime, getLastMonthTime } from '../../utils/index'
 import bcTime from "@/components/bcTime";
 
@@ -101,7 +113,8 @@ export default {
       },
       pagesize: 20,
       loading: false,
-      detailData: []
+      detailData: [],
+      statusCount: {}
     };
   },
   // 监听属性 类似于data概念
@@ -156,6 +169,12 @@ export default {
         self.loading = false
       }).catch(() => {
         self.loading = false
+      })
+      billdemandCount({
+        start: self.fromDate + ' 00:00:00',
+        end: self.toDate + ' 23:59:59',
+      }).then(res => {
+        self.statusCount = res.data
       })
     },
     searchIt () {
@@ -220,6 +239,20 @@ export default {
         width: 49%;
       }
     }
+  }
+}
+.tabLabel {
+  display: flex;
+  justify-content: flex-end;
+
+  .badge {
+    font-size: 12px;
+    margin-left: 5px;
+    color: #aaa;
+  }
+
+  .red {
+    color: red;
   }
 }
 </style>

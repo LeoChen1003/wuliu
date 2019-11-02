@@ -23,14 +23,26 @@
                  tab-position="left"
                  @tab-click="handleClick"
                  style="height:100%;">
-          <el-tab-pane name="DEFAULT"
-                       :label="$t('billing.toBeConfirmed')">
+          <el-tab-pane name="DEFAULT">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">{{$t('billing.toBeConfirmed')}}<sub class="badge red">{{statusCount.DEFAULT}}</sub></div>
+              </div>
+            </span>
           </el-tab-pane>
-          <el-tab-pane name="ACCEPT"
-                       :label="$t('billing.confirmed')">
+          <el-tab-pane name="ACCEPT">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">{{$t('billing.confirmed')}}<sub class="badge">{{statusCount.ACCEPT}}</sub></div>
+              </div>
+            </span>
           </el-tab-pane>
-          <el-tab-pane name="REJECTED"
-                       :label="$t('billing.rejected')">
+          <el-tab-pane name="REJECTED">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">{{$t('billing.rejected')}}<sub class="badge">{{statusCount.REJECTED}}</sub></div>
+              </div>
+            </span>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -178,7 +190,7 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import { topUpList, topUp } from "../../api/billing"
+import { topUpList, topUp, billTopUpCount } from "../../api/billing"
 import { getToken } from '@/utils/auth'
 import bcTime from "@/components/bcTime";
 
@@ -237,7 +249,8 @@ export default {
       },
       pagesize: 20,
       time_at: '',
-      time: ''
+      time: '',
+      statusCount: {}
     };
   },
   // 监听属性 类似于data概念
@@ -258,6 +271,7 @@ export default {
   },
   mounted () {
     this.getTopUpList()
+    self.getCount()
   },
   methods: {
     cell ({ row, column, rowIndex, columnIndex }) {
@@ -277,6 +291,12 @@ export default {
           total: res.data.totalPages,
           currentPage: res.data.number + 1
         }
+      })
+    },
+    getCount () {
+      const self = this
+      billTopUpCount(self.apply_type).then(res => {
+        self.statusCount = res.data
       })
     },
     pageChange (val) {
@@ -416,6 +436,20 @@ export default {
 }
 .inputWidth {
   width: 350px;
+}
+.tabLabel {
+  display: flex;
+  justify-content: flex-end;
+
+  .badge {
+    font-size: 12px;
+    margin-left: 5px;
+    color: #aaa;
+  }
+
+  .red {
+    color: red;
+  }
 }
 </style>
 
