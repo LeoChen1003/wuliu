@@ -30,6 +30,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="contractNo"
+                       v-if="auditStatus != 'DEFAULT'"
                        :label="$t('member.contract')">
         <template slot-scope="scope">
           <div style="cursor: pointer;">
