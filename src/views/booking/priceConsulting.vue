@@ -240,7 +240,7 @@ export default {
         pickUpDate: [{ required: true, }],
         truckCategory: [{ required: true, validator: validatorTruck }],
       },
-      time: '00:00:00',
+      time: '',
       options: [],
       logisticType: 'FTL',
       logisticTypeOption: [
@@ -352,7 +352,9 @@ export default {
       consultInfo.delRegionList = self.delRegionList
       consultInfo.searchForm = self.searchForm
       consultInfo.logisticType = self.logisticType
-      consultInfo.time = self.time
+      consultInfo.time = self.time ? self.time : '00:00:00'
+      consultInfo.searchForm.truckSubCategory = row.subCategory
+      console.log(consultInfo)
       localStorage.setItem('consultInfo', JSON.stringify(consultInfo))
       this.$router.replace('/booking/placeOrder');
     },
@@ -426,10 +428,8 @@ export default {
         let searchForm = JSON.parse(JSON.stringify(self.searchForm));
         if (valid) {
           self.searchloading = true
-
-          if (self.time) {
-            searchForm.pickUpDate += ' ' + self.time
-          }
+          let time = self.time ? self.time : '00:00:00'
+          searchForm.pickUpDate = searchForm.pickUpDate.split(' ')[0] + ` ${time}`
           if (self.logisticType == 'FTL') {
             ftlLine(searchForm, {
               page: self.page.currentPage - 1,
