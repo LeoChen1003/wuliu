@@ -612,7 +612,7 @@
                              :label="$t('member.downloadContract')">
               <template slot-scope="scope">
                 <el-button type="primary"
-                           @click="downloadContract(scope.row.path)">{{$t('member.download')}}</el-button>
+                           @click="downloadContract(scope.row.type)">{{$t('member.download')}}</el-button>
               </template>
             </el-table-column>
             <el-table-column header-align="center"
@@ -658,7 +658,7 @@
 </template>
 
 <script>
-import { fillInfo, getInfo, getCredentials, submitApply, getApplying, getDc, getContract } from '@/api/member'
+import { fillInfo, getInfo, getCredentials, submitApply, getApplying, getDc, getContract, downContract } from '@/api/member'
 import { getToken } from '@/utils/auth'
 
 let self;
@@ -783,6 +783,7 @@ export default {
     // 获取合同
     loadData_contract () {
       getContract().then(res => {
+        console.log(res.data)
         self.contractList = res.data;
       })
     },
@@ -898,8 +899,12 @@ export default {
     goToDownload () {
       self.tabActive = 'contract';
     },
-    downloadContract (path) {
-      window.open(path)
+    downloadContract (type) {
+      downContract(type).then(res => {
+        console.log(res)
+        window.open(res)
+      })
+      // window.open(path)
     }
 
   }
