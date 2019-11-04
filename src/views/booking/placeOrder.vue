@@ -709,8 +709,7 @@ export default {
     getdistrictFullList (query, page) {
       const self = this
       findDistrictFullList({
-        name: query
-      }, {
+        name: query,
         page: page
       }).then(res => {
         self.isLast = res.data.last

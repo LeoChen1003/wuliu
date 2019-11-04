@@ -336,6 +336,7 @@ export default {
       let consultInfo = JSON.parse(localStorage.getItem('consultInfo'))
       self.searchForm = consultInfo.searchForm
       self.logisticType = consultInfo.logisticType
+      self.dateCascader = consultInfo.searchForm.pickUpDate.split('-').map(Number)
       self.time = consultInfo.time
       self.pickUpRegionList = consultInfo.pickUpRegionList
       self.delRegionList = consultInfo.delRegionList
@@ -386,8 +387,7 @@ export default {
     getdistrictFullList (query, page) {
       const self = this
       findDistrictFullList({
-        name: query
-      }, {
+        name: query,
         page: page
       }).then(res => {
         self.isLast = res.data.last
