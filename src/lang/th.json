@@ -154,7 +154,8 @@
     "central": "ภาคกลาง",
     "southern": " ภาคใต้",
     "northern": "ภาคเหนือ",
-    "northeastern": " ตะวันออกเฉียงเหนือ"
+    "northeastern": " ตะวันออกเฉียงเหนือ",
+    "expectedDeliveryTime": "เวลาที่คาดหวัง"
   },
   "tracking": {
     "status": "สถานะ",

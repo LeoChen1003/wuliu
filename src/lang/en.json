@@ -154,7 +154,8 @@
     "central": "Central",
     "southern": "Southern",
     "northern": "Northern",
-    "northeastern": "Northeastern"
+    "northeastern": "Northeastern",
+    "expectedDeliveryTime": "Expected delivery time"
   },
   "tracking": {
     "status": "Status",

@@ -74,12 +74,11 @@ export function findDistrictList(data) {
 }
 
 // 所有包含区（全名搜索）
-export function findDistrictFullList(data, data2) {
+export function findDistrictFullList(data) {
   return request({
     url: '/misc/geo/district/search/fullname',
-    method: 'post',
-    data,
-    params: data2
+    method: 'get',
+    params: data
   })
 }
 

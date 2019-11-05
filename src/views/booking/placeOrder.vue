@@ -709,8 +709,7 @@ export default {
     getdistrictFullList (query, page) {
       const self = this
       findDistrictFullList({
-        name: query
-      }, {
+        name: query,
         page: page
       }).then(res => {
         self.isLast = res.data.last
@@ -753,6 +752,7 @@ export default {
     // 下单
     todoIt () {
       const self = this
+      console.log(self.bookingForm)
       this.$refs.bookingform.validate(valid => {
         if (valid) {
           self.todoLoading = true
@@ -765,7 +765,7 @@ export default {
               })
             }
           }
-          self.bookingForm.senderAddress.pickAt += ` ${self.time}`;
+          self.bookingForm.senderAddress.pickAt = self.bookingForm.senderAddress.pickAt.split(' ')[0] + ` ${self.time}`;
           placeOrder(self.bookingForm).then(res => {
             self.todoLoading = false
             self.$message.success(res.message)
