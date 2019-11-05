@@ -612,7 +612,7 @@
                              :label="$t('member.downloadContract')">
               <template slot-scope="scope">
                 <el-button type="primary"
-                           @click="downloadContract(scope.row.path)">{{$t('member.download')}}</el-button>
+                           @click="downloadContract(scope.row)">{{$t('member.download')}}</el-button>
               </template>
             </el-table-column>
             <el-table-column header-align="center"
@@ -898,8 +898,10 @@ export default {
     goToDownload () {
       self.tabActive = 'contract';
     },
-    downloadContract (path) {
-      window.open(path)
+    downloadContract(path) {
+        window.open(process.env.VUE_APP_BASE_API+"/api/token/pdf/download?applyType="+path.type+"&token="+getToken())
+      //console.log(path.type)
+      //window.open()
     }
 
   }
