@@ -120,7 +120,7 @@
             </template>
           </el-table-column>
           <!-- <el-table-column :label="$t('tracking.ETD')"></el-table-column> -->
-          <el-table-column>
+          <!-- <el-table-column>
             <template slot-scope="scope">
               <div style="text-align:center;">
                 <el-button v-if="scope.row.status == 'WAIT_SUPPLY_TO_ACCEPT'"
@@ -134,7 +134,7 @@
                            type="primary">{{$t('tracking.operation')}}</el-button>
               </div>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
         <div style="text-align:center;margin:20px 0;">
           <el-pagination background
@@ -289,8 +289,8 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getSupplyTD } from '../../api/data'
-import { confirmOrder, updateOrderInfo, rejectOrder, getOrder, getOrderLog, getOrderStatus } from '../../api/tracking.js'
+import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty } from '../../api/data'
+import { confirmOrder, updateOrderInfo, rejectOrder, getOrderPF, getOrderLogPF, getOrderStatusPF } from '../../api/tracking.js'
 
 let self;
 export default {
@@ -403,16 +403,13 @@ export default {
       self.sizeObj = sizeObj;
       self.unitObj = unitObj;
     })
-    getSupplyTD().then(res => {
-      self.td = res.data;
-    })
     self.loadData();
   },
   methods: {
     loadData (cb) {
       self.loading = true;
       let page = self.data.number ? self.data.number : 0;
-      getOrder({
+      getOrderPF({
         status: self.tabActive,
         page: page,
       }).then(res => {
@@ -422,13 +419,13 @@ export default {
           cb();
         }
       });
-      getOrderStatus().then(res => {
+      getOrderStatusPF().then(res => {
         self.orderStatus = res.data;
       })
     },
     pageChange (e) {
       self.loading = true;
-      getOrder({
+      getOrderPF({
         status: self.tabActive,
         page: e - 1,
       }).then(res => {
@@ -486,7 +483,7 @@ export default {
       }
     },
     orderLog (id) {
-      getOrderLog(id).then(res => {
+      getOrderLogPF(id).then(res => {
         self.logs = res.data;
         self.logDialog = true;
       })

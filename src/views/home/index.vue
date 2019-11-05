@@ -27,7 +27,7 @@ export default {
       } else if (curRole == "HUB") {
         next({ path: "/billing/payableBill" });
       } else if (curRole == "PLATFORM") {
-        next({ path: "/tracking/FTL" });
+        next({ path: "/tracking/platformFTL" });
       } else {
         next();
       }
