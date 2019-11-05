@@ -101,7 +101,8 @@
     "mustAccept": "You need to agree to the registration terms",
     "registerSuccess": "register success",
     "resetPassword": "Reset password",
-    "resetSuccess": "Reset success"
+    "resetSuccess": "Reset success",
+    "phoneWrong": "Incorrect phone number"
   },
   "booking": {
     "searchSupply": "Search supply",

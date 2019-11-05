@@ -459,7 +459,7 @@ export default {
     },
     confirmIt () {
       self.confirmLoading = true;
-      if (self.orderInfo.status == 'WAIT_DEMAND_TO_ACCEPT') {
+      if (self.orderInfo.status == 'WAIT_SUPPLY_TO_ACCEPT') {
         confirmOrder(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(res => {
           self.loadData(() => {
             self.confirmDialog = false;

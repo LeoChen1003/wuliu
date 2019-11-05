@@ -98,7 +98,8 @@
     "mustAccept": "需要同意注册条款",
     "registerSuccess": "注册成功",
     "resetPassword": "重置密码",
-    "resetSuccess": "重置成功"
+    "resetSuccess": "重置成功",
+    "phoneWrong": "手机号不正确"
   },
   "home": {
     "button": "按钮"
