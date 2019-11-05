@@ -552,6 +552,8 @@ export default {
       const self = this;
       if (self.codeFreezeTime != 0) {
         return;
+      } else if ((/^(0|66)\d{9}$/).test('^(0|66)\d{9}$')) {
+        return self.$messages.warning(self.$t('login.phoneWrong'))
       }
       if ((self.regForm.phone == "" || !self.regForm.phone) && self.formType == 'register') {
         return self.$message.warning(self.$t("login.rule_phone"));

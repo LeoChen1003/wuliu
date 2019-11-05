@@ -747,7 +747,7 @@ export default {
     loadData_info () {
       getInfo().then(res => {
         self.infoForm = res.data.site;
-        if (self.infoForm.contactMobile == '') {
+        if (res.data.site.contactMobile == '' || res.data.site.contactMobile == null) {
           self.infoForm.contactMobile = res.data.user.phone;
         }
         self.typeList = self.$store.getters.userInfo.chosenRoles.split(',');
