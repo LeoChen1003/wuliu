@@ -119,3 +119,14 @@ export function getContract() {
     method: 'get'
   })
 }
+
+// 下载合同
+export function downContract(applyType) {
+  return request({
+    url: '/misc/pdf/download',
+    method: 'get',
+    params: {
+      applyType: applyType
+    }
+  })
+}

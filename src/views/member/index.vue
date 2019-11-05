@@ -658,7 +658,7 @@
 </template>
 
 <script>
-import { fillInfo, getInfo, getCredentials, submitApply, getApplying, getDc, getContract } from '@/api/member'
+import { fillInfo, getInfo, getCredentials, submitApply, getApplying, getDc, getContract, downContract } from '@/api/member'
 import { getToken } from '@/utils/auth'
 
 let self;
@@ -783,6 +783,7 @@ export default {
     // 获取合同
     loadData_contract () {
       getContract().then(res => {
+        console.log(res.data)
         self.contractList = res.data;
       })
     },
@@ -898,8 +899,8 @@ export default {
     goToDownload () {
       self.tabActive = 'contract';
     },
-    downloadContract(path) {
-        window.open(process.env.VUE_APP_BASE_API+"/api/token/pdf/download?applyType="+path.type+"&token="+getToken())
+    downloadContract (path) {
+      window.open(process.env.VUE_APP_BASE_API + "/api/token/pdf/download?applyType=" + path.type + "&token=" + getToken())
       //console.log(path.type)
       //window.open()
     }
