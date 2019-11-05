@@ -564,7 +564,8 @@ export default {
         getMessageCode({
           key: self.captcha.key,
           verifyCode: self.captcha.inp,
-          phone: phone
+          phone: phone,
+          type:self.formType
         }).then(res => {
           self.$message.success(self.$t("login.smsSend"));
           self.codeFreezeTime = 60;
