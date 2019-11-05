@@ -92,7 +92,12 @@ export const asyncRoutes = [
       {
         path: 'FTL',
         component: () => import('@/views/tracking/FTL'),
-        meta: { title: 'FTLNotHUB', roles: ['SUPPLY', 'PLATFORM'] }
+        meta: { title: 'FTLNotHUB', roles: ['SUPPLY'] }
+      },
+      {
+        path: 'platformFTL',
+        component: () => import('@/views/tracking/platformFTL'),
+        meta: { title: 'FTLNotHUB', roles: ['PLATFORM'] }
       },
       {
         path: 'LTL',

@@ -3,6 +3,7 @@
     <div>
       <el-button type="primary"
                  style="width:150px;margin-bottom:20px;"
+                 :disabled="!$store.getters.roles.Demand"
                  @click="toAdd">{{$t('resources.add')}}</el-button>
     </div>
     <el-row :gutter="40">
