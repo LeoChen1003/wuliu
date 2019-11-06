@@ -132,6 +132,9 @@
                 <el-button v-if="scope.row.status == 'WILL_PICK' && scope.row.transport.driverName == null"
                            @click="confirmB(scope.row)"
                            type="primary">{{$t('tracking.operation')}}</el-button>
+                <el-button v-if="scope.row.status == 'SENDING' && scope.row.publishBack == 0"
+                           @click="returnShow(scope.row)"
+                           type="primary">{{$t('tracking.returnTruck')}}</el-button>
               </div>
             </template>
           </el-table-column>
@@ -163,68 +166,49 @@
         </div>
       </span>
     </el-dialog>
-    <el-dialog :title="$t('tracking.edit')"
+    <el-dialog :title="$t('tracking.returnTruck')"
                width="600px"
-               :visible.sync="editDialog">
+               :visible.sync="returnDialog">
       <el-form ref="form"
                :model="form"
                label-width="120px">
-        <el-form-item :label="$t('tracking.origin')"
-                      required>
-          <el-select v-model="form.fromProvinceCode"
-                     class="formSelect"
-                     filterable
-                     placeholder="province">
-            <el-option v-for="(item,index) in provinceList"
-                       :key='index'
-                       :label="item.name"
-                       :value="item.code"></el-option>
-          </el-select>
+        <el-form-item :label="$t('tracking.origin')">
+          {{returnForm_show.sender}}
         </el-form-item>
-        <el-form-item :label="$t('tracking.destination')"
-                      required>
-          <el-select v-model="form.toCityCode"
-                     filterable
-                     class="formSelect"
-                     placeholder="city">
-            <el-option v-for="(item,index) in cityList"
-                       :key='index'
-                       :label="item.name"
-                       :value="item.code"></el-option>
-          </el-select>
+        <el-form-item :label="$t('tracking.destination')">
+          {{returnForm_show.receiver}}
         </el-form-item>
-        <el-form-item :label="$t('tracking.truckType')"
-                      required>
-          <el-select v-model="form.category"
-                     filterable
-                     class="formSelect"
-                     placeholder="Truck type">
-            <el-option v-for="(item,index) in truckTypes.categories"
-                       :key='index'
-                       :label="item.value"
-                       :value="item.key"></el-option>
-          </el-select>
+        <el-form-item :label="$t('tracking.truckType')">
+          {{truckObj[returnForm_show.truck]}}
         </el-form-item>
-        <el-form-item :label="$t('tracking.availableCapacity')"
+        <el-form-item :label="$t('tracking.backTime')"
                       required>
-          <el-input v-model="form.availableCapacity"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('tracking.payload')">
-          <el-input v-model="form.payload"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('tracking.cutoffTime')"
-                      required>
-          <el-time-select v-model="form.finishedAt"
-                          style="width:100%;"
-                          :picker-options="timeOptions"
-                          default-value="18:00">
-          </el-time-select>
+          <el-cascader v-model="dateCascader"
+                       class="innerInp"
+                       :options="options"
+                       :props="props"
+                       separator='-'
+                       style="margin-right:5px;"
+                       @change="dateChange"></el-cascader>
+          <el-time-picker v-model="returnTime"
+                          format="HH:mm:ss"
+                          class="innerInp"
+                          :clearable="false"
+                          style="width:50%;"
+                          value-format='HH:mm:ss'>
+          </el-time-picker>
         </el-form-item>
         <el-form-item :label="$t('tracking.quotation')"
                       required>
-          <el-input v-model="form.charge"
+          <el-input v-model="returnCharge"
                     @mousewheel.native.prevent
                     type="number"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary"
+                     :loading="returnLoading"
+                     :disabled="returnCharge == '' || returnDate == '' || returnTime == ''"
+                     @click="returnIt">{{$t('tracking.confirm')}}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -289,8 +273,8 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getSupplyTD } from '../../api/data'
-import { confirmOrder, updateOrderInfo, rejectOrder, getOrder, getOrderLog, getOrderStatus } from '../../api/tracking.js'
+import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getSupplyTD, getBcYear, getBcDay } from '../../api/data'
+import { confirmOrder, updateOrderInfo, rejectOrder, getOrder, getOrderLog, getOrderStatus, returnTruck } from '../../api/tracking.js'
 
 let self;
 export default {
@@ -302,7 +286,7 @@ export default {
       data: {},
       tabActive: 'WAIT_DEMAND_TO_ACCEPT',
       printeDialog: false,
-      editDialog: false,
+      returnDialog: false,
       confirmDialog: false,
       logDialog: false,
       form: {
@@ -351,10 +335,64 @@ export default {
       loading: false,
       confirmLoading: false,
       orderDialog: false,
+      returnLoading: false,
       searchForm: {
         province: ""
       },
-      logs: []
+      logs: [],
+      returnForm_show: {},
+      returnCharge: '',
+      returnDate: '',
+      returnTime: '',
+      dateCascader: '',
+      options: [],
+      truckObj: {},
+      props: {
+        lazy: true,
+        lazyLoad (node, resolve) {
+          let year = self.bcYear;
+          let date = new Date();
+          let month = node.label == year ? date.getMonth() + 1 : 1;
+          let day = date.getDate();
+          let options = [];
+          if (node.level == 0) {
+            getBcYear().then(res => {
+              self.bcYear = res.data;
+              let years = [{
+                label: self.bcYear,
+                value: self.bcYear
+              }, {
+                label: self.bcYear + 1,
+                value: self.bcYear + 1
+              }]
+              resolve(years);
+            })
+          } else if (node.level == 1) {
+            let months = [];
+            for (let y = month; y <= 12; y++) {
+              months.push({
+                label: y,
+                value: y
+              })
+            }
+            resolve(months)
+          } else if (node.level == 2) {
+            getBcDay(node.parent.value, node.value).then(res => {
+              let days = res.data;
+              let dateList = [];
+              let d = (node.parent.value == self.bcYear && node.value == date.getMonth() + 1) ? day : 1;
+              for (let x = d; x <= days; x++) {
+                dateList.push({
+                  label: x,
+                  value: x,
+                  leaf: true
+                })
+              }
+              resolve(dateList)
+            })
+          }
+        }
+      },
     };
   },
   // 监听属性 类似于data概念
@@ -491,6 +529,34 @@ export default {
         self.logDialog = true;
       })
     },
+    returnShow (item) {
+      console.log(item)
+      self.returnForm_show = {
+        sender: item.receiverAddress.province,
+        receiver: item.senderAddress.city,
+        truck: item.transport.carType,
+        subType: item.transport.carriage
+      }
+      self.returnCharge = '';
+      self.returnDate = '';
+      self.returnTime = '';
+      self.returnId = item.id;
+      self.returnDialog = true;
+    },
+    dateChange (e) {
+      self.returnDate = `${e[0]}-${e[1]}-${e[2]}`;
+    },
+    returnIt () {
+      self.returnLoading = true;
+      let returnDate = `${self.returnDate} ${self.returnTime}`
+      returnTruck(self.returnId, self.returnCharge, returnDate)
+        .then(res => {
+          self.loadData(() => {
+            self.returnLoading = false;
+            self.returnDialog = false;
+          });
+        })
+    }
   }
 };
 </script>

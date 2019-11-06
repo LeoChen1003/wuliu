@@ -6,7 +6,7 @@ const state = {
   token: getToken(),
   userInfo: {},
   curRole: [],
-  rules: {
+  roles: {
     Demand: false,
     Supply: false,
     Platform: false
@@ -26,7 +26,7 @@ const mutations = {
   SET_CURROLE: (state, curRole) => {
     state.curRole = curRole
   },
-  SET_RULES: (state, roles) => {
+  SET_ROLES: (state, roles) => {
     state.roles = roles
   }
 }
@@ -67,8 +67,7 @@ const actions = {
             roles[i.name] = true
           }
           commit('SET_USERINFO', data)
-          commit('SET_RULES', roles)
-          console.log(roles)
+          commit('SET_ROLES', roles)
           resolve(data)
         })
         .catch(error => {

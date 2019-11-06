@@ -4,7 +4,7 @@
       <el-button style="width:200px;"
                  @click="todoIt"
                  :loading="todoLoading"
-                 :disabled="!$store.getters.roles.Demand"
+                 :disabled="!roles.Demand"
                  type="primary">{{$t('booking.releaseToMarket')}}</el-button>
     </div>
     <el-form ref="releaseform"
@@ -360,6 +360,7 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
+import { mapGetters } from "vuex";
 import { releaseOrder } from '../../api/booking'
 import { getTruckType, findDistrictFullList, getGoodsProperty, getSenderList, getTransportList } from '../../api/data'
 import bcTime from "@/components/bcTime";
@@ -473,7 +474,6 @@ export default {
         ],
       },
       releaseRules: {
-        orderInfo: [{ required: true, trigger: 'blur', validator: validatorOrderInfo }],
         senderAddress: [{ required: true, trigger: 'change', validator: validatorSenderAddress }],
         receiverAddress: [{ required: true, trigger: 'change', validator: validatorReceiverAddress }],
         propertyList: [{ required: true, trigger: 'change', validator: validatorPropertyList }],
@@ -529,6 +529,7 @@ export default {
   },
   // 监听属性 类似于data概念
   computed: {
+    ...mapGetters(["roles"])
   },
   // 监控data中的数据变化
   watch: {

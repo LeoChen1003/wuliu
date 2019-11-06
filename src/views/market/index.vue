@@ -20,7 +20,7 @@
                 <el-option v-for="(item,index) in provinceList"
                            :key='index'
                            :label="item.name"
-                           :value="item.code"></el-option>
+                           :value="item.name"></el-option>
               </el-select>
             </div>
           </el-form-item>
@@ -38,7 +38,7 @@
                 <el-option v-for="(item,index) in provinceList"
                            :key='index'
                            :label="item.name"
-                           :value="item.code"></el-option>
+                           :value="item.name"></el-option>
               </el-select>
             </div>
           </el-form-item>
@@ -107,7 +107,7 @@
           <template slot-scope="scope">
             <div style="text-align:center;">
               <el-button type="primary"
-                         :disabled="!$store.getters.roles.Supply"
+                         :disabled="!roles.Supply"
                          @click="toquotePrice(scope.row)">{{$t('market.quoteAPrice')}}</el-button>
             </div>
           </template>
@@ -299,6 +299,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
+import { mapGetters } from "vuex";
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getProvinceArea, getSupplyTD, getBcYear, getBcDay } from '../../api/data'
 import { orderShop, quoteOrder } from '../../api/market.js'
 
@@ -420,7 +421,9 @@ export default {
     };
   },
   // 监听属性 类似于data概念
-  computed: {},
+  computed: {
+    ...mapGetters(["roles"])
+  },
   // 监控data中的数据变化
   watch: {},
   created () {
@@ -531,9 +534,9 @@ export default {
     },
     tapPro (pro) {
       if (self.proType == 'origin') {
-        self.searchForm.pickUpRegion = pro.code;
+        self.searchForm.pickUpRegion = pro.name;
       } else {
-        self.searchForm.deliveryRegion = pro.code;
+        self.searchForm.deliveryRegion = pro.name;
       }
       self.proDialog = false;
     }

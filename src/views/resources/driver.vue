@@ -3,7 +3,7 @@
     <div>
       <el-button type="primary"
                  style="width:150px;margin-bottom:20px;"
-                 :disabled="!$store.getters.roles.Demand"
+                 :disabled="!roles.Demand"
                  @click="toAdd">{{$t('resources.add')}}</el-button>
     </div>
     <el-row :gutter="40">
@@ -35,7 +35,7 @@
                  type="border-card">
           <el-tab-pane :label="$t('resources.task')"
                        name="first">
-            <el-table :data="[{},{},{}]"
+            <el-table :data="[]"
                       border
                       :cell-style="cell">
               <el-table-column prop=""
@@ -102,6 +102,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
+import { mapGetters } from "vuex";
 import { driverAdd, driverList, driverEdit } from "../../api/resources";
 
 export default {
@@ -137,7 +138,9 @@ export default {
     };
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    ...mapGetters(["roles"])
+  },
   //监控data中的数据变化
   watch: {},
   methods: {
@@ -175,6 +178,9 @@ export default {
     },
     toConfirm () {
       let self = this
+      if (!/^(0|66)\d{9}$/.test(self.detailform.phone)) {
+        return self.$message.warning(self.$t('login.phoneWrong'))
+      }
       this.$refs.detailform.validate(valid => {
         if (valid) {
           self.loading = true

@@ -205,7 +205,10 @@
     "cancel": "Cancel",
     "pleaseEnterTheRejectionReason": "Please enter the rejection reason",
     "canceled": "Canceled",
-    "operation": "Operation"
+    "operation": "Operation",
+    "returnTruck": "Return Truck",
+    "backTime": "Back time",
+    "charge": "Charge"
   },
   "resources": {
     "add": "Add",
