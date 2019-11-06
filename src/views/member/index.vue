@@ -809,6 +809,9 @@ export default {
     },
     // 保存基础资料
     saveInfo () {
+      if (!/^(0|66)\d{9}$/.test(self.infoForm.contactMobile)) {
+        return self.$message.warning(self.$t('login.phoneWrong'))
+      }
       fillInfo(self.infoForm).then(res => {
         self.$message.success(self.$t('member.saveSuccess'))
         self.loadData_info()

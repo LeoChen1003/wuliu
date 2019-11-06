@@ -2,7 +2,7 @@
   <div class='wrapper'>
     <div style="margin-bottom:20px;">
       <el-button @click="add"
-                 :disabled="!$store.getters.roles.Demand"
+                 :disabled="!roles.Demand"
                  type="primary">{{$t('resources.add')}}</el-button>
     </div>
     <div class="container">
@@ -122,9 +122,20 @@
               </div>
               <div class="date-list">
                 <div class="day-item"
+                     v-for="(item,index) in week"
+                     :key="item">
+                  <el-tag class="day nop week"
+                          type="info">{{item}}</el-tag>
+                </div>
+                <div class="day-item"
+                     v-for="(item,index) in showWeekPH"
+                     :key="index + item">
+                  <el-tag class="day nop day_ph"></el-tag>
+                </div>
+                <div class="day-item"
                      v-for="(item,index) in dateList_show"
                      :key="index">
-                  <el-tag class="day"
+                  <el-tag class="day nop"
                           :effect="showDateList['show_' + showDate.year + '_' + showDate.month + '_' + item] ? 'dark' : 'plain'">{{item}}</el-tag>
                 </div>
               </div>
@@ -295,6 +306,17 @@
               <div class="date-list"
                    v-loading="dateLoading">
                 <div class="day-item"
+                     v-for="(item,index) in week"
+                     :key="item">
+                  <el-tag class="day nop week"
+                          type="info">{{item}}</el-tag>
+                </div>
+                <div class="day-item"
+                     v-for="(item,index) in weekPH"
+                     :key="index + item">
+                  <el-tag class="day nop day_ph"></el-tag>
+                </div>
+                <div class="day-item"
                      v-for="(item,index) in dateList"
                      :key="index">
                   <el-tag class="day"
@@ -359,6 +381,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { getProvinceList, getCityList, getTruckType, getSupplyTD, getBcYear, getBcDay } from '@/api/data'
 import { getRoute, addRoute, updateRoute } from '@/api/resources'
 
@@ -419,11 +442,16 @@ export default {
       cityLoading: false,
       loading: false,
       allChecked: false,
-      proObj: {}
+      proObj: {},
+      weekPH: [],
+      showWeekPH: [],
+      week: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
     };
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    ...mapGetters(["roles"])
+  },
   //监控data中的数据变化
   watch: {},
   methods: {
@@ -683,11 +711,20 @@ export default {
           let days = res.data;
           let start = self.dateInfo[self.date.year].start;
           let dateList = {};
+          let yearInd = Object.keys(self.dateInfo).indexOf(self.date.year.toString());
+          let year = yearInd == 0 ? new Date().getFullYear() : new Date().getFullYear() + 1;
+          let week = new Date(`${year}/${self.date.month}/1`).getDay();
+          let weekPD = week == 7 ? 0 : week;
+          let weekPH = [];
           for (let x = 1; x <= days; x++) {
             dateList['show_' + self.date.year + '_' + self.date.month + '_' + x] = x
           }
           self.dateList = dateList;
           self.checkAllCheck();
+          for (let x = 0; x < weekPD; x++) {
+            weekPH.push('');
+          }
+          self.weekPH = weekPH;
           self.dateLoading = false;
         })
       } else {
@@ -695,9 +732,18 @@ export default {
           let days = res.data;
           let start = self.showDateInfo[self.showDate.year].start;
           let showDateList = {};
+          let yearInd = Object.keys(self.showDateInfo).indexOf(self.showDate.year.toString());
+          let year = yearInd == 0 ? new Date().getFullYear() - 1 : yearInd == 1 ? new Date().getFullYear() : new Date().getFullYear() + 1;
+          let week = new Date(`${year}/${self.showDate.month}/1`).getDay();
+          let weekPD = week == 7 ? 0 : week;
+          let weekPH = [];
           for (let x = 1; x <= days; x++) {
             showDateList['show_' + self.showDate.year + '_' + self.showDate.month + '_' + x] = x
           }
+          for (let x = 0; x < weekPD; x++) {
+            weekPH.push('');
+          }
+          self.showWeekPH = weekPH;
           self.dateList_show = showDateList;
         })
       }
@@ -822,6 +868,18 @@ export default {
     cursor: pointer;
     transition: all 0.1s;
     border-width: 2px;
+  }
+
+  .nop {
+    cursor: auto;
+  }
+
+  .day_ph {
+    opacity: 0;
+  }
+
+  .week {
+    font-size: 20px;
   }
 }
 

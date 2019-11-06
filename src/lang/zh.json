@@ -205,7 +205,9 @@
     "cancel": "取消",
     "pleaseEnterTheRejectionReason": "请输入拒绝原因",
     "canceled": "已拒绝",
-    "operation": "处理"
+    "operation": "处理",
+    "returnTruck": "发布返程卡车",
+    "backTime": "返程时间"
   },
   "resources": {
     "add": "添加",

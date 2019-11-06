@@ -204,7 +204,8 @@
     "reject": "ปฏิเสธ",
     "cancel": "ยกเลิก",
     "pleaseEnterTheRejectionReason": "โปรดป้อนเหตุผลในการปฏิเสธ",
-    "operation": "ดำเนินการ"
+    "operation": "ดำเนินการ",
+    "backTime": "ย้อนเวลากลับไป"
   },
   "resources": {
     "add": "เพิ่ม",

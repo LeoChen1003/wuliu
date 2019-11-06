@@ -167,7 +167,7 @@
           <el-table-column width='95'>
             <template slot-scope="scope">
               <el-button type="primary"
-                         :disabled="!$store.getters.roles.Demand"
+                         :disabled="!roles.Demand"
                          @click="toBooking(scope.row)">{{$t('booking.placeOrder')}}</el-button>
             </template>
           </el-table-column>
@@ -189,6 +189,7 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
+import { mapGetters } from "vuex";
 import { ftlLine } from '../../api/booking';
 import { getTruckType, findDistrictFullList, getBcYear, getBcDay } from '../../api/data'
 import Search from '@/components/HeaderSearch';
@@ -322,7 +323,9 @@ export default {
     };
   },
   // 监听属性 类似于data概念
-  computed: {},
+  computed: {
+    ...mapGetters(["roles"])
+  },
   // 监控data中的数据变化
   watch: {},
   created () { },
