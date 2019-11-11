@@ -344,7 +344,7 @@ export default {
     },
     toConfirm () {
       let self = this
-      if (!/^(0|66)\d{9}$/.test(self.detailform.phone)) {
+      if (!/^(0|66)\d{9}$/.test(self.detailform.mobile)) {
         return self.$message.warning(self.$t('login.phoneWrong'))
       }
       this.$refs.detailform.validate(valid => {

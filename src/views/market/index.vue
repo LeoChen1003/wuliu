@@ -425,7 +425,11 @@ export default {
     ...mapGetters(["roles"])
   },
   // 监控data中的数据变化
-  watch: {},
+  watch: {
+    '$store.getters.language' () {
+      self.init();
+    }
+  },
   created () {
     self = this;
   },
@@ -436,44 +440,47 @@ export default {
     getCityList().then(res => {
       self.cityList = res.data;
     });
-    getTruckType().then(res => {
-      self.truckTypes = res.data;
-      let truckObj = new Object();
-      for (let i of res.data.categories) {
-        truckObj[i.key] = i.value;
-      }
-      self.truckObj = truckObj;
-    });
-    getExtraServer().then(res => {
-      let serveObj = new Object();
-      for (let i of res.data) {
-        serveObj[i.key] = i.trans;
-      }
-      self.serveObj = serveObj;
-    })
-    getGoodsProperty().then(res => {
-      let propertyObj = new Object();
-      let sizeObj = new Object();
-      let unitObj = new Object();
-      for (let i of res.data.propertyType) {
-        propertyObj[i.key] = i.trans;
-      }
-      for (let i of res.data.sizeType) {
-        sizeObj[i.key] = i.trans;
-      }
-      for (let i of res.data.unit) {
-        unitObj[i.key] = i.trans;
-      }
-      self.propertyObj = propertyObj;
-      self.sizeObj = sizeObj;
-      self.unitObj = unitObj;
-    })
-    getProvinceArea().then(res => {
-      self.proArea = res.data;
-    })
+    self.init();
     self.loadData();
   },
   methods: {
+    init () {
+      getTruckType().then(res => {
+        self.truckTypes = res.data;
+        let truckObj = new Object();
+        for (let i of res.data.categories) {
+          truckObj[i.key] = i.value;
+        }
+        self.truckObj = truckObj;
+      });
+      getExtraServer().then(res => {
+        let serveObj = new Object();
+        for (let i of res.data) {
+          serveObj[i.key] = i.trans;
+        }
+        self.serveObj = serveObj;
+      })
+      getGoodsProperty().then(res => {
+        let propertyObj = new Object();
+        let sizeObj = new Object();
+        let unitObj = new Object();
+        for (let i of res.data.propertyType) {
+          propertyObj[i.key] = i.trans;
+        }
+        for (let i of res.data.sizeType) {
+          sizeObj[i.key] = i.trans;
+        }
+        for (let i of res.data.unit) {
+          unitObj[i.key] = i.trans;
+        }
+        self.propertyObj = propertyObj;
+        self.sizeObj = sizeObj;
+        self.unitObj = unitObj;
+      })
+      getProvinceArea().then(res => {
+        self.proArea = res.data;
+      })
+    },
     loadData (cb) {
       self.tableLoading = true;
       self.searchForm.pickUpDate = self.searchForm.pickUpDate ? self.searchForm.pickUpDate : ''
