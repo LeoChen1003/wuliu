@@ -51,6 +51,7 @@
                              :props="props"
                              separator='-'
                              style="margin-right:5px;"
+                             :placeholder="$t('booking.pickupTime')"
                              @change="dateChange"></el-cascader>
                 <el-time-picker v-model="time"
                                 format="HH:mm:ss"
@@ -194,6 +195,8 @@ import { ftlLine } from '../../api/booking';
 import { getTruckType, findDistrictFullList, getBcYear, getBcDay } from '../../api/data'
 import Search from '@/components/HeaderSearch';
 
+let self;
+
 export default {
   // import引入的组件需要注入到对象中才能使用
   components: {},
@@ -327,28 +330,35 @@ export default {
     ...mapGetters(["roles"])
   },
   // 监控data中的数据变化
-  watch: {},
-  created () { },
-  mounted () {
-    const self = this
-    getTruckType().then(res => {
-      self.categoryList = res.data.categories
-      self.subCategoryList = res.data.subCategories
-    })
-    if (self.$route.query.return == 1) {
-      let consultInfo = JSON.parse(localStorage.getItem('consultInfo'))
-      self.searchForm = consultInfo.searchForm
-      self.logisticType = consultInfo.logisticType
-      self.dateCascader = consultInfo.searchForm.pickUpDate.split('-').map(Number)
-      self.time = consultInfo.time
-      self.pickUpRegionList = consultInfo.pickUpRegionList
-      self.delRegionList = consultInfo.delRegionList
-      self.searchSupply()
+  watch: {
+    '$store.getters.language' () {
+      self.init();
     }
   },
+  created () {
+    self = this;
+  },
+  mounted () {
+    self.init();
+  },
   methods: {
+    init () {
+      getTruckType().then(res => {
+        self.categoryList = res.data.categories
+        self.subCategoryList = res.data.subCategories
+      })
+      if (self.$route.query.return == 1) {
+        let consultInfo = JSON.parse(localStorage.getItem('consultInfo'))
+        self.searchForm = consultInfo.searchForm
+        self.logisticType = consultInfo.logisticType
+        self.dateCascader = consultInfo.searchForm.pickUpDate.split('-').map(Number)
+        self.time = consultInfo.time
+        self.pickUpRegionList = consultInfo.pickUpRegionList
+        self.delRegionList = consultInfo.delRegionList
+        self.searchSupply()
+      }
+    },
     toBooking (row) {
-      const self = this
       let consultInfo = {}
       consultInfo.data = row
       consultInfo.pickUpRegionList = self.pickUpRegionList
@@ -362,7 +372,6 @@ export default {
       this.$router.replace('/booking/placeOrder');
     },
     pickUpMethod (query) {
-      const self = this
       if (query !== '') {
         if (self.curSelect == 'pk') {
           self.pickUpQuery = query
@@ -379,7 +388,6 @@ export default {
       }
     },
     loadmore () {
-      const self = this
       if (!self.isLast) {
         self.regionPage += 1
         if (self.curSelect == 'pk') {
@@ -390,7 +398,6 @@ export default {
       }
     },
     getdistrictFullList (query, page) {
-      const self = this
       findDistrictFullList({
         name: query,
         page: page
@@ -413,7 +420,6 @@ export default {
     },
     // 聚焦初始化     
     clearSelect (type) {
-      const self = this
       if (type == 'pk') {
         self.pickUpQuery = ''
         self.curSelect = 'pk'
@@ -426,7 +432,6 @@ export default {
     },
     // 搜索
     searchSupply () {
-      let self = this;
       this.$refs.searchform.validate(valid => {
         let searchForm = JSON.parse(JSON.stringify(self.searchForm));
         if (valid) {
@@ -452,17 +457,14 @@ export default {
       })
     },
     pageChange (val) {
-      let self = this
       self.page.currentPage = val
       self.searchSupply()
     },
     pageSizeChange (val) {
-      let self = this;
       self.pagesize = val
       self.searchSupply()
     },
     dateChange (e) {
-      let self = this;
       self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
     }
   }

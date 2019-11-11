@@ -22,6 +22,7 @@ export function logout() {
   })
 }
 
+// 注册
 export function register(data) {
   return request({
     url: '/auth/register',
@@ -30,6 +31,7 @@ export function register(data) {
   })
 }
 
+// 获取图片验证码
 export function getCaptcha() {
   return request({
     url: '/misc/verify/verify',
@@ -37,9 +39,10 @@ export function getCaptcha() {
   })
 }
 
+// 图片验证码换取手机验证码
 export function getMessageCode(data) {
   return request({
-    url: 'misc/verify/sendSms',
+    url: '/misc/verify/sendSms',
     method: 'post',
     data
   })

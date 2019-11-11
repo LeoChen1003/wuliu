@@ -9,7 +9,7 @@
                  :rules="loginRules"
                  class="login-form"
                  autocomplete="on"
-                 label-position="right"
+                 label-position="right" 
                  label-width="120px"
                  hide-required-asterisk
                  size="small">
