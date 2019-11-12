@@ -74,7 +74,7 @@
                     border>
             <el-table-column :label="$t('billing.supply')">
               <template slot-scope="scope">
-                {{scope.row.transport.supply ? scope.row.transport.supply.companyName : ''}}
+                {{scope.row.transport.supply ? (scope.row.transport.supply.type=='COMPANY'?scope.row.transport.supply.companyName: scope.row.transport.supply.humanName): ''}}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.amount')">
@@ -163,7 +163,7 @@ export default {
       }).then(res => {
         self.tableData = res.data.content
         self.page = {
-          total: res.data.totalPages,
+          total: res.data.totalElements,
           currentPage: res.data.number + 1
         }
         self.loading = false
