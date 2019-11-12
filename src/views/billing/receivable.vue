@@ -163,7 +163,7 @@ export default {
       }).then(res => {
         self.tableData = res.data.content
         self.page = {
-          total: res.data.totalPages,
+          total: res.data.totalElements,
           currentPage: res.data.number + 1
         }
         self.loading = false

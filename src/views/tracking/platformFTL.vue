@@ -139,7 +139,7 @@
         <div style="text-align:center;margin:20px 0;">
           <el-pagination background
                          :page-size.sync="data.size"
-                         :page-count="data.totalPages"
+                         :page-count="data.totalElements"
                          :total="data.totalElements"
                          :current-page.sync="data.number + 1"
                          @current-change="pageChange"
