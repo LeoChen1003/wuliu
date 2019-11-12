@@ -262,7 +262,8 @@
     "edit": "Edit",
     "truckSubType": "Truck sub Type",
     "reset": "Reset password",
-    "successful": "Successful"
+    "successful": "Successful",
+    "basicData": "Basic data"
   },
   "billing": {
     "billingStatus": "Billing status",
@@ -408,5 +409,8 @@
     "licencePlate": "Licence plate",
     "loaderType": "Loader type",
     "theSearchTermCannotBeEmpty": "The search term cannot be empty"
+  },
+  "resrouces": {
+    "quotation": "Quotation"
   }
 }

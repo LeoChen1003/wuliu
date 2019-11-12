@@ -149,185 +149,138 @@
                :title="$t('resources.edit')"
                :close-on-click-modal="false"
                width="1000px">
-      <div class="edit-box">
-        <div class="edit-top">
-          <div class="edit-left">
+
+      <el-tabs v-model="editActive">
+        <el-tab-pane :label="$t('resources.basicData')"
+                     name="form">
+          <div class="form-box">
             <el-form :label-width="$store.getters.language == 'zh_CN' ? '150px' : '220px'"
-                     :show-message="false"
-                     :model="form"
-                     ref='form'>
-              <el-form-item :label="$t('resources.plateLicense')"
-                            prop="truckId"
-                            required>
-                <el-select v-model="form.truckId"
-                           class="formSelect"
-                           @change="choosePlate"
-                           filterable
-                           placeholder="province">
-                  <el-option v-for="(item,index) in tdList"
-                             :key='index'
-                             :label="item.plate"
-                             :value="item.id"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item :label="$t('resources.truckType')"
-                            prop="category"
-                            required>
-                <el-select v-model="form.category"
-                           disabled
-                           filterable
-                           class="formSelect"
-                           placeholder="Truck type">
-                  <el-option v-for="(item,index) in truckTypes.categories"
-                             :key='index'
-                             :label="item.value"
-                             :value="item.key"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item prop="subCategory"
-                            required>
-                <el-select v-model="form.subCategory"
-                           disabled
-                           filterable
-                           class="formSelect"
-                           placeholder="Truck sub type">
-                  <el-option v-for="(item,index) in truckTypes.subCategories"
-                             :key='index'
-                             :label="item.value"
-                             :value="item.key"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item :label="$t('resources.origin')"
-                            prop="fromProvinceCode"
-                            required>
-                <el-select v-model="form.fromProvinceCode"
-                           class="formSelect"
-                           filterable>
-                  <el-option v-for="(item,index) in provinceList"
-                             :key='index'
-                             :label="item.name"
-                             :value="item.code"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item :label="$t('resources.destination')"
-                            prop="toProvinceCodes"
-                            required>
-                <el-select v-model="form.toProvinceCodes"
-                           filterable
-                           multiple
-                           @change="toProvinceCodeChange"
-                           class="formSelect">
-                  <el-option v-for="(item,index) in provinceList"
-                             :key='index'
-                             :label="item.name"
-                             :value="item.code"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item :label="$t('resources.cutOffTime')"
-                            prop="finishedAt">
-                <el-time-select v-model="form.finishedAt"
-                                style="width:100%;"
-                                :picker-options="timeOptions"
-                                default-value="18:00">
-                </el-time-select>
-              </el-form-item>
-              <el-form-item :label="$t('resources.supportLoading')"
-                            prop="supportLoading"
-                            required>
-                <el-select class="formSelect"
-                           v-model="form.supportLoading">
-                  <el-option :label="$t('resources.require')"
-                             :value="1">
-                  </el-option>
-                  <el-option :label="$t('resources.notRequired')"
-                             :value="0">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item :label="$t('resources.humanWorkDay')"
-                            required
-                            prop="humanWorkDay"
-                            v-if="form.supportLoading">
-                <el-input v-model="form.humanWorkDay"
-                          @mousewheel.native.prevent
-                          type="number"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('resources.moneyPerDay')"
-                            required
-                            prop="supportLoading"
-                            v-if="form.supportLoading">
-                <el-input v-model="form.moneyPerDay"
-                          type="number"
-                          @mousewheel.native.prevent>
-                </el-input>
-              </el-form-item>
-              <el-form-item :label="$t('resources.status')"
-                            prop="status"
-                            required>
-                <el-select class="formSelect"
-                           v-model="form.status">
-                  <el-option :label="$t('resources.activated')"
-                             value="ACTIVE">
-                  </el-option>
-                  <el-option :label="$t('resources.closed')"
-                             value="CLOSED">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
+                   :show-message="false"
+                   :model="form"
+                   ref='form'>
+            <el-form-item :label="$t('resources.plateLicense')"
+                          prop="truckId"
+                          required>
+              <el-select v-model="form.truckId"
+                         class="formSelect"
+                         @change="choosePlate"
+                         filterable
+                         placeholder="province">
+                <el-option v-for="(item,index) in tdList"
+                           :key='index'
+                           :label="item.plate"
+                           :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('resources.truckType')"
+                          prop="category"
+                          required>
+              <el-select v-model="form.category"
+                         disabled
+                         filterable
+                         class="formSelect"
+                         placeholder="Truck type">
+                <el-option v-for="(item,index) in truckTypes.categories"
+                           :key='index'
+                           :label="item.value"
+                           :value="item.key"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item prop="subCategory"
+                          required>
+              <el-select v-model="form.subCategory"
+                         disabled
+                         filterable
+                         class="formSelect"
+                         placeholder="Truck sub type">
+                <el-option v-for="(item,index) in truckTypes.subCategories"
+                           :key='index'
+                           :label="item.value"
+                           :value="item.key"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('resources.origin')"
+                          prop="fromProvinceCode"
+                          required>
+              <el-select v-model="form.fromProvinceCode"
+                         class="formSelect"
+                         filterable>
+                <el-option v-for="(item,index) in provinceList"
+                           :key='index'
+                           :label="item.name"
+                           :value="item.code"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('resources.destination')"
+                          prop="toProvinceCodes"
+                          required>
+              <el-select v-model="form.toProvinceCodes"
+                         filterable
+                         multiple
+                         @change="toProvinceCodeChange"
+                         class="formSelect">
+                <el-option v-for="(item,index) in provinceList"
+                           :key='index'
+                           :label="item.name"
+                           :value="item.code"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('resources.cutOffTime')"
+                          prop="finishedAt">
+              <el-time-select v-model="form.finishedAt"
+                              style="width:100%;"
+                              :picker-options="timeOptions"
+                              default-value="18:00">
+              </el-time-select>
+            </el-form-item>
+            <el-form-item :label="$t('resources.supportLoading')"
+                          prop="supportLoading"
+                          required>
+              <el-select class="formSelect"
+                         v-model="form.supportLoading">
+                <el-option :label="$t('resources.require')"
+                           :value="1">
+                </el-option>
+                <el-option :label="$t('resources.notRequired')"
+                           :value="0">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('resources.humanWorkDay')"
+                          required
+                          prop="humanWorkDay"
+                          v-if="form.supportLoading">
+              <el-input v-model="form.humanWorkDay"
+                        @mousewheel.native.prevent
+                        type="number"></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('resources.moneyPerDay')"
+                          required
+                          prop="supportLoading"
+                          v-if="form.supportLoading">
+              <el-input v-model="form.moneyPerDay"
+                        type="number"
+                        @mousewheel.native.prevent>
+              </el-input>
+            </el-form-item>
+            <el-form-item :label="$t('resources.status')"
+                          prop="status"
+                          required>
+              <el-select class="formSelect"
+                         v-model="form.status">
+                <el-option :label="$t('resources.activated')"
+                           value="ACTIVE">
+                </el-option>
+                <el-option :label="$t('resources.closed')"
+                           value="CLOSED">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
           </div>
-          <div class="edit-right">
-            <div>
-              <div class="date-header">
-                <div>{{$t('resources.availableDate')}}</div>
-                <el-select v-model="date.year"
-                           @change="dateChange"
-                           style="width:150px;"
-                           placeholder="">
-                  <el-option v-for="item in dateInfo"
-                             :key="item.year"
-                             :label="item.year"
-                             :value="item.year">
-                  </el-option>
-                </el-select>
-                <el-select v-model="date.month"
-                           @change="dateChange"
-                           style="width:150px;"
-                           placeholder="">
-                  <el-option v-for="item in dateInfo[date.year].months"
-                             :key="item"
-                             :label="item"
-                             :value="item">
-                  </el-option>
-                </el-select>
-                <el-button @click="checkAll"
-                           type="primary">{{ allChecked ? $t('resources.deselectAll') : $t('resources.checkAll') }}</el-button>
-              </div>
-              <div class="date-list"
-                   v-loading="dateLoading">
-                <div class="day-item"
-                     v-for="(item,index) in week"
-                     :key="item">
-                  <el-tag class="day nop week"
-                          type="info">{{item}}</el-tag>
-                </div>
-                <div class="day-item"
-                     v-for="(item,index) in weekPH"
-                     :key="index + item">
-                  <el-tag class="day nop day_ph"></el-tag>
-                </div>
-                <div class="day-item"
-                     v-for="(item,index) in dateList"
-                     :key="index">
-                  <el-tag class="day"
-                          :effect="sendDateList['show_' + date.year + '_' + date.month + '_' + item] ? 'dark' : 'plain'"
-                          @click="tapDay(item)">{{item}}</el-tag>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="edit-bottom">
+        </el-tab-pane>
+        <el-tab-pane :label="$t('resrouces.quotation')"
+                     name="quotation">
           <el-table :data="form.cityList"
                     border
                     v-loading="cityLoading"
@@ -367,8 +320,57 @@
               </template>
             </el-table-column>
           </el-table>
-        </div>
-      </div>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('resources.availableDate')"
+                     name="available">
+          <div class="date-header">
+            <div>{{$t('resources.availableDate')}}</div>
+            <el-select v-model="date.year"
+                       @change="dateChange"
+                       style="width:150px;"
+                       placeholder="">
+              <el-option v-for="item in dateInfo"
+                         :key="item.year"
+                         :label="item.year"
+                         :value="item.year">
+              </el-option>
+            </el-select>
+            <el-select v-model="date.month"
+                       @change="dateChange"
+                       style="width:150px;"
+                       placeholder="">
+              <el-option v-for="item in dateInfo[date.year].months"
+                         :key="item"
+                         :label="item"
+                         :value="item">
+              </el-option>
+            </el-select>
+            <el-button @click="checkAll"
+                       type="primary">{{ allChecked ? $t('resources.deselectAll') : $t('resources.checkAll') }}</el-button>
+          </div>
+          <div class="date-list"
+               v-loading="dateLoading">
+            <div class="day-item"
+                 v-for="(item,index) in week"
+                 :key="item">
+              <el-tag class="day nop week"
+                      type="info">{{item}}</el-tag>
+            </div>
+            <div class="day-item"
+                 v-for="(item,index) in weekPH"
+                 :key="index + item">
+              <el-tag class="day nop day_ph"></el-tag>
+            </div>
+            <div class="day-item"
+                 v-for="(item,index) in dateList"
+                 :key="index">
+              <el-tag class="day"
+                      :effect="sendDateList['show_' + date.year + '_' + date.month + '_' + item] ? 'dark' : 'plain'"
+                      @click="tapDay(item)">{{item}}</el-tag>
+            </div>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
       <div slot="footer"
            class="dialog-footer">
         <el-button type="primary"
@@ -392,7 +394,7 @@ export default {
   data () {
     return {
       data: {},
-      editDialog: false,
+      editDialog: true,
       form: {
         category: '',
         subCategory: '',
@@ -445,7 +447,8 @@ export default {
       proObj: {},
       weekPH: [],
       showWeekPH: [],
-      week: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+      week: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+      editActive: 'form'
     };
   },
   //监听属性 类似于data概念
@@ -892,5 +895,10 @@ export default {
   .edit-right {
     width: 550px;
   }
+}
+
+.form-box {
+  width: 500px;
+  margin: 0 auto;
 }
 </style>

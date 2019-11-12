@@ -365,16 +365,16 @@ export default {
   },
   mounted () {
     self.init();
-    ftlLines({
-      page: self.page.currentPage - 1,
-      pagesize: self.pagesize
-    }).then(res => {
-      self.tableList = res.data.content;
-      self.page = {
-        total: res.data.totalElements,
-        currentPage: res.data.number + 1
-      };
-    })
+    // ftlLines({
+    //   page: self.page.currentPage - 1,
+    //   pagesize: self.pagesize
+    // }).then(res => {
+    //   self.tableList = res.data.content;
+    //   self.page = {
+    //     total: res.data.totalElements,
+    //     currentPage: res.data.number + 1
+    //   };
+    // })
   },
   methods: {
     init () {
@@ -497,20 +497,7 @@ export default {
     },
     pageChange (val) {
       self.page.currentPage = val;
-      if (self.searchForm.pickUpRegion == '') {
-        ftlLines({
-          page: self.page.currentPage - 1,
-          pagesize: self.pagesize
-        }).then(res => {
-          self.tableList = res.data.content;
-          self.page = {
-            total: res.data.totalElements,
-            currentPage: res.data.number + 1
-          };
-        })
-      } else {
-        self.searchSupply();
-      }
+      self.searchSupply();
     },
     pageSizeChange (val) {
       self.pagesize = val;
