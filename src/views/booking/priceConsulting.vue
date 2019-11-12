@@ -49,14 +49,14 @@
                              class="innerInp"
                              :options="options"
                              :props="props"
-                             separator='-'
+                             separator="-"
                              style="margin-right:5px;"
                              :placeholder="$t('booking.pickupTime')"
                              @change="dateChange"></el-cascader>
                 <el-time-picker v-model="time"
                                 format="HH:mm:ss"
                                 class="innerInp"
-                                value-format='HH:mm:ss'
+                                value-format="HH:mm:ss"
                                 :placeholder="$t('placeholder.chooseTime')">
                 </el-time-picker>
               </div>
@@ -104,7 +104,7 @@
               <el-button type="primary"
                          @click="searchSupply"
                          style="width:100%;"
-                         :loading="searchloading">{{ $t('booking.searchSupply') }}</el-button>
+                         :loading="searchloading">{{ $t("booking.searchSupply") }}</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -118,10 +118,10 @@
                            align="center">
             <template slot-scope="scope">
               <div>
-                <div>{{scope.row.supply ? scope.row.supply.name : ''}}</div>
+                <div>{{ scope.row.supply ? scope.row.supply.name : "" }}</div>
                 <div>
                   <div>
-                    <el-rate v-model="3.5"
+                    <el-rate v-model="scope.row.supply.avgRating / 2"
                              disabled
                              text-color="#ff9900"
                              score-template="{value}">
@@ -140,7 +140,7 @@
               </div>
               <div>
                 <!-- {{$t('booking.transitTime')}} :  -->
-                {{scope.row.transitTime}} days
+                {{ scope.row.transitTime }} days
               </div>
             </template>
           </el-table-column>
@@ -149,8 +149,18 @@
                            :label="$t('booking.valueAddedService')">
             <template slot-scope="scope">
               <div>
-                <div>{{$t('booking.loading')}}/{{$t('booking.unloading')}} : <i :class="scope.row.supportLoading == 1?'el-icon-check':'el-icon-close'"></i></div>
-                <div>{{$t('booking.documentReturn')}} : <i class="el-icon-check"></i></div>
+                <div>
+                  {{ $t("booking.loading") }}/{{ $t("booking.unloading") }} :
+                  <i :class="
+                      scope.row.supportLoading == 1
+                        ? 'el-icon-check'
+                        : 'el-icon-close'
+                    "></i>
+                </div>
+                <div>
+                  {{ $t("booking.documentReturn") }} :
+                  <i class="el-icon-check"></i>
+                </div>
               </div>
             </template>
           </el-table-column>
@@ -158,24 +168,24 @@
                            align="center"
                            :label="$t('booking.price')">
             <template slot-scope="scope">
-              {{scope.row.charge}}
+              {{ scope.row.charge }}
               <!-- <div>{{$t('booking.feight')}} : {{scope.row.charge}}</div>
               <div v-if="scope.row.supportLoading == 1">{{$t('booking.loading')}}/{{$t('booking.unloading')}} : {{scope.row.loadingOrUnloadingHumanWorkDay * scope.row.moneyPerDay}}</div>
               <div>{{$t('booking.documentReturn')}} :{{documentReturn}}</div>
               <div>{{$t('booking.totalamt')}} : {{10 + scope.row.charge + (scope.row.supportLoading == 1 ? scope.row.loadingOrUnloadingHumanWorkDay * scope.row.moneyPerDay : 0)}}</div> -->
             </template>
           </el-table-column>
-          <el-table-column width='95'>
+          <el-table-column width="95">
             <template slot-scope="scope">
               <el-button type="primary"
                          :disabled="!roles.Demand"
-                         @click="toBooking(scope.row)">{{$t('booking.placeOrder')}}</el-button>
+                         @click="toBooking(scope.row)">{{ $t("booking.placeOrder") }}</el-button>
             </template>
           </el-table-column>
         </el-table>
         <el-pagination style="margin-top:10px;text-align: center;margin-bottom:50px;"
                        background
-                       :page-sizes="[1,5,10,20,50]"
+                       :page-sizes="[1, 5, 10, 20, 50]"
                        :page-size="pagesize"
                        @size-change="pageSizeChange"
                        :current-page.sync="page.currentPage"
@@ -191,9 +201,14 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { mapGetters } from "vuex";
-import { ftlLine } from '../../api/booking';
-import { getTruckType, findDistrictFullList, getBcYear, getBcDay } from '../../api/data'
-import Search from '@/components/HeaderSearch';
+import { ftlLine, ftlLines } from "../../api/booking";
+import {
+  getTruckType,
+  findDistrictFullList,
+  getBcYear,
+  getBcDay
+} from "../../api/data";
+import Search from "@/components/HeaderSearch";
 
 let self;
 
@@ -201,19 +216,22 @@ export default {
   // import引入的组件需要注入到对象中才能使用
   components: {},
   directives: {
-    'el-select-loadmore': {
+    "el-select-loadmore": {
       bind (el, binding) {
         // 获取element-ui定义好的scroll盒子
-        const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap');
-        SELECTWRAP_DOM.addEventListener('scroll', function () {
+        const SELECTWRAP_DOM = el.querySelector(
+          ".el-select-dropdown .el-select-dropdown__wrap"
+        );
+        SELECTWRAP_DOM.addEventListener("scroll", function () {
           /**
-          * scrollHeight 获取元素内容高度(只读)
-          * scrollTop 获取或者设置元素的偏移值,常用于, 计算滚动条的位置, 当一个元素的容器没有产生垂直方向的滚动条, 那它的scrollTop的值默认为0.
-          * clientHeight 读取元素的可见高度(只读)
-          * 如果元素滚动到底, 下面等式返回true, 没有则返回false:
-          * ele.scrollHeight - ele.scrollTop === ele.clientHeight;
-          */
-          const condition = this.scrollHeight - this.scrollTop <= this.clientHeight;
+           * scrollHeight 获取元素内容高度(只读)
+           * scrollTop 获取或者设置元素的偏移值,常用于, 计算滚动条的位置, 当一个元素的容器没有产生垂直方向的滚动条, 那它的scrollTop的值默认为0.
+           * clientHeight 读取元素的可见高度(只读)
+           * 如果元素滚动到底, 下面等式返回true, 没有则返回false:
+           * ele.scrollHeight - ele.scrollTop === ele.clientHeight;
+           */
+          const condition =
+            this.scrollHeight - this.scrollTop <= this.clientHeight;
           if (condition) {
             binding.value();
           }
@@ -222,36 +240,36 @@ export default {
     }
   },
   data () {
-    const self = this
+    const self = this;
     const validatorTruck = (rule, value, callback) => {
       if (!value || !self.searchForm.truckSubCategory) {
-        callback(new Error(''));
+        callback(new Error(""));
       } else {
         callback();
       }
     };
     return {
       searchForm: {
-        truckCategory: '',
-        truckSubCategory: '',
-        pickUpDate: '',
-        deliveryRegion: '',
-        pickUpRegion: ''
+        truckCategory: "",
+        truckSubCategory: "",
+        pickUpDate: "",
+        deliveryRegion: "",
+        pickUpRegion: ""
       },
       searchRules: {
-        deliveryRegion: [{ required: true, }],
-        pickUpRegion: [{ required: true, }],
-        pickUpDate: [{ required: true, }],
-        truckCategory: [{ required: true, validator: validatorTruck }],
+        deliveryRegion: [{ required: true }],
+        pickUpRegion: [{ required: true }],
+        pickUpDate: [{ required: true }],
+        truckCategory: [{ required: true, validator: validatorTruck }]
       },
-      time: '',
+      time: "",
       options: [],
-      logisticType: 'FTL',
+      logisticType: "FTL",
       logisticTypeOption: [
         {
-          value: 'FTL',
-          label: 'FTL'
-        },
+          value: "FTL",
+          label: "FTL"
+        }
         // {
         //   value: 'LTL',
         //   label: 'LTL'
@@ -262,21 +280,21 @@ export default {
       searchloading: false,
       categoryList: [],
       subCategoryList: [],
-      pickUpQuery: '',
+      pickUpQuery: "",
       pickUpRegionList: [],
       delRegionList: [],
-      delQuery: '',
+      delQuery: "",
       isLast: false,
       regionPage: 0,
-      curSelect: '',
+      curSelect: "",
       page: {
         total: 0,
         currentPage: 1
       },
       pagesize: 20,
       documentReturn: 10,
-      bcYear: '',
-      dateCascader: '',
+      bcYear: "",
+      dateCascader: "",
       props: {
         lazy: true,
         lazyLoad (node, resolve) {
@@ -288,38 +306,45 @@ export default {
           if (node.level == 0) {
             getBcYear().then(res => {
               self.bcYear = res.data;
-              let years = [{
-                label: self.bcYear,
-                value: self.bcYear
-              }, {
-                label: self.bcYear + 1,
-                value: self.bcYear + 1
-              }]
+              let years = [
+                {
+                  label: self.bcYear,
+                  value: self.bcYear
+                },
+                {
+                  label: self.bcYear + 1,
+                  value: self.bcYear + 1
+                }
+              ];
               resolve(years);
-            })
+            });
           } else if (node.level == 1) {
             let months = [];
             for (let y = month; y <= 12; y++) {
               months.push({
                 label: y,
                 value: y
-              })
+              });
             }
-            resolve(months)
+            resolve(months);
           } else if (node.level == 2) {
             getBcDay(node.parent.value, node.value).then(res => {
               let days = res.data;
               let dateList = [];
-              let d = (node.parent.value == self.bcYear && node.value == date.getMonth() + 1) ? day : 1;
+              let d =
+                node.parent.value == self.bcYear &&
+                  node.value == date.getMonth() + 1
+                  ? day
+                  : 1;
               for (let x = d; x <= days; x++) {
                 dateList.push({
                   label: x,
                   value: x,
                   leaf: true
-                })
+                });
               }
-              resolve(dateList)
-            })
+              resolve(dateList);
+            });
           }
         }
       }
@@ -331,7 +356,7 @@ export default {
   },
   // 监控data中的数据变化
   watch: {
-    '$store.getters.language' () {
+    "$store.getters.language" () {
       self.init();
     }
   },
@@ -340,48 +365,59 @@ export default {
   },
   mounted () {
     self.init();
+    ftlLines({
+      page: self.page.currentPage - 1,
+      pagesize: self.pagesize
+    }).then(res => {
+      self.tableList = res.data.content;
+      self.page = {
+        total: res.data.totalElements,
+        currentPage: res.data.number + 1
+      };
+    })
   },
   methods: {
     init () {
       getTruckType().then(res => {
-        self.categoryList = res.data.categories
-        self.subCategoryList = res.data.subCategories
-      })
+        self.categoryList = res.data.categories;
+        self.subCategoryList = res.data.subCategories;
+      });
       if (self.$route.query.return == 1) {
-        let consultInfo = JSON.parse(localStorage.getItem('consultInfo'))
-        self.searchForm = consultInfo.searchForm
-        self.logisticType = consultInfo.logisticType
-        self.dateCascader = consultInfo.searchForm.pickUpDate.split('-').map(Number)
-        self.time = consultInfo.time
-        self.pickUpRegionList = consultInfo.pickUpRegionList
-        self.delRegionList = consultInfo.delRegionList
-        self.searchSupply()
+        let consultInfo = JSON.parse(localStorage.getItem("consultInfo"));
+        self.searchForm = consultInfo.searchForm;
+        self.logisticType = consultInfo.logisticType;
+        self.dateCascader = consultInfo.searchForm.pickUpDate
+          .split("-")
+          .map(Number);
+        self.time = consultInfo.time;
+        self.pickUpRegionList = consultInfo.pickUpRegionList;
+        self.delRegionList = consultInfo.delRegionList;
+        self.searchSupply();
       }
     },
     toBooking (row) {
-      let consultInfo = {}
-      consultInfo.data = row
-      consultInfo.pickUpRegionList = self.pickUpRegionList
-      consultInfo.delRegionList = self.delRegionList
-      consultInfo.searchForm = self.searchForm
-      consultInfo.logisticType = self.logisticType
-      consultInfo.time = self.time ? self.time : '00:00:00'
-      consultInfo.searchForm.truckSubCategory = row.subCategory
-      console.log(consultInfo)
-      localStorage.setItem('consultInfo', JSON.stringify(consultInfo))
-      this.$router.replace('/booking/placeOrder');
+      let consultInfo = {};
+      consultInfo.data = row;
+      consultInfo.pickUpRegionList = self.pickUpRegionList;
+      consultInfo.delRegionList = self.delRegionList;
+      consultInfo.searchForm = self.searchForm;
+      consultInfo.logisticType = self.logisticType;
+      consultInfo.time = self.time ? self.time : "00:00:00";
+      consultInfo.searchForm.truckSubCategory = row.subCategory;
+      localStorage.setItem("consultInfo", JSON.stringify(consultInfo));
+      this.$router.replace("/booking/placeOrder");
     },
     pickUpMethod (query) {
-      if (query !== '') {
-        if (self.curSelect == 'pk') {
-          self.pickUpQuery = query
+      if (query !== "") {
+        if (self.curSelect == "pk") {
+          self.pickUpQuery = query;
         } else {
-          self.delQuery = query
+          self.delQuery = query;
         }
         self.loading = true;
         setTimeout(() => {
           self.loading = false;
-          self.getdistrictFullList(query, self.regionPage)
+          self.getdistrictFullList(query, self.regionPage);
         }, 200);
       } else {
         self.regionList = [];
@@ -389,8 +425,8 @@ export default {
     },
     loadmore () {
       if (!self.isLast) {
-        self.regionPage += 1
-        if (self.curSelect == 'pk') {
+        self.regionPage += 1;
+        if (self.curSelect == "pk") {
           self.getdistrictFullList(self.pickUpQuery, self.regionPage);
         } else {
           self.getdistrictFullList(self.delQuery, self.regionPage);
@@ -402,67 +438,83 @@ export default {
         name: query,
         page: page
       }).then(res => {
-        self.isLast = res.data.last
+        self.isLast = res.data.last;
         if (!res.data.first) {
-          if (self.curSelect == 'pk') {
-            self.pickUpRegionList = self.pickUpRegionList.concat(res.data.content)
+          if (self.curSelect == "pk") {
+            self.pickUpRegionList = self.pickUpRegionList.concat(
+              res.data.content
+            );
           } else {
-            self.delRegionList = self.delRegionList.concat(res.data.content)
+            self.delRegionList = self.delRegionList.concat(res.data.content);
           }
         } else {
-          if (self.curSelect == 'pk') {
-            self.pickUpRegionList = res.data.content
+          if (self.curSelect == "pk") {
+            self.pickUpRegionList = res.data.content;
           } else {
-            self.delRegionList = res.data.content
+            self.delRegionList = res.data.content;
           }
         }
-      })
+      });
     },
-    // 聚焦初始化     
+    // 聚焦初始化
     clearSelect (type) {
-      if (type == 'pk') {
-        self.pickUpQuery = ''
-        self.curSelect = 'pk'
+      if (type == "pk") {
+        self.pickUpQuery = "";
+        self.curSelect = "pk";
       } else {
-        self.delQuery = ''
-        self.curSelect = 'del'
+        self.delQuery = "";
+        self.curSelect = "del";
       }
-      self.regionPage = 0
-      self.isLast = false
+      self.regionPage = 0;
+      self.isLast = false;
     },
     // 搜索
     searchSupply () {
       this.$refs.searchform.validate(valid => {
         let searchForm = JSON.parse(JSON.stringify(self.searchForm));
         if (valid) {
-          self.searchloading = true
-          let time = self.time ? self.time : '00:00:00'
-          searchForm.pickUpDate = searchForm.pickUpDate.split(' ')[0] + ` ${time}`
-          if (self.logisticType == 'FTL') {
+          self.searchloading = true;
+          let time = self.time ? self.time : "00:00:00";
+          searchForm.pickUpDate =
+            searchForm.pickUpDate.split(" ")[0] + ` ${time}`;
+          if (self.logisticType == "FTL") {
             ftlLine(searchForm, {
               page: self.page.currentPage - 1,
               pagesize: self.pagesize
             }).then(res => {
-              self.searchloading = false
-              self.tableList = res.data.content
+              self.searchloading = false;
+              self.tableList = res.data.content;
               self.page = {
-                total: res.data.totalPages,
+                total: res.data.totalElements,
                 currentPage: res.data.number + 1
-              }
+              };
             }).catch(el => {
-              self.searchloading = false
-            })
+              self.searchloading = false;
+            });
           }
         }
-      })
+      });
     },
     pageChange (val) {
-      self.page.currentPage = val
-      self.searchSupply()
+      self.page.currentPage = val;
+      if (self.searchForm.pickUpRegion == '') {
+        ftlLines({
+          page: self.page.currentPage - 1,
+          pagesize: self.pagesize
+        }).then(res => {
+          self.tableList = res.data.content;
+          self.page = {
+            total: res.data.totalElements,
+            currentPage: res.data.number + 1
+          };
+        })
+      } else {
+        self.searchSupply();
+      }
     },
     pageSizeChange (val) {
-      self.pagesize = val
-      self.searchSupply()
+      self.pagesize = val;
+      self.searchSupply();
     },
     dateChange (e) {
       self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
@@ -470,7 +522,7 @@ export default {
   }
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 //@import url(); 引入公共css类
 .manage {
   padding-top: 20px;

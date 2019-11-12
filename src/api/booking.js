@@ -11,6 +11,15 @@ export function ftlLine(data, data2) {
   })
 }
 
+// 获取所有路线s
+export function ftlLines(data) {
+  return request({
+    url: '/api/demand/order/search/ftlLines',
+    method: 'get',
+    params: data
+  })
+}
+
 // ftlLine
 export function ftlCharge(data) {
   return request({
