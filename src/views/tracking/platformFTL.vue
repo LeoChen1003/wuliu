@@ -96,6 +96,15 @@
                 <div>{{propertyObj[item.propertyType]}}</div>
                 <div>{{item.number}} {{unitObj[item.unit]}} {{item.name}} {{sizeObj[item.sizeType]}}</div>
               </el-card>
+              <el-card shadow="never"
+                       v-for="(item,index) in scope.row.chargeList"
+                       :key="index"
+                       style="margin-top:5px;"
+                       v-if="item.chargeIntro=='true'">
+                <div style="display:flex;">
+                  <div>{{serveObj[item.chargeType]}}</div>
+                </div>
+              </el-card>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
