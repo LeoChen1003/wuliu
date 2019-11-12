@@ -9,7 +9,7 @@
                  :rules="loginRules"
                  class="login-form"
                  autocomplete="on"
-                 label-position="right" 
+                 label-position="right"
                  label-width="120px"
                  hide-required-asterisk
                  size="small">
@@ -167,31 +167,6 @@
                           disabled
                           class="inputWidth" />
               </el-form-item>
-              <el-form-item prop="phone"
-                            :label="$t('login.mobilePhoneNo')">
-                <el-input v-model="regForm.phone"
-                          class="inputWidth" />
-              </el-form-item>
-              <el-form-item prop="captcha"
-                            :label="$t('login.graphCaptcha')">
-                <div style="display:flex;align-items:center;">
-                  <el-input v-model="captcha.inp"
-                            maxlength="4" />
-                  <img :src="captcha.url"
-                       @click="refreshCaptcha"
-                       alt="captcha" />
-                </div>
-              </el-form-item>
-              <el-form-item prop="smsCode"
-                            :label="$t('login.messageCode')">
-                <div class="inputWidth"
-                     style="display:flex;align-items:center;">
-                  <el-input v-model="regForm.smsCode">
-                    <el-button @click="sendMessageCode"
-                               slot="append">{{ codeFreezeTime == 0 ? $t('login.sendMessage') : codeFreezeTime + 's' }}</el-button>
-                  </el-input>
-                </div>
-              </el-form-item>
               <el-form-item prop="email"
                             :label="$t('login.email')">
                 <el-input v-model="regForm.email"
@@ -213,6 +188,31 @@
                 <el-input v-model="regForm.confirmPassword"
                           show-password
                           class="inputWidth" />
+              </el-form-item>
+              <el-form-item prop="captcha"
+                            :label="$t('login.graphCaptcha')">
+                <div style="display:flex;align-items:center;">
+                  <el-input v-model="captcha.inp"
+                            maxlength="4" />
+                  <img :src="captcha.url"
+                       @click="refreshCaptcha"
+                       alt="captcha" />
+                </div>
+              </el-form-item>
+              <el-form-item prop="phone"
+                            :label="$t('login.mobilePhoneNo')">
+                <el-input v-model="regForm.phone"
+                          class="inputWidth" />
+              </el-form-item>
+              <el-form-item prop="smsCode"
+                            :label="$t('login.messageCode')">
+                <div class="inputWidth"
+                     style="display:flex;align-items:center;">
+                  <el-input v-model="regForm.smsCode">
+                    <el-button @click="sendMessageCode"
+                               slot="append">{{ codeFreezeTime == 0 ? $t('login.sendMessage') : codeFreezeTime + 's' }}</el-button>
+                  </el-input>
+                </div>
               </el-form-item>
               <el-form-item>
                 <el-checkbox v-model="regArgee">I accept</el-checkbox>
@@ -552,7 +552,7 @@ export default {
       const self = this;
       if (self.codeFreezeTime != 0) {
         return;
-      } else if (!/^(0|66)\d{9}$/.test(self.regForm.phone)) {
+      } else if (!/^(0|66)\d{9}$/.test(self.formType == 'register' ? self.regForm.phone : self.formType == 'forget' ? self.forgotForm.phone : '')) {
         return self.$message.warning(self.$t('login.phoneWrong'))
       }
       if ((self.regForm.phone == "" || !self.regForm.phone) && self.formType == 'register') {
@@ -567,7 +567,7 @@ export default {
           key: self.captcha.key,
           verifyCode: self.captcha.inp,
           phone: phone,
-          type:self.formType
+          type: self.formType
         }).then(res => {
           self.$message.success(self.$t("login.smsSend"));
           self.codeFreezeTime = 60;
