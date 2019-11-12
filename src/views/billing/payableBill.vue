@@ -74,7 +74,7 @@
                     border>
             <el-table-column :label="$t('billing.supply')">
               <template slot-scope="scope">
-                {{scope.row.transport.supply?scope.row.transport.supply.companyName:''}}
+                {{scope.row.transport.supply ? scope.row.transport.supply.companyName : ''}}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.amount')">

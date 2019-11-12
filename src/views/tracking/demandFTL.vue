@@ -87,7 +87,7 @@
                       v-if="scope.row.receiverAddress">
               <div>{{scope.row.receiverAddress.name}} {{scope.row.receiverAddress.mobile}}</div>
               <div>{{scope.row.receiverAddress.addressDetail}}</div>
-              <div>{{scope.row.receiverAddress.province}} {{scope.row.receiverAddress.city}} {{scope.row.receiverAddress.district}}</div>
+              <div>{{scope.row.receiverAddress.district}} {{scope.row.receiverAddress.city}} {{scope.row.receiverAddress.province}}</div>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.supply')">

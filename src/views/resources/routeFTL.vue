@@ -2,7 +2,7 @@
   <div class='wrapper'>
     <div style="margin-bottom:20px;">
       <el-button @click="add"
-                 :disabled="!roles.Demand"
+                 :disabled="!roles.Supply"
                  type="primary">{{$t('resources.add')}}</el-button>
     </div>
     <div class="container">
