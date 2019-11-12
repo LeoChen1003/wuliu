@@ -1,5 +1,5 @@
 <template>
-  <div class="manage">
+  <div class="manage cardFix">
     <!-- <div class="statusHeader">
       <el-button type="primary">{{$t('tracking.releaseAReturnTruck')}}</el-button>
     </div> -->
@@ -634,5 +634,8 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
   margin: 0;
+}
+.cardFix .el-card__body {
+  padding: 5px 10px;
 }
 </style>
