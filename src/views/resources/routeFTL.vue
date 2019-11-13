@@ -307,10 +307,10 @@
                              class="formSelect"
                              multiple>
                     <el-option-group v-for="group in waitTo_cityList"
-                                     :key="group.provinceCode"
+                                     :key="group.code"
                                      :label="group.provinceName">
-                      <el-option v-for="item in group.children"
-                                 :key="item.code"
+                      <el-option v-for="(item,index) in group.children"
+                                 :key="item.code + index"
                                  :label="item.name + '-' + proObj[item.provinceCode]"
                                  :value="item.code">
                       </el-option>
@@ -425,7 +425,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getProvinceList, getCityList, getTruckType, getSupplyTD, getBcYear, getBcDay } from '@/api/data'
+import { getProvinceList, getCityList, getCityListGroup, getTruckType, getSupplyTD, getBcYear, getBcDay } from '@/api/data'
 import { getRoute, addRoute, updateRoute } from '@/api/resources'
 
 let self;
@@ -496,22 +496,22 @@ export default {
         children: [{
           code: 'TH0202',
           name: 'บางบ่อ',
-          provinceCode:'TH05'
+          provinceCode: 'TH05'
         }, {
           code: 'TH0203',
           label: 'บางพลี',
-          provinceCode:'TH05'
+          provinceCode: 'TH05'
         }]
       }, {
         provinceName: 'มืองสมุทกา',
         children: [{
           code: 'TH0202',
           name: 'บางบ่อางาง',
-          provinceCode:'TH06'
+          provinceCode: 'TH06'
         }, {
           code: 'TH0203',
           label: 'บางพลีางพางพ',
-          provinceCode:'TH06'
+          provinceCode: 'TH06'
         }]
       }],
     };
@@ -832,15 +832,15 @@ export default {
     },
     // 目的地省改变
     toProvinceCodeChange (e) {
-      let params = '';
-      if (e.length == 0) {
-        params = 'provinceCodes=emptyCode'
-      } else {
-        for (let x in e) {
-          params += `${x == 0 ? '' : '&'}provinceCodes=${e[x]}`
-        }
-      }
-      getCityList(params).then(res => {
+      // let params = '';
+      // if (e.length == 0) {
+      //   params = 'provinceCodes=emptyCode'
+      // } else {
+      //   for (let x in e) {
+      //     params += `${x == 0 ? '' : '&'}provinceCodes=${e[x]}`
+      //   }
+      // }
+      getCityListGroup(e).then(res => {
         self.waitTo_cityList = res.data;
       })
     },
