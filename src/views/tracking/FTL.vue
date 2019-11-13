@@ -549,6 +549,7 @@ export default {
       self.returnCharge = '';
       self.returnDate = '';
       self.returnTime = '';
+      self.dateCascader = [];
       self.returnId = item.id;
       self.returnDialog = true;
     },
