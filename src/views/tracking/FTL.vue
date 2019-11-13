@@ -111,7 +111,7 @@
             <template slot-scope="scope">
               <div>{{scope.row.receiverAddress.name}} {{tabActive=='toBeconfirmedOrderbyDemand' || tabActive=='toBeconfirmedOrderbySupply'?'':scope.row.receiverAddress.mobile}}</div>
               <div>{{scope.row.receiverAddress.addressDetail}}</div>
-              <div>{{scope.row.receiverAddress.province}} {{scope.row.receiverAddress.city}} {{scope.row.receiverAddress.district}}</div>
+              <div>{{scope.row.receiverAddress.district}} {{scope.row.receiverAddress.city}} {{scope.row.receiverAddress.province}}</div>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.price')">
@@ -141,7 +141,7 @@
                 <el-button v-if="scope.row.status == 'WILL_PICK' && scope.row.transport.driverName == null"
                            @click="confirmB(scope.row)"
                            type="primary">{{$t('tracking.operation')}}</el-button>
-                <el-button v-if="scope.row.status == 'SENDING' && scope.row.publishBack == 0"
+                <el-button v-if="scope.row.status == 'SENDING' && (scope.row.publishBack == 0 || scope.row.publishBack == null)"
                            @click="returnShow(scope.row)"
                            type="primary">{{$t('tracking.returnTruck')}}</el-button>
               </div>
