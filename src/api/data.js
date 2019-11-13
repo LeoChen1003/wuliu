@@ -1,4 +1,5 @@
 import request from "@/utils/request";
+import requestJSON from '@/utils/requestJSON'
 
 // 卡车类型
 export function getTruckType() {
@@ -57,11 +58,11 @@ export function getCityList(params) {
 }
 
 // 分组获取所有市
-export function getCityListGroup(params) {
-  return request({
+export function getCityListGroup(data) {
+  return requestJSON({
     url: "/misc/geo/city/grouplist",
-    method: "get",
-    params: params
+    method: "post",
+    data: data
   });
 }
 

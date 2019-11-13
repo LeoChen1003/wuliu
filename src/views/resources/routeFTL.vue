@@ -289,7 +289,8 @@
             <el-table-column :label="$t('resources.origin')">
               <template slot-scope="scope">
                 <div>
-                  <el-select v-model="scope.row.fromCityCode">
+                  <el-select v-model="scope.row.fromCityCode"
+                             @change="formCityChange(scope.row)">
                     <el-option v-for="item in waitFrom_cityList"
                                :key="item.code"
                                :label="item.name"
@@ -305,10 +306,11 @@
                 <div>
                   <el-select v-model="scope.row.toCityCode"
                              class="formSelect"
+                             @change="formCityChange(scope.row)"
                              multiple>
                     <el-option-group v-for="group in waitTo_cityList"
-                                     :key="group.code"
-                                     :label="group.provinceName">
+                                     :key="group.provinceCode"
+                                     :label="proObj[group.provinceCode]">
                       <el-option v-for="(item,index) in group.children"
                                  :key="item.code + index"
                                  :label="item.name + '-' + proObj[item.provinceCode]"
@@ -426,7 +428,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { getProvinceList, getCityList, getCityListGroup, getTruckType, getSupplyTD, getBcYear, getBcDay } from '@/api/data'
-import { getRoute, addRoute, updateRoute } from '@/api/resources'
+import { getRoute, addRoute, updateRoute, getCityDT } from '@/api/resources'
 
 let self;
 export default {
@@ -491,29 +493,7 @@ export default {
       week: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
       editActive: 'form',
       waitFrom_cityList: [],
-      waitTo_cityList: [{
-        provinceName: 'มืองสมุทรปรากา',
-        children: [{
-          code: 'TH0202',
-          name: 'บางบ่อ',
-          provinceCode: 'TH05'
-        }, {
-          code: 'TH0203',
-          label: 'บางพลี',
-          provinceCode: 'TH05'
-        }]
-      }, {
-        provinceName: 'มืองสมุทกา',
-        children: [{
-          code: 'TH0202',
-          name: 'บางบ่อางาง',
-          provinceCode: 'TH06'
-        }, {
-          code: 'TH0203',
-          label: 'บางพลีางพางพ',
-          provinceCode: 'TH06'
-        }]
-      }],
+      waitTo_cityList: [],
     };
   },
   //监听属性 类似于data概念
@@ -871,6 +851,11 @@ export default {
       self.showDateList = dateList;
       self.thisRow = row;
       this.$forceUpdate();
+    },
+    formCityChange (row) {
+      if (row.fromCityCode != '' && row.toCityCode.length != 0 && self.form.category != '') {
+        getCityDT(row.fromCityCode, row.toCityCode.toString(), self.form.category)
+      }
     }
   },
   created () {
