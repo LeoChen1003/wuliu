@@ -109,7 +109,7 @@
           </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
             <template slot-scope="scope">
-              <div>{{scope.row.receiverAddress.name}} {{scope.row.receiverAddress.mobile}}</div>
+              <div>{{scope.row.receiverAddress.name}} {{tabActive=='toBeconfirmedOrderbyDemand' || tabActive=='toBeconfirmedOrderbySupply'?'':scope.row.receiverAddress.mobile}}</div>
               <div>{{scope.row.receiverAddress.addressDetail}}</div>
               <div>{{scope.row.receiverAddress.district}} {{scope.row.receiverAddress.city}} {{scope.row.receiverAddress.province}}</div>
             </template>
@@ -123,7 +123,7 @@
           </el-table-column>
           <el-table-column :label="$t('tracking.pickupPoint')">
             <template slot-scope="scope">
-              <div>{{scope.row.senderAddress.name}} {{scope.row.senderAddress.mobile}}</div>
+              <div>{{scope.row.senderAddress.name}} {{tabActive=='toBeconfirmedOrderbyDemand' || tabActive=='toBeconfirmedOrderbySupply'?'':scope.row.senderAddress.mobile}}</div>
               <div>{{scope.row.senderAddress.addressDetail}}</div>
               <div>{{scope.row.senderAddress.province}} {{scope.row.senderAddress.city}} {{scope.row.senderAddress.district}}</div>
             </template>
