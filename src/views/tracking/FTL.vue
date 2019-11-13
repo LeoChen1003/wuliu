@@ -236,7 +236,7 @@
           <div>{{orderInfo.receiverAddress.city}} {{orderInfo.receiverAddress.district}}</div>
         </el-form-item>
         <el-form-item :label="$t('tracking.qty')">
-          <div>{{orderInfo.orderNo}}</div>
+          <div>0</div>
         </el-form-item>
         <el-form-item :label="$t('tracking.driver')">
           <el-select v-model="confirmForm.driverId"
