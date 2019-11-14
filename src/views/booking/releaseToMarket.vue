@@ -739,6 +739,7 @@ export default {
       this.$refs.releaseform.validate(valid => {
         if (valid) {
           self.todoLoading = true
+          self.releaseForm.chargeList.splice(1)
           // self.releaseForm.senderAddress.pickAt += ' ' + self.time
           for (let x in self.amountList) {
             self.releaseForm.chargeList.push({
