@@ -756,6 +756,7 @@ export default {
       this.$refs.bookingform.validate(valid => {
         if (valid) {
           self.todoLoading = true
+          self.bookingForm.chargeList.splice(1)
           for (let x in self.amountList) {
             if (self.amountList[x].key != 'FREIGHT') {
               self.bookingForm.chargeList.push({
