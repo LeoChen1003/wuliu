@@ -1,4 +1,4 @@
-{
+﻿{
   "message": {
     "switchLang": "Switch Language Success"
   },
@@ -263,7 +263,9 @@
     "truckSubType": "Truck sub Type",
     "reset": "Reset password",
     "successful": "Successful",
-    "basicData": "Basic data"
+    "basicData": "Basic data",
+    "detailInformation": "Detail information",
+    "quoteMode": "Quote mode"
   },
   "billing": {
     "billingStatus": "Billing status",

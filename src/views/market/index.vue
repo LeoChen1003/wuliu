@@ -186,13 +186,13 @@
                            :value="item.key" />
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('booking.shareTruck')">
+            <!-- <el-form-item :label="$t('booking.shareTruck')">
               <el-radio-group v-model="shareTruck"
                               disabled>
                 <el-radio :label="false">{{$t('booking.fullTruckLoad')}}</el-radio>
                 <el-radio :label="true">{{$t('booking.sharetruckLoad')}}</el-radio>
               </el-radio-group>
-            </el-form-item>
+            </el-form-item> -->
           </div>
           <div style="width:50%;">
             <el-form-item :label="$t('booking.valueAddedService')">

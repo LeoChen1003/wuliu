@@ -81,7 +81,7 @@
                   border>
           <el-table-column :label="$t('tracking.tracking')">
             <template slot-scope="scope">
-              <el-button style="width:100%;"
+              <el-button style="width:100%;text-align:left;"
                          @click="orderLog(scope.row.id)">
                 <div>{{scope.row.orderNo}}</div>
                 <div>{{scope.row.outNumber}}</div>

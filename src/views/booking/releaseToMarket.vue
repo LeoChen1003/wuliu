@@ -736,7 +736,6 @@ export default {
     // 下单
     todoIt () {
       const self = this
-      console.log(self.releaseForm)
       this.$refs.releaseform.validate(valid => {
         if (valid) {
           self.todoLoading = true
@@ -747,6 +746,9 @@ export default {
               chargeIntro: self.amountList[x].key == 'INSURANCE' ? self.liabilitySelect : 'true',
               money: self.amountList[x].key == 'INSURANCE' ? self.liabilityCon : 0
             })
+          }
+          if (self.releaseForm.orderInfo.settlementAmount == '' || self.releaseForm.orderInfo.settlementAmount == null) {
+            self.releaseForm.orderInfo.settlementAmount = 0;
           }
           releaseOrder(self.releaseForm).then(res => {
             self.todoLoading = false
