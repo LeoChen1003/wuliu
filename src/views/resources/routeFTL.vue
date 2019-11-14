@@ -765,6 +765,10 @@ export default {
       let form = JSON.parse(JSON.stringify(self.form));
       this.$refs.form.validate((valid) => {
         if (valid) {
+          if(form.cityList[0].fromCityCode == '' || form.cityList[0].toCityCode.length == 0 || form.cityList[0].charge == ''){
+            self.editActive = 'quotation'
+            return self.$message.warning(self.$t('resources.quotationIsRequired'))
+          }
           self.editLoading = true;
           if (form.supportLoading == 0) {
             form.humanWorkDay = 0;
@@ -820,6 +824,7 @@ export default {
             })
           }
         } else {
+          self.editActive = 'form';
           return false;
         }
       });

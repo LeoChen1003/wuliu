@@ -265,7 +265,8 @@
     "reset": "重置密码",
     "successful": "成功",
     "ftlType1": "点对点",
-    "ftlType2": "公里数"
+    "ftlType2": "公里数",
+    "quotationIsRequired": "quotation不能为空"
   },
   "billing": {
     "billingStatus": "订单状态",
