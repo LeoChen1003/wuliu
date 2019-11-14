@@ -259,7 +259,8 @@
     "truckSubType": "ประเภทรถบรรทุก",
     "reset": "รีเซ็ตรหัสผ่าน",
     "successful": "สำเร็จ",
-    "detailInformation": "ข้อมูลพื้นฐาน"
+    "detailInformation": "ข้อมูลพื้นฐาน",
+    "quoteMode": "โหมดใบเสนอราคา"
   },
   "billing": {
     "billingStatus": "สถานะการเรียกเก็บเงิน",

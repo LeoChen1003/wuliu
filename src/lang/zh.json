@@ -267,7 +267,8 @@
     "ftlType1": "点对点",
     "ftlType2": "公里数",
     "quotationIsRequired": "内容不能为空",
-    "detailInformation":"基础资料 "
+    "detailInformation":"基础资料 ",
+    "quoteMode": "报价模式"
   },
   "billing": {
     "billingStatus": "订单状态",
