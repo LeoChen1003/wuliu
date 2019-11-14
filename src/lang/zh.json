@@ -252,8 +252,8 @@
     "notRequired": "不提供",
     "closed": "关闭",
     "activated": "激活",
-    "price_2": "价格",
-    "availableDate": "可接单日",
+    "price_2": "报价",
+    "availableDate": "有效日期",
     "inverse": "反选",
     "plateLicense": "车牌号",
     "destination_Dsitrict": "目的地(市)",
@@ -266,7 +266,8 @@
     "successful": "成功",
     "ftlType1": "点对点",
     "ftlType2": "公里数",
-    "quotationIsRequired": "内容不能为空"
+    "quotationIsRequired": "内容不能为空",
+    "detailInformation":"基础资料 "
   },
   "billing": {
     "billingStatus": "订单状态",

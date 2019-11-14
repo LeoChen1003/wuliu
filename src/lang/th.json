@@ -246,19 +246,20 @@
     "origin": "ต้นทาง",
     "destination": "ปลายทาง",
     "plateLicense": "ป้ายทะเบียนรถ",
-    "availableDate": "วันที่ใช้ได้",
+    "availableDate": "วันที่พร้อมรับงาน",
     "dst": "ปลายทาง",
     "route": "เส้นทาง",
     "activated": "Activated",
     "closed": "ปิด",
     "distance": "ระยะทาง",
-    "price_2": "ราคา",
+    "price_2": "ใบเสนอราคา",
     "edit": "แก้ไข",
     "notRequired": "ไม่บริการ",
     "require": "บริการ",
     "truckSubType": "ประเภทรถบรรทุก",
     "reset": "รีเซ็ตรหัสผ่าน",
-    "successful": "สำเร็จ"
+    "successful": "สำเร็จ",
+    "detailInformation": "ข้อมูลพื้นฐาน"
   },
   "billing": {
     "billingStatus": "สถานะการเรียกเก็บเงิน",

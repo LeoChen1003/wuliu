@@ -245,8 +245,8 @@
     "notRequired": "I con't provde service",
     "activated": "Activated",
     "closed": "Closed",
-    "price_2": "Price",
-    "availableDate": "Available date",
+    "price_2": "Quotation",
+    "availableDate": "Available Date",
     "dst": "Dst",
     "transitTime": "Transit time",
     "distance": "Distance",
@@ -264,7 +264,7 @@
     "reset": "Reset password",
     "successful": "Successful",
     "basicData": "Basic data",
-    "detailInformation": "Detail information",
+    "detailInformation": "Basic Data",
     "quoteMode": "Quote mode"
   },
   "billing": {
