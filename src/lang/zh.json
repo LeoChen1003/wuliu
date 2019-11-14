@@ -268,6 +268,7 @@
     "ftlType2": "公里数",
     "quotationIsRequired": "内容不能为空",
     "detailInformation":"基础资料 ",
+    "basicData": "基础资料",
     "quoteMode": "报价模式",
     "quotation": "报价"
   },

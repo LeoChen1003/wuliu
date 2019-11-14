@@ -261,7 +261,8 @@
     "successful": "สำเร็จ",
     "detailInformation": "ข้อมูลพื้นฐาน",
     "quoteMode": "โหมดใบเสนอราคา",
-    "quotation": "ใบเสนอราคา"
+    "quotation": "ใบเสนอราคา",
+    "basicData": "ข้อมูลพื้นฐาน"
   },
   "billing": {
     "billingStatus": "สถานะการเรียกเก็บเงิน",
