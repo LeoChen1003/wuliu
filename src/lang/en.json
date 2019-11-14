@@ -1,4 +1,4 @@
-{
+﻿{
   "message": {
     "switchLang": "Switch Language Success"
   },
@@ -262,7 +262,10 @@
     "edit": "Edit",
     "truckSubType": "Truck sub Type",
     "reset": "Reset password",
-    "successful": "Successful"
+    "successful": "Successful",
+    "basicData": "Basic data",
+    "detailInformation": "Detail information",
+    "quoteMode": "Quote mode"
   },
   "billing": {
     "billingStatus": "Billing status",
@@ -408,5 +411,8 @@
     "licencePlate": "Licence plate",
     "loaderType": "Loader type",
     "theSearchTermCannotBeEmpty": "The search term cannot be empty"
+  },
+  "resrouces": {
+    "quotation": "Quotation"
   }
 }
