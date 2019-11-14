@@ -11,13 +11,13 @@
                   v-loading="loading"
                   highlight-current-row
                   @current-change="tapRow"
-                  :data="data">
+                  :data="data.content">
           <el-table-column header-align="center"
                            align="center"
                            :label="$t('resources.route')">
             <template slot-scope="scope">
               <div>
-                {{ scope.row.data.fromProvince }} --> {{ scope.row.data.toProvinceName }}
+                {{ scope.row.fromProvince }} --> {{ scope.row.toProvinceName }}
               </div>
             </template>
           </el-table-column>
@@ -25,8 +25,8 @@
                            align="center"
                            :label="$t('resources.truckType')">
             <template slot-scope="scope">
-              <div>{{ truckObj[scope.row.data.category] }}</div>
-              <div>{{ scope.row.data.truck.plate }}</div>
+              <div>{{ truckObj[scope.row.category] }}</div>
+              <div>{{ scope.row.truck.plate }}</div>
             </template>
           </el-table-column>
           <!-- <el-table-column header-align="center"
@@ -34,7 +34,7 @@
                            :label="$t('resources.cutOffTime')">
             <template slot-scope="scope">
               <div>
-                {{ scope.row.data.finishedAt }}
+                {{ scope.row.finishedAt }}
               </div>
             </template>
           </el-table-column> -->
@@ -42,7 +42,7 @@
                            align="center"
                            :label="$t('resources.status')">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.data.status == 'ACTIVE' ? 'status' : 'info'">{{scope.row.data.status}}</el-tag>
+              <el-tag :type="scope.row.status == 'ACTIVE' ? 'status' : 'info'">{{scope.row.status}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column header-align="center"
@@ -77,40 +77,40 @@
             <div style="background:#fff;box-sizing:border-box;padding:20px;">
               <el-form :label-width="$store.getters.language == 'zh_CN' ? '150px' : '220px'"
                        :show-message="false"
-                       v-if="thisRow.data">
+                       v-if="thisRow.citys">
                 <el-form-item :label="$t('resources.plateLicense')">
-                  {{ thisRow.data.truck.plate }}
+                  {{ thisRow.truck.plate }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.truckType')">
-                  {{ truckObj[thisRow.data.truck.category] }} - {{ subObj[thisRow.data.truck.subCategory]}}
+                  {{ truckObj[thisRow.truck.category] }} - {{ subObj[thisRow.truck.subCategory]}}
                 </el-form-item>
                 <el-form-item :label="$t('resources.origin')">
-                  {{ thisRow.data.fromProvince }}
+                  {{ thisRow.fromProvince }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.destination')">
-                  {{ thisRow.data.toProvinceName }}
+                  {{ thisRow.toProvinceName }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.quoteMode')">
-                  {{ thisRow.data.ftlType == 0 ? $t('resources.ftlType1') : $t('resources.ftlType2') }}
+                  {{ thisRow.ftlType == 0 ? $t('resources.ftlType1') : $t('resources.ftlType2') }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.cutOffTime')">
-                  {{ thisRow.data.finishedAt }}
+                  {{ thisRow.finishedAt }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.supportLoading')">
-                  {{ thisRow.data.supportLoading == 0 ? $t('resources.notRequired') : $t('resources.require') }}
+                  {{ thisRow.supportLoading == 0 ? $t('resources.notRequired') : $t('resources.require') }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.humanWorkDay')"
-                              v-if="thisRow.data.supportLoading">
-                  {{ thisRow.data.loadingOrUnloadingHumanWorkDay }}
+                              v-if="thisRow.supportLoading">
+                  {{ thisRow.loadingOrUnloadingHumanWorkDay }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.moneyPerDay')"
-                              v-if="thisRow.data.supportLoading">
-                  {{ thisRow.data.moneyPerDay }}
+                              v-if="thisRow.supportLoading">
+                  {{ thisRow.moneyPerDay }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.status')">
-                  <el-tag v-if="thisRow.data.status == 'ACTIVE'"
+                  <el-tag v-if="thisRow.status == 'ACTIVE'"
                           type="primary">{{$t('resources.activated')}}</el-tag>
-                  <el-tag v-if="thisRow.data.status == 'CLOSED'"
+                  <el-tag v-if="thisRow.status == 'CLOSED'"
                           type="info">{{$t('resources.closed')}}</el-tag>
                 </el-form-item>
               </el-form>
@@ -127,7 +127,7 @@
                                  :label="$t('resources.origin')">
                   <template slot-scope="scope">
                     <div>
-                      {{ cityObj[scope.row.fromCityCode] }}-{{ thisRow.data.fromProvince }}
+                      {{ cityObj[scope.row.fromCityCode] }}-{{ thisRow.fromProvince }}
                     </div>
                   </template>
                 </el-table-column>
@@ -338,7 +338,7 @@
                 </el-form-item>
                 <el-form-item :label="$t('resources.moneyPerDay')"
                               required
-                              prop="supportLoading"
+                              prop="moneyPerDay"
                               v-if="form.supportLoading">
                   <el-input v-model="form.moneyPerDay"
                             type="number"
@@ -389,7 +389,7 @@
                                :label="$t('resources.destination_Dsitrict')">
                 <template slot-scope="scope">
                   <div>
-                    <el-select v-model="scope.row.toCityCode"
+                    <el-select v-model="scope.row.toCityCodes"
                                :disabled="form.category == '' || form.toProvinceCodes.length == 0"
                                class="formSelect"
                                filterable
@@ -707,9 +707,10 @@ export default {
       if (self.$refs.form) {
         self.resetForm();
       }
+      self.editActive = 'form';
       self.form.cityList = [{
         "fromCityCode": '',
-        "toCityCode": [],
+        "toCityCodes": [],
         "charge": '',
         "transitTime": '',
       }]
@@ -717,13 +718,13 @@ export default {
     },
     // 编辑按钮
     edit (row) {
-      let item = row.data;
+      let item = row;
       let cityList = row.citys;
       self.editType = 'update';
       self.editActive = 'form';
-      for (let i of cityList) {
-        i.toCityCode = i.toCityCodes;
-      }
+      // for (let i of cityList) {
+      //   i.toCityCode = JSON.parse(JSON.stringify(i.toCityCodes));
+      // }
       for (let i of item.dateList) {
         self.$set(self.sendDateList, ['show_' + i.bcYear + '_' + i.month + '_' + i.day], {
           "bcYear": i.bcYear,
@@ -765,9 +766,12 @@ export default {
       let form = JSON.parse(JSON.stringify(self.form));
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if(form.cityList[0].fromCityCode == '' || form.cityList[0].toCityCode.length == 0 || form.cityList[0].charge == ''){
-            self.editActive = 'quotation'
-            return self.$message.warning(self.$t('resources.quotationIsRequired'))
+          // 验证cityList是否有空值
+          for (let i of form.cityList) {
+            if (i.fromCityCode == '' || i.toCityCodes.length == 0 || i.charge == '') {
+              self.editActive = 'quotation'
+              return self.$message.warning(self.$t('resources.quotationIsRequired'))
+            }
           }
           self.editLoading = true;
           if (form.supportLoading == 0) {
@@ -777,12 +781,12 @@ export default {
           for (let x in self.sendDateList) {
             form.dateList.push(self.sendDateList[x])
           }
-          let toProvinceCode = '';
-          for (let i of form.toProvinceCodes) {
-            toProvinceCode += i + ',';
-          }
-          toProvinceCode = toProvinceCode.substring(0, toProvinceCode.lastIndexOf(','));
-          form['toProvinceCode'] = toProvinceCode;
+          // let toProvinceCode = '';
+          // for (let i of form.toProvinceCodes) {
+          //   toProvinceCode += i + ',';
+          // }
+          // toProvinceCode = toProvinceCode.substring(0, toProvinceCode.lastIndexOf(','));
+          form['toProvinceCode'] = form.toProvinceCodes.toString();
           form['citys'] = [];
           for (let x in form.cityList) {
             form.citys.push({
@@ -796,7 +800,7 @@ export default {
               transitTime: form.cityList[x].transitTime,
               price: parseInt(form.cityList[x].charge),
             })
-            for (let t of form.cityList[x].toCityCode) {
+            for (let t of form.cityList[x].toCityCodes) {
               form.citys[x].toCitys.push({
                 name: self.cityObj[t],
                 code: t
@@ -952,7 +956,7 @@ export default {
         self.waitFrom_cityList = res.data;
         self.form.cityList = [{
           "fromCityCode": '',
-          "toCityCode": [],
+          "toCityCodes": [],
           "charge": '',
           "transitTime": '',
         }]
@@ -970,12 +974,13 @@ export default {
       // }
       getCityListGroup(e).then(res => {
         self.waitTo_cityList = res.data;
-        self.form.cityList = [{
-          "fromCityCode": '',
-          "toCityCode": [],
-          "charge": '',
-          "transitTime": '',
-        }]
+        // self.form.cityList = [{
+        //   "fromCityCode": '',
+        //   "toCityCodes": [],
+        //   "charge": '',
+        //   "transitTime": '',
+        // }]
+
       })
     },
     choosePlate (e) {
@@ -987,6 +992,7 @@ export default {
       }
     },
     tapRow (row) {
+      console.log(row)
       if (row == null) {
         self.priceList = [];
         self.showDateList = {};
@@ -995,7 +1001,7 @@ export default {
       }
       let dateList = {};
       self.priceList = row.citys;
-      for (let i of row.data.dateList) {
+      for (let i of row.dateList) {
         dateList['show_' + i.bcYear + '_' + i.month + '_' + i.day] = {
           "bcYear": i.bcYear,
           "month": i.month,
@@ -1007,8 +1013,8 @@ export default {
       this.$forceUpdate();
     },
     formCityChange (row) {
-      if (row.fromCityCode != '' && row.toCityCode.length != 0 && self.form.category != '') {
-        getCityDT(row.fromCityCode, row.toCityCode.toString(), self.form.category)
+      if (row.fromCityCode != '' && row.toCityCodes.length != 0 && self.form.category != '') {
+        getCityDT(row.fromCityCode, row.toCityCodes.toString(), self.form.category)
           .then(res => {
             row.minMiles = res.data.minMiles;
             row.maxMiles = res.data.maxMiles;
@@ -1020,7 +1026,7 @@ export default {
     addRow () {
       self.form.cityList.push({
         "fromCityCode": '',
-        "toCityCode": [],
+        "toCityCodes": [],
         "charge": '',
         "transitTime": '',
       })
@@ -1042,7 +1048,7 @@ export default {
             if (x == index) {
               break;
             }
-            choosed = choosed.concat(cityList[x].toCityCode);
+            choosed = choosed.concat(cityList[x].toCityCodes);
           }
         }
         for (let x in waitTo_cityList) {
