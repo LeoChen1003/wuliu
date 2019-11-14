@@ -1,5 +1,5 @@
 <template>
-  <div class="manage">
+  <div class="manage cardFix">
     <!-- <div class="statusHeader">
       <el-button type="primary">{{$t('tracking.releaseAReturnTruck')}}</el-button>
     </div> -->
@@ -96,13 +96,22 @@
                 <div>{{propertyObj[item.propertyType]}}</div>
                 <div>{{item.number}} {{unitObj[item.unit]}} {{item.name}} {{sizeObj[item.sizeType]}}</div>
               </el-card>
+              <el-card shadow="never"
+                       v-for="(item,index) in scope.row.chargeList"
+                       :key="index"
+                       style="margin-top:5px;"
+                       v-if="item.chargeIntro=='true'">
+                <div style="display:flex;">
+                  <div>{{serveObj[item.chargeType]}}</div>
+                </div>
+              </el-card>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
             <template slot-scope="scope">
-              <div>{{scope.row.receiverAddress.name}} {{scope.row.receiverAddress.mobile}}</div>
+              <div>{{scope.row.receiverAddress.name}} {{tabActive=='toBeconfirmedOrderbyDemand' || tabActive=='toBeconfirmedOrderbySupply'?'':scope.row.receiverAddress.mobile}}</div>
               <div>{{scope.row.receiverAddress.addressDetail}}</div>
-              <div>{{scope.row.receiverAddress.province}} {{scope.row.receiverAddress.city}} {{scope.row.receiverAddress.district}}</div>
+              <div>{{scope.row.receiverAddress.district}} {{scope.row.receiverAddress.city}} {{scope.row.receiverAddress.province}}</div>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.price')">
@@ -114,7 +123,7 @@
           </el-table-column>
           <el-table-column :label="$t('tracking.pickupPoint')">
             <template slot-scope="scope">
-              <div>{{scope.row.senderAddress.name}} {{scope.row.senderAddress.mobile}}</div>
+              <div>{{scope.row.senderAddress.name}} {{tabActive=='toBeconfirmedOrderbyDemand' || tabActive=='toBeconfirmedOrderbySupply'?'':scope.row.senderAddress.mobile}}</div>
               <div>{{scope.row.senderAddress.addressDetail}}</div>
               <div>{{scope.row.senderAddress.province}} {{scope.row.senderAddress.city}} {{scope.row.senderAddress.district}}</div>
             </template>
@@ -132,7 +141,7 @@
                 <el-button v-if="scope.row.status == 'WILL_PICK' && scope.row.transport.driverName == null"
                            @click="confirmB(scope.row)"
                            type="primary">{{$t('tracking.operation')}}</el-button>
-                <el-button v-if="scope.row.status == 'SENDING' && scope.row.publishBack == 0"
+                <el-button v-if="(scope.row.status == 'SENDING' || scope.row.status == 'WILL_PICK') && (scope.row.publishBack == 0 || scope.row.publishBack == null)"
                            @click="returnShow(scope.row)"
                            type="primary">{{$t('tracking.returnTruck')}}</el-button>
               </div>
@@ -227,7 +236,7 @@
           <div>{{orderInfo.receiverAddress.city}} {{orderInfo.receiverAddress.district}}</div>
         </el-form-item>
         <el-form-item :label="$t('tracking.qty')">
-          <div>{{orderInfo.orderNo}}</div>
+          <div>0</div>
         </el-form-item>
         <el-form-item :label="$t('tracking.driver')">
           <el-select v-model="confirmForm.driverId"
@@ -540,6 +549,7 @@ export default {
       self.returnCharge = '';
       self.returnDate = '';
       self.returnTime = '';
+      self.dateCascader = [];
       self.returnId = item.id;
       self.returnDialog = true;
     },
@@ -625,5 +635,8 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
   margin: 0;
+}
+.cardFix .el-card__body {
+  padding: 5px 10px;
 }
 </style>

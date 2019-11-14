@@ -1,5 +1,5 @@
 <template>
-  <div class="manage">
+  <div class="manage cardFix">
     <!-- <div class="statusHeader">
       <el-button type="primary">{{$t('tracking.releaseAReturnTruck')}}</el-button>
     </div> -->
@@ -96,13 +96,22 @@
                 <div>{{propertyObj[item.propertyType]}}</div>
                 <div>{{item.number}} {{unitObj[item.unit]}} {{item.name}} {{sizeObj[item.sizeType]}}</div>
               </el-card>
+              <el-card shadow="never"
+                       v-for="(item,index) in scope.row.chargeList"
+                       :key="index"
+                       style="margin-top:5px;"
+                       v-if="item.chargeIntro=='true'">
+                <div style="display:flex;">
+                  <div>{{serveObj[item.chargeType]}}</div>
+                </div>
+              </el-card>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
             <template slot-scope="scope">
               <div>{{scope.row.receiverAddress.name}} {{scope.row.receiverAddress.mobile}}</div>
               <div>{{scope.row.receiverAddress.addressDetail}}</div>
-              <div>{{scope.row.receiverAddress.province}} {{scope.row.receiverAddress.city}} {{scope.row.receiverAddress.district}}</div>
+              <div>{{scope.row.receiverAddress.district}} {{scope.row.receiverAddress.city}} {{scope.row.receiverAddress.province}}</div>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.price')">
@@ -556,5 +565,8 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
   margin: 0;
+}
+.cardFix .el-card__body {
+  padding: 5px 10px;
 }
 </style>

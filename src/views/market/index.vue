@@ -102,7 +102,11 @@
             <div>{{scope.row.remark}}</div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('tracking.price')"></el-table-column>
+        <el-table-column :label="$t('tracking.price')">
+          <template slot-scope="scope">
+            <div>{{scope.row.settlementAmount>0?scope.row.settlementAmount:''}}</div>
+          </template>
+        </el-table-column>
         <el-table-column>
           <template slot-scope="scope">
             <div style="text-align:center;">

@@ -404,6 +404,7 @@ export default {
       consultInfo.logisticType = self.logisticType;
       consultInfo.time = self.time ? self.time : "00:00:00";
       consultInfo.searchForm.truckSubCategory = row.subCategory;
+      consultInfo.searchForm.truckCategory = row.category;
       localStorage.setItem("consultInfo", JSON.stringify(consultInfo));
       this.$router.replace("/booking/placeOrder");
     },
@@ -497,6 +498,19 @@ export default {
     },
     pageChange (val) {
       self.page.currentPage = val;
+      // if (self.searchForm.pickUpRegion == '') {
+      //   ftlLines({
+      //     page: self.page.currentPage - 1,
+      //     pagesize: self.pagesize
+      //   }).then(res => {
+      //     self.tableList = res.data.content;
+      //     self.page = {
+      //       total: res.data.totalElements,
+      //       currentPage: res.data.number + 1
+      //     };
+      //   })
+      // } else {
+      // }
       self.searchSupply();
     },
     pageSizeChange (val) {
