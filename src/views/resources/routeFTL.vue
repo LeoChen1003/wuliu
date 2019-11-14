@@ -362,7 +362,7 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane :label="$t('resrouces.quotation')"
+        <el-tab-pane :label="$t('resources.quotation')"
                      name="quotation">
           <div class="tab-wrapper">
             <el-table :data="form.cityList"
