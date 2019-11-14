@@ -265,7 +265,8 @@
     "successful": "Successful",
     "basicData": "Basic data",
     "detailInformation": "Basic Data",
-    "quoteMode": "Quote mode"
+    "quoteMode": "Quote mode",
+    "quotation": "Quotation "
   },
   "billing": {
     "billingStatus": "Billing status",

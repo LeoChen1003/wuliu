@@ -260,7 +260,8 @@
     "reset": "รีเซ็ตรหัสผ่าน",
     "successful": "สำเร็จ",
     "detailInformation": "ข้อมูลพื้นฐาน",
-    "quoteMode": "โหมดใบเสนอราคา"
+    "quoteMode": "โหมดใบเสนอราคา",
+    "quotation": "ใบเสนอราคา"
   },
   "billing": {
     "billingStatus": "สถานะการเรียกเก็บเงิน",
