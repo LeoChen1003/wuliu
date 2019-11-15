@@ -571,7 +571,7 @@ export default {
       if (val) {
         self.amountList.push({
           key: 'RETURN_DOCUMENT',
-          amount: 10,
+          amount: 0,
           label: self.$t('booking.documentReturn'),
         })
       } else {
