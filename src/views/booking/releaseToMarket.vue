@@ -179,8 +179,9 @@
           </el-form-item>
           <el-form-item prop="orderInfo"
                         :label="$t('booking.price')">
-            <el-input v-model="releaseForm.orderInfo.settlementAmount"
+            <el-input v-model.number="releaseForm.orderInfo.settlementAmount"
                       type="number"
+                      @change="moneyChange"
                       class="inputWidth" />
           </el-form-item>
           <el-form-item :label="$t('booking.referenceNo')">
@@ -365,6 +366,7 @@ import { releaseOrder } from '../../api/booking'
 import { getTruckType, findDistrictFullList, getGoodsProperty, getSenderList, getTransportList } from '../../api/data'
 import bcTime from "@/components/bcTime";
 
+let self;
 export default {
   directives: {
     'el-select-loadmore': {
@@ -383,7 +385,6 @@ export default {
   // import引入的组件需要注入到对象中才能使用
   components: { bcTime },
   data () {
-    const self = this
     const validatorOrderInfo = (rule, value, callback) => {
       if (!value.settlementAmount) {
         callback(new Error(''));
@@ -535,7 +536,6 @@ export default {
   watch: {
     shareTruck (val) {
       console.log(val)
-      const self = this
       if (val) {
         self.releaseForm.chargeList[0].chargeIntro = self.cargoShape
       } else {
@@ -543,13 +543,11 @@ export default {
       }
     },
     cargoShape (val) {
-      const self = this
       if (self.shareTruck) {
         self.releaseForm.chargeList[0].chargeIntro = val
       }
     },
     documentReturn (val) {
-      const self = this
       if (val) {
         self.amountList.push({
           key: 'RETURN_DOCUMENT',
@@ -561,7 +559,6 @@ export default {
       }
     },
     loading (val) {
-      const self = this
       if (val) {
         self.amountList.push({
           key: 'LOADING',
@@ -573,7 +570,6 @@ export default {
       }
     },
     unloading (val) {
-      const self = this
       if (val) {
         self.amountList.push({
           key: 'UNLOADING',
@@ -585,7 +581,6 @@ export default {
       }
     },
     liability (val) {
-      const self = this
       if (val) {
         self.amountList.push({
           key: 'INSURANCE',
@@ -597,29 +592,26 @@ export default {
       }
     },
     time_at (val) {
-      const self = this
       let t = self.time ? self.time : '23:59:59'
       self.releaseForm.senderAddress.pickAt = val + ` ${t}`
     },
     time (val) {
-      const self = this
       let t = val ? val : '23:59:59'
       self.releaseForm.senderAddress.pickAt = self.time_at + ` ${val}`
     },
     receive_time_at (val) {
-      const self = this
       let t = self.receive_time ? self.receive_time : '23:59:59'
       self.releaseForm.receiverAddress.receiveAt = val + ` ${t}`
     },
     receive_time (val) {
-      const self = this
       let t = val ? val : '23:59:59'
       self.releaseForm.receiverAddress.receiveAt = self.receive_time_at + ` ${val}`
     }
   },
-  created () { },
+  created () {
+    self = this;
+  },
   mounted () {
-    const self = this
     // 卡车类型
     getTruckType().then(res => {
       self.categoryList = res.data.categories
@@ -640,7 +632,6 @@ export default {
   },
   methods: {
     amountWatch (name) {
-      const self = this
       for (let x in self.amountList) {
         if (self.amountList[x].key == name) {
           self.amountList.splice(x, 1)
@@ -648,17 +639,14 @@ export default {
       }
     },
     changeBCtime (time) {
-      const self = this
       self.time_at = time
       console.log(time)
     },
     changeBCtimeReceive (time) {
-      const self = this
       self.receive_time_at = time
       console.log(time)
     },
     pickUpMethod (query) {
-      const self = this
       console.log(query)
       if (query !== '') {
         if (self.curSelect == 'pk') {
@@ -676,7 +664,6 @@ export default {
       }
     },
     loadmore () {
-      const self = this
       if (!self.isLast) {
         self.page += 1
         if (self.curSelect == 'pk') {
@@ -687,7 +674,6 @@ export default {
       }
     },
     getdistrictFullList (query, page) {
-      const self = this
       findDistrictFullList({
         name: query,
         page: page
@@ -710,7 +696,6 @@ export default {
     },
     // 聚焦初始化     
     clearSelect (type) {
-      const self = this
       if (type == 'pk') {
         self.pickUpQuery = ''
         self.curSelect = 'pk'
@@ -723,8 +708,6 @@ export default {
     },
     // 选择寄件人
     senderSelect (val) {
-      console.log(val)
-      const self = this
       self.releaseForm.senderAddress.name = self.senderList[val].name
       self.releaseForm.senderAddress.mobile = self.senderList[val].mobile
       self.releaseForm.senderAddress.addressDetail = self.senderList[val].addressDetail
@@ -735,7 +718,6 @@ export default {
     },
     // 下单
     todoIt () {
-      const self = this
       this.$refs.releaseform.validate(valid => {
         if (valid) {
           self.todoLoading = true
@@ -762,7 +744,6 @@ export default {
       })
     },
     pushIt () {
-      const self = this
       self.releaseForm.propertyList.push({
         propertyType: '',
         name: '',
@@ -773,27 +754,22 @@ export default {
       })
     },
     delIt (row, index) {
-      const self = this
-      self
-        .$confirm(this.$t('booking.aysDel'), this.$t('confirm.tips'), {
-          confirmButtonText: this.$t('booking.delete'),
-          cancelButtonText: this.$t('member.cancel')
-        })
+      self.$confirm(this.$t('booking.aysDel'), this.$t('confirm.tips'), {
+        confirmButtonText: this.$t('booking.delete'),
+        cancelButtonText: this.$t('member.cancel')
+      })
         .then(() => {
           self.releaseForm.propertyList.splice(index, 1)
         })
         .catch(() => { });
     },
     sizeSelect (val, index) {
-      const self = this
-      console.log(val)
       if (val == 'EXTRA_SIZE') {
         self.sizeDialog = true
         self.sizeCurIndex = index
       }
     },
     sizeConfirm () {
-      const self = this
       self.sizeDialog = false
       let size = self.size_length + '*' + self.size_width + '*' + self.size_height
       self.sizeTypeList.push({
@@ -802,6 +778,13 @@ export default {
       })
       self.releaseForm.propertyList[self.sizeCurIndex].sizeType = size
     },
+    moneyChange (e) {
+      if (e < 0) {
+        self.releaseForm.orderInfo.settlementAmount = null;
+      } else if (e > 1000000) {
+        self.releaseForm.orderInfo.settlementAmount = 1000000;
+      }
+    }
   }
 };
 </script>

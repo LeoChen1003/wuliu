@@ -233,8 +233,7 @@
                   <el-select v-model="form.truckId"
                              class="formSelect"
                              @change="choosePlate"
-                             filterable
-                             placeholder="province">
+                             filterable>
                     <el-option v-for="(item,index) in tdList"
                                :key='index'
                                :label="item.plate"
