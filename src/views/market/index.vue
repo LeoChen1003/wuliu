@@ -226,8 +226,9 @@
                         class="inp" />
             </el-form-item>
             <el-form-item :label="$t('booking.myQuotaion')">
-              <el-input v-model="quotePriceForm.money"
+              <el-input v-model.number="quotePriceForm.money"
                         @mousewheel.native.prevent
+                        @change="moneyChange"
                         type="number"
                         class="inp" />
             </el-form-item>
@@ -503,6 +504,8 @@ export default {
     toquotePrice (row) {
       self.quotePriceDialog = true
       self.quotePriceCon = row
+      self.quotePriceForm.money = null;
+      self.quotePriceForm.truck_id = null;
       self.shareTruck = row.chargeList[0].chargeIntro == 'false' ? false : true
       getSupplyTD().then(res => {
         self.truckData = res.data.trucks
@@ -550,6 +553,13 @@ export default {
         self.searchForm.deliveryRegion = pro.name;
       }
       self.proDialog = false;
+    },
+    moneyChange (e) {
+      if (e < 0) {
+        self.quotePriceForm.money = null;
+      } else if (e > 1000000) {
+        self.quotePriceForm.money = 1000000;
+      }
     }
   }
 };

@@ -141,8 +141,9 @@
                 <el-button v-if="scope.row.status == 'WILL_PICK' && scope.row.transport.driverName == null"
                            @click="confirmB(scope.row)"
                            type="primary">{{$t('tracking.operation')}}</el-button>
-                <el-button v-if="(scope.row.status == 'SENDING' || scope.row.status == 'WILL_PICK') && (scope.row.publishBack == 0 || scope.row.publishBack == null)"
+                <el-button v-if="(scope.row.status == 'SENDING' || scope.row.status == 'WILL_PICK')"
                            @click="returnShow(scope.row)"
+                           :disabled="scope.row.publishBack == 1"
                            type="primary">{{$t('tracking.returnTruck')}}</el-button>
               </div>
             </template>
