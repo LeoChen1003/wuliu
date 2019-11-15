@@ -63,7 +63,7 @@ export const asyncRoutes = [
     redirect: '/market',
     name: 'market',
     meta: {
-      title: 'tracking',
+      // title: 'market',
       roles: ['SUPPLY']
     },
     children: [

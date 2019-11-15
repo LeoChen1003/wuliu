@@ -102,7 +102,11 @@
             <div>{{scope.row.remark}}</div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('tracking.price')"></el-table-column>
+        <el-table-column :label="$t('tracking.price')">
+          <template slot-scope="scope">
+            <div>{{scope.row.settlementAmount>0?scope.row.settlementAmount:''}}</div>
+          </template>
+        </el-table-column>
         <el-table-column>
           <template slot-scope="scope">
             <div style="text-align:center;">
@@ -186,13 +190,13 @@
                            :value="item.key" />
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('booking.shareTruck')">
+            <!-- <el-form-item :label="$t('booking.shareTruck')">
               <el-radio-group v-model="shareTruck"
                               disabled>
                 <el-radio :label="false">{{$t('booking.fullTruckLoad')}}</el-radio>
                 <el-radio :label="true">{{$t('booking.sharetruckLoad')}}</el-radio>
               </el-radio-group>
-            </el-form-item>
+            </el-form-item> -->
           </div>
           <div style="width:50%;">
             <el-form-item :label="$t('booking.valueAddedService')">
@@ -222,8 +226,9 @@
                         class="inp" />
             </el-form-item>
             <el-form-item :label="$t('booking.myQuotaion')">
-              <el-input v-model="quotePriceForm.money"
+              <el-input v-model.number="quotePriceForm.money"
                         @mousewheel.native.prevent
+                        @change="moneyChange"
                         type="number"
                         class="inp" />
             </el-form-item>
@@ -499,6 +504,8 @@ export default {
     toquotePrice (row) {
       self.quotePriceDialog = true
       self.quotePriceCon = row
+      self.quotePriceForm.money = null;
+      self.quotePriceForm.truck_id = null;
       self.shareTruck = row.chargeList[0].chargeIntro == 'false' ? false : true
       getSupplyTD().then(res => {
         self.truckData = res.data.trucks
@@ -546,6 +553,13 @@ export default {
         self.searchForm.deliveryRegion = pro.name;
       }
       self.proDialog = false;
+    },
+    moneyChange (e) {
+      if (e < 0) {
+        self.quotePriceForm.money = null;
+      } else if (e > 1000000) {
+        self.quotePriceForm.money = 1000000;
+      }
     }
   }
 };

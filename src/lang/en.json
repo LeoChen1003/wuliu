@@ -1,4 +1,4 @@
-{
+﻿{
   "message": {
     "switchLang": "Switch Language Success"
   },
@@ -245,8 +245,8 @@
     "notRequired": "I con't provde service",
     "activated": "Activated",
     "closed": "Closed",
-    "price_2": "Price",
-    "availableDate": "Available date",
+    "price_2": "Quotation",
+    "availableDate": "Available Date",
     "dst": "Dst",
     "transitTime": "Transit time",
     "distance": "Distance",
@@ -262,7 +262,11 @@
     "edit": "Edit",
     "truckSubType": "Truck sub Type",
     "reset": "Reset password",
-    "successful": "Successful"
+    "successful": "Successful",
+    "basicData": "Basic data",
+    "detailInformation": "Basic Data",
+    "quoteMode": "Quote mode",
+    "quotation": "Quotation "
   },
   "billing": {
     "billingStatus": "Billing status",
@@ -408,5 +412,8 @@
     "licencePlate": "Licence plate",
     "loaderType": "Loader type",
     "theSearchTermCannotBeEmpty": "The search term cannot be empty"
+  },
+  "resrouces": {
+    "quotation": "Quotation"
   }
 }
