@@ -1,4 +1,4 @@
-{
+﻿{
   "message": {
     "switchLang": "เปลี่ยนภาษาเรียบร้อยแล้ว"
   },
@@ -262,7 +262,8 @@
     "detailInformation": "ข้อมูลพื้นฐาน",
     "quoteMode": "โหมดใบเสนอราคา",
     "quotation": "ใบเสนอราคา",
-    "basicData": "ข้อมูลพื้นฐาน"
+    "basicData": "ข้อมูลพื้นฐาน",
+    "pleaseSelectADdestinationFirst": "กรุณาเลือกปลายทาง"
   },
   "billing": {
     "billingStatus": "สถานะการเรียกเก็บเงิน",

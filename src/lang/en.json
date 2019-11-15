@@ -266,7 +266,8 @@
     "basicData": "Basic data",
     "detailInformation": "Basic Data",
     "quoteMode": "Quote mode",
-    "quotation": "Quotation "
+    "quotation": "Quotation ",
+    "pleaseSelectADdestinationFirst": "Please select a destination first"
   },
   "billing": {
     "billingStatus": "Billing status",

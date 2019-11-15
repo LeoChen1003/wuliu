@@ -72,27 +72,30 @@
           </el-form-item>
           <el-form-item prop="category"
                         :label="$t('resources.truckType')">
-            <el-select v-model="detailform.category"
-                       :placeholder="$t('placeholder.pleaseChoose')"
-                       class="inputWidth">
-              <el-option v-for="item in categoryList"
-                         :key="item.key"
-                         :label="item.value"
-                         :value="item.key">
-              </el-option>
-            </el-select>
+            <div class="double">
+              <el-select v-model="detailform.category"
+                         :placeholder="$t('placeholder.pleaseChoose')"
+                         class="inputWidth">
+                <el-option v-for="item in categoryList"
+                           :key="item.key"
+                           :label="item.value"
+                           :value="item.key">
+                </el-option>
+              </el-select>
+              <el-select v-model="detailform.subCategory"
+                         :placeholder="$t('placeholder.pleaseChoose')"
+                         class="inputWidth">
+                <el-option v-for="item in subCategoryList"
+                           :key="item.key"
+                           :label="item.value"
+                           :value="item.key">
+                </el-option>
+              </el-select>
+            </div>
           </el-form-item>
-          <el-form-item prop="subCategory">
-            <el-select v-model="detailform.subCategory"
-                       :placeholder="$t('placeholder.pleaseChoose')"
-                       class="inputWidth">
-              <el-option v-for="item in subCategoryList"
-                         :key="item.key"
-                         :label="item.value"
-                         :value="item.key">
-              </el-option>
-            </el-select>
-          </el-form-item>
+          <!-- <el-form-item prop="subCategory">
+
+          </el-form-item> -->
           <el-form-item prop="registerAtRegion"
                         :label="$t('resources.provinceOfRegistrationPlace')">
             <el-select v-model="detailform.registerAtRegion"
@@ -105,6 +108,19 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <!-- <el-form-item>
+            <el-upload class="upload-demo"
+                       action="https://jsonplaceholder.typicode.com/posts/"
+                       :on-preview="handlePreview"
+                       :on-remove="handleRemove"
+                       :file-list="fileList"
+                       list-type="picture">
+              <el-button size="small"
+                         type="primary">点击上传</el-button>
+              <div slot="tip"
+                   class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+          </el-form-item> -->
           <el-form-item prop="mobile"
                         :label="$t('resources.phone')">
             <el-input v-model="detailform.mobile"
@@ -413,6 +429,16 @@ export default {
 }
 .inputWidth {
   width: 350px;
+}
+
+.double {
+  width: 350px;
+  display: flex;
+  justify-content: space-between;
+
+  .inputWidth {
+    width: 48%;
+  }
 }
 </style>
 
