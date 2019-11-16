@@ -417,7 +417,7 @@
                 </el-button>
               </el-upload>
             </el-form-item>
-            <el-form-item :label="$t('member.mapForDistributionCenters')">
+            <!-- <el-form-item :label="$t('member.mapForDistributionCenters')">
               <el-upload class="upload"
                          :action="baseUrl + '?credentials_type=center_map&apply_type=SUPPLY'"
                          :headers="headers"
@@ -444,7 +444,7 @@
                            type="primary">{{ $t('member.upload') }}
                 </el-button>
               </el-upload>
-            </el-form-item>
+            </el-form-item> -->
             <!-- <el-form-item :label="$t('member.cargoInsurance')">
               <div>
                 <div class="z-cell">
@@ -694,8 +694,8 @@ export default {
           idcard: [],
           house_particulars: [],
           bank_account_copy: [],
-          center_map: [],
-          truck_register_copy: [],
+          // center_map: [],
+          // truck_register_copy: [],
           logo: []
         },
         contract: {
@@ -864,7 +864,6 @@ export default {
     submitDemand () {
       // 简单验证
       for (let x in self.fileList.demand) {
-        console.log(x)
         if (self.fileList.demand[x].length == 0) {
           return self.$message.warning(self.$t('member.pleaseCompleteTheInformation'))
         }
