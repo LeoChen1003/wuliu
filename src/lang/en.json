@@ -267,7 +267,9 @@
     "detailInformation": "Basic Data",
     "quoteMode": "Quote mode",
     "quotation": "Quotation ",
-    "pleaseSelectADdestinationFirst": "Please select a destination first"
+    "pleaseSelectADdestinationFirst": "Please select a destination first",
+    "truckPhotos": "Truck photos",
+    "license": "License"
   },
   "billing": {
     "billingStatus": "Billing status",

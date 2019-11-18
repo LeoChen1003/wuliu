@@ -86,6 +86,37 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item :label="$t('resources.license')">
+            <div class="inputWidth">
+              <el-upload class="upload-box"
+                         ref="license"
+                         :action="env + '/api/file/upload'"
+                         :on-preview="handlePreview"
+                         multiple
+                         :file-list="fileList1"
+                         :headers="headers"
+                         :limit="5"
+                         list-type="picture-card">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </div>
+          </el-form-item>
+          <el-form-item :label="$t('resources.identityCard')">
+            <div class="inputWidth">
+              <el-upload class="upload-box"
+                         ref="identityCard"
+                         :action="env + '/api/file/upload'"
+                         :on-preview="handlePreview"
+                         multiple
+                         :file-list="fileList2"
+                         :headers="headers"
+                         :limit="5"
+                         list-type="picture-card">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </div>
+          </el-form-item>
+
           <el-form-item>
             <el-button type="primary"
                        style="margin-bottom:20px;"
@@ -96,6 +127,10 @@
         </el-form>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="previewDialog">
+      <img width="100%"
+           :src="previewImg">
+    </el-dialog>
   </div>
 </template>
 
@@ -104,12 +139,17 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import { mapGetters } from "vuex";
 import { driverAdd, driverList, driverEdit } from "../../api/resources";
+import { getToken } from '@/utils/auth'
 
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
   data () {
     return {
+      env: process.env.VUE_APP_BASE_API,
+      headers: {
+        'Authorization': getToken()
+      },
       dataList: [],
       dialogVisible: false,
       detailform: {
@@ -134,12 +174,22 @@ export default {
       },
       loading: false,
       activeTab: 'first',
-      curEditId: null
+      curEditId: null,
+      fileList1: [],
+      fileList2: [],
+      previewDialog: false,
+      previewImg: '',
     };
   },
   //监听属性 类似于data概念
   computed: {
-    ...mapGetters(["roles"])
+    ...mapGetters(["roles"]),
+    licFileList: function () {
+      return self.$refs.license.uploadFiles
+    },
+    idcFileList: function () {
+      return self.$refs.identityCard.uploadFiles
+    },
   },
   //监控data中的数据变化
   watch: {},
@@ -207,7 +257,11 @@ export default {
       })
     },
     handleCurrentChange (val) {
-    }
+    },
+    handlePreview (file) {
+      this.previewImg = file.url;
+      this.previewDialog = true;
+    },
   },
   created () { },
   mounted () {
@@ -234,11 +288,35 @@ export default {
 .inputWidth {
   width: 350px;
 }
+
+.upload-box {
+  width: 100%;
+  height: 70px;
+  overflow: hidden;
+}
 </style>
 
-<style>
+<style lang="scss">
 .tabfix .el-tabs__item {
   width: 200px;
   text-align: center;
+}
+
+.el-upload {
+  width: 60px !important;
+  height: 60px !important;
+}
+
+.el-upload-list {
+  .is-success,
+  .is-uploading,
+  .is-ready {
+    width: 60px !important;
+    height: 60px !important;
+  }
+}
+
+.el-icon-plus {
+  transform: translateY(-38px) !important;
 }
 </style>

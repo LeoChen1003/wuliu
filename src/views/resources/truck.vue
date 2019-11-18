@@ -108,19 +108,21 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <!-- <el-form-item>
-            <el-upload class="upload-demo"
-                       action="https://jsonplaceholder.typicode.com/posts/"
-                       :on-preview="handlePreview"
-                       :on-remove="handleRemove"
-                       :file-list="fileList"
-                       list-type="picture">
-              <el-button size="small"
-                         type="primary">点击上传</el-button>
-              <div slot="tip"
-                   class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-            </el-upload>
-          </el-form-item> -->
+          <el-form-item>
+            <div class="inputWidth">
+              <el-upload class="upload-box"
+                         ref="registrationIds"
+                         :action="env + '/api/file/upload'"
+                         :on-preview="handlePreview"
+                         multiple
+                         :file-list="fileList1"
+                         :headers="headers"
+                         :limit="5"
+                         list-type="picture-card">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </div>
+          </el-form-item>
           <el-form-item prop="mobile"
                         :label="$t('resources.phone')">
             <el-input v-model="detailform.mobile"
@@ -151,9 +153,21 @@
                           label="DO_NOT_HAS_INSURANCE"
                           border>{{$t('resources.DO_NOT_HAS_INSURANCE')}}</el-radio>
               </div>
-
             </template>
-
+          </el-form-item>
+          <el-form-item>
+            <div class="inputWidth">
+              <el-upload class="upload-box"
+                         ref="insuranceIds"
+                         :action="env + '/api/file/upload'"
+                         :on-preview="handlePreview"
+                         :file-list="fileList2"
+                         :headers="headers"
+                         :limit="5"
+                         list-type="picture-card">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </div>
           </el-form-item>
           <div v-if="detailform.insuranceStatus == 'HAS_INSURANCE'">
             <el-form-item prop='insuranceExpiredAt'
@@ -173,6 +187,20 @@
                         class="inputWidth"></el-input>
             </el-form-item>
           </div>
+          <el-form-item :label="$t('resources.truckPhotos')">
+            <div class="inputWidth">
+              <el-upload class="upload-box"
+                         ref="truckIds"
+                         :action="env + '/api/file/upload'"
+                         :on-preview="handlePreview"
+                         :file-list="fileList3"
+                         :headers="headers"
+                         :limit="5"
+                         list-type="picture-card">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </div>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary"
                        style="margin-bottom:20px;"
@@ -190,6 +218,10 @@
         </el-form>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="previewDialog">
+      <img width="100%"
+           :src="previewImg">
+    </el-dialog>
   </div>
 </template>
 
@@ -199,12 +231,16 @@
 import { mapGetters } from "vuex";
 import { truckList, truckAdd, truckEdit, resetPassword } from "../../api/resources";
 import { getTruckType, getProvinceList, getBcYear, getBcDay } from "../../api/data";
+import { getToken } from '@/utils/auth'
+
+let self;
 
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
   data () {
     return {
+      env: process.env.VUE_APP_BASE_API,
       dataList: [],
       dialogVisible: false,
       detailform: {
@@ -288,12 +324,29 @@ export default {
             })
           }
         }
-      }
+      },
+      fileList1: [],
+      fileList2: [],
+      fileList3: [],
+      headers: {
+        'Authorization': getToken()
+      },
+      previewDialog: false,
+      previewImg: '',
     };
   },
   //监听属性 类似于data概念
   computed: {
-    ...mapGetters(["roles"])
+    ...mapGetters(["roles"]),
+    regFileList: function () {
+      return self.$refs.registrationIds.uploadFiles
+    },
+    insFileList: function () {
+      return self.$refs.insuranceIds.uploadFiles
+    },
+    truFileList: function () {
+      return self.$refs.truckIds.uploadFiles
+    },
   },
   //监控data中的数据变化
   watch: {},
@@ -304,13 +357,11 @@ export default {
       }
     },
     getTruckList () {
-      let self = this
       truckList().then(res => {
         self.dataList = res.data
       })
     },
     toAdd () {
-      let self = this
       self.editType = 'add'
       self.detailform = {
         category: '',
@@ -330,7 +381,6 @@ export default {
       self.getData()
     },
     getData () {
-      let self = this
       getTruckType().then(res => {
         self.categoryList = res.data.categories
         self.subCategoryList = res.data.subCategories
@@ -340,7 +390,6 @@ export default {
       })
     },
     toEdit (row) {
-      let self = this
       self.dialogVisible = true
       self.editType = 'edit'
       self.detailform = {
@@ -359,15 +408,45 @@ export default {
       self.getData()
     },
     toConfirm () {
-      let self = this
       if (!/^(0|66)\d{9}$/.test(self.detailform.mobile)) {
         return self.$message.warning(self.$t('login.phoneWrong'))
       }
       this.$refs.detailform.validate(valid => {
         if (valid) {
+          let detailform = JSON.parse(JSON.stringify(self.detailform));
           self.loading = true
+          // 整理registrationIds
+          let regArr = [];
+          for (let i of self.regFileList) {
+            if (i.response) {
+              regArr.push(i.response.data.id)
+            } else {
+              regArr.push(i.id)
+            }
+          }
+          // 整理insuranceIds
+          let insArr = [];
+          for (let i of self.insFileList) {
+            if (i.response) {
+              insArr.push(i.response.data.id)
+            } else {
+              insArr.push(i.id)
+            }
+          }
+          // 整理truckIds
+          let truArr = [];
+          for (let i of self.truFileList) {
+            if (i.response) {
+              truArr.push(i.response.data.id)
+            } else {
+              truArr.push(i.id)
+            }
+          }
+          detailform.registrationIds = regArr.toString();
+          detailform.insuranceIds = insArr.toString();
+          detailform.truckIds = truArr.toString();
           if (self.editType == 'add') {
-            truckAdd(self.detailform).then(res => {
+            truckAdd(detailform).then(res => {
               self.$message.success(res.message)
               self.loading = false
               self.getTruckList()
@@ -376,8 +455,8 @@ export default {
               self.loading = false
             })
           } else if (self.editType == 'edit') {
-            self.detailform.id = self.curEditId
-            truckEdit(self.detailform).then(res => {
+            detailform.id = self.curEditId
+            truckEdit(detailform).then(res => {
               self.$message.success(res.message)
               self.loading = false
               self.getTruckList()
@@ -393,22 +472,26 @@ export default {
       console.log(val)
     },
     dateChange (e) {
-      let self = this;
       self.detailform.insuranceExpiredAt = `${e[0]}-${e[1]}-${e[2]}`;
     },
     reset () {
-      let self = this;
       self.resetLoading = true;
       resetPassword(self.curEditId).then(res => {
         self.$message.success(self.$t('resources.successful'))
         self.resetLoading = false;
       })
-    }
+    },
+    handlePreview (file) {
+      this.previewImg = file.url;
+      this.previewDialog = true;
+    },
   },
-  created () { },
+  created () {
+    self = this;
+  },
   mounted () {
     this.getTruckList()
-  }
+  },
 };
 </script>
 <style lang='scss' scoped>
@@ -440,11 +523,35 @@ export default {
     width: 48%;
   }
 }
+
+.upload-box {
+  width: 100%;
+  height: 70px;
+  overflow: hidden;
+}
 </style>
 
-<style>
+<style lang="scss">
 .tabfix .el-tabs__item {
   width: 200px;
   text-align: center;
+}
+
+.el-upload {
+  width: 60px !important;
+  height: 60px !important;
+}
+
+.el-upload-list {
+  .is-success,
+  .is-uploading,
+  .is-ready {
+    width: 60px !important;
+    height: 60px !important;
+  }
+}
+
+.el-icon-plus {
+  transform: translateY(-38px) !important;
 }
 </style>
