@@ -271,7 +271,9 @@
     "basicData": "基础资料",
     "quoteMode": "报价模式",
     "quotation": "报价",
-    "pleaseSelectADdestinationFirst": "请先选择目的地！"
+    "pleaseSelectADdestinationFirst": "请先选择目的地！",
+    "app": "司机端APP",
+    "outLimit": "最多上传5张图片"
   },
   "billing": {
     "billingStatus": "订单状态",

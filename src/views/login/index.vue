@@ -90,6 +90,38 @@
             <div class="county">English</div>
           </div>
         </div>
+        <div class="app-box">
+          <el-popover placement="bottom"
+                      trigger="hover">
+            <img src="../../assets/image/iphoneQRC.png"
+                 class="qrCode">
+            <el-button type="primary"
+                       slot="reference"
+                       round
+                       @click="iphoneDownload"
+                       size="mini">
+              <div class="app-btn">
+                <img src="../../assets/image/iphone.png">
+                <div>iphone</div>
+              </div>
+            </el-button>
+          </el-popover>
+          <el-popover placement="bottom"
+                      trigger="hover">
+            <img src="../../assets/image/androidQRC.png"
+                 class="qrCode">
+            <el-button type="primary"
+                       slot="reference"
+                       round
+                       @click="androidDownload"
+                       size="mini">
+              <div class="app-btn">
+                <img src="../../assets/image/android.png">
+                <div>Android</div>
+              </div>
+            </el-button>
+          </el-popover>
+        </div>
       </div>
     </transition>
     <!-- 注册 -->
@@ -453,7 +485,7 @@ export default {
         inp: ""
       },
       codeFreezeTime: 0,
-      conditionsDialog: false
+      conditionsDialog: false,
     };
   },
   // 监听属性 类似于data概念
@@ -639,6 +671,12 @@ export default {
     changeLang (lang) {
       this.$i18n.locale = lang
       this.$store.dispatch('app/setLanguage', lang)
+    },
+    androidDownload () {
+      window.open('https://play.google.com/store/apps/details?id=com.flashexpress.express.logistics')
+    },
+    iphoneDownload () {
+      window.open('https://itunes.apple.com/app/id1484309319')
     }
   }
 };
@@ -773,6 +811,7 @@ export default {
   margin-top: 20px;
   align-items: center;
   line-height: 16px;
+  margin-bottom: 120px;
 
   .languageBox-item {
     width: 100px;
@@ -792,5 +831,28 @@ export default {
   .actived {
     border: 1px solid #409eff;
   }
+}
+
+.app-box {
+  box-sizing: border-box;
+  padding-left: 120px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+
+  .app-btn {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+
+    img {
+      width: 30px;
+    }
+  }
+}
+
+.qrCode {
+  width: 220px;
+  height: 220px;
 }
 </style>
