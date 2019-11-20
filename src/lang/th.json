@@ -174,15 +174,9 @@
     "print": "พิมพ์",
     "confirm": "ยืนยัน",
     "KPI": "KPI",
-<<<<<<< HEAD
-    "truckType": "ประเภทรถบรรทุก",
-    "quotation": "เสนอราคา",
-    "price": "ราคา (฿)",
-=======
     "truckType": " ประเภทรถบรรทุก",
     "quotation": "เสนอราคา(บาท)",
     "price": "ค่าขนส่ง",
->>>>>>> 1d837159db5a3947676205d4e35e1ecf8038b4f1
     "route": "เส้นทาง",
     "rating": "Rating",
     "ETD": "ETD",
@@ -344,11 +338,7 @@
     "accountName": "ชื่อบัญชี",
     "bankAccount_No": "เลขที่บัญชีธนาคาร",
     "billingAddress": "เลขที่บัญชีธนาคาร",
-<<<<<<< HEAD
-    "profileDiscription": "รายละเอียดบริษัท",
-=======
     "profileDiscription": "อธิบายเกี่ยวกับบริษัท",
->>>>>>> 1d837159db5a3947676205d4e35e1ecf8038b4f1
     "region": "ภูมิภาค",
     "affidavit": "หนังสือรับรอง",
     "transportationLicense": "ใบอนุญาติประกอบการขนส่ง",

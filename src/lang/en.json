@@ -313,21 +313,13 @@
   "member": {
     "myData": "My data",
     "user": "User",
-<<<<<<< HEAD
     "membershipApplicationProcess": "Membership Application Process",
     "essentialData": "Basic Data",
     "relevantDocument_demand": "Relevant Document (Demand)",
     "relevantdocument_supply": "Relevant Document (Supply)",
-=======
-    "membershipApplicationProcess": "Membership application process",
-    "essentialData": "Basic Data",
-    "relevantDocument_demand": "Relevant document(Demand)",
-    "relevantdocument_supply": "Relevant document(Supply)",
->>>>>>> 1d837159db5a3947676205d4e35e1ecf8038b4f1
     "relevantdocument_HUB": "Relevant document(HUB)",
     "myContract": "My Contract",
     "register": "Register",
-<<<<<<< HEAD
     "enterData": "Enter Data",
     "submitApplication": "Submit Application",
     "downloadContract": "Download Contract",
@@ -335,15 +327,6 @@
     "sendContractBackToPlatform": "Send Contract Back to Platform",
     "onlieTraining": "Online Training",
     "activateAccount": "Activate Account",
-=======
-    "enterData": "Enter data",
-    "submitApplication": "Submit application",
-    "downloadContract": "Download contract",
-    "payGuaranteeMoney": "Pay guarantee money",
-    "sendContractBackToPlatform": "Send contract back to  platform",
-    "onlieTraining": "Onlie training",
-    "activateAccount": "Activate account",
->>>>>>> 1d837159db5a3947676205d4e35e1ecf8038b4f1
     "memberType": "Member Type",
     "demand": "Demand",
     "supply": "Supply",
@@ -365,11 +348,7 @@
     "region": "Region",
     "affidavit": "Affidavit",
     "transportationLicense": "Transportation License",
-<<<<<<< HEAD
     "IDcard": "ID Card",
-=======
-    "IDcard": "Identity Card",
->>>>>>> 1d837159db5a3947676205d4e35e1ecf8038b4f1
     "houseParticulars": "House Particulars",
     "bangAccount": "Bank Account",
     "upload": "upload",
