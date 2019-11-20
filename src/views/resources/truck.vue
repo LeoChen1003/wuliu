@@ -10,6 +10,7 @@
       <el-col :span="9">
         <el-table :data="dataList"
                   border
+                  v-loading="resetLoading"
                   highlight-current-row
                   @current-change="handleCurrentChange"
                   :cell-style="cell">
@@ -20,12 +21,16 @@
                            :label="$t('resources.truckType')"></el-table-column>
           <el-table-column prop="activeStatus"
                            :label="$t('resources.status')"></el-table-column>
-          <el-table-column width='80px;'>
+          <el-table-column>
             <template slot-scope="scope">
-              <div style="cursor: pointer;"
-                   @click="toEdit(scope.row)">
-                <i class="el-icon-edit"></i>
-              </div>
+              <el-button type="primary"
+                         style="margin-bottom:5px;"
+                         @click="toEdit(scope.row)">
+                {{$t('resources.edit')}}
+              </el-button>
+              <el-button type="primary"
+                         style="margin-left:0;"
+                         @click="reset(scope.row)">{{$t('resources.reset')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -341,13 +346,6 @@
                        class="inputWidth"
                        @click="toConfirm">{{$t('resources.confirm')}}</el-button>
           </el-form-item>
-          <el-form-item v-if="editType == 'edit'">
-            <el-button type="primary"
-                       style="margin-bottom:20px;"
-                       :loading="resetLoading"
-                       class="inputWidth"
-                       @click="reset">{{$t('resources.reset')}}</el-button>
-          </el-form-item>
         </el-form>
       </div>
     </el-dialog>
@@ -659,12 +657,20 @@ export default {
     dateChange (e) {
       self.detailform.insuranceExpiredAt = `${e[0]}-${e[1]}-${e[2]}`;
     },
-    reset () {
-      self.resetLoading = true;
-      resetPassword(self.curEditId).then(res => {
-        self.$message.success(self.$t('resources.successful'))
-        self.resetLoading = false;
-      })
+    reset (row) {
+      this.$confirm(self.$t('resources.resetThePassword'), '', {
+        confirmButtonText: self.$t('resources.confirm'),
+        cancelButtonText: self.$t('resources.cancel'),
+        type: 'warning'
+      }).then(() => {
+        self.resetLoading = true;
+        resetPassword(row.id).then(res => {
+          self.$message.success(self.$t('resources.successful'))
+          self.resetLoading = false;
+        })
+      }).catch(() => {
+
+      });
     },
     handlePreview (file) {
       this.previewImg = file.url;

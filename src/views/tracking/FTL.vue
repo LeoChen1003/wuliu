@@ -562,7 +562,7 @@ export default {
       let returnDate = `${self.returnDate} ${self.returnTime}`
       returnTruck(self.returnId, self.returnCharge, returnDate)
         .then(res => {
-          self.loadData(() => {
+          self.loadData(() => { 
             self.returnLoading = false;
             self.returnDialog = false;
           });

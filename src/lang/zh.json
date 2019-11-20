@@ -275,7 +275,9 @@
     "app": "司机端APP",
     "outLimit": "最多上传5张图片",
     "truckPhotos": "卡车照片",
-    "license": "驾照"
+    "license": "驾照",
+    "identityCard": "身份证",
+    "resetThePassword": "重置密码， 你确认吗？"
   },
   "billing": {
     "billingStatus": "状态",

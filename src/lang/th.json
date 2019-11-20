@@ -268,7 +268,9 @@
     "truckPhotos": "ภาพรถบรรทุก",
     "license": "ใบขับขี่",
     "checkAll": "เลือกทั้งหมด",
-    "deselectAll": "ยกเลิกการเลือกทั้งหมด"
+    "deselectAll": "ยกเลิกการเลือกทั้งหมด",
+    "identityCard": "บัตรประจำตัวประชาชน",
+    "resetThePassword": "รีเซ็ตรหัสผ่าน คุณแน่ใจหรือไม่?"
   },
   "billing": {
     "billingStatus": "สถานะ",

@@ -271,7 +271,9 @@
     "truckPhotos": "Truck Photos",
     "license": "License",
     "checkAll": "Select All",
-    "deselectAll": "Unselect All"
+    "deselectAll": "Unselect All",
+    "identityCard": "Identity Card",
+    "resetThePassword": "Reset the password ,are you sure?"
   },
   "billing": {
     "billingStatus": "Status",

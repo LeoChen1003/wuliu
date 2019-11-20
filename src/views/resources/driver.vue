@@ -140,7 +140,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('resources.license')">
+          <el-form-item :label="$t('resources.license')" required>
             <div class="inputWidth">
               <el-upload class="upload-box"
                          ref="licenseIds"
@@ -157,7 +157,7 @@
               </el-upload>
             </div>
           </el-form-item>
-          <el-form-item :label="$t('resources.identityCard')">
+          <el-form-item :label="$t('resources.identityCard')" required>
             <div class="inputWidth">
               <el-upload class="upload-box"
                          ref="identityIds"

@@ -95,6 +95,7 @@
                       trigger="hover">
             <img src="../../assets/image/iphoneQRC.png"
                  class="qrCode">
+            <div style="text-align:center;">司机端的APP</div>
             <el-button type="primary"
                        slot="reference"
                        round
@@ -110,6 +111,7 @@
                       trigger="hover">
             <img src="../../assets/image/androidQRC.png"
                  class="qrCode">
+            <div style="text-align:center;">司机端的APP</div>
             <el-button type="primary"
                        slot="reference"
                        round

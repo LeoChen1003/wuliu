@@ -131,8 +131,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column width="250"
-                           align="center"
+          <el-table-column align="center"
                            :label="$t('booking.route')">
             <template slot-scope="scope">
               <div>
@@ -141,6 +140,16 @@
               <div>
                 <!-- {{$t('booking.transitTime')}} :  -->
                 {{ scope.row.transitTime }} days
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column header-align="center"
+                           :label="$t('booking.truckType')">
+            <template slot-scope="scope">
+              <div class="cantouch"
+                   @click="previewImg(scope.row)">
+                <div>{{ truckObj[scope.row.category] }}</div>
+                <div>{{ subObj[scope.row.subCategory] }}</div>
               </div>
             </template>
           </el-table-column>
@@ -164,8 +173,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column width="250"
-                           align="center"
+          <el-table-column align="center"
                            :label="$t('booking.price')">
             <template slot-scope="scope">
               {{ scope.row.charge }}
@@ -175,11 +183,13 @@
               <div>{{$t('booking.totalamt')}} : {{10 + scope.row.charge + (scope.row.supportLoading == 1 ? scope.row.loadingOrUnloadingHumanWorkDay * scope.row.moneyPerDay : 0)}}</div> -->
             </template>
           </el-table-column>
-          <el-table-column width="95">
+          <el-table-column>
             <template slot-scope="scope">
-              <el-button type="primary"
+             <div style="text-align:center;">
+                <el-button type="primary"
                          :disabled="!roles.Demand"
                          @click="toBooking(scope.row)">{{ $t("booking.placeOrder") }}</el-button>
+             </div>
             </template>
           </el-table-column>
         </el-table>
@@ -194,6 +204,18 @@
                        :total="page.total"></el-pagination>
       </el-col>
     </el-row>
+    <el-dialog :visible.sync="previewDialog">
+      <div>
+        <el-carousel arrow="always">
+          <el-carousel-item v-for="item in previewImgList"
+                            style="text-align:center;"
+                            :key="item">
+            <el-image :src="item"
+                      fit="cover"></el-image>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -347,7 +369,11 @@ export default {
             });
           }
         }
-      }
+      },
+      truckObj: {},
+      subObj: {},
+      previewImgList: [],
+      previewDialog: false
     };
   },
   // 监听属性 类似于data概念
@@ -381,6 +407,16 @@ export default {
       getTruckType().then(res => {
         self.categoryList = res.data.categories;
         self.subCategoryList = res.data.subCategories;
+        let truckObj = new Object();
+        let subObj = new Object();
+        for (let i of res.data.categories) {
+          truckObj[i.key] = i.value;
+        }
+        for (let i of res.data.subCategories) {
+          subObj[i.key] = i.value;
+        }
+        self.truckObj = truckObj;
+        self.subObj = subObj;
       });
       if (self.$route.query.return == 1) {
         let consultInfo = JSON.parse(localStorage.getItem("consultInfo"));
@@ -484,7 +520,14 @@ export default {
               pagesize: self.pagesize
             }).then(res => {
               self.searchloading = false;
-              self.tableList = res.data.content;
+              let tableList = res.data.content;
+              // for (let i of tableList) {
+              //   i.truckImgList = [];
+              //   for (let t of i.registrationResource) {
+              //     i.truckImgList.push(t.path)
+              //   }
+              // }
+              self.tableList = tableList;
               self.page = {
                 total: res.data.totalElements,
                 currentPage: res.data.number + 1
@@ -519,6 +562,14 @@ export default {
     },
     dateChange (e) {
       self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
+    },
+    previewImg (row) {
+      let arr = [];
+      for (let i of row.truckResource) {
+        arr.push(i.path)
+      }
+      self.previewImgList = arr;
+      self.previewDialog = true;
     }
   }
 };
@@ -557,5 +608,21 @@ export default {
 
 .innerInp {
   width: 48%;
+}
+
+.cantouch {
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid rgb(50, 126, 226);
+  color: rgb(50, 126, 226);
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 0 5px 0 #ccc;
+  margin: 5px;
+  transition: all 0.4s;
+}
+
+.cantouch:hover {
+  box-shadow: 0 0 5px 0 #000;
 }
 </style>
