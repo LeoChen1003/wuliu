@@ -101,7 +101,7 @@
                   <el-image v-for="(img,index) in regPreList"
                             :key="index"
                             style="width: 100px; height: 100px;margin-right:10px;"
-                            :src="img"
+                            :src="img + '?x-oss-process=style/th-90'"
                             :preview-src-list="regPreList">
                   </el-image>
                 </div>
@@ -144,18 +144,18 @@
                     <el-image v-for="(img,index) in insPreList"
                               :key="index"
                               style="width: 100px; height: 100px;margin-right:10px;"
-                              :src="img"
+                              :src="img + '?x-oss-process=style/th-90'"
                               :preview-src-list="insPreList">
                     </el-image>
                   </div>
                 </el-form-item>
                 <el-form-item prop='insuranceExpiredAt'
                               :label="$t('resources.expireDate')">
-                  {{thisRow.insuranceExpiredAt}}
+                  <div class="inputWidth">{{thisRow.insuranceExpiredAt}}</div>
                 </el-form-item>
                 <el-form-item prop='insuranceAmount'
                               :label="$t('resources.IinsuranceValue')">
-                  {{thisRow.insuranceAmount}}
+                  <div class="inputWidth">{{thisRow.insuranceAmount}}</div>
                 </el-form-item>
               </div>
               <el-form-item :label="$t('resources.truckPhotos')"
@@ -164,7 +164,7 @@
                   <el-image v-for="(img,index) in truPreList"
                             :key="index"
                             style="width: 100px; height: 100px;margin-right:10px;"
-                            :src="img"
+                            :src="img + '?x-oss-process=style/th-90'"
                             :preview-src-list="truPreList">
                   </el-image>
                 </div>

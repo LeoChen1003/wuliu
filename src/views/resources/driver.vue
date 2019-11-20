@@ -83,7 +83,7 @@
                   <el-image v-for="(img,index) in licPreList"
                             :key="index"
                             style="width: 100px; height: 100px;margin-right:10px;"
-                            :src="img"
+                            :src="img + '?x-oss-process=style/th-90'"
                             :preview-src-list="licPreList">
                   </el-image>
                 </div>
@@ -94,7 +94,7 @@
                   <el-image v-for="(img,index) in idePreList"
                             :key="index"
                             style="width: 100px; height: 100px;margin-right:10px;"
-                            :src="img"
+                            :src="img + '?x-oss-process=style/th-90'"
                             :preview-src-list="idePreList">
                   </el-image>
                 </div>
