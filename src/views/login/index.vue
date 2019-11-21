@@ -249,11 +249,16 @@
                 </div>
               </el-form-item>
               <el-form-item>
-                <el-checkbox v-model="regArgee">I accept</el-checkbox>
+                <el-checkbox v-model="regArgee">{{$t('login.iAgree')}}</el-checkbox>
                 <el-link :underline="false"
                          type="primary"
                          @click="conditionsDialog = true"
                          class="argee">{{ $t('login.termAndConditions') }}</el-link>
+                {{$t('login.and')}}
+                <el-link :underline="false"
+                         type="primary"
+                         @click="privacyPolicyDialog = true"
+                         class="argee">{{ $t('login.privacyPolicy') }}</el-link>
               </el-form-item>
               <el-form-item>
                 <el-button :loading="loading"
@@ -369,6 +374,20 @@
             class="dialog-footer">
         <el-button type="primary"
                    @click="conditionsDialog = false">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :title="$t('login.privacyPolicy')"
+               :visible.sync="privacyPolicyDialog"
+               width="700px">
+      <iframe :src="privacyPolicyUrl"
+              width="100%"
+              height="700px"
+              frameborder="0">
+      </iframe>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button type="primary"
+                   @click="privacyPolicyDialog = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -488,6 +507,7 @@ export default {
       },
       codeFreezeTime: 0,
       conditionsDialog: false,
+      privacyPolicyDialog: false
     };
   },
   // 监听属性 类似于data概念
@@ -502,8 +522,14 @@ export default {
     },
     conditionsUrl: {
       get () {
-        let type = this.language == 'en_US' ? 'en' : this.language == 'th_TH' ? 'th' : 'th';
-        return `http://wl.z.12zan.net/version-20191030-${type}.html`
+        let type = this.language == 'en_US' ? 'en' : this.language == 'th_TH' ? 'th' : 'en';
+        return `http://t-rex.flashlogistics.co.th/html/term-${type}.html`
+      }
+    },
+    privacyPolicyUrl: {
+      get () {
+        let type = this.language == 'en_US' ? 'en' : this.language == 'th_TH' ? 'th' : 'en';
+        return `http://t-rex.flashlogistics.co.th/html/privacy-${type}.html`
       }
     }
   },

@@ -82,7 +82,7 @@
     "regName": "ชื่อผู้ใช้",
     "regPassword": "รหัสผ่าน",
     "confirmPassword": "ยืนยันรหัสผ่าน",
-    "termAndConditions": "ข้อกำหนดและเงื่อนไข",
+    "termAndConditions": "ข้อตกลง​และเงื่อนไข​",
     "confirm": "ยืนยัน",
     "back": "ย้อนกลับ",
     "rule_password": "ต้องการรหัสผ่าน",
@@ -99,7 +99,10 @@
     "smsSend": "ส่งข้อความแล้ว",
     "mustAccept": "ฉันได้อ่านและยอมรับ”สัญญาเงื่อนไข”",
     "registerSuccess": "ลงทะเบียนสำเร็จ",
-    "phoneWrong": "หมายเลขโทรศัพท์ไม่ถูกต้อง"
+    "phoneWrong": "หมายเลขโทรศัพท์ไม่ถูกต้อง",
+    "iAgree": "ฉันได้อ่านและยอมรับ",
+    "and": "และ",
+    "privacyPolicy": "นโยบาย​ความเป็นส่วนตัว​"
   },
   "home": {
     "button": "ปุ่ม"
@@ -200,13 +203,22 @@
     "pickupPoint": "จุดรับสินค้า",
     "ratingIsRequired": "ต้องประเมินคะแนน",
     "releaseAReturnTruck": "ประกาศรถเที่ยวกลับ",
-    "trackingNo": "เลขที่จัดส่ง",
+    "trackingNo": "หมายเลขการติดตาม",
     "reject": "ปฏิเสธ",
     "cancel": "ยกเลิก",
     "pleaseEnterTheRejectionReason": "กรุณาระบุเหตุผลสำหรับการปฏิเสธ",
     "operation": "ดำเนินการ",
     "backTime": "ย้อนเวลากลับไป",
-    "canceled": "ปฎิเสธรายการ"
+    "canceled": "ปฎิเสธรายการ",
+    "returnDocument": "ส่งคืนเอกสารนำกลับ",
+    "deliveryChannel": "ช่องทางการส่งคืนเอกสารนำกลับ",
+    "faceToFace": "นำส่งเอง",
+    "expressDelivery": "ขนส่งด่วน",
+    "photo": "รูปถ่าย",
+    "expressWaybillNo": "เลขพัสดุขนส่งด่วน",
+    "courierNumberRequired": "เลขพัสดุขนส่งด่วนไม่ควรเว้นว่าง",
+    "confirmReceiptOfDocument": "ยืนยันได้รับเอกสาร",
+    "areYouSure": "คุณได้รับเอกสารของคุณแล้ว ยืนยัน?"
   },
   "resources": {
     "add": "เพิ่ม",

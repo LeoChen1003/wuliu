@@ -197,7 +197,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import { mapGetters } from "vuex";
 import { driverAdd, driverList, driverEdit } from "../../api/resources";
-import { getToken } from '@/utils/auth'
+import { getToken } from '@/utils/auth';
 
 let self;
 

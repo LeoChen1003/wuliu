@@ -102,7 +102,10 @@
     "registerSuccess": "register success",
     "resetPassword": "Reset Password",
     "resetSuccess": "Reset success",
-    "phoneWrong": "Incorrect phone number"
+    "phoneWrong": "Incorrect phone number",
+    "iAgree": "I agree",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy"
   },
   "booking": {
     "searchSupply": "Search Supply",
@@ -208,7 +211,16 @@
     "operation": "Operation",
     "returnTruck": "Return Truck",
     "backTime": "Back time",
-    "charge": "Charge"
+    "charge": "Charge",
+    "returnDocument": "Return Document",
+    "deliveryChannel": "Delivery Channel",
+    "faceToFace": "Face-to-face",
+    "expressDelivery": "Express Delivery",
+    "photo": "Photo",
+    "expressWaybillNo": "Express Waybill No.",
+    "courierNumberRequired": "Express Waybill No. Cannot be Empty",
+    "confirmReceiptOfDocument": "Confirm Receipt of Document",
+    "areYouSure": "You have received the document, are you sure?"
   },
   "resources": {
     "add": "Add",

@@ -2,7 +2,7 @@
   <div class="manage booking">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
       <div style="display:flex;width:80%;">
-        <el-alert class="rejectMsg"
+        <el-alert
                   show-icon
                   :closable="false"
                   :title="`${$t('title.TheCurrentlySelectedSupplyIs')} ${consultInfo.data.supply.name}，${$t('title.TomodifyPleaseClickButton')}`"
