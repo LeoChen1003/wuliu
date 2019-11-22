@@ -110,6 +110,7 @@
             <!-- 注册类型 -->
             <el-form-item :label="$t('member.typeOfRegistration')">
               <el-radio-group v-model="infoForm.type"
+                              :disabled="activated"
                               @change="typeChange">
                 <el-radio label="PERSONAL">{{ $t('member.personal') }}</el-radio>
                 <el-radio label="COMPANY">{{ $t('member.juristicPerson') }}</el-radio>
@@ -117,12 +118,12 @@
             </el-form-item>
             <el-form-item :label="$t('member.companyName')">
               <el-input class="inp"
-                        :disabled="!infoForm.type || infoForm.type == 'PERSONAL'"
+                        :disabled="(!infoForm.type || infoForm.type == 'PERSONAL') || activated"
                         v-model="infoForm.companyName" />
             </el-form-item>
             <el-form-item :label="$t('member.name')">
               <el-input class="inp"
-                        :disabled="!infoForm.type || infoForm.type == 'COMPANY'"
+                        :disabled="(!infoForm.type || infoForm.type == 'COMPANY') || activated"
                         v-model="infoForm.humanName" />
             </el-form-item>
             <el-form-item :label="$t('member.contacktName')">
@@ -719,7 +720,8 @@ export default {
       contractStatus: {
         "DEMAND": '',
         "SUPPLY": ''
-      }
+      },
+      activated: false
     }
   },
   watch: {
@@ -753,13 +755,18 @@ export default {
         self.typeList = self.$store.getters.userInfo.chosenRoles.split(',');
       })
       getApplying().then(res => {
+        let activated = false;
         for (let i of res.data) {
           self.applyStatus[i.applyType.toLowerCase()] = {
             status: i.auditStatus,
             rejectReason: i.rejectReason
           };
           self.contractStatus[i.applyType] = i.contract;
+          if (i.auditStatus == 'ACTIVATED') {
+            activated = true;
+          }
         }
+        self.activated = activated;
       })
     },
     // 载入相关文件

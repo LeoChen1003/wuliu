@@ -254,8 +254,7 @@
                                :value="item.key"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item prop="subCategory"
-                              required>
+                <el-form-item prop="subCategory">
                   <el-select v-model="form.subCategory"
                              disabled
                              filterable
@@ -988,7 +987,6 @@ export default {
           cityList[x].toCityCodes = arr;
         }
         // 判断是否有空列
-        console.log(cityList)
         for (let x = cityList.length - 1; x >= 0; x--) {
           if (cityList[x].toCityCodes.length == 0) {
             cityList.splice(x, 1);
@@ -1011,6 +1009,11 @@ export default {
                 i.maxMiles = res.data.maxMiles;
                 i.transitTime = res.data.transitTime;
                 this.$forceUpdate();
+              }).catch(res => {
+                self.$message.info('距离计算失败，正在重试...');
+                setTimeout(() => {
+                  self.toProvinceCodeChange(e);
+                }, 1500);
               })
           }
         }
@@ -1031,7 +1034,6 @@ export default {
       }
     },
     tapRow (row) {
-      console.log(row)
       if (row == null) {
         self.priceList = [];
         self.showDateList = {};
@@ -1059,6 +1061,11 @@ export default {
             row.maxMiles = res.data.maxMiles;
             row.transitTime = res.data.transitTime;
             this.$forceUpdate();
+          }).catch(res => {
+            self.$message.info('距离计算失败，正在重试...');
+            setTimeout(() => {
+              self.formCityChange(row);
+            }, 1500);
           })
       }
     },

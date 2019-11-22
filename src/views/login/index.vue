@@ -714,7 +714,7 @@ export default {
 .manage {
   .loginBox {
     position: absolute;
-    top: 50%;
+    top: 55%;
     right: 50%;
     transform: translate(40%, -60%);
 
@@ -726,6 +726,7 @@ export default {
 
     .login-header {
       width: 100%;
+      // height: 100px;
       display: flex;
       align-items: center;
       margin-bottom: 30px;
