@@ -145,6 +145,10 @@
                            @click="returnShow(scope.row)"
                            :disabled="scope.row.publishBack == 1"
                            type="primary">{{$t('tracking.returnTruck')}}</el-button>
+                <el-button v-if="scope.row.status == 'WILL_RETURN'"
+                           :disabled="scope.row.returnType == 1 || scope.row.returnType == 2"
+                           @click="rdShow(scope.row)"
+                           type="primary">{{$t('tracking.returnDocument')}}</el-button>
               </div>
             </template>
           </el-table-column>
@@ -277,6 +281,63 @@
         </el-timeline-item>
       </el-timeline>
     </el-dialog>
+    <el-dialog :title="$t('tracking.returnDocument')"
+               width="600px"
+               @close="dialogClose"
+               :visible.sync='rdDialog'>
+      <el-form :model="rdForm"
+               size="mini"
+               label-width="150px">
+        <el-form-item :label="$t('tracking.trackingNo')">
+          {{ rdRow.orderNo }}
+        </el-form-item>
+        <el-form-item :label="$t('tracking.deliveryChannel')"
+                      required>
+          <el-select v-model="rdForm.returnType"
+                     class="rdFormWidth">
+            <el-option :label="$t('tracking.expressDelivery')"
+                       :value="1">
+            </el-option>
+            <el-option :label="$t('tracking.faceToFace')"
+                       :value="2">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('tracking.expressWaybillNo')"
+                      v-if="rdForm.returnType == 1"
+                      required>
+          <el-input class="rdFormWidth"
+                    v-model="rdForm.courierNumber"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('tracking.photo')"
+                      v-if="rdForm.returnType == 1">
+          <div class="upload-box">
+            <el-upload class="upload-box"
+                       ref="photoIds"
+                       :action="env + '/api/file/upload'"
+                       :on-preview="handlePreview"
+                       multiple
+                       :file-list="fileList"
+                       :headers="headers"
+                       :limit="5"
+                       :on-exceed="outLimit"
+                       accept="image/*"
+                       list-type="picture-card">
+              <i class="el-icon-plus"></i>
+            </el-upload>
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <el-button class="rdFormWidth"
+                     @click="rdIt"
+                     type="primary">{{$t('tracking.confirm')}}</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <el-dialog :visible.sync="previewDialog">
+      <img width="100%"
+           :src="previewImg">
+    </el-dialog>
   </div>
 </template>
 
@@ -284,7 +345,8 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getSupplyTD, getBcYear, getBcDay } from '../../api/data'
-import { confirmOrder, updateOrderInfo, rejectOrder, getOrder, getOrderLog, getOrderStatus, returnTruck } from '../../api/tracking.js'
+import { confirmOrder, updateOrderInfo, rejectOrder, getOrder, getOrderLog, getOrderStatus, returnTruck, returnDocument } from '../../api/tracking.js'
+import { getToken } from '@/utils/auth';
 
 let self;
 export default {
@@ -292,6 +354,10 @@ export default {
   components: {},
   data () {
     return {
+      env: process.env.VUE_APP_BASE_API,
+      headers: {
+        'Authorization': getToken()
+      },
       orderList: [],
       data: {},
       tabActive: 'WAIT_DEMAND_TO_ACCEPT',
@@ -403,10 +469,22 @@ export default {
           }
         }
       },
+      rdDialog: false,
+      rdForm: {
+        returnType: 1,
+      },
+      fileList: [],
+      previewDialog: false,
+      previewImg: '',
+      rdRow: {}
     };
   },
   // 监听属性 类似于data概念
-  computed: {},
+  computed: {
+    phoFileList: function () {
+      return self.$refs.photoIds.uploadFiles
+    },
+  },
   // 监控data中的数据变化
   watch: {},
   created () {
@@ -567,6 +645,47 @@ export default {
             self.returnDialog = false;
           });
         })
+    },
+    rdShow (row) {
+      console.log(row)
+      self.rdRow = row;
+      self.rdDialog = true;
+    },
+    handlePreview (file) {
+      this.previewImg = file.url;
+      this.previewDialog = true;
+    },
+    dialogClose () {
+      self.fileList = [];
+      self.rdForm = {
+        returnType: 1,
+      };
+    },
+    outLimit () {
+      self.$message.warning(self.$t('resources.outLimit'))
+    },
+    rdIt () {
+      let rdForm = JSON.parse(JSON.stringify(self.rdForm))
+      if (rdForm.returnType == 1 && rdForm.courierNumber == '') {
+        return self.$message.warning(self.$t('tracking.courierNumberRequired'))
+      }
+      if (rdForm.returnType != 2) {
+        // 整理photoIds
+        let phoArr = [];
+        for (let i of self.phoFileList) {
+          if (i.response) {
+            phoArr.push(i.response.data.id)
+          } else {
+            phoArr.push(i.id)
+          }
+        } rdForm.photoIds = phoArr.toString();
+      }
+      returnDocument(self.rdRow.id, rdForm).then(res => {
+        self.loadData(() => {
+          self.$message.success(self.$t('tracking.successful'));
+          self.rdDialog = false;
+        })
+      })
     }
   }
 };
@@ -627,11 +746,22 @@ export default {
     color: red;
   }
 }
+
 .formSelect {
   width: 100%;
 }
+
+.rdFormWidth {
+  width: 300px;
+}
+
+.upload-box {
+  width: 350px;
+  height: 70px;
+  overflow: hidden;
+}
 </style>
-<style>
+<style lang="scss">
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
@@ -639,5 +769,25 @@ input::-webkit-inner-spin-button {
 }
 .cardFix .el-card__body {
   padding: 5px 10px;
+}
+
+.el-upload {
+  width: 60px !important;
+  height: 60px !important;
+}
+
+.el-upload-list {
+  .is-success,
+  .is-uploading,
+  .is-ready {
+    width: 60px !important;
+    height: 60px !important;
+  }
+}
+
+.upload-box {
+  .el-icon-plus {
+    transform: translateY(-38px) !important;
+  }
 }
 </style>

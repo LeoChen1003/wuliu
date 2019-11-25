@@ -254,8 +254,7 @@
                                :value="item.key"></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item prop="subCategory"
-                              required>
+                <el-form-item prop="subCategory">
                   <el-select v-model="form.subCategory"
                              disabled
                              filterable
@@ -272,6 +271,7 @@
                               required>
                   <el-select v-model="form.fromProvinceCode"
                              class="formSelect"
+                             :disabled="form.cityList[0] && form.cityList[0].maxMiles != '' && form.cityList[0].toCityCodes.length != 0"
                              @change="fromProvinceCodeChange"
                              filterable>
                     <el-option v-for="(item,index) in provinceList"
@@ -963,24 +963,67 @@ export default {
     },
     // 目的地省改变
     toProvinceCodeChange (e) {
-      // let params = '';
-      // if (e.length == 0) {
-      //   params = 'provinceCodes=emptyCode'
-      // } else {
-      //   for (let x in e) {
-      //     params += `${x == 0 ? '' : '&'}provinceCodes=${e[x]}`
-      //   }
-      // }
+      let cityList = JSON.parse(JSON.stringify(self.form.cityList));
       getCityListGroup(e).then(res => {
         self.waitTo_cityList = res.data;
-        // self.form.cityList = [{
-        //   "fromCityCode": '',
-        //   "toCityCodes": [],
-        //   "charge": '',
-        //   "transitTime": '',
-        // }]
+        // 判断已选市是否在可选列表
+        for (let x in cityList) {
+          let arr = [];
+          for (let y in cityList[x].toCityCodes) {
+            let included = false;
+            for (let t of self.waitTo_cityList) {
+              for (let e of t.children) {
+                if (cityList[x].toCityCodes[y] == e.code) {
+                  arr.push(cityList[x].toCityCodes[y])
+                  included = true;
+                  break;
+                }
+              }
+              if (included) {
+                break;
+              }
+            }
+          }
+          cityList[x].toCityCodes = arr;
+        }
+        // 判断是否有空列
+        for (let x = cityList.length - 1; x >= 0; x--) {
+          if (cityList[x].toCityCodes.length == 0) {
+            cityList.splice(x, 1);
+          }
+        }
+        // 至少保留一行
+        if (cityList.length == 0) {
+          cityList.push({
+            "fromCityCode": '',
+            "toCityCodes": [],
+            "charge": '',
+            "transitTime": '',
+          })
+        } else {
+          // 重新计算距离
+          for (let i of cityList) {
+            getCityDT(i.fromCityCode, i.toCityCodes.toString(), self.form.category)
+              .then(res => {
+                i.minMiles = res.data.minMiles;
+                i.maxMiles = res.data.maxMiles;
+                i.transitTime = res.data.transitTime;
+                this.$forceUpdate();
+              }).catch(res => {
+                self.$message.info('距离计算失败，正在重试...');
+                setTimeout(() => {
+                  self.toProvinceCodeChange(e);
+                }, 1500);
+              })
+          }
+        }
 
+        self.form.cityList = cityList;
       })
+      // 目的地省为空
+      if (e.length == 0) {
+        self.$message.warning(self.$t('resources.pleaseSelectADdestinationFirst'))
+      }
     },
     choosePlate (e) {
       for (let i of self.tdList) {
@@ -991,7 +1034,6 @@ export default {
       }
     },
     tapRow (row) {
-      console.log(row)
       if (row == null) {
         self.priceList = [];
         self.showDateList = {};
@@ -1019,6 +1061,11 @@ export default {
             row.maxMiles = res.data.maxMiles;
             row.transitTime = res.data.transitTime;
             this.$forceUpdate();
+          }).catch(res => {
+            self.$message.info('距离计算失败，正在重试...');
+            setTimeout(() => {
+              self.formCityChange(row);
+            }, 1500);
           })
       }
     },

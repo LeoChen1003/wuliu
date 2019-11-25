@@ -144,3 +144,31 @@ export function returnTruck(id, charge, backTime) {
     }
   })
 }
+
+// SUPPLY返回文件
+export function returnDocument(id, data) {
+  return request({
+    url: `/api/supply/order/confirm/returnfile/${id}`,
+    method: 'post',
+    data: data
+  })
+}
+
+// DEMAND确认返回文件
+export function confirmRD(id) {
+  return request({
+    url: `/api/demand/order/complete/${id}`,
+    method: 'post'
+  })
+}
+
+// DEMAND确认返回文件图片获取
+export function getImg(ids) {
+  return request({
+    url: `/api/resource/part`,
+    method: 'get',
+    params: {
+      ids: ids
+    }
+  })
+}

@@ -90,6 +90,40 @@
             <div class="county">English</div>
           </div>
         </div>
+        <div class="app-box">
+          <el-popover placement="bottom"
+                      trigger="hover">
+            <img src="../../assets/image/iphoneQRC.png"
+                 class="qrCode">
+            <div style="text-align:center;">司机端的APP</div>
+            <el-button type="primary"
+                       slot="reference"
+                       round
+                       @click="iphoneDownload"
+                       size="mini">
+              <div class="app-btn">
+                <img src="../../assets/image/iphone.png">
+                <div>iphone</div>
+              </div>
+            </el-button>
+          </el-popover>
+          <el-popover placement="bottom"
+                      trigger="hover">
+            <img src="../../assets/image/androidQRC.png"
+                 class="qrCode">
+            <div style="text-align:center;">司机端的APP</div>
+            <el-button type="primary"
+                       slot="reference"
+                       round
+                       @click="androidDownload"
+                       size="mini">
+              <div class="app-btn">
+                <img src="../../assets/image/android.png">
+                <div>Android</div>
+              </div>
+            </el-button>
+          </el-popover>
+        </div>
       </div>
     </transition>
     <!-- 注册 -->
@@ -215,11 +249,16 @@
                 </div>
               </el-form-item>
               <el-form-item>
-                <el-checkbox v-model="regArgee">I accept</el-checkbox>
+                <el-checkbox v-model="regArgee">{{$t('login.iAgree')}}</el-checkbox>
                 <el-link :underline="false"
                          type="primary"
                          @click="conditionsDialog = true"
                          class="argee">{{ $t('login.termAndConditions') }}</el-link>
+                {{$t('login.and')}}
+                <el-link :underline="false"
+                         type="primary"
+                         @click="privacyPolicyDialog = true"
+                         class="argee">{{ $t('login.privacyPolicy') }}</el-link>
               </el-form-item>
               <el-form-item>
                 <el-button :loading="loading"
@@ -335,6 +374,20 @@
             class="dialog-footer">
         <el-button type="primary"
                    @click="conditionsDialog = false">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :title="$t('login.privacyPolicy')"
+               :visible.sync="privacyPolicyDialog"
+               width="700px">
+      <iframe :src="privacyPolicyUrl"
+              width="100%"
+              height="700px"
+              frameborder="0">
+      </iframe>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button type="primary"
+                   @click="privacyPolicyDialog = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -453,7 +506,8 @@ export default {
         inp: ""
       },
       codeFreezeTime: 0,
-      conditionsDialog: false
+      conditionsDialog: false,
+      privacyPolicyDialog: false
     };
   },
   // 监听属性 类似于data概念
@@ -468,8 +522,14 @@ export default {
     },
     conditionsUrl: {
       get () {
-        let type = this.language == 'en_US' ? 'en' : this.language == 'th_TH' ? 'th' : 'th';
-        return `http://wl.z.12zan.net/version-20191030-${type}.html`
+        let type = this.language == 'en_US' ? 'en' : this.language == 'th_TH' ? 'th' : 'en';
+        return `http://t-rex.flashlogistics.co.th/html/term-${type}.html`
+      }
+    },
+    privacyPolicyUrl: {
+      get () {
+        let type = this.language == 'en_US' ? 'en' : this.language == 'th_TH' ? 'th' : 'en';
+        return `http://t-rex.flashlogistics.co.th/html/privacy-${type}.html`
       }
     }
   },
@@ -639,6 +699,12 @@ export default {
     changeLang (lang) {
       this.$i18n.locale = lang
       this.$store.dispatch('app/setLanguage', lang)
+    },
+    androidDownload () {
+      window.open('https://play.google.com/store/apps/details?id=com.flashexpress.express.logistics')
+    },
+    iphoneDownload () {
+      window.open('https://itunes.apple.com/app/id1484309319')
     }
   }
 };
@@ -648,7 +714,7 @@ export default {
 .manage {
   .loginBox {
     position: absolute;
-    top: 50%;
+    top: 55%;
     right: 50%;
     transform: translate(40%, -60%);
 
@@ -660,6 +726,7 @@ export default {
 
     .login-header {
       width: 100%;
+      // height: 100px;
       display: flex;
       align-items: center;
       margin-bottom: 30px;
@@ -773,6 +840,7 @@ export default {
   margin-top: 20px;
   align-items: center;
   line-height: 16px;
+  margin-bottom: 120px;
 
   .languageBox-item {
     width: 100px;
@@ -792,5 +860,28 @@ export default {
   .actived {
     border: 1px solid #409eff;
   }
+}
+
+.app-box {
+  box-sizing: border-box;
+  padding-left: 120px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+
+  .app-btn {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+
+    img {
+      width: 30px;
+    }
+  }
+}
+
+.qrCode {
+  width: 220px;
+  height: 220px;
 }
 </style>

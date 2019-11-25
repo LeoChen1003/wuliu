@@ -94,10 +94,22 @@
             <template slot-scope="scope">
               <div v-if="!(tabActive=='0'||tabActive=='1') && scope.row.transport.supply">
                 <div>
-                  {{scope.row.transport.supply.companyName }}
+                  {{ scope.row.transport.supply.companyName }}
                 </div>
                 <div>
-                  {{scope.row.transport.supply.contactMobile }}
+                  {{ scope.row.transport.supply.contactMobile }}
+                </div>
+                <div>
+                  {{ truckObj[scope.row.transport.transport] }}
+                </div>
+                <div>
+                  {{ scope.row.transport.plate }}
+                </div>
+                <div>
+                  {{ scope.row.transport.driver.name }}
+                </div>
+                <div>
+                  {{ scope.row.transport.driver.phone }}
                 </div>
               </div>
             </template>
@@ -122,8 +134,10 @@
                          disabled
                          v-model="scope.row.rating.rating / 2">
                 </el-rate>
+                <el-button type="primary"
+                           v-if="scope.row.status == 'WILL_RETURN'"
+                           @click="rdConfirmShow(scope.row)">{{$t('tracking.confirm')}}</el-button>
               </div>
-
             </template>
           </el-table-column>
         </el-table>
@@ -242,6 +256,28 @@
                    @click="ratingConfirm">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog :title="$t('tracking.confirmReceiptOfDocument')"
+               :visible.sync="rdDialog"
+               center
+               width="600px">
+      <div style="text-alitn:center;">
+        <div style="text-align:center;margin-bottom:10px;">{{$t('tracking.areYouSure')}}</div>
+        <div class="img-box">
+          <el-image v-for="(img,index) in imgList"
+                    :src="img  + '?x-oss-process=style/th-90'"
+                    :key="index"
+                    style="width: 100px; height: 100px;margin-right:10px;"
+                    :preview-src-list="imgList"></el-image>
+        </div>
+      </div>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="rdDialog = false">{{$t('tracking.cancel')}}</el-button>
+        <el-button type="primary"
+                   :loading="rdLoading"
+                   @click="rdConfirmIt">{{$t('tracking.confirm')}}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -249,7 +285,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty } from '../../api/data'
-import { demandOrderList, demandStatusCount, demandquoteList, demandquoteConfirm, getOrderLog, orderRating } from '../../api/tracking.js'
+import { demandOrderList, demandStatusCount, demandquoteList, demandquoteConfirm, getOrderLog, orderRating, getImg, confirmRD } from '../../api/tracking.js'
 
 let self;
 export default {
@@ -304,7 +340,11 @@ export default {
       ratingForm: {
         rating: 0,
         remark: ''
-      }
+      },
+      rdDialog: false,
+      imgList: [],
+      rdRow: {},
+      rdLoading: false
     };
   },
   // 监听属性 类似于data概念
@@ -360,12 +400,12 @@ export default {
       self.unitObj = unitObj;
     })
     self.loadData();
-    self.getCount()
   },
   methods: {
     loadData (cb) {
       const self = this;
       self.tableLoading = true;
+      self.getCount()
       demandOrderList({ status: self.tabActive }).then(res => {
         self.data = res.data;
         self.tableLoading = false;
@@ -429,7 +469,6 @@ export default {
       self.ratingDialog = true;
     },
     ratingConfirm () {
-      console.log(self.ratingForm)
       if (self.ratingForm.rating == 0) {
         return self.$message.warning(self.$t('tracking.ratingIsRequired'))
       }
@@ -438,6 +477,34 @@ export default {
           self.ratingDialog = false;
           self.loadData();
         })
+    },
+    // 返回文件确认
+    rdConfirmShow (row) {
+      self.rdRow = row;
+      if (row.photoIds) {
+        getImg(row.photoIds)
+          .then(res => {
+            let arr = [];
+            for (let i of res.data) {
+              arr.push(i.path)
+              self.imgList = arr;
+              self.rdDialog = true;
+            }
+          })
+      } else {
+        self.imgList = [];
+        self.rdDialog = true;
+      }
+    },
+    rdConfirmIt () {
+      self.rdLoading = true;
+      confirmRD(self.rdRow.id).then(res => {
+        self.loadData(() => {
+          self.$message.success(self.$t('tracking.successful'));
+          self.rdDialog = false;
+          self.rdLoading = false;
+        })
+      })
     }
   }
 };

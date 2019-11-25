@@ -148,9 +148,9 @@
               <el-input v-model="quotePriceCon.senderAddress.name"
                         class="inp"
                         disabled></el-input>
-              <el-input v-model="quotePriceCon.senderAddress.mobile"
+              <!-- <el-input v-model="quotePriceCon.senderAddress.mobile"
                         class="inp"
-                        disabled></el-input>
+                        disabled></el-input> -->
               <el-input v-model="quotePriceCon.senderAddress.addressDetail"
                         class="inp"
                         disabled></el-input>
@@ -169,9 +169,9 @@
               <el-input v-model="quotePriceCon.receiverAddress.name"
                         class="inp"
                         disabled></el-input>
-              <el-input v-model="quotePriceCon.receiverAddress.mobile"
+              <!-- <el-input v-model="quotePriceCon.receiverAddress.mobile"
                         class="inp"
-                        disabled></el-input>
+                        disabled></el-input> -->
               <el-input v-model="quotePriceCon.receiverAddress.addressDetail"
                         class="inp"
                         disabled></el-input>
@@ -205,14 +205,14 @@
                       v-if="item.chargeType!='CARPOOL'"
                       type="info"
                       style="margin-right:5px;">
-                {{  serveObj[item.chargeType]}}
+                {{  serveObj[item.chargeType] }}
               </el-tag>
             </el-form-item>
-            <el-form-item :label="$t('booking.referenceNo')">
+            <!-- <el-form-item :label="$t('booking.referenceNo')">
               <el-input v-model="quotePriceCon.outNumber"
                         disabled
                         class="inp" />
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item :label="$t('booking.remarks')">
               <el-input v-model="quotePriceCon.remark"
                         disabled
