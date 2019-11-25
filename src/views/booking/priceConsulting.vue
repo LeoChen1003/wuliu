@@ -185,11 +185,11 @@
           </el-table-column>
           <el-table-column>
             <template slot-scope="scope">
-             <div style="text-align:center;">
+              <div style="text-align:center;">
                 <el-button type="primary"
-                         :disabled="!roles.Demand"
-                         @click="toBooking(scope.row)">{{ $t("booking.placeOrder") }}</el-button>
-             </div>
+                           :disabled="!roles.Demand"
+                           @click="toBooking(scope.row)">{{ $t("booking.placeOrder") }}</el-button>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -206,12 +206,13 @@
     </el-row>
     <el-dialog :visible.sync="previewDialog">
       <div>
-        <el-carousel arrow="always">
+        <el-carousel arrow="always" height="600px" :autoplay="false">
           <el-carousel-item v-for="item in previewImgList"
                             style="text-align:center;"
                             :key="item">
             <el-image :src="item"
-                      fit="cover"></el-image>
+                      style="height:600px;"
+                      fit="contain"></el-image>
           </el-carousel-item>
         </el-carousel>
       </div>

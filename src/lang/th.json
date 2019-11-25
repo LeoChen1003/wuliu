@@ -31,7 +31,7 @@
     "releaseToMarket": "จองรถ",
     "tracking": "ติดตามสถานะขนส่ง",
     "FTLNotHUB": "เหมาคัน (FTL)",
-    "LTLHUB": "เหมาคัน (FTL)",
+    "LTLHUB": "รายชิ้น",
     "billing": "การเรียกเก็บเงิน",
     "payableBill": "บัญชีเจ้าหนี้",
     "topUp": "เติมเงิน",
@@ -48,7 +48,7 @@
     "market": "ตลาดขนส่ง",
     "resources": "ทรัพยากร",
     "truck": "รถบรรทุก",
-    "driver": "คนขับรถ",
+    "driver": "พนักงานขับรถ",
     "routeFTL": "เส้นทาง（FTL）",
     "routeLTL": "เส้นทาง（LTL）",
     "planningLTL": "การวางแผน（LTL）",
@@ -222,7 +222,7 @@
   },
   "resources": {
     "add": "เพิ่ม",
-    "driver_name": "คนขับรถ",
+    "driver_name": "พนักงานขับรถ",
     "phoneNo": "เบอร์มือถือ",
     "status": "สถานะ",
     "task": "รายการงาน",
@@ -232,8 +232,8 @@
     "locationTracking": "การติดตามตำแหน่ง",
     "driverLicense": "เอกสารใบอนุญาตขับรถ",
     "driver": "พนักงานขับรถ",
-    "name": "ป้ายทะเบียนรถ",
-    "phone": "ประเภทรถบรรทุก",
+    "name": "ชื่อ",
+    "phone": "เบอร์มือถือ",
     "confirm": "ยืนยัน",
     "truck": "รถบรรทุก",
     "licensePlate": "หมายเลขทะเบียนรถ",
@@ -282,7 +282,9 @@
     "checkAll": "เลือกทั้งหมด",
     "deselectAll": "ยกเลิกการเลือกทั้งหมด",
     "identityCard": "บัตรประจำตัวประชาชน",
-    "resetThePassword": "รีเซ็ตรหัสผ่าน คุณแน่ใจหรือไม่?"
+    "resetThePassword": "รีเซ็ตรหัสผ่าน คุณแน่ใจหรือไม่?",
+    "ftlType1": "จุดต่อจุด",
+    "ftlType2": "บาทต่อกิโลเมตร"
   },
   "billing": {
     "billingStatus": "สถานะ",
@@ -353,7 +355,7 @@
     "bankAccount_No": "เลขที่บัญชีธนาคาร",
     "billingAddress": "เลขที่บัญชีธนาคาร",
     "profileDiscription": "อธิบายเกี่ยวกับบริษัท",
-    "region": "ภูมิภาค",
+    "region": "แขวง/ตำบล-เขต/อำเภอ-จังหวัด-รหัสไปรษณีย์",
     "affidavit": "หนังสือรับรอง",
     "transportationLicense": "ใบอนุญาติประกอบการขนส่ง",
     "IDcard": "บัตรประจำตัวประชาชน",
@@ -400,7 +402,8 @@
     "underReview": "รอตรวจสอบ",
     "uploadSuccess": "อัพโหลดสำเร็จ",
     "uploadContract": "อัพโหลดสัญญา",
-    "waitUpload": "รออัพโหลด"
+    "waitUpload": "รออัพโหลด",
+    "address": "บ้านเลขที่-ซอย-ถนน"
   },
   "confirm": {
     "tips": "คำแนะนำ",

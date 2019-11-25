@@ -435,7 +435,9 @@ export default {
   }
 }
 
-.el-icon-plus {
-  transform: translateY(-38px) !important;
+.inputWidth {
+  .el-icon-plus {
+    transform: translateY(-38px) !important;
+  }
 }
 </style>

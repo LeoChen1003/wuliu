@@ -2,8 +2,7 @@
   <div class="manage booking">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
       <div style="display:flex;width:80%;">
-        <el-alert
-                  show-icon
+        <el-alert show-icon
                   :closable="false"
                   :title="`${$t('title.TheCurrentlySelectedSupplyIs')} ${consultInfo.data.supply.name}，${$t('title.TomodifyPleaseClickButton')}`"
                   type="info"></el-alert>
@@ -76,7 +75,7 @@
             <el-input :placeholder="$t('placeholder.pleaseEnterTelNumber')"
                       v-model="bookingForm.senderAddress.mobile"
                       class="inputWidth inputBottom"></el-input>
-            <el-input :placeholder="$t('placeholder.pleaseEnterDetailAddress')"
+            <el-input :placeholder="$t('member.address')"
                       v-model="bookingForm.senderAddress.addressDetail"
                       class="inputWidth inputBottom"></el-input>
             <el-select v-model="bookingForm.senderAddress.code"
@@ -86,7 +85,7 @@
                        reserve-keyword
                        class="inputWidth"
                        v-el-select-loadmore="loadmore"
-                       :placeholder="$t('placeholder.administrativeDivision')"
+                       :placeholder="$t('member.region')"
                        :remote-method="pickUpMethod"
                        @focus="clearSelect('pk')"
                        :loading="searchloading">
@@ -107,7 +106,7 @@
             <el-input :placeholder="$t('placeholder.pleaseEnterTelNumber')"
                       v-model="bookingForm.receiverAddress.mobile"
                       class="inputWidth inputBottom"></el-input>
-            <el-input :placeholder="$t('placeholder.pleaseEnterDetailAddress')"
+            <el-input :placeholder="$t('member.address')"
                       v-model="bookingForm.receiverAddress.addressDetail"
                       class="inputWidth inputBottom"></el-input>
             <el-select v-model="bookingForm.receiverAddress.code"
@@ -118,7 +117,7 @@
                        @focus="clearSelect('del')"
                        class="inputWidth"
                        v-el-select-loadmore="loadmore"
-                       :placeholder="$t('placeholder.administrativeDivision')"
+                       :placeholder="$t('member.region')"
                        :remote-method="pickUpMethod"
                        :loading="searchloading">
               <el-option v-for="item in delRegionList"

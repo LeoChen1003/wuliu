@@ -285,7 +285,9 @@
     "checkAll": "Select All",
     "deselectAll": "Unselect All",
     "identityCard": "Identity Card",
-    "resetThePassword": "Reset the password ,are you sure?"
+    "resetThePassword": "Reset the password ,are you sure?",
+    "ftlType1": "Lump sum",
+    "ftlType2": "Baht per Kilometer"
   },
   "billing": {
     "billingStatus": "Status",
@@ -406,7 +408,8 @@
     "applyStatusDefault": "Your application is under review",
     "applyStatusRejected": "Audited not pass",
     "goToDownload": "Download contract",
-    "uploadContract": "Upload Contract"
+    "uploadContract": "Upload Contract",
+    "address": "Address"
   },
   "confirm": {
     "tips": "Tips",

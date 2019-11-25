@@ -785,7 +785,9 @@ input::-webkit-inner-spin-button {
   }
 }
 
-.el-icon-plus {
-  transform: translateY(-38px) !important;
+.upload-box {
+  .el-icon-plus {
+    transform: translateY(-38px) !important;
+  }
 }
 </style>

@@ -140,9 +140,10 @@
             </el-form-item>
             <el-form-item :label="$t('member.fullAddress')">
               <el-input class="inp"
+                        :placeholder="$t('member.address')"
                         v-model="infoForm.address" />
               <el-input class="inp"
-                        placeholder="Region"
+                        :placeholder="$t('member.region')"
                         v-model="infoForm.region" />
             </el-form-item>
             <el-form-item />
@@ -160,9 +161,10 @@
             </el-form-item>
             <el-form-item :label="$t('member.billingAddress')">
               <el-input class="inp"
+                        :placeholder="$t('member.address')"
                         v-model="infoForm.bankBillAddress" />
               <el-input class="inp"
-                        placeholder="Region"
+                        :placeholder="$t('member.region')"
                         v-model="infoForm.bankBillRegion" />
             </el-form-item>
             <el-form-item />

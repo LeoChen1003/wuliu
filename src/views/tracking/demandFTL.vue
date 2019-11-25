@@ -94,10 +94,22 @@
             <template slot-scope="scope">
               <div v-if="!(tabActive=='0'||tabActive=='1') && scope.row.transport.supply">
                 <div>
-                  {{scope.row.transport.supply.companyName }}
+                  {{ scope.row.transport.supply.companyName }}
                 </div>
                 <div>
-                  {{scope.row.transport.supply.contactMobile }}
+                  {{ scope.row.transport.supply.contactMobile }}
+                </div>
+                <div>
+                  {{ truckObj[scope.row.transport.transport] }}
+                </div>
+                <div>
+                  {{ scope.row.transport.plate }}
+                </div>
+                <div>
+                  {{ scope.row.transport.driver.name }}
+                </div>
+                <div>
+                  {{ scope.row.transport.driver.phone }}
                 </div>
               </div>
             </template>

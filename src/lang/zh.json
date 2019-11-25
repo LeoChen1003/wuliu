@@ -407,7 +407,8 @@
     "underReview": "待审核",
     "passed": "已通过",
     "uploadSuccess": "上传成功",
-    "logo": "Logo"
+    "logo": "Logo",
+    "address": "详细地址"
   },
   "confirm": {
     "tips": "提示",
