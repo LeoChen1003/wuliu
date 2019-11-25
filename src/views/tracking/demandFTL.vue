@@ -105,10 +105,10 @@
                 <div>
                   {{ scope.row.transport.plate }}
                 </div>
-                <div>
+                <div v-if="scope.row.transport.driver">
                   {{ scope.row.transport.driver.name }}
                 </div>
-                <div>
+                <div v-if="scope.row.transport.driver">
                   {{ scope.row.transport.driver.phone }}
                 </div>
               </div>
