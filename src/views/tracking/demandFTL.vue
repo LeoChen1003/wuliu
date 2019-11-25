@@ -94,7 +94,7 @@
             <template slot-scope="scope">
               <div v-if="!(tabActive=='0'||tabActive=='1') && scope.row.transport.supply">
                 <div>
-                  {{ scope.row.transport.supply.companyName }}
+                  {{ scope.row.transport.supply.companyName == '' ? scope.row.transport.supply.humanName : scope.row.transport.supply.companyName }}
                 </div>
                 <div>
                   {{ scope.row.transport.supply.contactMobile }}
