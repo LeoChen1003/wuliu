@@ -67,7 +67,7 @@
             <el-input :placeholder="$t('placeholder.pleaseEnterTelNumber')"
                       v-model="releaseForm.senderAddress.mobile"
                       class="inputWidth inputBottom"></el-input>
-            <el-input :placeholder="$t('placeholder.pleaseEnterDetailAddress')"
+            <el-input :placeholder="$t('member.address')"
                       v-model="releaseForm.senderAddress.addressDetail"
                       class="inputWidth inputBottom"></el-input>
             <el-select v-model="releaseForm.senderAddress.code"
@@ -76,7 +76,7 @@
                        reserve-keyword
                        class="inputWidth"
                        v-el-select-loadmore="loadmore"
-                       :placeholder="$t('placeholder.administrativeDivision')"
+                       :placeholder="$t('member.region')"
                        :remote-method="pickUpMethod"
                        @focus="clearSelect('pk')"
                        :loading="searchloading">
@@ -97,7 +97,7 @@
             <el-input :placeholder="$t('placeholder.pleaseEnterTelNumber')"
                       v-model="releaseForm.receiverAddress.mobile"
                       class="inputWidth inputBottom"></el-input>
-            <el-input :placeholder="$t('placeholder.pleaseEnterDetailAddress')"
+            <el-input :placeholder="$t('member.address')"
                       v-model="releaseForm.receiverAddress.addressDetail"
                       class="inputWidth inputBottom"></el-input>
             <el-select v-model="releaseForm.receiverAddress.code"
@@ -107,7 +107,7 @@
                        @focus="clearSelect('del')"
                        class="inputWidth"
                        v-el-select-loadmore="loadmore"
-                       :placeholder="$t('placeholder.administrativeDivision')"
+                       :placeholder="$t('member.region')"
                        :remote-method="pickUpMethod"
                        :loading="searchloading">
               <el-option v-for="item in delRegionList"

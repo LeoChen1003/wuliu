@@ -2,8 +2,7 @@
   <div class="manage booking">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
       <div style="display:flex;width:80%;">
-        <el-alert class="rejectMsg"
-                  show-icon
+        <el-alert show-icon
                   :closable="false"
                   :title="`${$t('title.TheCurrentlySelectedSupplyIs')} ${consultInfo.data.supply.name}，${$t('title.TomodifyPleaseClickButton')}`"
                   type="info"></el-alert>
@@ -76,7 +75,7 @@
             <el-input :placeholder="$t('placeholder.pleaseEnterTelNumber')"
                       v-model="bookingForm.senderAddress.mobile"
                       class="inputWidth inputBottom"></el-input>
-            <el-input :placeholder="$t('placeholder.pleaseEnterDetailAddress')"
+            <el-input :placeholder="$t('member.address')"
                       v-model="bookingForm.senderAddress.addressDetail"
                       class="inputWidth inputBottom"></el-input>
             <el-select v-model="bookingForm.senderAddress.code"
@@ -86,7 +85,7 @@
                        reserve-keyword
                        class="inputWidth"
                        v-el-select-loadmore="loadmore"
-                       :placeholder="$t('placeholder.administrativeDivision')"
+                       :placeholder="$t('member.region')"
                        :remote-method="pickUpMethod"
                        @focus="clearSelect('pk')"
                        :loading="searchloading">
@@ -107,7 +106,7 @@
             <el-input :placeholder="$t('placeholder.pleaseEnterTelNumber')"
                       v-model="bookingForm.receiverAddress.mobile"
                       class="inputWidth inputBottom"></el-input>
-            <el-input :placeholder="$t('placeholder.pleaseEnterDetailAddress')"
+            <el-input :placeholder="$t('member.address')"
                       v-model="bookingForm.receiverAddress.addressDetail"
                       class="inputWidth inputBottom"></el-input>
             <el-select v-model="bookingForm.receiverAddress.code"
@@ -118,7 +117,7 @@
                        @focus="clearSelect('del')"
                        class="inputWidth"
                        v-el-select-loadmore="loadmore"
-                       :placeholder="$t('placeholder.administrativeDivision')"
+                       :placeholder="$t('member.region')"
                        :remote-method="pickUpMethod"
                        :loading="searchloading">
               <el-option v-for="item in delRegionList"
@@ -410,6 +409,8 @@ import { ftlCharge, placeOrder } from '../../api/booking'
 import { getTruckType, findDistrictFullList, getGoodsProperty, getSenderList, getTransportList, myAccount } from '../../api/data'
 import path from 'path';
 
+let self;
+
 export default {
   directives: {
     'el-select-loadmore': {
@@ -428,7 +429,6 @@ export default {
   // import引入的组件需要注入到对象中才能使用
   components: {},
   data () {
-    const self = this
     const validatorSenderAddress = (rule, value, callback) => {
       if (!value.pickAt || !value.name || !value.mobile || !value.addressDetail || !value.code) {
         callback(new Error(''));
@@ -553,7 +553,6 @@ export default {
   // 监控data中的数据变化
   watch: {
     shareTruck (val) {
-      const self = this
       if (val) {
         self.bookingForm.chargeList[0].chargeIntro = self.cargoShape
       } else {
@@ -561,13 +560,11 @@ export default {
       }
     },
     cargoShape (val) {
-      const self = this
       if (self.shareTruck) {
         self.bookingForm.chargeList[0].chargeIntro = val
       }
     },
     documentReturn (val) {
-      const self = this
       if (val) {
         self.amountList.push({
           key: 'RETURN_DOCUMENT',
@@ -579,7 +576,6 @@ export default {
       }
     },
     loading (val) {
-      const self = this
       if (val) {
         self.amountList.push({
           key: 'LOADING',
@@ -591,7 +587,6 @@ export default {
       }
     },
     unloading (val) {
-      const self = this
       if (val) {
         self.amountList.push({
           key: 'UNLOADING',
@@ -603,7 +598,6 @@ export default {
       }
     },
     liability (val) {
-      const self = this
       if (val) {
         self.amountList.push({
           key: 'INSURANCE',
@@ -613,21 +607,19 @@ export default {
       } else {
         self.amountWatch('INSURANCE')
       }
+    },
+    "$store.getters.language" () {
+      self.init();
     }
   },
   created () {
-    const self = this
+    self = this
     let consultInfo = JSON.parse(localStorage.getItem('consultInfo'))
     self.consultInfo = consultInfo
-    console.log(consultInfo)
   },
   mounted () {
-    const self = this
     // 卡车类型
-    getTruckType().then(res => {
-      self.categoryList = res.data.categories
-      self.subCategoryList = res.data.subCategories
-    })
+    self.init();
     let consultInfo = self.consultInfo
     if (consultInfo) {
       let booking = self.bookingForm;
@@ -650,12 +642,6 @@ export default {
         key: 'FREIGHT'
       })
     }
-    // 货物属性
-    getGoodsProperty().then(res => {
-      self.propertyTypeList = res.data.propertyType
-      self.sizeTypeList = res.data.sizeType
-      self.unitList = res.data.unit
-    })
     // 寄件人列表 
     getSenderList().then(res => {
       self.senderList = res.data
@@ -670,8 +656,19 @@ export default {
     })
   },
   methods: {
+    init () {
+      getTruckType().then(res => {
+        self.categoryList = res.data.categories
+        self.subCategoryList = res.data.subCategories
+        // 货物属性
+        getGoodsProperty().then(res => {
+          self.propertyTypeList = res.data.propertyType
+          self.sizeTypeList = res.data.sizeType
+          self.unitList = res.data.unit
+        })
+      })
+    },
     amountWatch (name) {
-      const self = this
       for (let x in self.amountList) {
         if (self.amountList[x].key == name) {
           self.amountList.splice(x, 1)
@@ -679,7 +676,6 @@ export default {
       }
     },
     pickUpMethod (query) {
-      const self = this
       if (query !== '') {
         if (self.curSelect == 'pk') {
           self.pickUpQuery = query
@@ -696,7 +692,6 @@ export default {
       }
     },
     loadmore () {
-      const self = this
       if (!self.isLast) {
         self.page += 1
         if (self.curSelect == 'pk') {
@@ -707,7 +702,6 @@ export default {
       }
     },
     getdistrictFullList (query, page) {
-      const self = this
       findDistrictFullList({
         name: query,
         page: page
@@ -730,7 +724,6 @@ export default {
     },
     // 聚焦初始化     
     clearSelect (type) {
-      const self = this
       if (type == 'pk') {
         self.pickUpQuery = ''
         self.curSelect = 'pk'
@@ -743,16 +736,12 @@ export default {
     },
     // 选择寄件人
     senderSelect (val) {
-      console.log(val)
-      const self = this
       self.bookingForm.senderAddress.name = self.senderList[val].name
       self.bookingForm.senderAddress.mobile = self.senderList[val].mobile
       self.bookingForm.senderAddress.addressDetail = self.senderList[val].addressDetail
     },
     // 下单
     todoIt () {
-      const self = this
-      console.log(self.bookingForm)
       this.$refs.bookingform.validate(valid => {
         if (valid) {
           self.todoLoading = true
@@ -778,7 +767,6 @@ export default {
       })
     },
     viewIt () {
-      const self = this
       let transportInfo = self.bookingForm.transportInfo
       ftlCharge({
         documentReturn: self.documentReturn,
@@ -794,7 +782,6 @@ export default {
       })
     },
     pushIt () {
-      const self = this
       self.bookingForm.propertyList.push({
         propertyType: '',
         name: '',
@@ -805,26 +792,20 @@ export default {
       })
     },
     delIt (row, index) {
-      const self = this
-      self
-        .$confirm(this.$t('booking.aysDel'), this.$t('confirm.tips'), {
-          confirmButtonText: this.$t('booking.delete'),
-          cancelButtonText: this.$t('member.cancel')
-        })
-        .then(() => {
-          self.bookingForm.propertyList.splice(index, 1)
-        })
-        .catch(() => { });
+      self.$confirm(this.$t('booking.aysDel'), this.$t('confirm.tips'), {
+        confirmButtonText: this.$t('booking.delete'),
+        cancelButtonText: this.$t('member.cancel')
+      }).then(() => {
+        self.bookingForm.propertyList.splice(index, 1)
+      }).catch(() => { });
     },
     sizeSelect (val, index) {
-      const self = this
       if (val == 'EXTRA_SIZE') {
         self.sizeDialog = true
         self.sizeCurIndex = index
       }
     },
     sizeConfirm () {
-      const self = this
       self.sizeDialog = false
       let size = self.size_length + '*' + self.size_width + '*' + self.size_height
       self.sizeTypeList.push({
@@ -835,11 +816,9 @@ export default {
       self.bookingForm.propertyList[self.sizeCurIndex].sizeType = size
     },
     toTopUp () {
-      const self = this
       self.$router.replace('/billing/topUp')
     },
     goBack () {
-      const self = this
       self.$router.replace({ path: '/booking/priceConsulting', query: { return: 1 } })
     }
   }
