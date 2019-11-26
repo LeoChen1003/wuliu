@@ -1,7 +1,7 @@
 <template>
   <div :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" />
-    <el-scrollbar wrap-class="scrollbar-wrapper">
+    <el-scrollbar wrap-class="scrollbar-wrapper" style="margin:0 auto;">
       <el-menu :default-active="activeMenu"
                :background-color="variables.menuBg"
                :text-color="variables.menuText"
@@ -31,11 +31,14 @@ export default {
     activeMenu () {
       const route = this.$route;
       const { meta, path } = route;
+      console.log(route)
       // if set path, the sidebar will highlight the path you set
-      if (meta.activeMenu) {
-        return meta.activeMenu;
-      }
-      return path;
+      // if (meta.activeMenu) {
+      //   return meta.activeMenu;
+      // }
+
+      // 获取matched里的第一个下标为父级
+      return route.matched[0].path;
     },
     showLogo () {
       return this.$store.state.settings.sidebarLogo;
@@ -53,5 +56,7 @@ export default {
 <style>
 .fixmenu {
   display: flex;
+  justify-content: center;
+  text-align: center;
 }
 </style>

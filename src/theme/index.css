@@ -1105,8 +1105,8 @@
   color: #409eff;
 }
 .el-pagination.is-background .el-pager li:not(.disabled).active {
-  background-color: #ffea33;
-  color: #333;
+  background-color: red;
+  color: #fff;
 }
 .el-dialog,
 .el-pager li {
@@ -1996,8 +1996,8 @@
   background-color: #fff;
 }
 .el-switch.is-checked .el-switch__core {
-  border-color: #ffea33;
-  background-color: #ffea33;
+  border-color: red;
+  background-color: red;
 }
 .el-switch.is-checked .el-switch__core::after {
   left: 100%;
@@ -4148,7 +4148,7 @@
   bottom: 0;
   left: 0;
   height: 2px;
-  background-color: #ffea33;
+  background-color: red;
   z-index: 1;
   -webkit-transition: -webkit-transform 0.3s
     cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -4351,7 +4351,7 @@
   padding-right: 13px;
 }
 .el-tabs--card > .el-tabs__header .el-tabs__item.is-active {
-  border-bottom-color: #fff;
+  border-bottom-color: red;
 }
 .el-tabs--card > .el-tabs__header .el-tabs__item.is-active.is-closable {
   padding-left: 20px;
@@ -10952,21 +10952,21 @@
   padding: 12px;
 }
 .el-button--primary {
-  color: #333;
-  background-color: #ffea33;
-  border-color: #ffea33;
+  color: #fff;
+  background-color: red;
+  border-color: red;
 }
 .el-button--primary:focus,
 .el-button--primary:hover {
-  background: #e9d521;
-  border-color: #e9d521;
-  color: #333;
+  background: #e90000;
+  border-color: #2e0707;
+  color: #fff;
 }
 .el-button--primary.is-active,
 .el-button--primary:active {
-  background: #ffc820;
-  border-color: #ffc820;
-  color: #333;
+  background: #c40202;
+  border-color: #810606;
+  color: #fff;
 }
 .el-button--primary:active {
   outline: 0;
@@ -10975,20 +10975,20 @@
 .el-button--primary.is-disabled:active,
 .el-button--primary.is-disabled:focus,
 .el-button--primary.is-disabled:hover {
-  color: #ccc;
-  background-color: rgba(244,237,173);
-  border-color: rgba(244,237,173);
+  color: #fff;
+  background-color: rgba(255,0,0,.3);
+  border-color: rgba(255,0,0,.2);
 }
 .el-button--primary.is-plain {
-  color: #409eff;
-  background: #ecf5ff;
-  border-color: #b3d8ff;
+  color: #8c8c8c;
+  background: #ffffff;
+  border-color: #ccc;
 }
 .el-button--primary.is-plain:focus,
 .el-button--primary.is-plain:hover {
-  background: #409eff;
-  border-color: #409eff;
-  color: #fff;
+  background: #ffffff;
+  border-color: #ff0000;
+  color: red;
 }
 .el-button--primary.is-plain:active {
   background: #3a8ee6;

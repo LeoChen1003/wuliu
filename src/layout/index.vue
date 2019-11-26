@@ -9,8 +9,17 @@
          class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
-        <breadcrumb id="breadcrumb-container"
-                    class="breadcrumb-container" />
+        <div class="subNav" v-if="subRoutes.length > 1">
+          <div class="subNav-item"
+               :class="item.active ? 'subNav-item-active' : ''"
+               v-for="(item,index) in subRoutes"
+               @click="$router.push({path:item.path})"
+               v-if="!item.hidden">
+            {{generateTitle(item.meta.title)}}
+          </div>
+        </div>
+        <!-- <breadcrumb id="breadcrumb-container"
+                    class="breadcrumb-container" /> -->
         <!-- <tags-view v-if="needTagsView" /> -->
       </div>
       <app-main />
@@ -27,6 +36,10 @@ import Breadcrumb from "@/components/Breadcrumb";
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from "./components";
 import ResizeMixin from "./mixin/ResizeHandler";
 import { mapState } from "vuex";
+import { generateTitle } from "@/utils/i18n";
+
+
+let self;
 
 export default {
   name: "Layout",
@@ -39,6 +52,9 @@ export default {
     TagsView,
     Breadcrumb
   },
+  created () {
+    self = this;
+  },
   mixins: [ResizeMixin],
   computed: {
     ...mapState({
@@ -46,7 +62,7 @@ export default {
       device: state => state.app.device,
       showSettings: state => state.settings.showSettings,
       needTagsView: state => state.settings.tagsView,
-      fixedHeader: state => state.settings.fixedHeader
+      fixedHeader: state => state.settings.fixedHeader,
     }),
     classObj () {
       return {
@@ -55,12 +71,59 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === "mobile"
       };
+    },
+  },
+  data () {
+    return {
+      subRoutes: []
+    }
+  },
+  watch: {
+    $route: {
+      handler: function (val, oldVal) {
+        self.cRouter();
+      },
     }
   },
   methods: {
     handleClickOutside () {
       this.$store.dispatch("app/closeSideBar", { withoutAnimation: false });
-    }
+    },
+    // 计算子路由
+    cRouter () {
+      let nowPath = self.$router.history.current.path;
+      let nowSub = self.cNowSub(nowPath);
+      let subRoutes = nowSub.children;
+      self.subRoutes = subRoutes;
+    },
+    // 寻找当前子路由集
+    cNowSub (nowPath) {
+      // 依附当前权限的路由集
+      let routers = JSON.parse(JSON.stringify(self.$store.state.permission.addRoutes));
+      for (let i of routers) {
+        /*
+         * 不包含二级路由情况
+         * 暂不存在
+         * 目前的实现方式是写一个index子路由
+         * 后期如果出现需要此处适配
+         */
+        if (i.path == nowPath) {
+          return []
+        } else {
+          // 其他情况
+          for (let t of i.children) {
+            if (`${i.path}/${t.path}` == nowPath) {
+              t.active = true;
+              return i
+            }
+          }
+        }
+      }
+    },
+    generateTitle
+  },
+  mounted () {
+    self.cRouter();
   }
 };
 </script>
@@ -106,5 +169,35 @@ export default {
 
 .mobile .fixed-header {
   width: 100%;
+}
+
+.subNav {
+  display: flex;
+  justify-content: center;
+  background: rgb(249,249,249);
+  border-bottom: 1px solid #ddd;
+
+  .subNav-item {
+    width: 150px;
+    height: 40px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 40px;
+    margin: 0 10px;
+    border-bottom: 0px solid rgba($color: #000000, $alpha: 0);
+    cursor: pointer;
+    transition: all 0.4s;
+
+    &:hover {
+      border-bottom: 5px solid red;
+      color: red;
+    }
+  }
+
+  .subNav-item-active {
+    font-weight: bold;
+    color: red;
+    border-bottom: 2px solid red;
+  }
 }
 </style>

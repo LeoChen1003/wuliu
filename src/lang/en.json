@@ -55,7 +55,8 @@
     "order": "Order",
     "FTLCargoNotViaHUB": "FTL（Cargo not via HUB）",
     "LTLCargoViaHUB": "LTL(Cargo  via HUB)",
-    "receivable": "Receivable"
+    "receivable": "Receivable",
+    "welcome": "Welcome"
   },
   "layout": {
     "logout": "Logout"
