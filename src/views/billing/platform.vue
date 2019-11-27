@@ -2,27 +2,29 @@
   <div class="manage billing">
     <div class="statusHeader">
       <div class="status-txt">{{ $t('billing.billingStatus') }}</div>
-      <!-- <div class="timePicker">
-        <el-date-picker v-model="value1"
-                        type="daterange"
-                        :range-separator="$t('placeholder.to')"
-                        :start-placeholder="$t('placeholder.startDate')"
-                        :end-placeholder="$t('placeholder.endDate')"
-                        size="small" />
-      </div> -->
+      <div class="date-box">
+        <span style="margin: 0 10px;">{{$t('billing.date')}}</span>
+        <bcTime @changeBCtime="changeBCtimeFrom"
+                :timeType="'all'"
+                :dateDefault='fromDateDeFault'></bcTime>
+        <span style="margin:0 5px;">~</span>
+        <bcTime @changeBCtime="changeBCtimeTo"
+                :dateDefault='toDateDeFault'
+                style="margin-left:5px;"
+                :timeType="'all'"></bcTime>
+      </div>
+      <span style="margin: 0 10px 0 15px;">{{$t('placeholder.amount')}}</span>
       <el-input type="number"
-                v-model="amount"
-                style="margin-left:20px;width:200px;"
-                size="small"
-                :placeholder="$t('placeholder.amount')"></el-input>
-      <el-button size="small"
-                 style='margin-left:10px;'
+                v-model.number="amount"
+                style="width:200px;"></el-input>
+      <span style="margin: 0 10px 0 15px;">{{$t('billing.member')}}</span>
+      <el-input v-model="member"
+                style="width:200px;"></el-input>
+      <el-button style='margin-left:10px;'
                  icon="el-icon-search"
                  @click="searchIt"
                  type="primary">{{ $t('billing.search') }}</el-button>
-      <el-button size="small"
-                 @click="cancelIt"
-                 style='margin-left:10px;'>{{ $t('billing.cancel') }}</el-button>
+      <el-button @click="cancelIt">{{ $t('billing.cancel') }}</el-button>
     </div>
     <div class="content">
       <div>
@@ -66,23 +68,16 @@
                 {{scope.row.operateAt.slice(0,10) + ' ' +scope.row.operateAt.slice(11,19)}}
               </template>
             </el-table-column>
-            <el-table-column prop="financeAccountType"
-                             :label="$t('billing.type')"></el-table-column>
+            <el-table-column :label="$t('billing.description')">
+              <template slot-scope="scope">
+                <div>{{ scope.row.financeAccountType }}</div>
+                <div>{{ scope.row.site.type == "COMPANY" ? scope.row.site.companyName : scope.row.site.humanName }}</div>
+              </template>
+            </el-table-column>
             <el-table-column prop="amount"
                              :label="$t('billing.amount')">
               <template slot-scope="scope">
                 {{scope.row.amount}}
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('billing.operation')"
-                             v-if="tabActive == 'DEFAULT'">
-              <template slot-scope="scope">
-                <div style="display: flex;align-items: center;justify-content: center;">
-                  <el-button type="primary"
-                             @click="toConfirm(scope.row.id)">{{$t('billing.confirm')}}</el-button>
-                  <el-button type="info"
-                             @click="refuseVisible = true;curId = scope.row.id;reason='';">{{$t('billing.reject')}}</el-button>
-                </div>
               </template>
             </el-table-column>
           </el-table>
@@ -98,23 +93,57 @@
         </div>
         <el-card class="right"
                  shadow="never">
-          <el-image :src='showUrl'
-                    v-if="showUrl">
+          <el-image :src='thisRow.resource.path'
+                    :preview-src-list="thisRow.preViewList"
+                    v-if="thisRow">
             <!-- <div slot="error"
                  class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div> -->
           </el-image>
+          <div class="note-box"
+               v-if="thisRow">
+            {{ $t('billing.note') }}:{{ thisRow.remarks }}
+          </div>
+          <div class="handle-box"
+               v-if="thisRow && (tabActive == 'ACCEPT' || tabActive == 'REJECTED')">
+            <el-form label-width="150px"
+                     label-position="left"
+                     size="small">
+              <el-form-item :label="$t('billing.confirmedBy')">
+                {{ thisRow.handle.companyName }}
+              </el-form-item>
+              <el-form-item :label="$t('billing.date')">
+                {{ thisRow.handledAt }}
+              </el-form-item>
+              <el-form-item :label="$t('billing.note')"
+                            v-if="tabActive == 'REJECTED'">
+                {{ thisRow.handleNote }}
+              </el-form-item>
+            </el-form>
+          </div>
+          <div class="btn-box"
+               v-if="thisRow && tabActive == 'DEFAULT'">
+            <el-button type="primary"
+                       @click="confirmDialog = true">{{$t('billing.confirm')}}</el-button>
+            <el-button type="info"
+                       @click="refuseVisible = true;reason='';">{{$t('billing.reject')}}</el-button>
+          </div>
         </el-card>
       </div>
     </div>
-    <el-dialog :title="$t('member.reasonsForRefusal')"
+    <el-dialog :title="$t('billing.refuseTitle')"
                :visible.sync="refuseVisible"
-               width="40%">
-      <div style="display:flex;justify-content:center;align-items:center;">
-        {{$t('member.reason')}}：
-        <el-input v-model="reason"
-                  class="inp"></el-input>
+               center
+               width="600px">
+      <div>
+        <div style="text-align:center;margin-bottom:20px;">{{$t('member.reasonsForRefusal')}}</div>
+        <div>
+          <el-input v-model="reason"
+                    type="textarea"
+                    style="resize:none;width:100%;"
+                    class="inp"></el-input>
+        </div>
       </div>
       <span slot="footer"
             class="dialog-footer">
@@ -122,6 +151,37 @@
         <el-button type="info"
                    :loading="refuseLoading"
                    @click="rejectIt">{{ $t('member.reject') }}</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :title="$t('billing.confirmTitle')"
+               :visible.sync="confirmDialog"
+               center
+               width="700px">
+      <div>
+        <el-form label-width="200px"
+                 v-if='thisRow'>
+          <el-form-item :label="$t('billing.date')">
+            {{ thisRow.operateAt }}
+          </el-form-item>
+          <el-form-item :label="$t('billing.member')">
+            {{thisRow.site.type == "COMPANY" ? thisRow.site.companyName : thisRow.site.humanName }}
+          </el-form-item>
+          <el-form-item :label="$t('billing.rechargeType')">
+            {{ thisRow.financeAccountType }}
+          </el-form-item>
+          <el-form-item :label="$t('billing.amount')">
+            {{ thisRow.amount }}
+          </el-form-item>
+        </el-form>
+        <div class="confirm-text">
+          {{$t('billing.confirmText')}}
+        </div>
+      </div>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="confirmDialog = false">{{$t('billing.cancel')}}</el-button>
+        <el-button type="primary"
+                   @click="confirmIt">{{$t('billing.confirm')}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -132,10 +192,14 @@
 // 例如：import 《组件名称》 from '《组件路径》';
 import { billingList, billingAccept, billingReject, billplatformCount } from "../../api/billing"
 import { getToken } from '@/utils/auth'
+import { getTime, parseTime, getLastMonthTime } from '../../utils/index'
+import bcTime from "@/components/bcTime";
+
+let self;
 
 export default {
   // import引入的组件需要注入到对象中才能使用
-  components: {},
+  components: { bcTime },
   data () {
     const self = this;
     return {
@@ -154,21 +218,36 @@ export default {
       },
       pagesize: 20,
       amount: null,
-      statusCount: {}
+      statusCount: {},
+      thisRow: null,
+      confirmDialog: false,
+      fromDate: getLastMonthTime(new Date()),
+      toDate: parseTime(new Date().getTime(), '{y}-{m}-{d}'),
+      member: ''
     };
   },
   // 监听属性 类似于data概念
-  computed: {},
+  computed: {
+    fromDateDeFault () {
+      console.log(self.fromDate.split('-'))
+      return self.fromDate.split('-')
+    },
+    toDateDeFault () {
+      console.log(self.toDate.split('-'))
+      return self.toDate.split('-')
+    },
+  },
   // 监控data中的数据变化
   watch: {},
-  created () { },
+  created () {
+    self = this;
+  },
   mounted () {
     this.getList()
     this.getCount()
   },
   methods: {
     getList () {
-      let self = this
       billingList({ audit_status: self.tabActive, amount: self.amount ? self.amount : 0 }, {
         page: self.page.currentPage - 1,
         pagesize: self.pagesize,
@@ -181,27 +260,28 @@ export default {
       })
     },
     getCount () {
-      const self = this
       billplatformCount(self.apply_type).then(res => {
         self.statusCount = res.data
       })
     },
     searchIt () {
-      const self = this
       self.getList()
     },
     cancelIt () {
-      const self = this
       self.amount = null
       self.getList()
     },
+    changeBCtimeFrom (time) {
+      self.fromDate = time
+    },
+    changeBCtimeTo (time) {
+      self.toDate = time
+    },
     pageChange (val) {
-      const self = this
       self.page.currentPage = val
       self.getList()
     },
     pageSizeChange (val) {
-      const self = this;
       self.pagesize = val
       self.getList()
     },
@@ -209,34 +289,24 @@ export default {
       this.getList()
     },
     handleCurrentChange (val) {
-      const self = this
-      self.showUrl = val.resource.path
+      val.preViewList = [val.resource.path]
+      self.thisRow = val
     },
     // 确认
-    toConfirm (id) {
-      const self = this
-      self
-        .$confirm(this.$t('confirm.aysConfirm'), this.$t('confirm.tips'), {
-          confirmButtonText: this.$t('billing.confirm'),
-          cancelButtonText: this.$t('member.cancel')
-        })
-        .then(() => {
-          billingAccept({
-            id: id,
-          }).then(res => {
-            self.$message.success(res.message)
-            self.dialogVisible = false
-            self.getList()
-          })
-        })
-        .catch(() => { });
+    confirmIt () {
+      billingAccept({
+        id: self.thisRow.id,
+      }).then(res => {
+        self.$message.success(res.message)
+        self.confirmDialog = false
+        self.getList()
+      })
     },
     // 拒绝
     rejectIt () {
-      const self = this
       self.refuseLoading = true
       billingReject({
-        id: self.curId,
+        id: self.thisRow.id,
         note: self.reason
       }).then(res => {
         self.$message.success(res.message)
@@ -295,6 +365,8 @@ export default {
       .right {
         width: 49%;
         padding: 0 10px;
+        overflow: scroll;
+        text-align: center;
         // min-height: calc(100% - 50px);
         // border: 2px solid #dfe6ec;
         // display: flex;
@@ -330,6 +402,35 @@ export default {
   .red {
     color: red;
   }
+}
+
+.confirm-text {
+  margin: 10px 0;
+  color: red;
+  text-align: center;
+}
+
+.btn-box {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.note-box {
+  box-sizing: border-box;
+  padding: 20px;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+
+.handle-box {
+  text-align: left;
+  box-sizing: border-box;
+  padding-left: 100px;
+}
+
+.date-box {
+  display: flex;
+  align-items: center;
 }
 </style>
 

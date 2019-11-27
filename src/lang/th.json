@@ -318,7 +318,10 @@
     "reject": "ปฏิเสธ",
     "operation": "การดำเนินการ",
     "reasonsForRefusal": "เหตุผลสำหรับการปฏิเสธ",
-    "cancel": "ยกเลิก"
+    "cancel": "ยกเลิก",
+    "member": "สมัครเป็นสมาชิก",
+    "confirmedBy": "ยืนยัน",
+    "note": "ข้อคิดเห็น"
   },
   "member": {
     "myData": "ข้อมูลของฉัน",

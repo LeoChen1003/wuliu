@@ -102,12 +102,15 @@ export default {
       return false;
     },
     resolvePath (routePath) {
-      if (isExternal(routePath)) {
-        return routePath;
-      }
-      if (isExternal(this.basePath)) {
-        return this.basePath;
-      }
+      // if (isExternal(routePath)) {
+      //   return routePath;
+      // }
+      // if (isExternal(this.basePath)) {
+      //   return this.basePath;
+      // }
+      // console.log(routePath)
+      // console.log(this.basePath)
+      // console.log(path.resolve(this.basePath, routePath))
       return path.resolve(this.basePath, routePath);
     },
 

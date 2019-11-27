@@ -324,7 +324,15 @@
     "reject": "拒绝",
     "operation": "操作",
     "reasonsForRefusal": "拒绝原因",
-    "cancel": "取消"
+    "cancel": "取消",
+    "rechargeType": "充值类型",
+    "member": "会员",
+    "confirmText": "我确认此笔款已到账。此操作不可撤销，你确认吗？",
+    "confirmTitle": "确认充值到账",
+    "refuseTitle": "否认充值到账",
+    "description": "描述",
+    "confirmedBy": "审核人",
+    "note": "备注"
   },
   "member": {
     "myData": "我的资料",

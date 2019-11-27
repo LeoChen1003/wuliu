@@ -31,7 +31,16 @@ export default {
     activeMenu () {
       const route = this.$route;
       const { meta, path } = route;
-      console.log(route)
+      const parentPath = route.matched[0].path;
+      const routes = this.$store.state.permission.addRoutes;
+      // 如果只有1个子节点
+      for(let i of routes){
+        if(i.path == parentPath && i.children.length == 1){
+          return `${i.path}/${i.children[0].path}`
+        }
+      }
+      // console.log(route)
+      // console.log(route.matched[0].path)
       // if set path, the sidebar will highlight the path you set
       // if (meta.activeMenu) {
       //   return meta.activeMenu;

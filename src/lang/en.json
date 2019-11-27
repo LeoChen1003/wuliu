@@ -322,7 +322,11 @@
     "reject": "reject",
     "operation": "operation",
     "reasonsForRefusal": "Reasons for refusal",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "member": "Member",
+    "description": "Description",
+    "confirmedBy": "Confirmed by",
+    "note": "Note"
   },
   "home": {
     "button": "button"

@@ -6,7 +6,7 @@
         <bcTime @changeBCtime="changeBCtimeFrom"
                 :timeType="'all'"
                 :dateDefault='fromDateDeFault'></bcTime>
-        <span style="margin:0 5px;">至</span>
+        <span style="margin:0 5px;">~</span>
         <bcTime @changeBCtime="changeBCtimeTo"
                 :dateDefault='toDateDeFault'
                 style="margin-left:5px;"
