@@ -56,7 +56,8 @@
     "FTLCargoNotViaHUB": "FTL（Cargo not via HUB）",
     "LTLCargoViaHUB": "LTL(Cargo  via HUB)",
     "receivable": "Receivable",
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "transferFreight": "Transfer Freight"
   },
   "layout": {
     "logout": "Logout"
@@ -326,7 +327,10 @@
     "member": "Member",
     "description": "Description",
     "confirmedBy": "Confirmed by",
-    "note": "Note"
+    "note": "Note",
+    "unpaid_TF": "Unpaid",
+    "paid_TF": "Paid",
+    "canceled_TF": "Canceled"
   },
   "home": {
     "button": "button"

@@ -55,7 +55,8 @@
     "order": "ใบสั่ง",
     "FTLCargoNotViaHUB": "เหมาคัน (FTL)",
     "LTLCargoViaHUB": "รายชิ้น (LTL)",
-    "receivable": "บัญชีลูกหนี้"
+    "receivable": "บัญชีลูกหนี้",
+    "transferFreight": "โอนงินค่าขนส่ง"
   },
   "layout": {
     "logout": "ออกจากระบบ"
@@ -321,7 +322,10 @@
     "cancel": "ยกเลิก",
     "member": "สมัครเป็นสมาชิก",
     "confirmedBy": "ยืนยัน",
-    "note": "ข้อคิดเห็น"
+    "note": "ข้อคิดเห็น",
+    "unpaid_TF": "ค้างชำระ",
+    "paid_TF": "ชำระแล้ว",
+    "canceled_TF": "ยกเลิกแล้ว"
   },
   "member": {
     "myData": "ข้อมูลของฉัน",

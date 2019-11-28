@@ -56,7 +56,8 @@
     "order": "订单",
     "FTLCargoNotViaHUB": "整车物流（货物不经过HUB）",
     "LTLCargoViaHUB": "零担物流（货物经过HUB）",
-    "receivable": "应收账单"
+    "receivable": "应收账单",
+    "transferFreight": "返款"
   },
   "layout": {
     "logout": "退出"
@@ -332,7 +333,10 @@
     "refuseTitle": "否认充值到账",
     "description": "描述",
     "confirmedBy": "审核人",
-    "note": "备注"
+    "note": "备注",
+    "unpaid_TF": "未返款",
+    "paid_TF": "已返款",
+    "canceled_TF": "已取消"
   },
   "member": {
     "myData": "我的资料",
