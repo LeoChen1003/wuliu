@@ -6,10 +6,10 @@
         <span style="margin: 0 10px;">{{$t('billing.date')}}</span>
         <bcTime @changeBCtime="changeBCtimeFrom"
                 :timeType="'all'"
-                :dateDefault='fromDateDeFault'></bcTime>
+                :dateDefault='[0,0,0]'></bcTime>
         <span style="margin:0 5px;">~</span>
         <bcTime @changeBCtime="changeBCtimeTo"
-                :dateDefault='toDateDeFault'
+                :dateDefault='[0,0,0]'
                 style="margin-left:5px;"
                 :timeType="'all'"></bcTime>
       </div>
@@ -111,7 +111,7 @@
                      label-position="left"
                      size="small">
               <el-form-item :label="$t('billing.confirmedBy')">
-                {{ thisRow.handle.companyName }}
+                {{ thisRow.handledName }}
               </el-form-item>
               <el-form-item :label="$t('billing.date')">
                 {{ thisRow.handledAt }}
@@ -221,8 +221,8 @@ export default {
       statusCount: {},
       thisRow: null,
       confirmDialog: false,
-      fromDate: getLastMonthTime(new Date()),
-      toDate: parseTime(new Date().getTime(), '{y}-{m}-{d}'),
+      fromDate: null,
+      toDate: null,
       member: ''
     };
   },
@@ -241,12 +241,19 @@ export default {
     self = this;
   },
   mounted () {
-    this.getList()
-    this.getCount()
+    this.getList();
+    this.getCount();
   },
   methods: {
     getList () {
-      billingList({ audit_status: self.tabActive, amount: self.amount ? self.amount : 0 }, {
+      let form = {
+        audit_status: self.tabActive,
+        amount: self.amount ? self.amount : 0,
+        memberName: self.member,
+        start: self.fromDate,
+        end: self.toDate
+      }
+      billingList(form, {
         page: self.page.currentPage - 1,
         pagesize: self.pagesize,
       }).then(res => {
@@ -264,9 +271,13 @@ export default {
     },
     searchIt () {
       self.getList()
+      self.getCount();
     },
     cancelIt () {
-      self.amount = null
+      self.amount = null;
+      self.fromDate = null;
+      self.toDate = null;
+      self.member = '';
       self.getList()
     },
     changeBCtimeFrom (time) {
@@ -276,21 +287,21 @@ export default {
       self.toDate = time
     },
     pageChange (val) {
-      self.page.currentPage = val
-      self.getList()
+      self.page.currentPage = val;
+      self.getList();
     },
     pageSizeChange (val) {
-      self.pagesize = val
-      self.getList()
+      self.pagesize = val;
+      self.getList();
     },
     handleClick () {
       self.thisRow = null;
-      this.getList()
+      this.getList();
     },
     handleCurrentChange (val) {
       if (val) {
-        val.preViewList = [val.resource.path]
-        self.thisRow = val
+        val.preViewList = [val.resource.path];
+        self.thisRow = val;
       }
     },
     // 确认
@@ -298,25 +309,27 @@ export default {
       billingAccept({
         id: self.thisRow.id,
       }).then(res => {
-        self.$message.success(res.message)
-        self.confirmDialog = false
-        self.getList()
+        self.$message.success(res.message);
+        self.confirmDialog = false;
+        self.getList();
+        self.getCount();
       })
     },
     // 拒绝
     rejectIt () {
-      self.refuseLoading = true
+      self.refuseLoading = true;
       billingReject({
         id: self.thisRow.id,
         note: self.reason
       }).then(res => {
-        self.$message.success(res.message)
-        self.refuseVisible = false
-        self.refuseLoading = false
-        self.dialogVisible = false
-        self.getList()
+        self.$message.success(res.message);
+        self.refuseVisible = false;
+        self.refuseLoading = false;
+        self.dialogVisible = false;
+        self.getList();
+        self.getCount();
       }).catch(el => {
-        self.refuseLoading = false
+        self.refuseLoading = false;
       })
     },
   }

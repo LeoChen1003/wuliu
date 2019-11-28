@@ -95,13 +95,13 @@ export default {
   data () {
     return {
       visible: false,
-      nowRole: this.$router.currentRoute.meta.roles[0]
+      nowRole: localStorage.getItem('curRole')
     }
   },
   watch: {
     $route: {
       handler: function (val, oldVal) {
-        this.nowRole = this.$router.currentRoute.meta.roles[0];
+        this.nowRole = localStorage.getItem('curRole');
       },
     }
   }

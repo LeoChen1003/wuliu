@@ -120,11 +120,9 @@ export default {
   // 监听属性 类似于data概念
   computed: {
     fromDateDeFault () {
-      console.log(self.fromDate.split('-'))
       return self.fromDate.split('-')
     },
     toDateDeFault () {
-      console.log(self.toDate.split('-'))
       return self.toDate.split('-')
     },
   },
@@ -137,11 +135,9 @@ export default {
   methods: {
     changeBCtimeFrom (time) {
       self.fromDate = time
-      console.log(time)
     },
     changeBCtimeTo (time) {
       self.toDate = time
-      console.log(time)
     },
     pageChange (val) {
       let self = this
@@ -185,7 +181,6 @@ export default {
     },
     handleCurrentChange (val) {
       const self = this
-      console.log(val)
       self.detailData = []
       self.detailData.push(val)
     }

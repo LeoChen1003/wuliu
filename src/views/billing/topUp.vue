@@ -316,7 +316,6 @@ export default {
     changeBCtime (time) {
       const self = this
       self.time_at = time
-      console.log(time)
     },
     toTopup () {
       const self = this
@@ -339,16 +338,15 @@ export default {
     },
     toConfirm () {
       let self = this
-      console.log(self.time_at)
-      console.log(self.topUpform)
       this.$refs.topUpform.validate(valid => {
         if (valid) {
           self.loading = true
           topUp(self.topUpform).then(res => {
-            self.$message.success(res.message)
-            self.dialogVisible = false
-            self.loading = false
-            self.getTopUpList()
+            self.$message.success(res.message);
+            self.dialogVisible = false;
+            self.loading = false;
+            self.getTopUpList();
+            self.getCount();
           }).catch(el => {
             self.loading = false
           })

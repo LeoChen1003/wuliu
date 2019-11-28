@@ -10952,14 +10952,14 @@
   padding: 12px;
 }
 .el-button--primary {
-  color: #fff;
-  background-color: red;
-  border-color: red;
+  color: #646464;
+  background-color: #fff;
+  border-color: #d6d7db;
 }
 .el-button--primary:focus,
 .el-button--primary:hover {
-  background: #e90000;
-  border-color: #2e0707;
+  background: red;
+  border-color: red;
   color: #fff;
 }
 .el-button--primary.is-active,

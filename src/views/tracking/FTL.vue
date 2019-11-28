@@ -98,7 +98,7 @@
               </el-card>
               <el-card shadow="never"
                        v-for="(item,index) in scope.row.chargeList"
-                       :key="index"
+                       :key="index + '1'"
                        style="margin-top:5px;"
                        v-if="item.chargeIntro=='true'">
                 <div style="display:flex;">
