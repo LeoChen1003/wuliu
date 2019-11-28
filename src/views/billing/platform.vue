@@ -229,11 +229,9 @@ export default {
   // 监听属性 类似于data概念
   computed: {
     fromDateDeFault () {
-      console.log(self.fromDate.split('-'))
       return self.fromDate.split('-')
     },
     toDateDeFault () {
-      console.log(self.toDate.split('-'))
       return self.toDate.split('-')
     },
   },
@@ -286,11 +284,14 @@ export default {
       self.getList()
     },
     handleClick () {
+      self.thisRow = null;
       this.getList()
     },
     handleCurrentChange (val) {
-      val.preViewList = [val.resource.path]
-      self.thisRow = val
+      if (val) {
+        val.preViewList = [val.resource.path]
+        self.thisRow = val
+      }
     },
     // 确认
     confirmIt () {
