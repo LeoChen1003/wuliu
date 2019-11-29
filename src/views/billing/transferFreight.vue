@@ -2,13 +2,26 @@
   <div class="manage billing">
     <div class="statusHeader">
       <div class="status-txt">{{ $t('billing.billingStatus') }}</div>
+      <div class="supply-box">
+        <span style="margin:0 20px;">{{$t('billing.supply')}}</span>
+        <el-select v-model="supply"
+                   clearable
+                   placeholder="请选择">
+          <el-option v-for="item in supplyList"
+                     :key="item.supply_id"
+                     :label="item.company_name"
+                     :value="item.supply_id">
+          </el-option>
+        </el-select>
+      </div>
+      <span style="margin:0 10px 0 20px;">{{$t('billing.deliveredDate')}}</span>
       <div class="timePicker">
         <bcTime @changeBCtime="changeBCtimeFrom"
                 :timeType="'all'"
-                :dateDefault='fromDateDeFault'></bcTime>
-        <span style="margin:0 5px;">至</span>
+                :dateDefault='[0,0,0]'></bcTime>
+        <span style="margin:0 5px;">-</span>
         <bcTime @changeBCtime="changeBCtimeTo"
-                :dateDefault='toDateDeFault'
+                :dateDefault='[0,0,0]'
                 style="margin-left:5px;"
                 :timeType="'all'"></bcTime>
         <el-button size="small"
@@ -22,24 +35,17 @@
                  tab-position="left"
                  @tab-click="handleClick"
                  style="height:calc(100% - 50px);">
-          <el-tab-pane name="WAIT_SETTLE">
+          <el-tab-pane name="UNPAID">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.unpaid_TF')}}<sub class="badge red">{{statusCount.WAIT_SETTLE}}</sub></div>
+                <div class="text">{{$t('billing.unpaid_TF')}}<sub class="badge red">{{statusCount.UNPAID}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane name="SETTLED">
+          <el-tab-pane name="PAID">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.paid_TF')}}<sub class="badge">{{statusCount.SETTLED}}</sub></div>
-              </div>
-            </span>
-          </el-tab-pane>
-          <el-tab-pane name="CANCELED">
-            <span slot="label">
-              <div class="tabLabel">
-                <div class="text">{{$t('billing.canceled_TF')}}<sub class="badge">{{statusCount.CANCELED}}</sub></div>
+                <div class="text">{{$t('billing.paid_TF')}}<sub class="badge">{{statusCount.PAID}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
@@ -54,19 +60,30 @@
                     border>
             <el-table-column prop="orderNo"
                              :label="$t('billing.trackingNo')" />
-            <el-table-column prop="createdAt"
-                             :label="$t('billing.supply')" />
+            <el-table-column :label="$t('billing.supply')">
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.supplyName }}
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column prop="settlementAmount"
                              :label="$t('billing.totalAmount')" />
-            <el-table-column align="right">
+            <el-table-column align="right"
+                             header-align="center"
+                             v-if="tabActive == 'UNPAID'"
+                             width="50px">
               <template slot="header"
                         slot-scope="scope">
-                <el-input v-model="search"
-                          size="mini"
-                          placeholder="输入关键字搜索" />
+                <el-checkbox v-model="allChecked"
+                             @change="allCheckChange"></el-checkbox>
               </template>
               <template slot-scope="scope">
-                <el-checkbox ></el-checkbox>
+                <div class="check-box">
+                  <el-checkbox @change="checkChange(scope.row)"
+                               :disabled="!scope.row.canCheck"
+                               v-model="scope.row.checked"></el-checkbox>
+                </div>
               </template>
             </el-table-column>
           </el-table>
@@ -81,19 +98,55 @@
                          :total="page.total"></el-pagination>
         </div>
         <div class="right">
-          <el-table :data="detailData"
-                    border>
-            <el-table-column :label="$t('billing.supply')">
-              <template slot-scope="scope">
-                {{scope.row.transport.supply?scope.row.transport.supply.companyName:''}}
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('billing.amount')">
-              <template slot-scope="scope">
-                {{$t('billing.freight')}}: {{scope.row.settlementAmount}}
-              </template>
-            </el-table-column>
-          </el-table>
+          <el-form label-width="150px"
+                   v-if="thisRow"
+                   size="mini">
+            <el-form-item :label="$t('billing.trackingNo')">
+              {{ thisRow.orderNo }}
+            </el-form-item>
+            <el-form-item :label="$t('billing.deliveredDate')">
+              {{ thisRow.settleAt }}
+            </el-form-item>
+            <el-form-item :label="$t('billing.supply')">
+              {{ thisRow.supplyName }}
+            </el-form-item>
+            <el-form-item :label="$t('billing.total')">
+              {{ thisRow.payAmount }}
+            </el-form-item>
+            <el-form-item :label="$t('billing.VATFreight')">
+              {{ thisRow.freight }}
+            </el-form-item>
+            <el-form-item :label="$t('billing.VATService')">
+              {{ thisRow.serviceCharge }}
+            </el-form-item>
+            <el-form-item :label="$t('billing.platformServiceCharge')">
+              {{ thisRow.commission }}
+            </el-form-item>
+            <el-form-item :label="$t('billing.amountPayable')">
+              {{ thisRow.payAmount - thisRow.freight - thisRow.serviceCharge - thisRow.commission }}
+            </el-form-item>
+            <el-form-item :label="$t('billing.operator')"
+                          v-if='thisRow.orderRefunds'>
+              {{ thisRow.orderRefunds.handleName }}
+            </el-form-item>
+            <el-form-item :label="$t('billing.transferNo')"
+                          v-if='thisRow.orderRefunds'>
+              {{ thisRow.orderRefunds.sn }}
+            </el-form-item>
+            <el-form-item :label="$t('billing.transferedDate')"
+                          v-if='thisRow.orderRefunds'>
+              {{ thisRow.orderRefunds.refundDateTime }}
+            </el-form-item>
+            <el-form-item :label="$t('billing.transferVoucher')"
+                          v-if='thisRow.orderRefunds'>
+              <el-image v-for='(img,index) in thisRow.imgList'
+                        :key="index"
+                        style="margin-right:20px;"
+                        :src="img + '?x-oss-process=style/th-90'"
+                        :preview-src-list="thisRow.imgList">
+              </el-image>
+            </el-form-item>
+          </el-form>
         </div>
       </div>
     </div>
@@ -101,7 +154,7 @@
 </template>
 
 <script>
-import { supplyFinance, billsupplyCount } from '../../api/billing'
+import { supplyFinance, billsupplyCount, getSupplyList, getRefundList, getRefundCount } from '../../api/billing'
 import { getTime, parseTime, getLastMonthTime } from '../../utils/index'
 import bcTime from "@/components/bcTime";
 
@@ -111,9 +164,7 @@ export default {
   components: { bcTime },
   data () {
     return {
-      tabActive: 'WAIT_SETTLE',
-      fromDate: getLastMonthTime(new Date()),
-      toDate: parseTime(new Date().getTime(), '{y}-{m}-{d}'),
+      tabActive: 'UNPAID',
       tableData: [],
       page: {
         total: 0,
@@ -122,7 +173,13 @@ export default {
       pagesize: 20,
       loading: false,
       detailData: [],
-      statusCount: {}
+      statusCount: {},
+      supplyList: [],
+      supply: '',
+      fromDate: null,
+      toDate: null,
+      allChecked: false,
+      thisRow: null
     };
   },
   // 监听属性 类似于data概念
@@ -139,7 +196,9 @@ export default {
   created () {
     self = this
   },
-  mounted () { },
+  mounted () {
+    self.loadData();
+  },
   methods: {
     changeBCtimeFrom (time) {
       self.fromDate = time
@@ -148,37 +207,61 @@ export default {
       self.toDate = time
     },
     pageChange (val) {
-      let self = this
       self.page.currentPage = val
       self.loadData()
     },
     pageSizeChange (val) {
-      let self = this;
       self.pagesize = val
       self.loadData()
     },
     loadData () {
       self.loading = true
-      supplyFinance(self.tabActive, {
-        start: self.fromDate + ' 00:00:00',
-        end: self.toDate + ' 23:59:59',
+      getRefundList(self.tabActive, {
+        start: self.fromDate,
+        end: self.toDate,
+        supplyId: self.supply,
         page: self.page.currentPage - 1,
         pagesize: self.pagesize
       }).then(res => {
-        self.tableData = res.data.content
+        let data = res.data.content;
+        for (let i of data) {
+          i.supplyName =
+            i.supply.type == 'COMPANY'
+              ? i.supply.companyName
+              : i.supply.humanName
+          if (self.tabActive == 'PAID') {
+            let imgList = [];
+            for (let t of i.orderRefunds.resourceList) {
+              imgList.push(t.path);
+            }
+            i.imgList = imgList;
+          } else {
+            for (let i of data) {
+              i.checked = false;
+              i.canCheck = true;
+            }
+          }
+        }
+        self.tableData = data;
         self.page = {
           total: res.data.totalElements,
           currentPage: res.data.number + 1
         }
         self.loading = false
-      }).catch(() => {
+        self.allChecked = false;
+      }).catch((res) => {
         self.loading = false
+        self.allChecked = false;
       })
-      billsupplyCount({
-        start: self.fromDate + ' 00:00:00',
-        end: self.toDate + ' 23:59:59',
+      getRefundCount({
+        start: self.fromDate,
+        end: self.toDate,
+        supplyId: self.supply,
       }).then(res => {
         self.statusCount = res.data
+      })
+      getSupplyList(self.tabActive).then(res => {
+        self.supplyList = res.data;
       })
     },
     searchIt () {
@@ -188,9 +271,87 @@ export default {
       self.loadData()
     },
     handleCurrentChange (val) {
-      const self = this
-      self.detailData = []
-      self.detailData.push(val)
+      self.thisRow = val;
+    },
+    // 单选
+    checkChange (row) {
+      let supplyName = row.supplyName;
+      let data = JSON.parse(JSON.stringify(self.tableData));
+      let hasOtherChecked = false;
+      let allChecked = true;
+
+      // 检测是否有其他相同supply的已check
+      for (let i of data) {
+        if (i.supplyName == supplyName && i.id != row.id && i.checked) {
+          hasOtherChecked = true;
+          break;
+        }
+      }
+
+      // 如果没有，则处理
+      if (!hasOtherChecked) {
+        if (row.checked) {
+          for (let i of data) {
+            if (i.supplyName == supplyName) {
+              i.canCheck = true;
+            } else {
+              i.canCheck = false;
+            }
+          }
+        } else {
+          for (let i of data) {
+            i.canCheck = true;
+          }
+        }
+      }
+
+      // allCheck判断
+      for (let i of data) {
+        if (i.supplyName == supplyName && !i.checked) {
+          allChecked = false;
+          break;
+        }
+      }
+
+      self.tableData = data;
+      self.allChecked = allChecked;
+    },
+    // 全选
+    allCheckChange (val) {
+      let data = JSON.parse(JSON.stringify(self.tableData));
+      let supplyName = '';
+
+      if (val) {
+        // 判断是否已有check的supply
+        for (let i of data) {
+          if (i.checked) {
+            supplyName = i.supplyName;
+            break
+          }
+        }
+
+        // 如果没有则取第一个
+        if (supplyName == '') {
+          supplyName = data[0].supplyName;
+        }
+
+        // 处理 
+        for (let i of data) {
+          if (i.supplyName == supplyName) {
+            i.checked = true;
+            i.canCheck = true;
+          } else {
+            i.checked = false;
+            i.canCheck = false;
+          }
+        }
+      } else {
+        for (let i of data) {
+          i.checked = false;
+          i.canCheck = true;
+        }
+      }
+      self.tableData = data;
     }
   }
 };
@@ -219,26 +380,28 @@ export default {
   .timePicker {
     height: 42px;
     line-height: 40px;
-    padding-left: 30px;
     display: flex;
     align-items: center;
   }
   .content {
     padding-left: 25px;
     display: flex;
-    height: calc(100% - 50px);
     .container {
       padding-left: 20px;
       padding-top: 20px;
       width: 100%;
       display: flex;
-      overflow: scroll;
+
       .center {
         width: 49%;
         margin-right: 1%;
       }
+
       .right {
         width: 49%;
+        background: #fff;
+        box-sizing: border-box;
+        padding: 20px 0;
       }
     }
   }
@@ -256,6 +419,14 @@ export default {
   .red {
     color: red;
   }
+}
+
+.supply-box {
+  margin-left: 20px;
+}
+
+.check-box {
+  text-align: center;
 }
 </style>
 <style>

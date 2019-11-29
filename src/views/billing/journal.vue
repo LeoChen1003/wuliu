@@ -40,11 +40,10 @@
                              :label="$t('billing.date')" />
             <el-table-column prop="eventType"
                              :label="$t('billing.transactionType')" />
-            <el-table-column prop="sn"
-                             :label="$t('billing.documentNo')">
+            <el-table-column :label="$t('billing.documentNo')">
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.eventType == 'TOP_UP' ? scope.row.tradeNo : scope.row.sn }}
+                  {{ scope.row.eventType == 'TOP_UP' ? scope.row.tradeNo : scope.row.orderNo }}
                 </div>
               </template>
             </el-table-column>

@@ -336,7 +336,17 @@
     "note": "备注",
     "unpaid_TF": "未返款",
     "paid_TF": "已返款",
-    "canceled_TF": "已取消"
+    "canceled_TF": "已取消",
+    "deliveredDate": "妥投日期",
+    "total": "合计金额",
+    "VATFreight": "增值税(运费)",
+    "VATService": "增值税(服务)",
+    "platformServiceCharge": "平台抽佣",
+    "amountPayable": "应转账金额",
+    "operator": "转账人",
+    "transferNo": "返款单号",
+    "transferedDate": "转账日期",
+    "transferVoucher": "转账凭据"
   },
   "member": {
     "myData": "我的资料",

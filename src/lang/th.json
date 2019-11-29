@@ -325,7 +325,17 @@
     "note": "ข้อคิดเห็น",
     "unpaid_TF": "ค้างชำระ",
     "paid_TF": "ชำระแล้ว",
-    "canceled_TF": "ยกเลิกแล้ว"
+    "canceled_TF": "ยกเลิกแล้ว",
+    "deliveredDate": "วันจัดส่งสินค้า",
+    "total": "ยอดรวม",
+    "VATFreight": "ภาษีมูลค่าเพิ่ม(ค่าขนส่ง)",
+    "VATService": "ภาษีมูลค่าเพิ่ม(บริการเสริม)",
+    "platformServiceCharge": "ค่าบริการแพลตฟอร์ม",
+    "amountPayable": "ยอดเงินที่ควรโอน",
+    "operator": "ผู้โอน",
+    "transferNo": "หมาเลขการโอน",
+    "transferedDate": "วันที่โอนเงิน",
+    "transferVoucher": "สลิปโอนเงิน"
   },
   "member": {
     "myData": "ข้อมูลของฉัน",

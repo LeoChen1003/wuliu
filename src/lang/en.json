@@ -330,7 +330,17 @@
     "note": "Note",
     "unpaid_TF": "Unpaid",
     "paid_TF": "Paid",
-    "canceled_TF": "Canceled"
+    "canceled_TF": "Canceled",
+    "deliveredDate": "Delivered Date",
+    "total": "Total",
+    "VATFreight": "VAT-Freight",
+    "VATService": "VAT-Service",
+    "platformServiceCharge": "Platform Service Charge",
+    "amountPayable": "Amount Payable",
+    "operator": "Operator",
+    "transferNo": "Transfer No.",
+    "transferedDate": "Transfered date",
+    "transferVoucher": "Transfer voucher"
   },
   "home": {
     "button": "button"
