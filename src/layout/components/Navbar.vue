@@ -163,6 +163,14 @@ export default {
   }
 }
 
+.noPermission {
+  .el-menu-item:hover {
+    background: #fff !important;
+    border-bottom: 10px solid black !important;
+    color: black !important;
+  }
+}
+
 .logo {
   width: 100px;
   margin-right: 20px;

@@ -4,7 +4,6 @@
       <el-button style="width:200px;"
                  @click="todoIt"
                  :loading="todoLoading"
-                 :disabled="!roles.Demand"
                  type="primary">{{$t('booking.releaseToMarket')}}</el-button>
     </div>
     <el-form ref="releaseform"
@@ -530,7 +529,7 @@ export default {
   },
   // 监听属性 类似于data概念
   computed: {
-    ...mapGetters(["roles"])
+    ...mapGetters(["permissions"])
   },
   // 监控data中的数据变化
   watch: {

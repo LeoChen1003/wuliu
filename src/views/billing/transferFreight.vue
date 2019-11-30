@@ -27,6 +27,9 @@
         <el-button size="small"
                    @click="searchIt"
                    style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button>
+        <el-button size="small"
+                   @click="confirmShow"
+                   style='width:100px;margin-left:20px;'>{{ $t('billing.transferFreight') }}</el-button>
       </div>
     </div>
     <div class="content">
@@ -123,7 +126,7 @@
               {{ thisRow.commission }}
             </el-form-item>
             <el-form-item :label="$t('billing.amountPayable')">
-              {{ thisRow.payAmount - thisRow.freight - thisRow.serviceCharge - thisRow.commission }}
+              {{ thisRow.actualAmount }}
             </el-form-item>
             <el-form-item :label="$t('billing.operator')"
                           v-if='thisRow.orderRefunds'>
@@ -150,13 +153,62 @@
         </div>
       </div>
     </div>
+    <el-dialog :title="$t('billing.transferFreight')"
+               :visible.sync="confirmDialog"
+               center
+               @close="dialogClose"
+               width="600px">
+      <div>
+        <el-form label-width="120px"
+                 v-if="form.orders.length != 0">
+          <el-form-item :label="$t('billing.member')">
+            {{ form.member }}
+          </el-form-item>
+          <el-form-item :label="$t('billing.amountPayable')">
+            {{ form.countAmount }}
+          </el-form-item>
+          <el-form-item :label="$t('billing.orderQty')">
+            {{ form.orders.length }}
+          </el-form-item>
+          <el-form-item :label="$t('billing.transferVoucher')">
+            <div class="inputWidth">
+              <el-upload class="upload-box"
+                         ref="upload1"
+                         :action="env + '/api/file/upload'"
+                         :on-preview="handlePreview"
+                         multiple
+                         :file-list="fileList1"
+                         :headers="headers"
+                         :limit="5"
+                         :on-exceed="outLimit"
+                         accept="image/*"
+                         list-type="picture-card">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="confirmDialog = false">{{$t('billing.cancel')}}</el-button>
+        <el-button type="primary"
+                   :loading="confirmLoading"
+                   @click="confirmIt">{{$t('billing.confirm')}}</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :visible.sync="previewDialog">
+      <img width="100%"
+           :src="previewImg">
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { supplyFinance, billsupplyCount, getSupplyList, getRefundList, getRefundCount } from '../../api/billing'
+import { supplyFinance, billsupplyCount, getSupplyList, getRefundList, getRefundCount, confirmRefund } from '../../api/billing'
 import { getTime, parseTime, getLastMonthTime } from '../../utils/index'
 import bcTime from "@/components/bcTime";
+import { getToken } from '@/utils/auth';
 
 let self
 export default {
@@ -164,6 +216,10 @@ export default {
   components: { bcTime },
   data () {
     return {
+      env: process.env.VUE_APP_BASE_API,
+      headers: {
+        'Authorization': getToken()
+      },
       tabActive: 'UNPAID',
       tableData: [],
       page: {
@@ -179,7 +235,18 @@ export default {
       fromDate: null,
       toDate: null,
       allChecked: false,
-      thisRow: null
+      confirmDialog: false,
+      thisRow: null,
+      form: {
+        member: '',
+        countdAmount: '',
+        orders: '',
+      },
+      fileList1: [],
+      previewDialog: false,
+      previewImg: '',
+      confirmLoading: false
+
     };
   },
   // 监听属性 类似于data概念
@@ -189,6 +256,9 @@ export default {
     },
     toDateDeFault () {
       return self.toDate.split('-')
+    },
+    fileList: function () {
+      return self.$refs.upload1.uploadFiles
     },
   },
   // 监控data中的数据变化
@@ -273,6 +343,16 @@ export default {
     handleCurrentChange (val) {
       self.thisRow = val;
     },
+    handlePreview (file) {
+      this.previewImg = file.url;
+      this.previewDialog = true;
+    },
+    outLimit () {
+      self.$message.warning(self.$t('resources.outLimit'));
+    },
+    dialogClose () {
+      self.fileList1 = [];
+    },
     // 单选
     checkChange (row) {
       let supplyName = row.supplyName;
@@ -352,6 +432,50 @@ export default {
         }
       }
       self.tableData = data;
+    },
+    confirmShow () {
+      let data = JSON.parse(JSON.stringify(self.tableData));
+      let orders = [];
+      let member = {};
+      let countAmount = 0;
+
+      for (let i of data) {
+        if (i.checked) {
+          countAmount += i.actualAmount;
+          orders.push(i.id)
+          member = i.supplyName;
+        }
+      }
+
+      self.form = {
+        member: member,
+        countAmount: countAmount,
+        orders: orders,
+      }
+      self.confirmDialog = true;
+    },
+    confirmIt () {
+      let resourceIds = [];
+      if (self.fileList.length == 0) {
+        return self.$message.warning(self.$t('billing.cantRefund'))
+      }
+      self.confirmLoading = true;
+      for (let i of self.fileList) {
+        if (i.response) {
+          resourceIds.push(i.response.data.id)
+        }
+      }
+      console.log(resourceIds)
+      confirmRefund({
+        resourceIds: resourceIds.toString(),
+        orderIds: self.form.orders.toString()
+      }).then(res => {
+        self.loadData();
+        self.confirmLoading = false;
+        self.confirmDialog = false;
+      }).catch(() => {
+        self.confirmLoading = true;
+      })
     }
   }
 };
@@ -429,19 +553,41 @@ export default {
   text-align: center;
 }
 </style>
-<style>
+<style lang="scss">
 .billing .el-tabs--left .el-tabs__header.is-left {
   margin-right: 0px;
   width: 211px;
 }
+
 .billing .el-tabs--left .el-tabs__active-bar.is-left {
   width: 3px;
 }
+
 .billing .el-tabs--left .el-tabs__nav-wrap.is-left::after,
 .el-tabs--left .el-tabs__nav-wrap.is-right::after,
 .el-tabs--right .el-tabs__nav-wrap.is-left::after,
 .el-tabs--right .el-tabs__nav-wrap.is-right::after {
   width: 3px;
+}
+
+.el-upload {
+  width: 60px !important;
+  height: 60px !important;
+}
+
+.el-upload-list {
+  .is-success,
+  .is-uploading,
+  .is-ready {
+    width: 60px !important;
+    height: 60px !important;
+  }
+}
+
+.inputWidth {
+  .el-icon-plus {
+    transform: translateY(-38px) !important;
+  }
 }
 </style>
 

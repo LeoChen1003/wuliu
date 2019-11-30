@@ -57,7 +57,8 @@
     "FTLCargoNotViaHUB": "整车物流（货物不经过HUB）",
     "LTLCargoViaHUB": "零担物流（货物经过HUB）",
     "receivable": "应收账单",
-    "transferFreight": "返款"
+    "transferFreight": "返款",
+    "topUpConfirm": "确认充值"
   },
   "layout": {
     "logout": "退出"
@@ -346,7 +347,12 @@
     "operator": "转账人",
     "transferNo": "返款单号",
     "transferedDate": "转账日期",
-    "transferVoucher": "转账凭据"
+    "transferVoucher": "转账凭据",
+    "cantReject": "请填写拒绝理由",
+    "pleaseEnterTheReasonForRejection": "请输入拒绝确认的理由",
+    "transferFreight": "返款",
+    "orderQty": "订单数量",
+    "cantRefund": "转账凭据不能为空"
   },
   "member": {
     "myData": "我的资料",

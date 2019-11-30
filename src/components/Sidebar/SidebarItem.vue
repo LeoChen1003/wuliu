@@ -1,7 +1,7 @@
 <template>
   <div v-if="!item.hidden"
        class="menu-wrapper">
-    <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
+    <!-- <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta"
                 :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)"
@@ -10,17 +10,26 @@
                 :title="generateTitle(onlyOneChild.meta.title)" />
         </el-menu-item>
       </app-link>
-    </template>
-    <template v-else>
-      <app-link v-if="item.children[0].meta"
+    </template> -->
+    <template>
+      <app-link v-if="item.children[0].meta && permissions[item.children[0].meta.permission]"
                 :to="resolvePath(item.children[0].path)">
-                <!-- 设定父级path为index，引导default-active -->
+        <!-- 设定父级path为index，引导default-active -->
         <el-menu-item :index="resolvePath(item.path)"
                       :class="{'submenu-title-noDropdown':!isNest}">
           <item :icon="item.children[0].meta.icon||(item.meta&&item.meta.icon)"
-                :title="generateTitle(item.meta.title)" />
+                :title="item.meta.title ? generateTitle(item.meta.title) : generateTitle(item.children[0].meta.title)" />
         </el-menu-item>
       </app-link>
+      <div v-else class="noPermission">
+        <!-- 设定父级path为index，引导default-active -->
+        <el-menu-item :index="resolvePath(item.path)"
+                      disabled
+                      :class="{'submenu-title-noDropdown':!isNest}">
+          <item :icon="item.children[0].meta.icon||(item.meta&&item.meta.icon)"
+                :title="item.meta.title ? generateTitle(item.meta.title) : generateTitle(item.children[0].meta.title)" />
+        </el-menu-item>
+      </div>
     </template>
 
     <!-- <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
@@ -50,6 +59,7 @@ import { isExternal } from "@/utils/validate";
 import Item from "./Item";
 import AppLink from "./Link";
 import FixiOSBug from "./FixiOSBug";
+import { mapGetters } from "vuex";
 
 export default {
   name: "SidebarItem",
@@ -69,6 +79,9 @@ export default {
       type: String,
       default: ""
     }
+  },
+  computed: {
+    ...mapGetters(["permissions"]),
   },
   data () {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
@@ -110,7 +123,6 @@ export default {
       // }
       // console.log(routePath)
       // console.log(this.basePath)
-      // console.log(path.resolve(this.basePath, routePath))
       return path.resolve(this.basePath, routePath);
     },
 

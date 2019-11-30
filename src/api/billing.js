@@ -128,3 +128,12 @@ export function getRefundCount(params) {
     params: params
   });
 }
+
+// 确认返款
+export function confirmRefund(data) {
+  return request({
+    url: `api/platfrom/orderrefund/refund`,
+    method: "post",
+    data: data
+  });
+}

@@ -57,7 +57,8 @@
     "LTLCargoViaHUB": "LTL(Cargo  via HUB)",
     "receivable": "Receivable",
     "welcome": "Welcome",
-    "transferFreight": "Transfer Freight"
+    "transferFreight": "Transfer Freight",
+    "topUpConfirm": "Top-Up Confirmation"
   },
   "layout": {
     "logout": "Logout"
@@ -340,7 +341,11 @@
     "operator": "Operator",
     "transferNo": "Transfer No.",
     "transferedDate": "Transfered date",
-    "transferVoucher": "Transfer voucher"
+    "transferVoucher": "Transfer voucher",
+    "pleaseEnterTheReasonForRejection": "Please enter the reason for rejection",
+    "transferFreight": "Transfer Freight",
+    "orderQty": "Order Qty",
+    "cantRefund": "Transfer Voucher Cannot be Empty"
   },
   "home": {
     "button": "button"

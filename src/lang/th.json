@@ -56,7 +56,8 @@
     "FTLCargoNotViaHUB": "เหมาคัน (FTL)",
     "LTLCargoViaHUB": "รายชิ้น (LTL)",
     "receivable": "บัญชีลูกหนี้",
-    "transferFreight": "โอนงินค่าขนส่ง"
+    "transferFreight": "โอนงินค่าขนส่ง",
+    "topUpConfirm": "ยืนยันการโอนเงิน"
   },
   "layout": {
     "logout": "ออกจากระบบ"
@@ -335,7 +336,11 @@
     "operator": "ผู้โอน",
     "transferNo": "หมาเลขการโอน",
     "transferedDate": "วันที่โอนเงิน",
-    "transferVoucher": "สลิปโอนเงิน"
+    "transferVoucher": "สลิปโอนเงิน",
+    "pleaseEnterTheReasonForRejection": "กรุณาระบุเหตุผลสำหรับการปฏิเสธ",
+    "transferFreight": "โอนงินค่าขนส่ง",
+    "orderQty": "จำนวนออเดอร์",
+    "cantRefund": "สลิปโอนเงินไม่สามารถเว้นว่าง"
   },
   "member": {
     "myData": "ข้อมูลของฉัน",

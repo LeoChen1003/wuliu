@@ -8,6 +8,7 @@
 import store from "@/store";
 import router from '@/router'
 import { resetRouter } from '@/router'
+import { mapGetters } from "vuex";
 
 export default {
   beforeRouteEnter (to, from, next) {
@@ -17,20 +18,41 @@ export default {
       'permission/generateRoutes',
       [curRole]
     ).then(res => {
+      // 寻找可用的路由进行跳转
+      let routes = store.getters.addRoutes;
+      let permissions = store.getters.permissions;
+      let routerList = [];
+      let url;
+      for (let i of routes) {
+        for (let t of i.children) {
+          routerList.push({
+            ...t,
+            realPath: `${i.path}/${t.path}`
+          })
+        }
+      }
+      for (let i of routerList) {
+        if (permissions[i.meta.permission]) {
+          url = i.realPath;
+          break;
+        }
+      }
+      console.log(url)
       resetRouter()
       router.addRoutes(res)
       router.options.routes = store.getters.permission_routes
-      if (curRole == "DEMAND") {
-        next({ path: "/booking/priceConsulting" });
-      } else if (curRole == "SUPPLY") {
-        next({ path: "/market/index" });
-      } else if (curRole == "HUB") {
-        next({ path: "/billing/payableBill" });
-      } else if (curRole == "PLATFORM") {
-        next({ path: "/tracking/platformFTL" });
-      } else {
-        next();
-      }
+      next({ path: url });
+      // if (curRole == "DEMAND") {
+      //   next({ path: "/booking/priceConsulting" });
+      // } else if (curRole == "SUPPLY") {
+      //   next({ path: "/market/index" });
+      // } else if (curRole == "HUB") {
+      //   next({ path: "/billing/payableBill" });
+      // } else if (curRole == "PLATFORM") {
+      //   next({ path: "/tracking/platformFTL" });
+      // } else {
+      //   next();
+      // }
     })
   },
   //import引入的组件需要注入到对象中才能使用
@@ -39,7 +61,9 @@ export default {
     return {};
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    ...mapGetters(["permissions"]),
+  },
   //监控data中的数据变化
   watch: {},
   methods: {},

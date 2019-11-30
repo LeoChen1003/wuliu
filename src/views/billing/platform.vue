@@ -317,6 +317,9 @@ export default {
     },
     // 拒绝
     rejectIt () {
+      if(self.reason == ''){
+        return self.$message.warning(self.$t('billing.pleaseEnterTheReasonForRejection'))
+      }
       self.refuseLoading = true;
       billingReject({
         id: self.thisRow.id,

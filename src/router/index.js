@@ -40,20 +40,32 @@ export const asyncRoutes = [
         path: "priceConsulting",
         component: () => import("@/views/booking/priceConsulting"),
         name: "priceConsulting",
-        meta: { title: "priceConsulting", roles: ["DEMAND"] }
+        meta: {
+          title: "priceConsulting",
+          roles: ["DEMAND"],
+          permission: "DemandSearchSupply"
+        }
       },
       {
         path: "placeOrder",
         component: () => import("@/views/booking/placeOrder"),
         name: "placeOrder",
         hidden: true,
-        meta: { title: "placeOrder", roles: ["DEMAND"] }
+        meta: {
+          title: "placeOrder",
+          roles: ["DEMAND"],
+          permission: "DemandSearchSupply"
+        }
       },
       {
         path: "releaseToMarket",
         component: () => import("@/views/booking/releaseToMarket"),
         name: "releaseToMarket",
-        meta: { title: "releaseToMarket", roles: ["DEMAND"] }
+        meta: {
+          title: "releaseToMarket",
+          roles: ["DEMAND"],
+          permission: "DemandSearchSupply"
+        }
       }
     ]
   },
@@ -70,7 +82,11 @@ export const asyncRoutes = [
       {
         path: "index",
         component: () => import("@/views/market/index"),
-        meta: { title: "market", roles: ["SUPPLY"] }
+        meta: {
+          title: "market",
+          roles: ["SUPPLY"],
+          permission: "SupplySearchMarket"
+        }
       }
     ]
   },
@@ -87,22 +103,26 @@ export const asyncRoutes = [
       {
         path: "demandFTL",
         component: () => import("@/views/tracking/demandFTL"),
-        meta: { title: "FTLNotHUB", roles: ["DEMAND"] }
+        meta: { title: "FTLNotHUB", roles: ["DEMAND"], permission: "MyOrders" }
       },
       {
         path: "FTL",
         component: () => import("@/views/tracking/FTL"),
-        meta: { title: "FTLNotHUB", roles: ["SUPPLY"] }
+        meta: { title: "FTLNotHUB", roles: ["SUPPLY"], permission: "MyOrders" }
       },
       {
         path: "platformFTL",
         component: () => import("@/views/tracking/platformFTL"),
-        meta: { title: "FTLNotHUB", roles: ["PLATFORM"] }
+        meta: {
+          title: "FTLNotHUB",
+          roles: ["PLATFORM"],
+          permission: "PlatformOrderManage"
+        }
       },
       {
         path: "LTL",
         component: () => import("@/views/tracking/LTL"),
-        meta: { title: "LTLHUB", roles: ["DEMAND", "SUPPLY", "PLATFORM"] }
+        meta: { title: "LTLHUB", roles: ["DEMAND", "SUPPLY"] }
       }
     ]
   },
@@ -119,27 +139,47 @@ export const asyncRoutes = [
       {
         path: "truck",
         component: () => import("@/views/resources/truck"),
-        meta: { title: "truck", roles: ["SUPPLY"] }
+        meta: {
+          title: "truck",
+          roles: ["SUPPLY"],
+          permission: "SupplyResourceManage"
+        }
       },
       {
         path: "driver",
         component: () => import("@/views/resources/driver"),
-        meta: { title: "driver", roles: ["SUPPLY"] }
+        meta: {
+          title: "driver",
+          roles: ["SUPPLY"],
+          permission: "SupplyResourceManage"
+        }
       },
       {
         path: "routeFTL",
         component: () => import("@/views/resources/routeFTL"),
-        meta: { title: "routeFTL", roles: ["SUPPLY"] }
+        meta: {
+          title: "routeFTL",
+          roles: ["SUPPLY"],
+          permission: "SupplyResourceManage"
+        }
       },
       {
         path: "routeLTL",
         component: () => import("@/views/resources/routeLTL"),
-        meta: { title: "routeLTL", roles: ["SUPPLY"] }
+        meta: {
+          title: "routeLTL",
+          roles: ["SUPPLY"],
+          permission: "SupplyResourceManage"
+        }
       },
       {
         path: "planningLTL",
         component: () => import("@/views/resources/planningLTL"),
-        meta: { title: "planningLTL", roles: ["SUPPLY"] }
+        meta: {
+          title: "planningLTL",
+          roles: ["SUPPLY"],
+          permission: "SupplyResourceManage"
+        }
       }
     ]
   },
@@ -156,32 +196,56 @@ export const asyncRoutes = [
       {
         path: "payableBill",
         component: () => import("@/views/billing/payableBill"),
-        meta: { title: "payableBill", roles: ["DEMAND"] }
+        meta: {
+          title: "payableBill",
+          roles: ["DEMAND"],
+          permission: "MemberTopUp"
+        }
       },
       {
         path: "receivable",
         component: () => import("@/views/billing/receivable"),
-        meta: { title: "receivable", roles: ["SUPPLY"] }
+        meta: {
+          title: "receivable",
+          roles: ["SUPPLY"],
+          permission: "MemberTopUp"
+        }
       },
       {
         path: "topUp",
         component: () => import("@/views/billing/topUp"),
-        meta: { title: "topUp", roles: ["DEMAND", "SUPPLY", "HUB"] }
+        meta: {
+          title: "topUp",
+          roles: ["DEMAND", "SUPPLY", "HUB"],
+          permission: "MemberTopUp"
+        }
       },
       {
         path: "journal",
         component: () => import("@/views/billing/journal"),
-        meta: { title: "journal", roles: ["DEMAND", "SUPPLY", "HUB"] }
+        meta: {
+          title: "journal",
+          roles: ["DEMAND", "SUPPLY", "HUB"],
+          permission: "MemberTopUp"
+        }
       },
       {
-        path: "platform",
+        path: "topUpConfirm",
         component: () => import("@/views/billing/platform"),
-        meta: { title: "billing", roles: ["PLATFORM"] }
+        meta: {
+          title: "topUpConfirm",
+          roles: ["PLATFORM"],
+          permission: "PlatformFinanceQuery"
+        }
       },
       {
         path: "transferFreight",
         component: () => import("@/views/billing/transferFreight"),
-        meta: { title: "transferFreight", roles: ["PLATFORM"] }
+        meta: {
+          title: "transferFreight",
+          roles: ["PLATFORM"],
+          permission: "PlatformFinanceQuery"
+        }
       }
     ]
   },
@@ -198,32 +262,52 @@ export const asyncRoutes = [
       {
         path: "index",
         component: () => import("@/views/member/index"),
-        meta: { title: "member", roles: ["DEMAND", "SUPPLY", "HUB"] }
+        meta: {
+          title: "member",
+          roles: ["DEMAND", "SUPPLY", "HUB"],
+          permission: "MemberInfo"
+        }
       },
       {
         path: "toBeVerified",
         component: () => import("@/views/member/toBeVerified"),
-        meta: { title: "toBeVerified", roles: ["PLATFORM"] }
+        meta: {
+          title: "toBeVerified",
+          roles: ["PLATFORM"],
+          permission: "PlatformMemberView"
+        }
       },
       {
         path: "rejected",
         component: () => import("@/views/member/rejected"),
-        meta: { title: "rejected", roles: ["PLATFORM"] }
+        meta: {
+          title: "rejected",
+          roles: ["PLATFORM"],
+          permission: "PlatformMemberView"
+        }
       },
       {
         path: "toBeSignedContract",
         component: () => import("@/views/member/toBeSignedContract"),
-        meta: { title: "toBeSignedContract", roles: ["PLATFORM"] }
+        meta: {
+          title: "toBeSignedContract",
+          roles: ["PLATFORM"],
+          permission: "PlatformMemberView"
+        }
       },
       {
         path: "activated",
         component: () => import("@/views/member/activated"),
-        meta: { title: "activated", roles: ["PLATFORM"] }
+        meta: {
+          title: "activated",
+          roles: ["PLATFORM"],
+          permission: "PlatformMemberView"
+        }
       },
       {
         path: "closed",
         component: () => import("@/views/member/closed"),
-        meta: { title: "closed", roles: ["PLATFORM"] }
+        meta: { title: "closed", roles: ["PLATFORM"], permission: "MemberInfo" }
       }
     ]
   }

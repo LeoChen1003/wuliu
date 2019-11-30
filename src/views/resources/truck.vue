@@ -3,7 +3,6 @@
     <div>
       <el-button type="primary"
                  style="width:150px;margin-bottom:20px;"
-                 :disabled="!roles.Supply"
                  @click="toAdd">{{$t('resources.add')}}</el-button>
     </div>
     <el-row :gutter="40">
@@ -472,7 +471,7 @@ export default {
   },
   //监听属性 类似于data概念
   computed: {
-    ...mapGetters(["roles"]),
+    ...mapGetters(["permissions"]),
     regFileList: function () {
       return self.$refs.registrationIds.uploadFiles
     },

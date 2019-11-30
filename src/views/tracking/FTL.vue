@@ -347,6 +347,7 @@
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getSupplyTD, getBcYear, getBcDay } from '../../api/data'
 import { confirmOrder, updateOrderInfo, rejectOrder, getOrder, getOrderLog, getOrderStatus, returnTruck, returnDocument } from '../../api/tracking.js'
 import { getToken } from '@/utils/auth';
+import { mapGetters } from "vuex";
 
 let self;
 export default {
@@ -481,6 +482,7 @@ export default {
   },
   // 监听属性 类似于data概念
   computed: {
+    ...mapGetters(["permissions"]),
     phoFileList: function () {
       return self.$refs.photoIds.uploadFiles
     },
@@ -618,7 +620,6 @@ export default {
       })
     },
     returnShow (item) {
-      console.log(item)
       self.returnForm_show = {
         sender: item.receiverAddress.province,
         receiver: item.senderAddress.city,
@@ -647,7 +648,6 @@ export default {
         })
     },
     rdShow (row) {
-      console.log(row)
       self.rdRow = row;
       self.rdDialog = true;
     },
