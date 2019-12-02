@@ -111,6 +111,7 @@
           <template slot-scope="scope">
             <div style="text-align:center;">
               <el-button type="primary"
+                         :disabled="!permissions.SupplyQuoteOrder"
                          @click="toquotePrice(scope.row)">{{$t('market.quoteAPrice')}}</el-button>
             </div>
           </template>

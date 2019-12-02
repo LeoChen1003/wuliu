@@ -352,7 +352,16 @@
     "pleaseEnterTheReasonForRejection": "请输入拒绝确认的理由",
     "transferFreight": "返款",
     "orderQty": "订单数量",
-    "cantRefund": "转账凭据不能为空"
+    "cantRefund": "转账凭据不能为空",
+    "cantConfirm": "未选择返款订单",
+    "thisOperationIsIrrevocable": "此操作不可撤销，请核实正确，再点击确认！",
+    "orderPending": "订单待处理",
+    "orderCompleted": "订单已完成",
+    "paid2": "已返款",
+    "demandPaid": "Demand已支付",
+    "supplyDelivered": "Supply已妥投",
+    "orderCanceled": "已作废",
+    "orderRejected": "已拒绝订单"
   },
   "member": {
     "myData": "我的资料",

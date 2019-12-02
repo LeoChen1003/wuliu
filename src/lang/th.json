@@ -340,7 +340,15 @@
     "pleaseEnterTheReasonForRejection": "กรุณาระบุเหตุผลสำหรับการปฏิเสธ",
     "transferFreight": "โอนงินค่าขนส่ง",
     "orderQty": "จำนวนออเดอร์",
-    "cantRefund": "สลิปโอนเงินไม่สามารถเว้นว่าง"
+    "cantRefund": "สลิปโอนเงินไม่สามารถเว้นว่าง",
+    "thisOperationIsIrrevocable": "การทำรายการนี้ไม่สามารถยกเลิกได้ โปรดตรวจสอบความถูกต้องก่อนกดปุ่มยืนยัน!",
+    "orderPending": "ออเดอร์รอจัดการ",
+    "orderCompleted": "ออเดอร์สำเร็จแล้ว",
+    "paid2": "ชำระแล้ว",
+    "demandPaid": "Demandชำระเงินแล้ว",
+    "supplyDelivered": "Supplyจัดส่งสำเร็จ",
+    "orderCanceled": "ออเดอร์ถูกปฏิเสธ",
+    "orderRejected": "ออเดอร์ถูกปฏิเสธ"
   },
   "member": {
     "myData": "ข้อมูลของฉัน",

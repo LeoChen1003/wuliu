@@ -193,6 +193,7 @@
 import { topUpList, topUp, billTopUpCount } from "../../api/billing"
 import { getToken } from '@/utils/auth'
 import bcTime from "@/components/bcTime";
+import { mapGetters } from "vuex";
 
 let self
 export default {
@@ -254,7 +255,9 @@ export default {
     };
   },
   // 监听属性 类似于data概念
-  computed: {},
+  computed: {
+    ...mapGetters(["permissions"]),
+  },
   // 监控data中的数据变化
   watch: {
     time_at (val) {

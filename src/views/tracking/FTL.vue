@@ -134,19 +134,22 @@
               <div style="text-align:center;">
                 <el-button v-if="scope.row.status == 'WAIT_SUPPLY_TO_ACCEPT'"
                            @click="confirmB(scope.row)"
+                           :disabled="!permissions.SupplyOrderManage"
                            type="primary">{{$t('tracking.confirm')}}</el-button>
                 <el-button v-if="scope.row.status == 'WAIT_SUPPLY_TO_ACCEPT'"
                            @click="reject(scope.row)"
+                           :disabled="!permissions.SupplyOrderManage"
                            type="primary">{{$t('tracking.reject')}}</el-button>
                 <el-button v-if="scope.row.status == 'WILL_PICK' && scope.row.transport.driverName == null"
                            @click="confirmB(scope.row)"
+                           :disabled="!permissions.SupplyOrderManage"
                            type="primary">{{$t('tracking.operation')}}</el-button>
                 <el-button v-if="(scope.row.status == 'SENDING' || scope.row.status == 'WILL_PICK')"
                            @click="returnShow(scope.row)"
-                           :disabled="scope.row.publishBack == 1"
+                           :disabled="scope.row.publishBack == 1 || !permissions.SupplyResourceManage"
                            type="primary">{{$t('tracking.returnTruck')}}</el-button>
                 <el-button v-if="scope.row.status == 'WILL_RETURN'"
-                           :disabled="scope.row.returnType == 1 || scope.row.returnType == 2"
+                           :disabled="scope.row.returnType == 1 || scope.row.returnType == 2 || !permissions.SupplyOrderManage"
                            @click="rdShow(scope.row)"
                            type="primary">{{$t('tracking.returnDocument')}}</el-button>
               </div>

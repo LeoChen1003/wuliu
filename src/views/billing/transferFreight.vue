@@ -29,6 +29,7 @@
                    style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button>
         <el-button size="small"
                    @click="confirmShow"
+                   v-if="tabActive == 'UNPAID'"
                    style='width:100px;margin-left:20px;'>{{ $t('billing.transferFreight') }}</el-button>
       </div>
     </div>
@@ -188,6 +189,7 @@
             </div>
           </el-form-item>
         </el-form>
+        <div style="color:red;margin:0 20px;text-align:center;">{{$t('billing.thisOperationIsIrrevocable')}}</div>
       </div>
       <span slot="footer"
             class="dialog-footer">
@@ -209,6 +211,7 @@ import { supplyFinance, billsupplyCount, getSupplyList, getRefundList, getRefund
 import { getTime, parseTime, getLastMonthTime } from '../../utils/index'
 import bcTime from "@/components/bcTime";
 import { getToken } from '@/utils/auth';
+import { mapGetters } from "vuex";
 
 let self
 export default {
@@ -260,6 +263,7 @@ export default {
     fileList: function () {
       return self.$refs.upload1.uploadFiles
     },
+    ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {},
@@ -341,6 +345,9 @@ export default {
       self.loadData()
     },
     handleCurrentChange (val) {
+      // if(val.canCheck){
+      //   val.checked = true;
+      // }
       self.thisRow = val;
     },
     handlePreview (file) {
@@ -367,7 +374,6 @@ export default {
           break;
         }
       }
-
       // 如果没有，则处理
       if (!hasOtherChecked) {
         if (row.checked) {
@@ -392,7 +398,6 @@ export default {
           break;
         }
       }
-
       self.tableData = data;
       self.allChecked = allChecked;
     },
@@ -446,6 +451,9 @@ export default {
           member = i.supplyName;
         }
       }
+      if (orders.length == 0) {
+        return self.$message.warning(self.$t('billing.cantConfirm'))
+      }
 
       self.form = {
         member: member,
@@ -465,7 +473,6 @@ export default {
           resourceIds.push(i.response.data.id)
         }
       }
-      console.log(resourceIds)
       confirmRefund({
         resourceIds: resourceIds.toString(),
         orderIds: self.form.orders.toString()

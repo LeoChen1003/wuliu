@@ -25,21 +25,21 @@
           <el-tab-pane name="WAIT_SETTLE">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.unpaid')}}<sub class="badge red">{{statusCount.WAIT_SETTLE}}</sub></div>
+                <div class="text">{{$t('billing.demandPaid')}}<sub class="badge red">{{statusCount.WAIT_SETTLE}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
           <el-tab-pane name="SETTLED">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.paid')}}<sub class="badge">{{statusCount.SETTLED}}</sub></div>
+                <div class="text">{{$t('billing.supplyDelivered')}}<sub class="badge">{{statusCount.SETTLED}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
           <el-tab-pane name="CANCELED">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.cancelled')}}<sub class="badge">{{statusCount.CANCELED}}</sub></div>
+                <div class="text">{{$t('billing.orderCanceled')}}<sub class="badge">{{statusCount.CANCELED}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
@@ -96,6 +96,7 @@
 import { demandFinance, billdemandCount } from '../../api/billing'
 import { getTime, parseTime, getLastMonthTime } from '../../utils/index'
 import bcTime from "@/components/bcTime";
+import { mapGetters } from "vuex";
 
 let self
 export default {
@@ -125,6 +126,7 @@ export default {
     toDateDeFault () {
       return self.toDate.split('-')
     },
+    ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {},

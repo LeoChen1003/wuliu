@@ -345,7 +345,15 @@
     "pleaseEnterTheReasonForRejection": "Please enter the reason for rejection",
     "transferFreight": "Transfer Freight",
     "orderQty": "Order Qty",
-    "cantRefund": "Transfer Voucher Cannot be Empty"
+    "cantRefund": "Transfer Voucher Cannot be Empty",
+    "thisOperationIsIrrevocable": "This operation is irrevocable. please check again before confirm",
+    "orderPending": "Order pending",
+    "orderCompleted": "Order completed",
+    "paid2": "Paid",
+    "demandPaid": "Demand Paid",
+    "supplyDelivered": "Supply Delivered",
+    "orderCanceled": "Order Canceled",
+    "orderRejected": "Order Rejected"
   },
   "home": {
     "button": "button"

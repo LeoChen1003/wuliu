@@ -4,6 +4,7 @@
       <el-button style="width:200px;"
                  @click="todoIt"
                  :loading="todoLoading"
+                 :disabled="!permissions.DemandNewOrderOrRelease"
                  type="primary">{{$t('booking.releaseToMarket')}}</el-button>
     </div>
     <el-form ref="releaseform"
@@ -399,7 +400,6 @@ export default {
       }
     };
     const validatorpickAt = (rule, value, callback) => {
-      console.log(self.releaseForm.senderAddress.pickAt)
       if (!self.time_at) {
         callback(new Error(''));
       } else {
@@ -534,7 +534,6 @@ export default {
   // 监控data中的数据变化
   watch: {
     shareTruck (val) {
-      console.log(val)
       if (val) {
         self.releaseForm.chargeList[0].chargeIntro = self.cargoShape
       } else {
@@ -624,7 +623,6 @@ export default {
     })
     // 寄件人列表 
     getSenderList().then(res => {
-      console.log(res)
       self.senderList = res.data
     })
 
@@ -639,14 +637,11 @@ export default {
     },
     changeBCtime (time) {
       self.time_at = time
-      console.log(time)
     },
     changeBCtimeReceive (time) {
       self.receive_time_at = time
-      console.log(time)
     },
     pickUpMethod (query) {
-      console.log(query)
       if (query !== '') {
         if (self.curSelect == 'pk') {
           self.pickUpQuery = query
@@ -712,7 +707,6 @@ export default {
       self.releaseForm.senderAddress.addressDetail = self.senderList[val].addressDetail
       self.releaseForm.senderAddress.code = self.senderList[val].code
       self.curSelect = 'pk'
-      console.log(self.senderList[val].fullName)
       self.pickUpRegionList = [{ code: self.senderList[val].code, fullname: self.senderList[val].fullName }]
     },
     // 下单

@@ -10976,8 +10976,8 @@
 .el-button--primary.is-disabled:focus,
 .el-button--primary.is-disabled:hover {
   color: #fff;
-  background-color: rgba(255,0,0,.3);
-  border-color: rgba(255,0,0,.2);
+  background-color: rgba(180, 164, 164, 0.3);
+  border-color: rgba(250, 250, 250, 0.2);
 }
 .el-button--primary.is-plain {
   color: #8c8c8c;

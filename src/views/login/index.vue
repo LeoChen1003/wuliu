@@ -565,7 +565,6 @@ export default {
               this.loading = false;
             });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -687,7 +686,6 @@ export default {
     // 忘记密码
     forgotPassword () {
       let self = this
-      console.log(self.forgotForm)
       this.$refs.forgotForm.validate(valid => {
         if (valid) {
           forgot(self.forgotForm).then(res => {

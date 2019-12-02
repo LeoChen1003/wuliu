@@ -132,7 +132,7 @@ export default {
   }
 
   .right {
-    width: 100%;
+    width: 90%;
 
     .slidebar {
       width: 100%;

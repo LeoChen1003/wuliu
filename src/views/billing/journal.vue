@@ -42,9 +42,8 @@
                              :label="$t('billing.transactionType')" />
             <el-table-column :label="$t('billing.documentNo')">
               <template slot-scope="scope">
-                <div>
-                  {{ scope.row.eventType == 'TOP_UP' ? scope.row.tradeNo : scope.row.orderNo }}
-                </div>
+                <div v-if="scope.row.eventType == 'TOP_UP' || scope.row.eventType == 'REFUND'">{{scope.row.tradeNo}}</div>
+                <div v-if="scope.row.eventType == 'ORDER'">{{scope.row.orderNo}}</div>
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.increase')">

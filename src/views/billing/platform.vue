@@ -125,8 +125,10 @@
           <div class="btn-box"
                v-if="thisRow && tabActive == 'DEFAULT'">
             <el-button type="primary"
+                       :disabled="!permissions.PlatformFianceConfirm"
                        @click="confirmDialog = true">{{$t('billing.confirm')}}</el-button>
             <el-button type="info"
+                       :disabled="!permissions.PlatformFianceConfirm"
                        @click="refuseVisible = true;reason='';">{{$t('billing.reject')}}</el-button>
           </div>
         </el-card>
@@ -194,6 +196,7 @@ import { billingList, billingAccept, billingReject, billplatformCount } from "..
 import { getToken } from '@/utils/auth'
 import { getTime, parseTime, getLastMonthTime } from '../../utils/index'
 import bcTime from "@/components/bcTime";
+import { mapGetters } from "vuex";
 
 let self;
 
@@ -234,6 +237,7 @@ export default {
     toDateDeFault () {
       return self.toDate.split('-')
     },
+    ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {},
@@ -317,7 +321,7 @@ export default {
     },
     // 拒绝
     rejectIt () {
-      if(self.reason == ''){
+      if (self.reason == '') {
         return self.$message.warning(self.$t('billing.pleaseEnterTheReasonForRejection'))
       }
       self.refuseLoading = true;

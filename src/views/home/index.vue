@@ -37,7 +37,6 @@ export default {
           break;
         }
       }
-      console.log(url)
       resetRouter()
       router.addRoutes(res)
       router.options.routes = store.getters.permission_routes
