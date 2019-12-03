@@ -577,6 +577,7 @@ export default {
   // height: 100%;
 
   .form-item {
+    width: 200px;
     display: flex;
   }
 
@@ -595,5 +596,9 @@ export default {
 
 .proItem {
   margin: 0 10px 10px 0;
+}
+
+.innerInp {
+  width: 130px;
 }
 </style>

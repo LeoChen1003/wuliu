@@ -43,10 +43,10 @@
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane name="CANCELLED">
+          <el-tab-pane name="REJECTED">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.orderRejected')}}<sub class="badge">{{statusCount.CANCELLED}}</sub></div>
+                <div class="text">{{$t('billing.orderRejected')}}<sub class="badge">{{statusCount.REJECTED}}</sub></div>
               </div>
             </span>
           </el-tab-pane>

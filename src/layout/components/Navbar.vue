@@ -158,7 +158,6 @@ export default {
 
   &:hover {
     background: #fff !important;
-    border-bottom: 10px solid red !important;
     color: red !important;
   }
 }

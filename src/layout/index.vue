@@ -192,12 +192,10 @@ export default {
     font-size: 14px;
     line-height: 40px;
     margin: 0 10px;
-    border-bottom: 0px solid rgba($color: #000000, $alpha: 0);
     cursor: pointer;
     transition: all 0.4s;
 
     &:hover {
-      border-bottom: 5px solid red;
       color: red;
     }
   }
@@ -207,7 +205,6 @@ export default {
     color: #ccc;
 
     &:hover {
-      border-bottom: 5px solid #ccc;
       color: #ccc;
     }
   }

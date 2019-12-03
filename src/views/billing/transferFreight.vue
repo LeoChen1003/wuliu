@@ -30,6 +30,7 @@
         <el-button size="small"
                    @click="confirmShow"
                    v-if="tabActive == 'UNPAID'"
+                   :disabled="!permissions.PlatformFianceConfirm"
                    style='width:100px;margin-left:20px;'>{{ $t('billing.transferFreight') }}</el-button>
       </div>
     </div>

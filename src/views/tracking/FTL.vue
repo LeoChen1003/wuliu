@@ -59,7 +59,7 @@
       </div>
       <!-- 表格 -->
       <div class="container">
-        <div class="container-header">
+        <!-- <div class="container-header">
           <div>
             <el-select v-model="searchForm.province"
                        filterable
@@ -75,7 +75,7 @@
             <el-input prefix-icon="el-icon-search"></el-input>
           </div>
           <el-button type="primary">{{$t('tracking.search')}}</el-button>
-        </div>
+        </div> -->
         <el-table :data="data.content"
                   v-loading="loading"
                   border>
@@ -580,12 +580,14 @@ export default {
       self.$prompt(self.$t('tracking.pleaseEnterTheRejectionReason'), '', {
         confirmButtonText: self.$t('tracking.confirm'),
         cancelButtonText: self.$t('tracking.cancel'),
+        inputPattern: /\S/,
+        inputErrorMessage: self.$t('tracking.pleaseEnterTheRejectionReason')
       }).then(({ value }) => {
         rejectOrder(item.id, value).then(res => {
           self.loadData();
         })
       }).catch(() => {
-        t
+
       });
     },
     confirmIt () {

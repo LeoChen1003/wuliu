@@ -57,7 +57,8 @@
     "LTLCargoViaHUB": "รายชิ้น (LTL)",
     "receivable": "บัญชีลูกหนี้",
     "transferFreight": "โอนงินค่าขนส่ง",
-    "topUpConfirm": "ยืนยันการโอนเงิน"
+    "topUpConfirm": "ยืนยันการโอนเงิน",
+    "welcome": "Welcome"
   },
   "layout": {
     "logout": "ออกจากระบบ"
