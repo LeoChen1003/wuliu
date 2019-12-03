@@ -307,7 +307,11 @@ export const asyncRoutes = [
       {
         path: "closed",
         component: () => import("@/views/member/closed"),
-        meta: { title: "closed", roles: ["PLATFORM"], permission: "MemberInfo" }
+        meta: {
+          title: "closed",
+          roles: ["PLATFORM"],
+          permission: "PlatformMemberView"
+        }
       }
     ]
   }
