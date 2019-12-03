@@ -59,7 +59,7 @@
       </div>
       <!-- 表格 -->
       <div class="container">
-        <div class="container-header">
+        <!-- <div class="container-header">
           <div>
             <el-select v-model="searchForm.province"
                        filterable
@@ -71,11 +71,11 @@
                          :value="item.code"></el-option>
             </el-select>
           </div>
-          <!-- <div>
+          <div>
             <el-input prefix-icon="el-icon-search"></el-input>
-          </div> -->`
+          </div>`
           <el-button type="primary">{{$t('tracking.search')}}</el-button>
-        </div>
+        </div> -->
         <el-table :data="data.content"
                   v-loading="loading"
                   border>

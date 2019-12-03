@@ -349,7 +349,10 @@
     "demandPaid": "Demandชำระเงินแล้ว",
     "supplyDelivered": "Supplyจัดส่งสำเร็จ",
     "orderCanceled": "ออเดอร์ถูกปฏิเสธ",
-    "orderRejected": "ออเดอร์ถูกปฏิเสธ"
+    "orderRejected": "ออเดอร์ถูกปฏิเสธ",
+    "confirmText": "ฉันยืนยันว่ารายการนี้เงินเข้าบัญชีแล้ว การดำเนินการนี้ไม่สามารถยกเลิกได้ คุณแน่ใจหรือไม่",
+    "confirmTitle": "ยืนยันโอนเงินเข้าบัญชี",
+    "refuseTitle": "ปฏิเสธ"
   },
   "member": {
     "myData": "ข้อมูลของฉัน",

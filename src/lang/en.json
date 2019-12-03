@@ -353,7 +353,10 @@
     "demandPaid": "Demand Paid",
     "supplyDelivered": "Supply Delivered",
     "orderCanceled": "Order Canceled",
-    "orderRejected": "Order Rejected"
+    "orderRejected": "Order Rejected",
+    "confirmText": " I confirm that the money has been received. This operation is irrevocable. Are you sure?",
+    "confirmTitle": "Confirm Recharge to Account",
+    "refuseTitle": "Reject"
   },
   "home": {
     "button": "button"

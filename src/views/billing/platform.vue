@@ -94,6 +94,7 @@
         <el-card class="right"
                  shadow="never">
           <el-image :src='thisRow.resource.path'
+                    style="height:400px;"
                     :preview-src-list="thisRow.preViewList"
                     v-if="thisRow">
             <!-- <div slot="error"
@@ -382,6 +383,8 @@ export default {
       .center {
         width: 49%;
         margin-right: 1%;
+        overflow: scroll;
+        height: 100%;
       }
       .right {
         width: 49%;
@@ -452,6 +455,10 @@ export default {
 .date-box {
   display: flex;
   align-items: center;
+}
+
+div::-webkit-scrollbar {
+  display: none;
 }
 </style>
 
