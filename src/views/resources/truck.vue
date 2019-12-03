@@ -6,7 +6,7 @@
                  @click="toAdd">{{$t('resources.add')}}</el-button>
     </div>
     <el-row :gutter="40">
-      <el-col :span="9">
+      <el-col :span="12">
         <el-table :data="dataList"
                   border
                   v-loading="resetLoading"
@@ -20,21 +20,23 @@
                            :label="$t('resources.truckType')"></el-table-column>
           <el-table-column prop="activeStatus"
                            :label="$t('resources.status')"></el-table-column>
-          <el-table-column>
+          <el-table-column width="200px">
             <template slot-scope="scope">
-              <el-button type="primary"
-                         style="margin-bottom:5px;"
-                         @click="toEdit(scope.row)">
-                {{$t('resources.edit')}}
-              </el-button>
-              <el-button type="primary"
-                         style="margin-left:0;"
-                         @click="reset(scope.row)">{{$t('resources.reset')}}</el-button>
+              <div style="box-sizing:border-box;padding:0 5px;">
+                <el-button type="primary"
+                           style="margin-bottom:5px;width:100%;"
+                           @click="toEdit(scope.row)">
+                  {{$t('resources.edit')}}
+                </el-button>
+                <el-button type="primary"
+                           style="margin-left:0;width:100%;"
+                           @click="reset(scope.row)">{{$t('resources.reset')}}</el-button>
+              </div>
             </template>
           </el-table-column>
         </el-table>
       </el-col>
-      <el-col :span="15">
+      <el-col :span="12">
         <el-tabs v-model="activeTab"
                  type="border-card">
           <el-tab-pane :label="$t('resources.task')"
