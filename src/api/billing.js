@@ -77,10 +77,11 @@ export function billTopUpCount(applyType) {
 }
 
 // 平台充值各状态数量
-export function billplatformCount(applyType) {
+export function billplatformCount(params) {
   return request({
     url: "api/platform/finance/apply/status/count",
-    method: "get"
+    method: "get",
+    params: params
   });
 }
 

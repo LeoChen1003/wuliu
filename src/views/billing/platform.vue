@@ -270,7 +270,14 @@ export default {
       })
     },
     getCount () {
-      billplatformCount(self.apply_type).then(res => {
+      let form = {
+        audit_status: self.tabActive,
+        amount: self.amount ? self.amount : 0,
+        memberName: self.member,
+        start: self.fromDate,
+        end: self.toDate
+      }
+      billplatformCount(form).then(res => {
         self.statusCount = res.data
       })
     },
@@ -283,7 +290,8 @@ export default {
       self.fromDate = null;
       self.toDate = null;
       self.member = '';
-      self.getList()
+      self.getList();
+      self.getCount();
     },
     changeBCtimeFrom (time) {
       self.fromDate = time
