@@ -17,7 +17,7 @@
     "pleaseEnterDetailAddress": "โปรดระบุที่อยู่รายละเอียด",
     "pleaseEnterRegion": "โปรดระบุพื้นที่การบริหาร",
     "pleaseEnterRecipieName": "กรุณาใส่ชื่อผู้รับ",
-    "amount": "ผลรวม",
+    "amount": "ยอดเงิน",
     "administrativeDivision": "เขตการบริหาร",
     "width": "กว้าง",
     "length": "ยาว",
@@ -154,7 +154,7 @@
     "feight": " ค่าขนส่ง",
     "totalamt": "ยอดรวม",
     "amount": "ค่าใช้จ่าย",
-    "returnConsulting": "ปรึกษาเรื่องผลตอบแทน",
+    "returnConsulting": "ย้อนกลับ",
     "releaseToMarket": "ประกาศMarket",
     "viewValuation": "ดูการคิดค่าขนส่ง",
     "bangkokSuburb": "กรุงเทพและปริมณฑล",
@@ -221,7 +221,8 @@
     "expressWaybillNo": "เลขพัสดุขนส่งด่วน",
     "courierNumberRequired": "เลขพัสดุขนส่งด่วนไม่ควรเว้นว่าง",
     "confirmReceiptOfDocument": "ยืนยันได้รับเอกสาร",
-    "areYouSure": "คุณได้รับเอกสารของคุณแล้ว ยืนยัน?"
+    "areYouSure": "คุณได้รับเอกสารของคุณแล้ว ยืนยัน?",
+    "returnTruck": "ประกาศเส้นทางขากลับ"
   },
   "resources": {
     "add": "เพิ่ม",
@@ -322,7 +323,7 @@
     "operation": "การดำเนินการ",
     "reasonsForRefusal": "เหตุผลสำหรับการปฏิเสธ",
     "cancel": "ยกเลิก",
-    "member": "สมัครเป็นสมาชิก",
+    "member": "สมาชิก",
     "confirmedBy": "ยืนยัน",
     "note": "ข้อคิดเห็น",
     "unpaid_TF": "ค้างชำระ",
@@ -352,7 +353,8 @@
     "orderRejected": "ออเดอร์ถูกปฏิเสธ",
     "confirmText": "ฉันยืนยันว่ารายการนี้เงินเข้าบัญชีแล้ว การดำเนินการนี้ไม่สามารถยกเลิกได้ คุณแน่ใจหรือไม่",
     "confirmTitle": "ยืนยันโอนเงินเข้าบัญชี",
-    "refuseTitle": "ปฏิเสธ"
+    "refuseTitle": "ปฏิเสธ",
+    "description": "รายละเอียด"
   },
   "member": {
     "myData": "ข้อมูลของฉัน",
