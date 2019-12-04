@@ -159,9 +159,9 @@
     "viewValuation": "ดูการคิดค่าขนส่ง",
     "bangkokSuburb": "กรุงเทพและปริมณฑล",
     "central": "ภาคกลาง",
-    "southern": " ภาคใต้",
+    "southern": "ภาคใต้",
     "northern": "ภาคเหนือ",
-    "northeastern": " ตะวันออกเฉียงเหนือ",
+    "northeastern": "ตะวันออกเฉียงเหนือ",
     "expectedDeliveryTime": "เวลาประมาณการถถึงปลายทาง"
   },
   "tracking": {
