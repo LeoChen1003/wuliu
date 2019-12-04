@@ -187,7 +187,7 @@
             <template slot-scope="scope">
               <div style="text-align:center;">
                 <el-button type="primary"
-                           :disabled="!roles.Demand"
+                           :disabled="!permissions.DemandNewOrderOrRelease"
                            @click="toBooking(scope.row)">{{ $t("booking.placeOrder") }}</el-button>
               </div>
             </template>
@@ -206,7 +206,9 @@
     </el-row>
     <el-dialog :visible.sync="previewDialog">
       <div>
-        <el-carousel arrow="always" height="600px" :autoplay="false">
+        <el-carousel arrow="always"
+                     height="600px"
+                     :autoplay="false">
           <el-carousel-item v-for="item in previewImgList"
                             style="text-align:center;"
                             :key="item">
@@ -379,7 +381,7 @@ export default {
   },
   // 监听属性 类似于data概念
   computed: {
-    ...mapGetters(["roles"])
+    ...mapGetters(["permissions"])
   },
   // 监控data中的数据变化
   watch: {

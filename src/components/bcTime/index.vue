@@ -79,7 +79,6 @@ export default {
   methods: {
     dateChange (e) {
       let time = `${e[0]}-${e[1]}-${e[2]}`;
-      console.log(time)
       this.$emit('changeBCtime', time)
     }
   },

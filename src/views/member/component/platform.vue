@@ -201,18 +201,21 @@
             <el-button type="primary"
                        class="submitBtn inp"
                        v-if="auditStatus == 'DEFAULT'"
+                       :disabled="!permissions.PlatformMemberAudit"
                        @click="toAccept">{{ $t('member.accept') }}</el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="info"
                        class="submitBtn inp"
                        v-if="auditStatus == 'DEFAULT'"
+                       :disabled="!permissions.PlatformMemberAudit"
                        @click="toReject">{{ $t('member.reject') }}</el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="primary"
                        class="submitBtn inp"
                        v-if="auditStatus == 'ACCEPTED'"
+                       :disabled="!permissions.PlatformMemberAudit"
                        @click="toActivate">{{ $t('member.activate') }}</el-button>
           </el-form-item>
         </el-form>
@@ -241,6 +244,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import { platformList, platformAccept, platformRefuse, platformActive, dcInfo, appliedInfo } from '../../../api/member'
+import { mapGetters } from "vuex";
 
 export default {
   //import引入的组件需要注入到对象中才能使用
@@ -274,7 +278,9 @@ export default {
     };
   },
   //监听属性 类似于data概念
-  computed: {},
+  computed: {
+    ...mapGetters(["permissions"]),
+  },
   //监控data中的数据变化
   watch: {
   },
@@ -319,13 +325,10 @@ export default {
         // dc信息
         dcInfo(row.siteId).then(res => {
           self.dcList = res.data
-          console.log(res)
-          console.log(self.dcList)
         })
       }
       // 会员类型
       appliedInfo(row.siteId).then(res => {
-        console.log(res)
         for (let x in res.data) {
           self.typeList.push(res.data[x].applyType)
         }

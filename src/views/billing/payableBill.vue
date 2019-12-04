@@ -6,7 +6,7 @@
         <bcTime @changeBCtime="changeBCtimeFrom"
                 :timeType="'all'"
                 :dateDefault='fromDateDeFault'></bcTime>
-        <span style="margin:0 5px;">至</span>
+        <span style="margin:0 5px;">~</span>
         <bcTime @changeBCtime="changeBCtimeTo"
                 :dateDefault='toDateDeFault'
                 style="margin-left:5px;"
@@ -25,21 +25,21 @@
           <el-tab-pane name="WAIT_SETTLE">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.unpaid')}}<sub class="badge red">{{statusCount.WAIT_SETTLE}}</sub></div>
+                <div class="text">{{$t('billing.demandPaid')}}<sub class="badge red">{{statusCount.WAIT_SETTLE}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
           <el-tab-pane name="SETTLED">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.paid')}}<sub class="badge">{{statusCount.SETTLED}}</sub></div>
+                <div class="text">{{$t('billing.supplyDelivered')}}<sub class="badge">{{statusCount.SETTLED}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
-          <el-tab-pane name="CANCELED">
+          <el-tab-pane name="REJECTED">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.cancelled')}}<sub class="badge">{{statusCount.CANCELED}}</sub></div>
+                <div class="text">{{$t('billing.orderCanceled')}}<sub class="badge">{{statusCount.REJECTED}}</sub></div>
               </div>
             </span>
           </el-tab-pane>
@@ -96,6 +96,7 @@
 import { demandFinance, billdemandCount } from '../../api/billing'
 import { getTime, parseTime, getLastMonthTime } from '../../utils/index'
 import bcTime from "@/components/bcTime";
+import { mapGetters } from "vuex";
 
 let self
 export default {
@@ -120,13 +121,12 @@ export default {
   // 监听属性 类似于data概念
   computed: {
     fromDateDeFault () {
-      console.log(self.fromDate.split('-'))
       return self.fromDate.split('-')
     },
     toDateDeFault () {
-      console.log(self.toDate.split('-'))
       return self.toDate.split('-')
     },
+    ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {},
@@ -137,11 +137,9 @@ export default {
   methods: {
     changeBCtimeFrom (time) {
       self.fromDate = time
-      console.log(time)
     },
     changeBCtimeTo (time) {
       self.toDate = time
-      console.log(time)
     },
     pageChange (val) {
       let self = this
@@ -185,7 +183,6 @@ export default {
     },
     handleCurrentChange (val) {
       const self = this
-      console.log(val)
       self.detailData = []
       self.detailData.push(val)
     }

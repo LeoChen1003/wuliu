@@ -59,7 +59,7 @@
       </div>
       <!-- 表格 -->
       <div class="container">
-        <div class="container-header">
+        <!-- <div class="container-header">
           <div>
             <el-select v-model="searchForm.province"
                        filterable
@@ -75,7 +75,7 @@
             <el-input prefix-icon="el-icon-search"></el-input>
           </div>
           <el-button type="primary">{{$t('tracking.search')}}</el-button>
-        </div>
+        </div> -->
         <el-table :data="data.content"
                   v-loading="loading"
                   border>
@@ -98,7 +98,7 @@
               </el-card>
               <el-card shadow="never"
                        v-for="(item,index) in scope.row.chargeList"
-                       :key="index"
+                       :key="index + '1'"
                        style="margin-top:5px;"
                        v-if="item.chargeIntro=='true'">
                 <div style="display:flex;">
@@ -134,19 +134,22 @@
               <div style="text-align:center;">
                 <el-button v-if="scope.row.status == 'WAIT_SUPPLY_TO_ACCEPT'"
                            @click="confirmB(scope.row)"
+                           :disabled="!permissions.SupplyOrderManage"
                            type="primary">{{$t('tracking.confirm')}}</el-button>
                 <el-button v-if="scope.row.status == 'WAIT_SUPPLY_TO_ACCEPT'"
                            @click="reject(scope.row)"
+                           :disabled="!permissions.SupplyOrderManage"
                            type="primary">{{$t('tracking.reject')}}</el-button>
                 <el-button v-if="scope.row.status == 'WILL_PICK' && scope.row.transport.driverName == null"
                            @click="confirmB(scope.row)"
+                           :disabled="!permissions.SupplyOrderManage"
                            type="primary">{{$t('tracking.operation')}}</el-button>
                 <el-button v-if="(scope.row.status == 'SENDING' || scope.row.status == 'WILL_PICK')"
                            @click="returnShow(scope.row)"
-                           :disabled="scope.row.publishBack == 1"
+                           :disabled="scope.row.publishBack == 1 || !permissions.SupplyResourceManage"
                            type="primary">{{$t('tracking.returnTruck')}}</el-button>
                 <el-button v-if="scope.row.status == 'WILL_RETURN'"
-                           :disabled="scope.row.returnType == 1 || scope.row.returnType == 2"
+                           :disabled="scope.row.returnType == 1 || scope.row.returnType == 2 || !permissions.SupplyOrderManage"
                            @click="rdShow(scope.row)"
                            type="primary">{{$t('tracking.returnDocument')}}</el-button>
               </div>
@@ -347,6 +350,7 @@
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty, getSupplyTD, getBcYear, getBcDay } from '../../api/data'
 import { confirmOrder, updateOrderInfo, rejectOrder, getOrder, getOrderLog, getOrderStatus, returnTruck, returnDocument } from '../../api/tracking.js'
 import { getToken } from '@/utils/auth';
+import { mapGetters } from "vuex";
 
 let self;
 export default {
@@ -481,6 +485,7 @@ export default {
   },
   // 监听属性 类似于data概念
   computed: {
+    ...mapGetters(["permissions"]),
     phoFileList: function () {
       return self.$refs.photoIds.uploadFiles
     },
@@ -575,12 +580,14 @@ export default {
       self.$prompt(self.$t('tracking.pleaseEnterTheRejectionReason'), '', {
         confirmButtonText: self.$t('tracking.confirm'),
         cancelButtonText: self.$t('tracking.cancel'),
+        inputPattern: /\S/,
+        inputErrorMessage: self.$t('tracking.pleaseEnterTheRejectionReason')
       }).then(({ value }) => {
         rejectOrder(item.id, value).then(res => {
           self.loadData();
         })
       }).catch(() => {
-        t
+
       });
     },
     confirmIt () {
@@ -618,7 +625,6 @@ export default {
       })
     },
     returnShow (item) {
-      console.log(item)
       self.returnForm_show = {
         sender: item.receiverAddress.province,
         receiver: item.senderAddress.city,
@@ -647,7 +653,6 @@ export default {
         })
     },
     rdShow (row) {
-      console.log(row)
       self.rdRow = row;
       self.rdDialog = true;
     },

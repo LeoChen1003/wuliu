@@ -73,7 +73,7 @@
 
     .is-active > .el-submenu__title {
       color: $subMenuActiveText !important;
-      background-color: #333 !important;
+      background-color: #fff !important;
     }
 
     & .nest-menu .el-submenu > .el-submenu__title,
@@ -173,7 +173,11 @@
 
   .menu-wrapper {
     .is-active {
-      background-color: #333 !important;
+      background-color: #fff !important;
+      color: red !important;
+      border-bottom: 7px solid red !important;
+      border-bottom-color: red !important;
+      font-weight: bold !important;
       .el-submenu__title {
         background-color: #333 !important;
       }
@@ -182,24 +186,6 @@
 
   .el-breadcrumb {
     background: #f9f9f9;
-  }
-}
-
-.el-menu--horizontal {
-  .el-menu {
-    background-color: #fff !important;
-    .el-menu-item {
-      background: #fff !important;
-    }
-
-    .el-menu-item:hover {
-      background-color: #eee !important;
-    }
-
-    .is-active {
-      color: #131313 !important;
-      font-weight: bold !important;
-    }
   }
 }
 

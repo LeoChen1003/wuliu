@@ -98,6 +98,7 @@
             <div style="text-align:center;">司机端的APP</div>
             <el-button type="primary"
                        slot="reference"
+                       plain
                        round
                        @click="iphoneDownload"
                        size="mini">
@@ -114,6 +115,7 @@
             <div style="text-align:center;">司机端的APP</div>
             <el-button type="primary"
                        slot="reference"
+                       plain
                        round
                        @click="androidDownload"
                        size="mini">
@@ -563,7 +565,6 @@ export default {
               this.loading = false;
             });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -685,7 +686,6 @@ export default {
     // 忘记密码
     forgotPassword () {
       let self = this
-      console.log(self.forgotForm)
       this.$refs.forgotForm.validate(valid => {
         if (valid) {
           forgot(self.forgotForm).then(res => {
@@ -858,7 +858,7 @@ export default {
   }
 
   .actived {
-    border: 1px solid #409eff;
+    border: 1px solid red;
   }
 }
 

@@ -2,7 +2,6 @@
   <div class='wrapper'>
     <div style="margin-bottom:20px;">
       <el-button @click="add"
-                 :disabled="!roles.Supply"
                  type="primary">{{$t('resources.add')}}</el-button>
     </div>
     <div class="container">
@@ -593,7 +592,7 @@ export default {
   },
   //监听属性 类似于data概念
   computed: {
-    ...mapGetters(["roles"])
+    ...mapGetters(["permissions"])
   },
   //监控data中的数据变化
   watch: {},

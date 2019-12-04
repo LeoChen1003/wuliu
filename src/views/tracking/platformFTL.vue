@@ -59,7 +59,7 @@
       </div>
       <!-- 表格 -->
       <div class="container">
-        <div class="container-header">
+        <!-- <div class="container-header">
           <div>
             <el-select v-model="searchForm.province"
                        filterable
@@ -73,9 +73,9 @@
           </div>
           <div>
             <el-input prefix-icon="el-icon-search"></el-input>
-          </div>
+          </div>`
           <el-button type="primary">{{$t('tracking.search')}}</el-button>
-        </div>
+        </div> -->
         <el-table :data="data.content"
                   v-loading="loading"
                   border>
@@ -98,7 +98,7 @@
               </el-card>
               <el-card shadow="never"
                        v-for="(item,index) in scope.row.chargeList"
-                       :key="index"
+                       :key="index+item"
                        style="margin-top:5px;"
                        v-if="item.chargeIntro=='true'">
                 <div style="display:flex;">

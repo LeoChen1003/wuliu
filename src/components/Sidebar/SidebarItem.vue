@@ -1,22 +1,38 @@
 <template>
-  <div v-if="!item.hidden" class="menu-wrapper">
-    <template
-      v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow"
-    >
-      <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item
-          :index="resolvePath(onlyOneChild.path)"
-          :class="{'submenu-title-noDropdown':!isNest}"
-        >
-          <item
-            :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
-            :title="generateTitle(onlyOneChild.meta.title)"
-          />
+  <div v-if="!item.hidden"
+       class="menu-wrapper">
+    <!-- <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
+      <app-link v-if="onlyOneChild.meta"
+                :to="resolvePath(onlyOneChild.path)">
+        <el-menu-item :index="resolvePath(onlyOneChild.path)"
+                      :class="{'submenu-title-noDropdown':!isNest}">
+          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
+                :title="generateTitle(onlyOneChild.meta.title)" />
         </el-menu-item>
       </app-link>
+    </template> -->
+    <template>
+      <app-link v-if="item.children[0].meta && permissions[item.children[0].meta.permission]"
+                :to="resolvePath(item.children[0].path)">
+        <!-- 设定父级path为index，引导default-active -->
+        <el-menu-item :index="resolvePath(item.path)"
+                      :class="{'submenu-title-noDropdown':!isNest}">
+          <item :icon="item.children[0].meta.icon||(item.meta&&item.meta.icon)"
+                :title="item.meta.title ? generateTitle(item.meta.title) : generateTitle(item.children[0].meta.title)" />
+        </el-menu-item>
+      </app-link>
+      <div v-else class="noPermission">
+        <!-- 设定父级path为index，引导default-active -->
+        <el-menu-item :index="resolvePath(item.path)"
+                      disabled
+                      :class="{'submenu-title-noDropdown':!isNest}">
+          <item :icon="item.children[0].meta.icon||(item.meta&&item.meta.icon)"
+                :title="item.meta.title ? generateTitle(item.meta.title) : generateTitle(item.children[0].meta.title)" />
+        </el-menu-item>
+      </div>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
+    <!-- <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template slot="title">
         <item
           v-if="item.meta"
@@ -32,7 +48,7 @@
         :base-path="resolvePath(child.path)"
         class="nest-menu"
       />
-    </el-submenu>
+    </el-submenu> -->
   </div>
 </template>
 
@@ -43,6 +59,7 @@ import { isExternal } from "@/utils/validate";
 import Item from "./Item";
 import AppLink from "./Link";
 import FixiOSBug from "./FixiOSBug";
+import { mapGetters } from "vuex";
 
 export default {
   name: "SidebarItem",
@@ -63,14 +80,17 @@ export default {
       default: ""
     }
   },
-  data() {
+  computed: {
+    ...mapGetters(["permissions"]),
+  },
+  data () {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null;
     return {};
   },
   methods: {
-    hasOneShowingChild(children = [], parent) {
+    hasOneShowingChild (children = [], parent) {
       const showingChildren = children.filter(item => {
         if (item.hidden) {
           return false;
@@ -94,13 +114,15 @@ export default {
 
       return false;
     },
-    resolvePath(routePath) {
-      if (isExternal(routePath)) {
-        return routePath;
-      }
-      if (isExternal(this.basePath)) {
-        return this.basePath;
-      }
+    resolvePath (routePath) {
+      // if (isExternal(routePath)) {
+      //   return routePath;
+      // }
+      // if (isExternal(this.basePath)) {
+      //   return this.basePath;
+      // }
+      // console.log(routePath)
+      // console.log(this.basePath)
       return path.resolve(this.basePath, routePath);
     },
 

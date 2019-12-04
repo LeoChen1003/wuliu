@@ -792,7 +792,6 @@ export default {
     // 获取合同
     loadData_contract () {
       getContract().then(res => {
-        console.log(res.data)
         self.contractList = res.data;
       })
     },
@@ -856,8 +855,6 @@ export default {
           name: res.data.resource.name,
           url: res.data.resource.path
         }]
-        console.log(self.tabActive.toLowerCase())
-        console.log(res.data.credentialsType)
         // self.loadData_list(self.tabActive);
       }
     },
