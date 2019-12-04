@@ -190,10 +190,10 @@
         <el-table-column :label="$t('tracking.supply')">
           <template slot-scope="scope">
             <div>
-              {{ scope.row.supply.companyName }}
+              {{ scope.row.supply ? (scope.row.supply.type=='COMPANY'?scope.row.supply.companyName: scope.row.supply.humanName): ''}}
             </div>
             <div v-if="scope.row.supply.companyLogo">
-              <el-image style="width: 50px;"
+              <el-image style="width: 50px;max-height:100px;"
                         :src="scope.row.supply.companyLogo"
                         fit="contain"></el-image>
             </div>
