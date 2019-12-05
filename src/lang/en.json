@@ -162,7 +162,9 @@
     "southern": "Southern",
     "northern": "Northern",
     "northeastern": "Northeastern",
-    "expectedDeliveryTime": "Expected Delivery Time"
+    "expectedDeliveryTime": "Expected Delivery Time",
+    "days": "day",
+    "distance": "KM"
   },
   "tracking": {
     "status": "Order Status",

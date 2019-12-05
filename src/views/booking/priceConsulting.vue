@@ -111,97 +111,114 @@
       </el-col>
       <el-col :span="18"
               style="height:100%;overflow:scroll;">
-        <el-table :data="tableList"
-                  border
-                  style="width: 97%;">
-          <el-table-column :label="$t('booking.supply')"
-                           align="center">
-            <template slot-scope="scope">
-              <div>
-                <div>{{ scope.row.supply ? scope.row.supply.name : "" }}</div>
+        <div style="height:100%;"
+             :class="!mapMode ? 'hideMap' : ''">
+          <div id="map"></div>
+          <div id="content"
+               v-if="mapMode">
+            <div>
+              <img src="../../assets/image/truckIcon.png"
+                   class="truck-icon">
+            </div>
+            <div>
+              <div>{{disInfo.days + $t('booking.days')}}</div>
+              <div>{{disInfo.distance + $t('booking.distance')}}</div>
+            </div>
+          </div>
+        </div>
+        <div v-if="!mapMode">
+          <el-table :data="tableList"
+                    border
+                    style="width: 97%;">
+            <el-table-column :label="$t('booking.supply')"
+                             align="center">
+              <template slot-scope="scope">
                 <div>
+                  <div>{{ scope.row.supply ? scope.row.supply.name : "" }}</div>
                   <div>
-                    <el-rate v-model="scope.row.supply.avgRating / 2"
-                             disabled
-                             text-color="#ff9900"
-                             score-template="{value}">
-                    </el-rate>
+                    <div>
+                      <el-rate v-model="scope.row.supply.avgRating / 2"
+                               disabled
+                               text-color="#ff9900"
+                               score-template="{value}">
+                      </el-rate>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column align="center"
-                           :label="$t('booking.route')">
-            <template slot-scope="scope">
-              <div>
-                {{ scope.row.fromProvince }} --> {{ scope.row.toProvinceName }}
-              </div>
-              <div>
-                <!-- {{$t('booking.transitTime')}} :  -->
-                {{ scope.row.transitTime }} days
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column header-align="center"
-                           :label="$t('booking.truckType')">
-            <template slot-scope="scope">
-              <div class="cantouch"
-                   @click="previewImg(scope.row)">
-                <div>{{ truckObj[scope.row.category] }}</div>
-                <div>{{ subObj[scope.row.subCategory] }}</div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column header-align="center"
-                           align="center"
-                           :label="$t('booking.valueAddedService')">
-            <template slot-scope="scope">
-              <div>
+              </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             :label="$t('booking.route')">
+              <template slot-scope="scope">
                 <div>
-                  {{ $t("booking.loading") }}/{{ $t("booking.unloading") }} :
-                  <i :class="
+                  {{ scope.row.fromProvince }} --> {{ scope.row.toProvinceName }}
+                </div>
+                <div>
+                  <!-- {{$t('booking.transitTime')}} :  -->
+                  {{ scope.row.transitTime }} days
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column header-align="center"
+                             :label="$t('booking.truckType')">
+              <template slot-scope="scope">
+                <div class="cantouch"
+                     @click="previewImg(scope.row)">
+                  <div>{{ truckObj[scope.row.category] }}</div>
+                  <div>{{ subObj[scope.row.subCategory] }}</div>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column header-align="center"
+                             align="center"
+                             :label="$t('booking.valueAddedService')">
+              <template slot-scope="scope">
+                <div>
+                  <div>
+                    {{ $t("booking.loading") }}/{{ $t("booking.unloading") }} :
+                    <i :class="
                       scope.row.supportLoading == 1
                         ? 'el-icon-check'
                         : 'el-icon-close'
                     "></i>
+                  </div>
+                  <div>
+                    {{ $t("booking.documentReturn") }} :
+                    <i class="el-icon-check"></i>
+                  </div>
                 </div>
-                <div>
-                  {{ $t("booking.documentReturn") }} :
-                  <i class="el-icon-check"></i>
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column align="center"
-                           :label="$t('booking.price')">
-            <template slot-scope="scope">
-              {{ scope.row.charge }}
-              <!-- <div>{{$t('booking.feight')}} : {{scope.row.charge}}</div>
+              </template>
+            </el-table-column>
+            <el-table-column align="center"
+                             :label="$t('booking.price')">
+              <template slot-scope="scope">
+                {{ scope.row.charge }}
+                <!-- <div>{{$t('booking.feight')}} : {{scope.row.charge}}</div>
               <div v-if="scope.row.supportLoading == 1">{{$t('booking.loading')}}/{{$t('booking.unloading')}} : {{scope.row.loadingOrUnloadingHumanWorkDay * scope.row.moneyPerDay}}</div>
               <div>{{$t('booking.documentReturn')}} :{{documentReturn}}</div>
               <div>{{$t('booking.totalamt')}} : {{10 + scope.row.charge + (scope.row.supportLoading == 1 ? scope.row.loadingOrUnloadingHumanWorkDay * scope.row.moneyPerDay : 0)}}</div> -->
-            </template>
-          </el-table-column>
-          <el-table-column>
-            <template slot-scope="scope">
-              <div style="text-align:center;">
-                <el-button type="primary"
-                           :disabled="!permissions.DemandNewOrderOrRelease"
-                           @click="toBooking(scope.row)">{{ $t("booking.placeOrder") }}</el-button>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination style="margin-top:10px;text-align: center;margin-bottom:50px;"
-                       background
-                       :page-sizes="[1, 5, 10, 20, 50]"
-                       :page-size="pagesize"
-                       @size-change="pageSizeChange"
-                       :current-page.sync="page.currentPage"
-                       @current-change="pageChange"
-                       layout="prev, pager, next, jumper"
-                       :total="page.total"></el-pagination>
+              </template>
+            </el-table-column>
+            <el-table-column>
+              <template slot-scope="scope">
+                <div style="text-align:center;">
+                  <el-button type="primary"
+                             :disabled="!permissions.DemandNewOrderOrRelease"
+                             @click="toBooking(scope.row)">{{ $t("booking.placeOrder") }}</el-button>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination style="margin-top:10px;text-align: center;margin-bottom:50px;"
+                         background
+                         :page-sizes="[1, 5, 10, 20, 50]"
+                         :page-size="pagesize"
+                         @size-change="pageSizeChange"
+                         :current-page.sync="page.currentPage"
+                         @current-change="pageChange"
+                         layout="prev, pager, next, jumper"
+                         :total="page.total"></el-pagination>
+        </div>
       </el-col>
     </el-row>
     <el-dialog :visible.sync="previewDialog">
@@ -236,6 +253,7 @@ import {
 import Search from "@/components/HeaderSearch";
 
 let self;
+let map;
 
 export default {
   // import引入的组件需要注入到对象中才能使用
@@ -376,7 +394,12 @@ export default {
       truckObj: {},
       subObj: {},
       previewImgList: [],
-      previewDialog: false
+      previewDialog: false,
+      disInfo: {
+        distance: '',
+        days: ''
+      },
+      mapMode: false
     };
   },
   // 监听属性 类似于data概念
@@ -394,6 +417,7 @@ export default {
   },
   mounted () {
     self.init();
+    self.initMaps();
     // ftlLines({
     //   page: self.page.currentPage - 1,
     //   pagesize: self.pagesize
@@ -406,6 +430,189 @@ export default {
     // })
   },
   methods: {
+    initMaps (cb) {
+      let chicago = new google.maps.LatLng(41.850033, -87.6500523);
+
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 8,
+        //设置地图中心点
+        center: chicago,
+        //为了关闭默认控件集,设置地图的disableDefaultUI的属性为true
+        disableDefaultUI: true,
+        // 启用缩放和平移
+        gestureHandling: "greedy"
+      });
+      // let infoWindow = new google.maps.InfoWindow;
+
+      // 尝试通过H5API获取浏览器位置
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          // infoWindow.setPosition(pos);
+          // infoWindow.setContent('Location found.');
+          // infoWindow.open(self.map);
+          map.setCenter(pos);
+        }, function () {
+          self.handleLocationError(true, infoWindow, map.getCenter());
+        });
+      } else {
+        // 浏览器不支持 Geolocation
+        self.handleLocationError(false, infoWindow, map.getCenter());
+      }
+
+      if (cb) {
+        cb();
+      }
+    },
+    getDis (start, end, truckType) {
+      self.mapMode = true;
+      if (!map) {
+        return self.initMaps(self.getDis(start, end, truckType));
+      }
+
+      let directionsService = new google.maps.DirectionsService();
+      let directionsRenderer = new google.maps.DirectionsRenderer();
+      directionsRenderer.setMap(map);
+
+      let request = {
+        origin: start,
+        destination: end,
+        travelMode: 'DRIVING',
+        unitSystem: google.maps.DirectionsUnitSystem.METRIC
+      };
+      directionsService.route(request, function (result, status) {
+
+        if (status == 'OK') {
+          let distance = parseInt(result.routes[0].legs[0].distance.value / 1000);
+          let middleStep = result.routes[0].overview_path[parseInt(result.routes[0].overview_path.length / 2)];
+
+          directionsRenderer.setDirections(result);
+
+          // 卡车速度
+          let speed;
+          if (truckType == 4) {
+            speed = 70;
+          } else if (truckType == 6 || truckType == 10 || truckType == 12) {
+            speed = 60;
+          } else if (truckType == 18 || truckType == 22) {
+            speed = 50;
+          } else {
+            return self.$message.error('Truck type ERROR!');
+          }
+
+          // 休息次数
+          let count = parseInt(distance / 400);
+          if (count != 0 && count % 400 == 0) {
+            count--;
+          }
+          // 运输天数 
+          let day = parseInt((distance / speed + count * 0.5) / 12);
+          if (day < 1) {
+            day = 1;
+          }
+
+          self.disInfo = {
+            distance: distance,
+            days: day
+          }
+
+
+          // infoWindow样式悬浮框
+          // let contentString = '<div class="info-box">' +
+          //   '<div>123' +
+          //   '</div>' +
+          //   '</div>'
+          // let infoWindow = new google.maps.InfoWindow({
+          //   content: contentString,
+          //   position: middleStep
+          // })
+          // infoWindow.open(map)
+
+          let Popup = self.createPopupClass();
+          let popup = new Popup(
+            middleStep,
+            document.getElementById('content'));
+          popup.setMap(map);
+        }
+      });
+    },
+    hideMap () {
+      self.mapMode = false;
+    },
+    // 取当前位置发生错误报错
+    handleLocationError (browserHasGeolocation, infoWindow, pos) {
+      infoWindow.setPosition(pos);
+      infoWindow.setContent(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
+      infoWindow.open(self.map);
+    },
+    // 创建popup
+    createPopupClass () {
+      /**
+       * A customized popup on the map.
+       * @param {!google.maps.LatLng} position
+       * @param {!Element} content The bubble div.
+       * @constructor
+       * @extends {google.maps.OverlayView}
+       */
+      function Popup (position, content) {
+        this.position = position;
+
+        content.classList.add('popup-bubble');
+
+        // This zero-height div is positioned at the bottom of the bubble.
+        var bubbleAnchor = document.createElement('div');
+        bubbleAnchor.classList.add('popup-bubble-anchor');
+        bubbleAnchor.appendChild(content);
+
+        // This zero-height div is positioned at the bottom of the tip.
+        this.containerDiv = document.createElement('div');
+        this.containerDiv.classList.add('popup-container');
+        this.containerDiv.appendChild(bubbleAnchor);
+
+        // Optionally stop clicks, etc., from bubbling up to the map.
+        google.maps.OverlayView.preventMapHitsAndGesturesFrom(this.containerDiv);
+      }
+      // ES5 magic to extend google.maps.OverlayView.
+      Popup.prototype = Object.create(google.maps.OverlayView.prototype);
+
+      /** Called when the popup is added to the map. */
+      Popup.prototype.onAdd = function () {
+        this.getPanes().floatPane.appendChild(this.containerDiv);
+      };
+
+      /** Called when the popup is removed from the map. */
+      Popup.prototype.onRemove = function () {
+        if (this.containerDiv.parentElement) {
+          this.containerDiv.parentElement.removeChild(this.containerDiv);
+        }
+      };
+
+      /** Called each frame when the popup needs to draw itself. */
+      Popup.prototype.draw = function () {
+        var divPosition = this.getProjection().fromLatLngToDivPixel(this.position);
+
+        // Hide the popup when it is far out of view.
+        var display =
+          Math.abs(divPosition.x) < 4000 && Math.abs(divPosition.y) < 4000 ?
+            'block' :
+            'none';
+
+        if (display === 'block') {
+          this.containerDiv.style.left = divPosition.x + 'px';
+          this.containerDiv.style.top = divPosition.y + 'px';
+        }
+        if (this.containerDiv.style.display !== display) {
+          this.containerDiv.style.display = display;
+        }
+      };
+
+      return Popup;
+    },
     init () {
       getTruckType().then(res => {
         self.categoryList = res.data.categories;
@@ -580,7 +787,7 @@ export default {
 <style lang="scss" scoped>
 //@import url(); 引入公共css类
 .manage {
-  padding-top: 20px;
+  padding-top: 10px;
   box-sizing: border-box;
   padding-left: 20px;
   .searchBox {
@@ -627,5 +834,75 @@ export default {
 
 .cantouch:hover {
   box-shadow: 0 0 5px 0 #000;
+}
+
+#map {
+  height: 100%;
+}
+
+#content {
+  display: flex;
+  font-size: 16px;
+
+  .truck-icon {
+    height: 40px;
+    margin-right: 10px;
+  }
+}
+
+.hideMap {
+  height: 0 !important;
+  width: 0;
+  overflow: hidden;
+}
+</style>
+<style>
+/* The popup bubble styling. */
+.popup-bubble {
+  /* Position the bubble centred-above its parent. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -100%);
+  /* Style the bubble. */
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-family: sans-serif;
+  overflow-y: auto;
+  max-height: 60px;
+  box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.5);
+}
+/* The parent of the bubble. A zero-height div at the top of the tip. */
+.popup-bubble-anchor {
+  /* Position the div a fixed distance above the tip. */
+  position: absolute;
+  width: 100%;
+  bottom: /* TIP_HEIGHT= */ 8px;
+  left: 0;
+}
+/* This element draws the tip. */
+.popup-bubble-anchor::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Center the tip horizontally. */
+  transform: translate(-50%, 0);
+  /* The tip is a https://css-tricks.com/snippets/css/css-triangle/ */
+  width: 0;
+  height: 0;
+  /* The tip is 8px high, and 12px wide. */
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: /* TIP_HEIGHT= */ 8px solid white;
+}
+/* JavaScript will position this div at the bottom of the popup tip. */
+.popup-container {
+  cursor: auto;
+  height: 0;
+  position: absolute;
+  /* The max width of the info window. */
+  width: 200px;
 }
 </style>
