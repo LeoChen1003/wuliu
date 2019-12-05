@@ -162,7 +162,9 @@
     "bangkokSuburb": " 曼谷及周边",
     "southern": "南部地区",
     "northeastern": "东北部地区",
-    "expectedDeliveryTime": "期望送达时间"
+    "expectedDeliveryTime": "期望送达时间",
+    "days": "天",
+    "distance": "公里"
   },
   "tracking": {
     "status": "订单状态",
