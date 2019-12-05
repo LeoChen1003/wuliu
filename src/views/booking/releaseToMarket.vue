@@ -785,6 +785,8 @@ export default {
 //@import url(); 引入公共css类
 .manage {
   padding: 20px;
+  padding-top: 0px;
+ 
   box-sizing: border-box;
   .itemRow {
     border-top: 1px solid #dfe4ed;

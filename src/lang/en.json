@@ -164,7 +164,17 @@
     "northeastern": "Northeastern",
     "expectedDeliveryTime": "Expected Delivery Time",
     "days": "day",
-    "distance": "KM"
+    "distance": "KM",
+    "FTL": "Full Truck Load",
+    "LTL": "Less Than Truckload",
+    "bookingNow": "Booking Now",
+    "distance": "Distance",
+    "4_wheel": "4-wheel truck",
+    "6_wheel": "6-wheel truck",
+    "10_wheel": "10-wheel truck",
+    "12_wheel": "12-wheel truck",
+    "18_wheel": "18-wheel truck",
+    "22_wheel": "22-wheel truck"
   },
   "tracking": {
     "status": "Order Status",
