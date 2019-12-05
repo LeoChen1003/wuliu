@@ -164,7 +164,17 @@
     "northeastern": "东北部地区",
     "expectedDeliveryTime": "期望送达时间",
     "days": "天",
-    "distance": "公里"
+    "distance": "公里",
+    "FTL": "整车物流",
+    "LTL": "零担物流",
+    "bookingNow": "现在下单",
+    "4_wheel": "四轮皮卡车",
+    "6_wheel": "六轮卡车",
+    "10_wheel": "十轮卡车",
+    "12_wheel": "十二轮卡车",
+    "18_wheel": "十八轮卡车",
+    "22_wheel": "二十二轮卡车",
+    "truckTypechoose": "请选择车型"
   },
   "tracking": {
     "status": "订单状态",
