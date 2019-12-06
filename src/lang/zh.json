@@ -174,7 +174,8 @@
     "12_wheel": "十二轮卡车",
     "18_wheel": "十八轮卡车",
     "22_wheel": "二十二轮卡车",
-    "truckTypechoose": "请选择车型"
+    "truckTypechoose": "请选择车型",
+    "back": "返回"
   },
   "tracking": {
     "status": "订单状态",
