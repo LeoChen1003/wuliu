@@ -174,15 +174,15 @@ export const asyncRoutes = [
           permission: "SupplyResourceManage"
         }
       },
-      {
-        path: "planningLTL",
-        component: () => import("@/views/resources/planningLTL"),
-        meta: {
-          title: "planningLTL",
-          roles: ["SUPPLY"],
-          permission: "SupplyResourceManage"
-        }
-      }
+      // {
+      //   path: "planningLTL",
+      //   component: () => import("@/views/resources/planningLTL"),
+      //   meta: {
+      //     title: "planningLTL",
+      //     roles: ["SUPPLY"],
+      //     permission: "SupplyResourceManage"
+      //   }
+      // }
     ]
   },
   {
