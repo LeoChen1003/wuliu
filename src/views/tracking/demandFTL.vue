@@ -648,6 +648,12 @@ export default {
 .container {
   width: 90%;
   margin-top: 28px;
+  height: calc(100vh - 141px);
+  overflow: auto;
+}
+
+div::-webkit-scrollbar {
+  display: none;
 }
 
 .tabLabel {
