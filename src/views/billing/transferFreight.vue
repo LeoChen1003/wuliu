@@ -31,6 +31,7 @@
                    @click="confirmShow"
                    v-if="tabActive == 'UNPAID'"
                    :disabled="!permissions.PlatformFianceConfirm"
+                   type="primary"
                    style='width:100px;margin-left:20px;'>{{ $t('billing.transferFreight') }}</el-button>
       </div>
     </div>

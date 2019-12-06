@@ -40,6 +40,7 @@ export const asyncRoutes = [
         path: "priceConsulting",
         component: () => import("@/views/booking/priceConsulting"),
         name: "priceConsulting",
+        hidden: true,
         meta: {
           title: "priceConsulting",
           roles: ["DEMAND"],
@@ -61,6 +62,7 @@ export const asyncRoutes = [
         path: "releaseToMarket",
         component: () => import("@/views/booking/releaseToMarket"),
         name: "releaseToMarket",
+        hidden: true,
         meta: {
           title: "releaseToMarket",
           roles: ["DEMAND"],
