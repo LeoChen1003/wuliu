@@ -31,7 +31,11 @@
                 </div>
                 <div
                   class="logistic_type_item"
-                  :class="logisticType == 'LTL' ? 'logistic_type_active' : 'logistic_type_jy'"
+                  :class="
+                    logisticType == 'LTL'
+                      ? 'logistic_type_active'
+                      : 'logistic_type_jy'
+                  "
                 >
                   {{ $t("booking.LTL") }}
                 </div>
@@ -125,8 +129,15 @@
                   >
                   </el-option>
                 </el-select>
-                <div class="el_item_icon" @click="getCurLocation">
+                <div
+                  class="el_item_icon"
+                  @click="getCurLocation"
+                  v-loading="locationLoading"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(0, 0, 0, 0)"
+                >
                   <svg-icon
+                    v-if="!locationLoading"
                     icon-class="booking_location"
                     class-name="pick_up_location_svg"
                     slot="suffix"
@@ -816,6 +827,7 @@ export default {
                 type: "warning",
                 duration: 5000
               });
+              self.locationLoading = false
               // self.handleLocationError(true, infoWindow, map.getCenter())
               resolve();
             }
@@ -828,6 +840,7 @@ export default {
             type: "warning",
             duration: 5000
           });
+          self.locationLoading = false
           // self.handleLocationError(true, infoWindow, map.getCenter())
           resolve();
         }
@@ -1165,24 +1178,29 @@ export default {
       self.mapEnd = arr[1] + arr[0];
     },
     getCurLocation() {
-      self.getLocation().then(res => {
-        let query = res.postalCode;
-        self.curSelect = "pk";
-        self.regionPage = 0;
-        self.isLast = false;
-        findDistrictFullList({
-          name: query,
-          page: self.regionPage
-        }).then(res => {
-          if (res.data.content.length > 0) {
-            self.pickUpRegionList = res.data.content;
-            self.searchForm.pickUpRegion = self.pickUpRegionList[0].code;
-          } else {
-            self.$message.error("No code");
+      if (!self.locationLoading) {
+        self.locationLoading = true
+        self.getLocation().then(res => {
+          let query = res.postalCode;
+          self.curSelect = "pk";
+          self.regionPage = 0;
+          self.isLast = false;
+          findDistrictFullList({
+            name: query,
+            page: self.regionPage
+          }).then(res => {
+            if (res.data.content.length > 0) {
+              self.pickUpRegionList = res.data.content;
+              self.searchForm.pickUpRegion = self.pickUpRegionList[0].code;
+            } else {
+              self.$message.error("获取地址失败");
+            }
             self.locationLoading = false;
-          }
+          });
         });
-      });
+      } else {
+        self.locationLoading = false;
+      }
     }
   }
 };
