@@ -3,11 +3,10 @@
     <div>
       <el-button type="primary"
                  style="width:150px;margin-bottom:20px;"
-                 :disabled="!roles.Supply"
                  @click="toAdd">{{$t('resources.add')}}</el-button>
     </div>
     <el-row :gutter="40">
-      <el-col :span="9">
+      <el-col :span="12">
         <el-table :data="dataList"
                   border
                   highlight-current-row
@@ -20,17 +19,20 @@
                            :label="$t('resources.phoneNo')"></el-table-column>
           <el-table-column prop="activeStatus"
                            :label="$t('resources.status')"></el-table-column>
-          <el-table-column width='80px;'>
+          <el-table-column width='200px;'>
             <template slot-scope="scope">
-              <div style="cursor: pointer;"
-                   @click="toEdit(scope.row)">
-                <i class="el-icon-edit"></i>
+              <div style="box-sizing:border-box;padding:0 5px;">
+                <el-button type="primary"
+                           style="margin-bottom:5px;width:100%;"
+                           @click="toEdit(scope.row)">
+                  {{$t('resources.edit')}}
+                </el-button>
               </div>
             </template>
           </el-table-column>
         </el-table>
       </el-col>
-      <el-col :span="15">
+      <el-col :span="12">
         <el-tabs v-model="activeTab"
                  type="border-card">
           <el-tab-pane :label="$t('resources.task')"
@@ -246,7 +248,7 @@ export default {
   },
   //监听属性 类似于data概念
   computed: {
-    ...mapGetters(["roles"]),
+    ...mapGetters(["permissions"]),
     licFileList: function () {
       return self.$refs.licenseIds.uploadFiles
     },

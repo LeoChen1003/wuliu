@@ -40,8 +40,12 @@
                              :label="$t('billing.date')" />
             <el-table-column prop="eventType"
                              :label="$t('billing.transactionType')" />
-            <el-table-column prop="sn"
-                             :label="$t('billing.documentNo')" />
+            <el-table-column :label="$t('billing.documentNo')">
+              <template slot-scope="scope">
+                <div v-if="scope.row.eventType == 'TOP_UP' || scope.row.eventType == 'REFUND'">{{scope.row.tradeNo}}</div>
+                <div v-if="scope.row.eventType == 'ORDER'">{{scope.row.orderNo}}</div>
+              </template>
+            </el-table-column>
             <el-table-column :label="$t('billing.increase')">
               <template slot-scope="scope">
                 {{(scope.row.amountAfter-scope.row.amountBefore)>0?(scope.row.amount):0}}
@@ -103,11 +107,9 @@ export default {
   // 监听属性 类似于data概念
   computed: {
     fromDateDeFault () {
-      console.log(self.fromDate.split('-'))
       return self.fromDate.split('-')
     },
     toDateDeFault () {
-      console.log(self.toDate.split('-'))
       return self.toDate.split('-')
     },
 
@@ -157,12 +159,10 @@ export default {
     changeBCtimeFrom (time) {
       const self = this
       self.fromDate = time
-      console.log(time)
     },
     changeBCtimeTo (time) {
       const self = this
       self.toDate = time
-      console.log(time)
     }
   }
 };
@@ -179,6 +179,7 @@ export default {
     height: 50px;
     border-bottom: 2px solid #dfe4ed;
     align-items: center;
+
     .status-txt {
       height: 50px;
       line-height: 50px;

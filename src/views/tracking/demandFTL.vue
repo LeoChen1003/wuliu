@@ -126,8 +126,10 @@
               <div style="text-align:center;">
                 <el-button type="primary"
                            v-if="scope.row.status == 'WAIT_DEMAND_TO_ACCEPT'"
+                           :disabled="!permissions.DemandOrderManage"
                            @click="toShowConfirm(scope.row)">{{$t('tracking.confirm')}}</el-button>
                 <el-button type="primary"
+                           :disabled="!permissions.DemandOrderManage"
                            v-if="scope.row.status == 'COMPLETE' && scope.row.rating == null"
                            @click="rating(scope.row)">{{$t('tracking.rating')}}</el-button>
                 <el-rate v-if="scope.row.status == 'COMPLETE' && scope.row.rating"
@@ -136,6 +138,7 @@
                 </el-rate>
                 <el-button type="primary"
                            v-if="scope.row.status == 'WILL_RETURN'"
+                           :disabled="!permissions.DemandOrderManage"
                            @click="rdConfirmShow(scope.row)">{{$t('tracking.confirm')}}</el-button>
               </div>
             </template>
@@ -187,10 +190,10 @@
         <el-table-column :label="$t('tracking.supply')">
           <template slot-scope="scope">
             <div>
-              {{ scope.row.supply.companyName }}
+              {{ scope.row.supply ? (scope.row.supply.type=='COMPANY'?scope.row.supply.companyName: scope.row.supply.humanName): ''}}
             </div>
             <div v-if="scope.row.supply.companyLogo">
-              <el-image style="width: 50px;"
+              <el-image style="width: 50px;max-height:100px;"
                         :src="scope.row.supply.companyLogo"
                         fit="contain"></el-image>
             </div>
@@ -286,6 +289,7 @@
 // 例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty } from '../../api/data'
 import { demandOrderList, demandStatusCount, demandquoteList, demandquoteConfirm, getOrderLog, orderRating, getImg, confirmRD } from '../../api/tracking.js'
+import { mapGetters } from "vuex";
 
 let self;
 export default {
@@ -348,7 +352,9 @@ export default {
     };
   },
   // 监听属性 类似于data概念
-  computed: {},
+  computed: {
+    ...mapGetters(["permissions"])
+  },
   // 监控data中的数据变化
   watch: {},
   created () {
@@ -363,7 +369,6 @@ export default {
     });
     getTruckType().then(res => {
       self.truckTypes = res.data;
-      console.log(res)
       let truckObj = new Object();
       let subtruckObj = new Object()
       for (let i of res.data.categories) {
@@ -444,7 +449,6 @@ export default {
       //赋值给radio
       this.radio = this.quotedata.indexOf(row);
       this.selected = row;
-      console.log(this.selected)
     },
     confirmIt () {
       const self = this
@@ -462,7 +466,6 @@ export default {
       })
     },
     rating (item) {
-      console.log(item)
       self.thisId = item.id;
       self.ratingForm.rating = 0;
       self.ratingForm.remark = '';

@@ -9,7 +9,7 @@
       <el-option label="ไทย"
                  value="th_TH"></el-option>
     </el-select>
-    <div class="btnWrapper">
+    <!-- <div class="btnWrapper">
       <el-button type="primary"
                  class="versionBtn"
                  :key='index'
@@ -18,7 +18,10 @@
                  v-for="(item,index) in roles">
         {{item}}
       </el-button>
-    </div>
+    </div> -->
+    <el-button @click="logout"
+               type="text"
+               style="color:#333;margin-right:15px;">{{$t('layout.logout')}}</el-button>
   </div>
 </template>
 
@@ -55,7 +58,11 @@ export default {
       )
       localStorage.curRole = ver;
       self.$router.push('/home')
-    }
+    },
+    async logout () {
+      await this.$store.dispatch("user/logout");
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+    },
   },
 }
 </script>

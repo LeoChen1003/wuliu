@@ -55,7 +55,10 @@
     "order": "Order",
     "FTLCargoNotViaHUB": "FTL（Cargo not via HUB）",
     "LTLCargoViaHUB": "LTL(Cargo  via HUB)",
-    "receivable": "Receivable"
+    "receivable": "Receivable",
+    "welcome": "Welcome",
+    "transferFreight": "Transfer Freight",
+    "topUpConfirm": "Top-Up Confirmation"
   },
   "layout": {
     "logout": "Logout"
@@ -321,7 +324,39 @@
     "reject": "reject",
     "operation": "operation",
     "reasonsForRefusal": "Reasons for refusal",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "member": "Member",
+    "description": "Description",
+    "confirmedBy": "Confirmed by",
+    "note": "Note",
+    "unpaid_TF": "Unpaid",
+    "paid_TF": "Paid",
+    "canceled_TF": "Canceled",
+    "deliveredDate": "Delivered Date",
+    "total": "Total",
+    "VATFreight": "VAT-Freight",
+    "VATService": "VAT-Service",
+    "platformServiceCharge": "Platform Service Charge",
+    "amountPayable": "Amount Payable",
+    "operator": "Operator",
+    "transferNo": "Transfer No.",
+    "transferedDate": "Transfered date",
+    "transferVoucher": "Transfer voucher",
+    "pleaseEnterTheReasonForRejection": "Please enter the reason for rejection",
+    "transferFreight": "Transfer Freight",
+    "orderQty": "Order Qty",
+    "cantRefund": "Transfer Voucher Cannot be Empty",
+    "thisOperationIsIrrevocable": "This operation is irrevocable. please check again before confirm",
+    "orderPending": "Order pending",
+    "orderCompleted": "Order completed",
+    "paid2": "Paid",
+    "demandPaid": "Demand Paid",
+    "supplyDelivered": "Supply Delivered",
+    "orderCanceled": "Order Canceled",
+    "orderRejected": "Order Rejected",
+    "confirmText": " I confirm that the money has been received. This operation is irrevocable. Are you sure?",
+    "confirmTitle": "Confirm Recharge to Account",
+    "refuseTitle": "Reject"
   },
   "home": {
     "button": "button"

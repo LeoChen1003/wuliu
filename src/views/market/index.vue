@@ -111,7 +111,7 @@
           <template slot-scope="scope">
             <div style="text-align:center;">
               <el-button type="primary"
-                         :disabled="!roles.Supply"
+                         :disabled="!permissions.SupplyQuoteOrder"
                          @click="toquotePrice(scope.row)">{{$t('market.quoteAPrice')}}</el-button>
             </div>
           </template>
@@ -427,7 +427,7 @@ export default {
   },
   // 监听属性 类似于data概念
   computed: {
-    ...mapGetters(["roles"])
+    ...mapGetters(["permissions"])
   },
   // 监控data中的数据变化
   watch: {
@@ -577,6 +577,7 @@ export default {
   // height: 100%;
 
   .form-item {
+    width: 200px;
     display: flex;
   }
 
@@ -595,5 +596,9 @@ export default {
 
 .proItem {
   margin: 0 10px 10px 0;
+}
+
+.innerInp {
+  width: 130px;
 }
 </style>
