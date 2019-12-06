@@ -827,6 +827,7 @@ export default {
                 type: "warning",
                 duration: 5000
               });
+              self.locationLoading = false
               // self.handleLocationError(true, infoWindow, map.getCenter())
               resolve();
             }
@@ -839,6 +840,7 @@ export default {
             type: "warning",
             duration: 5000
           });
+          self.locationLoading = false
           // self.handleLocationError(true, infoWindow, map.getCenter())
           resolve();
         }
