@@ -1,17 +1,16 @@
 <template>
   <div class="manage Consulte">
     <el-row style="height:calc(100vh - 104px);">
-      <el-col :span="6" class="searchBox">
+      <el-col :span="6"
+              class="searchBox">
         <div>
-          <el-form
-            ref="searchform"
-            :model="searchForm"
-            :rules="searchRules"
-            label-position="left"
-            size="small"
-            hide-required-asterisk
-            label-width="50px"
-          >
+          <el-form ref="searchform"
+                   :model="searchForm"
+                   :rules="searchRules"
+                   label-position="left"
+                   size="small"
+                   hide-required-asterisk
+                   label-width="50px">
             <el-form-item prop="logisticType">
               <!-- <el-select v-model="logisticType" class="inputWidth">
                 <el-option
@@ -22,26 +21,19 @@
                 />
               </el-select> -->
               <div class="logistic_type">
-                <div
-                  class="logistic_type_item"
-                  :class="logisticType == 'FTL' ? 'logistic_type_active' : ''"
-                  @click="logisticType = 'FTL'"
-                >
+                <div class="logistic_type_item"
+                     :class="logisticType == 'FTL' ? 'logistic_type_active' : ''"
+                     @click="logisticType = 'FTL'">
                   {{ $t("booking.FTL") }}
                 </div>
-                <div
-                  class="logistic_type_item"
-                  :class="
-                    logisticType == 'LTL'
-                      ? 'logistic_type_active'
-                      : 'logistic_type_jy'
-                  "
-                >
+                <div class="logistic_type_item"
+                     :class="logisticType == 'LTL' ? 'logistic_type_active' : ''">
                   {{ $t("booking.LTL") }}
                 </div>
               </div>
             </el-form-item>
-            <el-form-item prop="truckgroup" v-if="logisticType == 'FTL'">
+            <el-form-item prop="truckgroup"
+                          v-if="logisticType == 'FTL'">
               <!-- <el-select
                 v-model="searchForm.truckCategory"
                 class="innerInp"
@@ -54,94 +46,69 @@
                   :value="item.key"
                 />
               </el-select> -->
-              <svg-icon
-                icon-class="booking_car"
-                class-name="truck_type_label"
-                slot="label"
-              ></svg-icon>
+              <svg-icon icon-class="booking_car"
+                        class-name="truck_type_label"
+                        slot="label"></svg-icon>
               <div class="truck_type">
-                <div
-                  v-for="(item, i) in categoryList"
-                  :key="i"
-                  @click="searchForm.truckgroup = item.key"
-                  class="truck_type_item"
-                  :class="
+                <div v-for="(item, i) in categoryList"
+                     :key="i"
+                     @click="searchForm.truckgroup = item.key"
+                     class="truck_type_item"
+                     :class="
                     searchForm.truckgroup == item.key
                       ? 'truck_type_item_active'
-                      : ''
-                  "
-                >
+                      : ''">
                   <span>{{ $t(`${item.value}`) }}</span>
-                  <el-popover
-                    placement="right-start"
-                    width="200"
-                    trigger="click"
-                  >
-                    <div></div>
-                    <svg-icon
-                      icon-class="booking_eye"
-                      class-name="truck_type_item_svg"
-                      slot="reference"
-                    ></svg-icon>
+                  <el-popover placement="right-start"
+                              title="标题"
+                              width="200"
+                              trigger="click"
+                              content="">
+                    <svg-icon icon-class="booking_eye"
+                              class-name="truck_type_item_svg"
+                              slot="reference"></svg-icon>
                   </el-popover>
                 </div>
               </div>
             </el-form-item>
             <el-form-item v-if="logisticType == 'FTL'">
-              <el-select
-                v-model="searchForm.truckSubCategory"
-                class="inputWidth"
-                :placeholder="$t('placeholder.pleaseChoose')"
-              >
-                <el-option
-                  v-for="item in subCategoryList"
-                  :key="item.key"
-                  :label="item.value"
-                  :value="item.key"
-                />
+              <el-select v-model="searchForm.truckSubCategory"
+                         class="inputWidth"
+                         :placeholder="$t('placeholder.pleaseChoose')">
+                <el-option v-for="item in subCategoryList"
+                           :key="item.key"
+                           :label="item.value"
+                           :value="item.key" />
               </el-select>
             </el-form-item>
-            <el-form-item prop="pickUpRegion" style="position:relative;">
-              <svg-icon
-                icon-class="booking_pickup"
-                class-name="pick_up_label"
-                slot="label"
-              ></svg-icon>
+            <el-form-item prop="pickUpRegion"
+                          style="position:relative;">
+              <svg-icon icon-class="booking_pickup"
+                        class-name="pick_up_label"
+                        slot="label"></svg-icon>
               <div class="el_item">
-                <el-select
-                  v-model="searchForm.pickUpRegion"
-                  filterable
-                  remote
-                  reserve-keyword
-                  class="inputWidth"
-                  @change="pickUpChange"
-                  v-el-select-loadmore="loadmore"
-                  :placeholder="$t('booking.pickupPoint')"
-                  :remote-method="pickUpMethod"
-                  @focus="clearSelect('pk')"
-                  :loading="loading"
-                >
-                  <el-option
-                    v-for="item in pickUpRegionList"
-                    :key="item.code"
-                    :label="item.fullname"
-                    :value="item.code"
-                  >
+                <el-select v-model="searchForm.pickUpRegion"
+                           filterable
+                           remote
+                           reserve-keyword
+                           class="inputWidth"
+                           @change="pickUpChange"
+                           v-el-select-loadmore="loadmore"
+                           :placeholder="$t('booking.pickupPoint')"
+                           :remote-method="pickUpMethod"
+                           @focus="clearSelect('pk')"
+                           :loading="loading">
+                  <el-option v-for="item in pickUpRegionList"
+                             :key="item.code"
+                             :label="item.fullname"
+                             :value="item.code">
                   </el-option>
                 </el-select>
-                <div
-                  class="el_item_icon"
-                  @click="getCurLocation"
-                  v-loading="locationLoading"
-                  element-loading-spinner="el-icon-loading"
-                  element-loading-background="rgba(0, 0, 0, 0)"
-                >
-                  <svg-icon
-                    icon-class="booking_location"
-                    class-name="pick_up_location_svg"
-                    slot="suffix"
-                    v-if="!locationLoading"
-                  ></svg-icon>
+                <div class="el_item_icon"
+                     @click="getCurLocation">
+                  <svg-icon icon-class="booking_location"
+                            class-name="pick_up_location_svg"
+                            slot="suffix"></svg-icon>
                 </div>
               </div>
               <div class="down_icon">
@@ -149,89 +116,73 @@
               </div>
             </el-form-item>
             <el-form-item prop="deliveryRegion">
-              <svg-icon
-                icon-class="booking_delivery"
-                class-name="pick_up_label"
-                slot="label"
-              ></svg-icon>
-              <el-select
-                v-model="searchForm.deliveryRegion"
-                filterable
-                remote
-                reserve-keyword
-                @change="deliveryChange"
-                @focus="clearSelect('del')"
-                class="inputWidth"
-                v-el-select-loadmore="loadmore"
-                :placeholder="$t('booking.deliveryPoint')"
-                :remote-method="pickUpMethod"
-                :loading="loading"
-              >
-                <el-option
-                  v-for="item in delRegionList"
-                  :key="item.code"
-                  :label="item.fullname"
-                  :value="item.code"
-                >
+              <svg-icon icon-class="booking_delivery"
+                        class-name="pick_up_label"
+                        slot="label"></svg-icon>
+              <el-select v-model="searchForm.deliveryRegion"
+                         filterable
+                         remote
+                         reserve-keyword
+                         @change="deliveryChange"
+                         @focus="clearSelect('del')"
+                         class="inputWidth"
+                         v-el-select-loadmore="loadmore"
+                         :placeholder="$t('booking.deliveryPoint')"
+                         :remote-method="pickUpMethod"
+                         :loading="loading">
+                <el-option v-for="item in delRegionList"
+                           :key="item.code"
+                           :label="item.fullname"
+                           :value="item.code">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item prop="pickUpDate">
-              <i
-                class="el-icon-time"
-                slot="label"
-                style="font-size:22px;color:#8a8a8a;"
-              ></i>
-              <div style="display:flex;" class="inputWidth">
-                <el-cascader
-                  v-model="dateCascader"
-                  class="innerInp"
-                  :options="options"
-                  :props="props"
-                  separator="-"
-                  style="margin-right:5px;"
-                  :placeholder="$t('booking.pickupTime')"
-                  @change="dateChange"
-                ></el-cascader>
-                <el-time-picker
-                  v-model="time"
-                  format="HH:mm:ss"
-                  class="innerInp"
-                  value-format="HH:mm:ss"
-                  :placeholder="$t('placeholder.chooseTime')"
-                >
+              <i class="el-icon-time"
+                 slot="label"
+                 style="font-size:22px;color:#8a8a8a;"></i>
+              <div style="display:flex;"
+                   class="inputWidth">
+                <el-cascader v-model="dateCascader"
+                             class="innerInp"
+                             :options="options"
+                             :props="props"
+                             separator="-"
+                             style="margin-right:5px;"
+                             :placeholder="$t('booking.pickupTime')"
+                             @change="dateChange"></el-cascader>
+                <el-time-picker v-model="time"
+                                format="HH:mm:ss"
+                                class="innerInp"
+                                value-format="HH:mm:ss"
+                                :placeholder="$t('placeholder.chooseTime')">
                 </el-time-picker>
               </div>
             </el-form-item>
             <el-form-item v-if="logisticType == 'LTL'">
-              <svg-icon
-                icon-class="booking_cargo"
-                class-name="cargo_label"
-                slot="label"
-              ></svg-icon>
+              <svg-icon icon-class="booking_cargo"
+                        class-name="cargo_label"
+                        slot="label"></svg-icon>
               <div class="el_item">
-                <el-input
-                  type="text"
-                  :placeholder="$t('booking.cargoList')"
-                  class="inputWidth"
-                />
-                <div class="el_item_icon" @click="cargoListDialog = true">
+                <el-input type="text"
+                          :placeholder="$t('booking.cargoList')"
+                          class="inputWidth" />
+                <div class="el_item_icon"
+                     @click="cargoListDialog = true">
                   <i class="el-icon-edit cargo_edit"></i>
                 </div>
               </div>
             </el-form-item>
             <el-form-item>
               <div class="btn_item">
-                <el-button
-                  type="primary"
-                  style="width:160px;"
-                  @click="searchSupply"
-                  :loading="searchloading"
-                  >{{ $t("booking.searchSupply") }}</el-button
-                >
+                <el-button type="primary"
+                           style="width:160px;"
+                           @click="searchSupply"
+                           :loading="searchloading">{{ $t("booking.searchSupply") }}</el-button>
               </div>
               <div v-if="logisticType == 'FTL'">
-                <div class="btn_item" v-if="showDisInfo">
+                <div class="btn_item"
+                     v-if="showDisInfo">
                   <div class="search_res">
                     <div class="search_res_item">
                       <span class="item_name">{{
@@ -255,34 +206,31 @@
                     </div>
                   </div>
                 </div>
-                <div class="btn_item" v-if="showDisInfo">
-                  <el-button
-                    type="primary"
-                    style="width:160px;"
-                    @click="hideMap"
-                    >{{ $t("booking.bookingNow") }}</el-button
-                  >
+                <div class="btn_item"
+                     v-if="showDisInfo">
+                  <el-button type="primary"
+                             style="width:160px;"
+                             @click="hideMap">{{ $t("booking.bookingNow") }}</el-button>
                 </div>
                 <div class="btn_item">
-                  <el-button
-                    type="primary"
-                    style="width:160px;"
-                    @click="$router.push('/booking/releaseToMarket')"
-                    >{{ $t("booking.releaseToMarket") }}</el-button
-                  >
+                  <el-button type="primary"
+                             style="width:160px;"
+                             @click="$router.push('/booking/releaseToMarket')">{{ $t("booking.releaseToMarket") }}</el-button>
                 </div>
               </div>
             </el-form-item>
           </el-form>
         </div>
       </el-col>
-      <el-col :span="18" style="height:100%;overflow:scroll;">
-        <div style="height:100%;" :class="!mapMode ? 'hideMap' : ''">
+      <el-col :span="18"
+              style="height:100%;overflow:scroll;">
+        <div style="height:100%;"
+             :class="!mapMode ? 'hideMap' : ''">
           <div id="map"></div>
-          <div id="content" v-if="mapMode">
-            <div>
-              <img src="../../assets/image/truckIcon.png" class="truck-icon" />
-            </div>
+          <div id="content"
+               v-if="mapMode">
+            <img src="../../assets/image/truckIcon.png"
+                 class="truck-icon" />
             <div>
               <div>{{ disInfo.days + $t("booking.days") }}</div>
               <div>{{ disInfo.distance + $t("booking.distance") }}</div>
@@ -290,24 +238,26 @@
           </div>
         </div>
         <div v-if="!mapMode">
-          <el-table :data="tableList" border style="width: 97%;">
-            <el-table-column :label="$t('booking.supply')" align="center">
+          <el-table :data="tableList"
+                    border
+                    style="width: 97%;">
+            <el-table-column :label="$t('booking.supply')"
+                             align="center">
               <template slot-scope="scope">
                 <div>
                   <div>{{ scope.row.supply ? scope.row.supply.name : "" }}</div>
                   <div>
-                    <el-rate
-                      v-model="scope.row.supply.avgRating / 2"
-                      disabled
-                      text-color="#ff9900"
-                      score-template="{value}"
-                    >
+                    <el-rate v-model="scope.row.supply.avgRating / 2"
+                             disabled
+                             text-color="#ff9900"
+                             score-template="{value}">
                     </el-rate>
                   </div>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column align="center" :label="$t('booking.route')">
+            <el-table-column align="center"
+                             :label="$t('booking.route')">
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.fromProvince }} -->
@@ -319,33 +269,28 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              header-align="center"
-              :label="$t('booking.truckType')"
-            >
+            <el-table-column header-align="center"
+                             :label="$t('booking.truckType')">
               <template slot-scope="scope">
-                <div class="cantouch" @click="previewImg(scope.row)">
+                <div class="cantouch"
+                     @click="previewImg(scope.row)">
                   <div>{{ truckObj[scope.row.category] }}</div>
                   <div>{{ subObj[scope.row.subCategory] }}</div>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              header-align="center"
-              align="center"
-              :label="$t('booking.valueAddedService')"
-            >
+            <el-table-column header-align="center"
+                             align="center"
+                             :label="$t('booking.valueAddedService')">
               <template slot-scope="scope">
                 <div>
                   <div>
                     {{ $t("booking.loading") }}/{{ $t("booking.unloading") }} :
-                    <i
-                      :class="
+                    <i :class="
                         scope.row.supportLoading == 1
                           ? 'el-icon-check'
                           : 'el-icon-close'
-                      "
-                    ></i>
+                      "></i>
                   </div>
                   <div>
                     {{ $t("booking.documentReturn") }} :
@@ -354,7 +299,8 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column align="center" :label="$t('booking.price')">
+            <el-table-column align="center"
+                             :label="$t('booking.price')">
               <template slot-scope="scope">
                 {{ scope.row.charge }}
                 <!-- <div>{{$t('booking.feight')}} : {{scope.row.charge}}</div>
@@ -366,64 +312,64 @@
             <el-table-column>
               <template slot-scope="scope">
                 <div style="text-align:center;">
-                  <el-button
-                    type="primary"
-                    :disabled="!permissions.DemandNewOrderOrRelease"
-                    @click="toBooking(scope.row)"
-                    >{{ $t("booking.placeOrder") }}</el-button
-                  >
+                  <el-button type="primary"
+                             :disabled="!permissions.DemandNewOrderOrRelease"
+                             @click="toBooking(scope.row)">{{ $t("booking.placeOrder") }}</el-button>
                 </div>
               </template>
             </el-table-column>
           </el-table>
-          <el-pagination
-            style="margin-top:10px;text-align: center;margin-bottom:50px;"
-            background
-            :page-sizes="[1, 5, 10, 20, 50]"
-            :page-size="pagesize"
-            @size-change="pageSizeChange"
-            :current-page.sync="page.currentPage"
-            @current-change="pageChange"
-            layout="prev, pager, next, jumper"
-            :total="page.total"
-          ></el-pagination>
+          <el-pagination style="margin-top:10px;text-align: center;margin-bottom:50px;"
+                         background
+                         :page-sizes="[1, 5, 10, 20, 50]"
+                         :page-size="pagesize"
+                         @size-change="pageSizeChange"
+                         :current-page.sync="page.currentPage"
+                         @current-change="pageChange"
+                         layout="prev, pager, next, jumper"
+                         :total="page.total"></el-pagination>
         </div>
       </el-col>
     </el-row>
     <el-dialog :visible.sync="previewDialog">
       <div>
-        <el-carousel arrow="always" height="600px" :autoplay="false">
-          <el-carousel-item
-            v-for="item in previewImgList"
-            style="text-align:center;"
-            :key="item"
-          >
-            <el-image
-              :src="item"
-              style="height:600px;"
-              fit="contain"
-            ></el-image>
+        <el-carousel arrow="always"
+                     height="600px"
+                     :autoplay="false">
+          <el-carousel-item v-for="item in previewImgList"
+                            style="text-align:center;"
+                            :key="item">
+            <el-image :src="item"
+                      style="height:600px;"
+                      fit="contain"></el-image>
           </el-carousel-item>
         </el-carousel>
       </div>
     </el-dialog>
-    <el-dialog
-      :visible.sync="cargoListDialog"
-      :title="$t('booking.cargoList')"
-      width="70%"
-      center
-    >
-      <el-table :data="cargoTip" border>
-        <el-table-column prop="unit" width="130"></el-table-column>
-        <el-table-column prop="ss" label="Size-SS"></el-table-column>
-        <el-table-column prop="s" label="Size-S"></el-table-column>
-        <el-table-column prop="m" label="Size-M"></el-table-column>
-        <el-table-column prop="l" label="Size-L"></el-table-column>
-        <el-table-column prop="xl" label="Size-XL"></el-table-column>
-        <el-table-column prop="eSize" label="Extra size"></el-table-column>
+    <el-dialog :visible.sync="cargoListDialog"
+               :title="$t('booking.cargoList')"
+               width="70%"
+               center>
+      <el-table :data="cargoTip"
+                border>
+        <el-table-column prop="unit"
+                         width="130"></el-table-column>
+        <el-table-column prop="ss"
+                         label="Size-SS"></el-table-column>
+        <el-table-column prop="s"
+                         label="Size-S"></el-table-column>
+        <el-table-column prop="m"
+                         label="Size-M"></el-table-column>
+        <el-table-column prop="l"
+                         label="Size-L"></el-table-column>
+        <el-table-column prop="xl"
+                         label="Size-XL"></el-table-column>
+        <el-table-column prop="eSize"
+                         label="Extra size"></el-table-column>
       </el-table>
       <div slot="footer">
-        <el-button type="primary" style="width:250px;">{{
+        <el-button type="primary"
+                   style="width:250px;">{{
           $t("booking.confirm")
         }}</el-button>
       </div>
@@ -445,19 +391,19 @@ import {
 import Search from "@/components/HeaderSearch";
 
 let self;
-let map, infoWindow;
+let map, infoWindow, directionsService, directionsRenderer;
 
 export default {
   // import引入的组件需要注入到对象中才能使用
   components: {},
   directives: {
     "el-select-loadmore": {
-      bind(el, binding) {
+      bind (el, binding) {
         // 获取element-ui定义好的scroll盒子
         const SELECTWRAP_DOM = el.querySelector(
           ".el-select-dropdown .el-select-dropdown__wrap"
         );
-        SELECTWRAP_DOM.addEventListener("scroll", function() {
+        SELECTWRAP_DOM.addEventListener("scroll", function () {
           /**
            * scrollHeight 获取元素内容高度(只读)
            * scrollTop 获取或者设置元素的偏移值,常用于, 计算滚动条的位置, 当一个元素的容器没有产生垂直方向的滚动条, 那它的scrollTop的值默认为0.
@@ -474,7 +420,7 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     const self = this;
     const validatorTruck = (rule, value, callback) => {
       if (!self.searchForm.truckgroup) {
@@ -581,7 +527,7 @@ export default {
       dateCascader: "",
       props: {
         lazy: true,
-        lazyLoad(node, resolve) {
+        lazyLoad (node, resolve) {
           let year = self.bcYear;
           let date = new Date();
           let month = node.label == year ? date.getMonth() + 1 : 1;
@@ -617,7 +563,7 @@ export default {
               let dateList = [];
               let d =
                 node.parent.value == self.bcYear &&
-                node.value == date.getMonth() + 1
+                  node.value == date.getMonth() + 1
                   ? day
                   : 1;
               for (let x = d; x <= days; x++) {
@@ -674,14 +620,14 @@ export default {
   },
   // 监控data中的数据变化
   watch: {
-    "$store.getters.language"() {
+    "$store.getters.language" () {
       self.init();
     }
   },
-  created() {
+  created () {
     self = this;
   },
-  mounted() {
+  mounted () {
     self.init();
     self.initMaps();
     // ftlLines({
@@ -696,7 +642,7 @@ export default {
     // })
   },
   methods: {
-    initMaps(cb) {
+    initMaps (cb) {
       try {
         google;
       } catch (e) {
@@ -725,15 +671,16 @@ export default {
         cb();
       }
     },
-    getDis(start, end, truckType) {
+    getDis (start, end, truckType) {
       self.mapMode = true;
       if (!map) {
         return self.initMaps(self.getDis(start, end, truckType));
       }
-
-      let directionsService = new google.maps.DirectionsService();
-      let directionsRenderer = new google.maps.DirectionsRenderer();
-      directionsRenderer.setMap(map);
+      if (!directionsService) {
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(map);
+      }
 
       let request = {
         origin: start,
@@ -741,14 +688,14 @@ export default {
         travelMode: "DRIVING",
         unitSystem: google.maps.DirectionsUnitSystem.METRIC
       };
-      directionsService.route(request, function(result, status) {
+      directionsService.route(request, function (result, status) {
         if (status == "OK") {
           let distance = parseInt(
             result.routes[0].legs[0].distance.value / 1000
           );
           let middleStep =
             result.routes[0].overview_path[
-              parseInt(result.routes[0].overview_path.length / 2)
+            parseInt(result.routes[0].overview_path.length / 2)
             ];
 
           directionsRenderer.setDirections(result);
@@ -798,22 +745,22 @@ export default {
         }
       });
     },
-    hideMap() {
+    hideMap () {
       self.mapMode = false;
     },
     // 获取当前位置
-    getLocation() {
+    getLocation () {
       return new Promise(resolve => {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
-            function(position) {
+            function (position) {
               var pos = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
               };
               resolve(self.geocodeLatLng(pos));
             },
-            function() {
+            function () {
               self.$notify({
                 title: "Warning",
                 message:
@@ -838,10 +785,10 @@ export default {
         }
       });
     },
-    geocodeLatLng(pos) {
+    geocodeLatLng (pos) {
       return new Promise(resolve => {
         var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ location: pos }, function(results, status) {
+        geocoder.geocode({ location: pos }, function (results, status) {
           if (status === "OK") {
             if (results[0]) {
               let arr = [];
@@ -892,7 +839,7 @@ export default {
       });
     },
     // 取当前位置发生错误报错
-    handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    handleLocationError (browserHasGeolocation, infoWindow, pos) {
       infoWindow.setPosition(pos);
       infoWindow.setContent(
         browserHasGeolocation
@@ -902,7 +849,7 @@ export default {
       infoWindow.open(self.map);
     },
     // 创建popup
-    createPopupClass() {
+    createPopupClass () {
       /**
        * A customized popup on the map.
        * @param {!google.maps.LatLng} position
@@ -910,7 +857,7 @@ export default {
        * @constructor
        * @extends {google.maps.OverlayView}
        */
-      function Popup(position, content) {
+      function Popup (position, content) {
         this.position = position;
 
         content.classList.add("popup-bubble");
@@ -934,19 +881,19 @@ export default {
       Popup.prototype = Object.create(google.maps.OverlayView.prototype);
 
       /** Called when the popup is added to the map. */
-      Popup.prototype.onAdd = function() {
+      Popup.prototype.onAdd = function () {
         this.getPanes().floatPane.appendChild(this.containerDiv);
       };
 
       /** Called when the popup is removed from the map. */
-      Popup.prototype.onRemove = function() {
+      Popup.prototype.onRemove = function () {
         if (this.containerDiv.parentElement) {
           this.containerDiv.parentElement.removeChild(this.containerDiv);
         }
       };
 
       /** Called each frame when the popup needs to draw itself. */
-      Popup.prototype.draw = function() {
+      Popup.prototype.draw = function () {
         var divPosition = this.getProjection().fromLatLngToDivPixel(
           this.position
         );
@@ -968,7 +915,7 @@ export default {
 
       return Popup;
     },
-    init() {
+    init () {
       getTruckType().then(res => {
         // self.categoryList = res.data.categories;
         self.subCategoryList = res.data.subCategories;
@@ -1008,7 +955,7 @@ export default {
         self.searchSupply();
       }
     },
-    toBooking(row) {
+    toBooking (row) {
       let consultInfo = {};
       consultInfo.data = row;
       consultInfo.pickUpRegionList = self.pickUpRegionList;
@@ -1021,7 +968,7 @@ export default {
       localStorage.setItem("consultInfo", JSON.stringify(consultInfo));
       this.$router.replace("/booking/placeOrder");
     },
-    pickUpMethod(query) {
+    pickUpMethod (query) {
       if (query !== "") {
         if (self.curSelect == "pk") {
           self.pickUpQuery = query;
@@ -1037,7 +984,7 @@ export default {
         self.regionList = [];
       }
     },
-    loadmore() {
+    loadmore () {
       if (!self.isLast) {
         self.regionPage += 1;
         if (self.curSelect == "pk") {
@@ -1047,7 +994,7 @@ export default {
         }
       }
     },
-    getdistrictFullList(query, page) {
+    getdistrictFullList (query, page) {
       findDistrictFullList({
         name: query,
         page: page
@@ -1071,7 +1018,7 @@ export default {
       });
     },
     // 聚焦初始化
-    clearSelect(type) {
+    clearSelect (type) {
       if (type == "pk") {
         self.pickUpQuery = "";
         self.curSelect = "pk";
@@ -1083,7 +1030,7 @@ export default {
       self.isLast = false;
     },
     // 搜索
-    searchSupply() {
+    searchSupply () {
       this.$refs.searchform.validate(valid => {
         let searchForm = JSON.parse(JSON.stringify(self.searchForm));
         if (valid) {
@@ -1121,7 +1068,7 @@ export default {
         }
       });
     },
-    pageChange(val) {
+    pageChange (val) {
       self.page.currentPage = val;
       // if (self.searchForm.pickUpRegion == '') {
       //   ftlLines({
@@ -1138,14 +1085,14 @@ export default {
       // }
       self.searchSupply();
     },
-    pageSizeChange(val) {
+    pageSizeChange (val) {
       self.pagesize = val;
       self.searchSupply();
     },
-    dateChange(e) {
+    dateChange (e) {
       self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
     },
-    previewImg(row) {
+    previewImg (row) {
       let arr = [];
       for (let i of row.truckResource) {
         arr.push(i.path);
@@ -1153,7 +1100,7 @@ export default {
       self.previewImgList = arr;
       self.previewDialog = true;
     },
-    pickUpChange(val) {
+    pickUpChange (val) {
       let obj = {};
       obj = self.pickUpRegionList.find(item => {
         return item.code === val;
@@ -1161,7 +1108,7 @@ export default {
       let arr = obj.fullname.split("-");
       self.mapStart = arr[1] + arr[0];
     },
-    deliveryChange(val) {
+    deliveryChange (val) {
       let obj = {};
       obj = self.delRegionList.find(item => {
         return item.code === val;
@@ -1169,33 +1116,25 @@ export default {
       let arr = obj.fullname.split("-");
       self.mapEnd = arr[1] + arr[0];
     },
-    getCurLocation() {
-      if (!self.locationLoading) {
-        self.locationLoading = true;
-        self.getLocation().then(res => {
-          let query = res.postalCode ? res.postalCode : "";
-          self.curSelect = "pk";
-          self.regionPage = 0;
-          self.isLast = false;
-          if (query) {
-            findDistrictFullList({
-              name: query,
-              page: self.regionPage
-            }).then(res => {
-              if (res.data.content.length > 0) {
-                self.pickUpRegionList = res.data.content;
-                self.searchForm.pickUpRegion = self.pickUpRegionList[0].code;
-              } else {
-                self.$message.error("No result");
-              }
-              self.locationLoading = false;
-            });
+    getCurLocation () {
+      self.getLocation().then(res => {
+        let query = res.postalCode;
+        self.curSelect = "pk";
+        self.regionPage = 0;
+        self.isLast = false;
+        findDistrictFullList({
+          name: query,
+          page: self.regionPage
+        }).then(res => {
+          if (res.data.content.length > 0) {
+            self.pickUpRegionList = res.data.content;
+            self.searchForm.pickUpRegion = self.pickUpRegionList[0].code;
           } else {
             self.$message.error("No code");
             self.locationLoading = false;
           }
         });
-      }
+      })
     }
   }
 };
@@ -1433,9 +1372,10 @@ export default {
 #content {
   display: flex;
   font-size: 16px;
+  align-items: center;
 
   .truck-icon {
-    height: 40px;
+    height: 20px;
     margin-right: 10px;
   }
 }
