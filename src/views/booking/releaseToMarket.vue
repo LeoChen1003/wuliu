@@ -4,8 +4,8 @@
       style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;"
     >
       <div class="go_back" @click="$router.go(-1)">
-        <!-- <el-button icon="el-icon-back"></el-button> -->
-        <el-button><svg-icon icon-class="goBack"></svg-icon></el-button>
+        <el-button icon="el-icon-arrow-left
+">{{$t('booking.back')}}</el-button>
       </div>
       <el-button
         style="width:200px;"
