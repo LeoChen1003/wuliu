@@ -48,8 +48,8 @@
                            align="center">
             <template slot-scope="scope">
               <div>
-                <el-button size="small"
-                           type="primary"
+                <el-button type="primary"
+                           style="margin-bottom:5px;width:100%;"
                            @click="edit(scope.row)">
                   {{$t('resources.edit')}}
                 </el-button>
