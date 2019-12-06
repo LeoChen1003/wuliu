@@ -41,7 +41,7 @@
                            align="center"
                            :label="$t('resources.status')">
             <template slot-scope="scope">
-              <el-tag :type="scope.row.status == 'ACTIVE' ? 'status' : 'info'">{{scope.row.status}}</el-tag>
+              {{scope.row.status}}
             </template>
           </el-table-column>
           <el-table-column header-align="center"
@@ -49,7 +49,6 @@
             <template slot-scope="scope">
               <div>
                 <el-button size="small"
-                           icon="el-icon-edit"
                            type="primary"
                            @click="edit(scope.row)">
                   {{$t('resources.edit')}}

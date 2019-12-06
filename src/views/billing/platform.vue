@@ -23,7 +23,7 @@
       <el-button style='margin-left:10px;'
                  icon="el-icon-search"
                  @click="searchIt"
-                 type="primary">{{ $t('billing.search') }}</el-button>
+                 >{{ $t('billing.search') }}</el-button>
       <el-button @click="cancelIt">{{ $t('billing.cancel') }}</el-button>
     </div>
     <div class="content">

@@ -31,7 +31,11 @@
                 </div>
                 <div
                   class="logistic_type_item"
-                  :class="logisticType == 'LTL' ? 'logistic_type_active' : ''"
+                  :class="
+                    logisticType == 'LTL'
+                      ? 'logistic_type_active'
+                      : 'logistic_type_jy'
+                  "
                 >
                   {{ $t("booking.LTL") }}
                 </div>
@@ -70,11 +74,10 @@
                   <span>{{ $t(`${item.value}`) }}</span>
                   <el-popover
                     placement="right-start"
-                    title="标题"
                     width="200"
                     trigger="click"
-                    content=""
                   >
+                    <div></div>
                     <svg-icon
                       icon-class="booking_eye"
                       class-name="truck_type_item_svg"
@@ -126,11 +129,18 @@
                   >
                   </el-option>
                 </el-select>
-                <div class="el_item_icon" @click="getCurLocation">
+                <div
+                  class="el_item_icon"
+                  @click="getCurLocation"
+                  v-loading="locationLoading"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(0, 0, 0, 0)"
+                >
                   <svg-icon
                     icon-class="booking_location"
                     class-name="pick_up_location_svg"
                     slot="suffix"
+                    v-if="!locationLoading"
                   ></svg-icon>
                 </div>
               </div>
@@ -634,6 +644,7 @@ export default {
       showDisInfo: false,
       mapStart: "", //地图起始点
       mapEnd: "", //地图终点
+      locationLoading: false,
       cargoListDialog: false,
       cargoTip: [
         {
@@ -1073,8 +1084,6 @@ export default {
     },
     // 搜索
     searchSupply() {
-      console.log("2222");
-      console.log(self.searchForm);
       this.$refs.searchform.validate(valid => {
         let searchForm = JSON.parse(JSON.stringify(self.searchForm));
         if (valid) {
@@ -1145,44 +1154,48 @@ export default {
       self.previewDialog = true;
     },
     pickUpChange(val) {
-      console.log(val);
       let obj = {};
       obj = self.pickUpRegionList.find(item => {
         return item.code === val;
       });
       let arr = obj.fullname.split("-");
       self.mapStart = arr[1] + arr[0];
-      console.log(self.mapStart);
     },
     deliveryChange(val) {
-      console.log(val);
       let obj = {};
       obj = self.delRegionList.find(item => {
         return item.code === val;
       });
       let arr = obj.fullname.split("-");
       self.mapEnd = arr[1] + arr[0];
-      console.log(self.mapEnd);
     },
     getCurLocation() {
-      self.getLocation().then(res => {
-        console.log(res);
-        let query = res.postalCode;
-        self.curSelect = "pk";
-        self.regionPage = 0;
-        self.isLast = false;
-        findDistrictFullList({
-          name: query,
-          page: self.regionPage
-        }).then(res => {
-          if (res.data.content.length > 0) {
-            self.pickUpRegionList = res.data.content;
-            self.searchForm.pickUpRegion = self.pickUpRegionList[0].code;
+      if (!self.locationLoading) {
+        self.locationLoading = true;
+        self.getLocation().then(res => {
+          let query = res.postalCode ? res.postalCode : "";
+          self.curSelect = "pk";
+          self.regionPage = 0;
+          self.isLast = false;
+          if (query) {
+            findDistrictFullList({
+              name: query,
+              page: self.regionPage
+            }).then(res => {
+              if (res.data.content.length > 0) {
+                self.pickUpRegionList = res.data.content;
+                self.searchForm.pickUpRegion = self.pickUpRegionList[0].code;
+              } else {
+                self.$message.error("No result");
+              }
+              self.locationLoading = false;
+            });
           } else {
-            self.$message.error("No result");
+            self.$message.error("No code");
+            self.locationLoading = false;
           }
         });
-      });
+      }
     }
   }
 };
@@ -1216,6 +1229,11 @@ export default {
       background: red;
       color: #fff;
       font-weight: 600;
+    }
+
+    .logistic_type_jy {
+      color: #ccc;
+      cursor: no-drop;
     }
   }
 
@@ -1428,7 +1446,7 @@ export default {
   overflow: hidden;
 }
 </style>
-<style>
+<style lang="scss">
 /* The popup bubble styling. */
 .popup-bubble {
   /* Position the bubble centred-above its parent. */
@@ -1484,5 +1502,13 @@ export default {
   align-items: center;
   height: 32px;
   justify-content: flex-end;
+}
+
+.Consulte .el_item_icon .el-loading-mask {
+  top: 9px;
+
+  .el-loading-spinner i {
+    color: #8a8a8a;
+  }
 }
 </style>
