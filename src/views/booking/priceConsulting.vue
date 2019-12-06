@@ -783,6 +783,13 @@ export default {
           let Popup = self.createPopupClass();
           let popup = new Popup(middleStep, document.getElementById("content"));
           popup.setMap(map);
+        } else {
+          self.$notify({
+            title: "Network Error",
+            message: "Network Error,Please try again later.",
+            type: "warning",
+            duration: 5000
+          });
         }
       });
     },
