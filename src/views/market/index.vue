@@ -63,8 +63,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"
-                       @click="searchIt">{{$t('market.search')}}</el-button>
+            <el-button @click="searchIt">{{$t('market.search')}}</el-button>
           </el-form-item>
         </el-form>
       </div>
