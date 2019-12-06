@@ -726,6 +726,13 @@ export default {
 
 .container {
   width: 90%;
+  margin-top: 48px;
+  height: calc(100vh - 161px);
+  overflow: auto;
+}
+
+div::-webkit-scrollbar {
+  display: none;
 }
 
 .container-header {
