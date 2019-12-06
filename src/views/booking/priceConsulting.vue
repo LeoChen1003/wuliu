@@ -31,7 +31,7 @@
                 </div>
                 <div
                   class="logistic_type_item"
-                  :class="logisticType == 'LTL' ? 'logistic_type_active' : ''"
+                  :class="logisticType == 'LTL' ? 'logistic_type_active' : 'logistic_type_jy'"
                 >
                   {{ $t("booking.LTL") }}
                 </div>
