@@ -57,6 +57,7 @@
               <svg-icon
                 icon-class="booking_car"
                 class-name="truck_type_label"
+                style="font-size:35px;transform: rotateY(180deg);"
                 slot="label"
               ></svg-icon>
               <div class="truck_type">
@@ -81,6 +82,7 @@
                     <svg-icon
                       icon-class="booking_eye"
                       class-name="truck_type_item_svg"
+                      style="font-size:18px;"
                       slot="reference"
                     ></svg-icon>
                   </el-popover>
@@ -105,6 +107,7 @@
               <svg-icon
                 icon-class="booking_pickup"
                 class-name="pick_up_label"
+                style="font-size:22px;"
                 slot="label"
               ></svg-icon>
               <div class="el_item">
@@ -140,6 +143,7 @@
                     v-if="!locationLoading"
                     icon-class="booking_location"
                     class-name="pick_up_location_svg"
+                    style="font-size:20px;"
                     slot="suffix"
                   ></svg-icon>
                 </div>
@@ -152,6 +156,7 @@
               <svg-icon
                 icon-class="booking_delivery"
                 class-name="pick_up_label"
+                style="font-size:22px;"
                 slot="label"
               ></svg-icon>
               <el-select
@@ -207,6 +212,7 @@
               <svg-icon
                 icon-class="booking_cargo"
                 class-name="cargo_label"
+                style="font-size:27px;"
                 slot="label"
               ></svg-icon>
               <div class="el_item">
