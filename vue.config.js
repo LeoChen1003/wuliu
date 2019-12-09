@@ -53,7 +53,14 @@ module.exports = {
     name: name,
     resolve: {
       alias: {
-        "@": resolve("src")
+        "@": resolve("src"),
+        "@assets": resolve("src/assets"),
+        "@layouts": resolve("src/layouts"),
+        "@views": resolve("src/views"),
+        "@comp": resolve("src/components"),
+        "@api": resolve("src/api"),
+        "@router": resolve("src/router"),
+        "@utils": resolve("src/utils")
       }
     },
     externals: {
