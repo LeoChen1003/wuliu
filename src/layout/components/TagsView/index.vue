@@ -5,12 +5,12 @@
         v-for="tag in visitedViews"
         ref="tag"
         :key="tag.path"
-        :class="isActive(tag)?'active':''"
+        :class="isActive(tag) ? 'active' : ''"
         :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
         tag="span"
         class="tags-view-item"
         @click.middle.native="closeSelectedTag(tag)"
-        @contextmenu.prevent.native="openMenu(tag,$event)"
+        @contextmenu.prevent.native="openMenu(tag, $event)"
       >
         {{ generateTitle(tag.title) }}
         <span
@@ -20,14 +20,22 @@
         />
       </router-link>
     </scroll-pane>
-    <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
-      <li @click="refreshSelectedTag(selectedTag)">{{ $t('tagsView.refresh') }}</li>
-      <li v-if="!(selectedTag.meta&&selectedTag.meta.affix)" @click="closeSelectedTag(selectedTag)">
-        {{
-        $t('tagsView.close') }}
+    <ul
+      v-show="visible"
+      :style="{ left: left + 'px', top: top + 'px' }"
+      class="contextmenu"
+    >
+      <li @click="refreshSelectedTag(selectedTag)">
+        {{ $t("tagsView.refresh") }}
       </li>
-      <li @click="closeOthersTags">{{ $t('tagsView.closeOthers') }}</li>
-      <li @click="closeAllTags(selectedTag)">{{ $t('tagsView.closeAll') }}</li>
+      <li
+        v-if="!(selectedTag.meta && selectedTag.meta.affix)"
+        @click="closeSelectedTag(selectedTag)"
+      >
+        {{ $t("tagsView.close") }}
+      </li>
+      <li @click="closeOthersTags">{{ $t("tagsView.closeOthers") }}</li>
+      <li @click="closeAllTags(selectedTag)">{{ $t("tagsView.closeAll") }}</li>
     </ul>
   </div>
 </template>

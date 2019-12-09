@@ -1,76 +1,100 @@
 <template>
   <div class="manage billing">
     <div class="statusHeader">
-      <div class="status-txt">{{ $t('billing.account') }}</div>
+      <div class="status-txt">{{ $t("billing.account") }}</div>
       <div class="timePicker">
-        <bcTime @changeBCtime="changeBCtimeFrom"
-                :timeType="'all'"
-                :dateDefault='fromDateDeFault'></bcTime>
+        <bcTime
+          @changeBCtime="changeBCtimeFrom"
+          :timeType="'all'"
+          :dateDefault="fromDateDeFault"
+        ></bcTime>
         <span style="margin:0 5px;">至</span>
-        <bcTime @changeBCtime="changeBCtimeTo"
-                :dateDefault='toDateDeFault'
-                style="margin-left:5px;"
-                :timeType="'all'"></bcTime>
-        <el-button size="small"
-                   @click="searchIt"
-                   style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button>
+        <bcTime
+          @changeBCtime="changeBCtimeTo"
+          :dateDefault="toDateDeFault"
+          style="margin-left:5px;"
+          :timeType="'all'"
+        ></bcTime>
+        <el-button
+          size="small"
+          @click="searchIt"
+          style="width:100px;margin-left:20px;"
+          >{{ $t("billing.search") }}</el-button
+        >
       </div>
     </div>
     <div class="content">
       <div>
-        <el-tabs v-model="tabActive"
-                 tab-position="left"
-                 @tab-click="handleClick"
-                 style="height:100%;">
-          <el-tab-pane name="GUARANTEE"
-                       :label="$t('billing.gaurantee')">
-
+        <el-tabs
+          v-model="tabActive"
+          tab-position="left"
+          @tab-click="handleClick"
+          style="height:100%;"
+        >
+          <el-tab-pane name="GUARANTEE" :label="$t('billing.gaurantee')">
           </el-tab-pane>
-          <el-tab-pane name="FEE"
-                       :label="$t('billing.freight')">
-          </el-tab-pane>
+          <el-tab-pane name="FEE" :label="$t('billing.freight')"> </el-tab-pane>
         </el-tabs>
       </div>
 
       <div class="container">
         <div class="center">
-          <el-table :data="dataList"
-                    border>
-            <el-table-column prop="createdAt"
-                             :label="$t('billing.date')" />
-            <el-table-column prop="eventType"
-                             :label="$t('billing.transactionType')" />
+          <el-table :data="dataList" border>
+            <el-table-column prop="createdAt" :label="$t('billing.date')" />
+            <el-table-column
+              prop="eventType"
+              :label="$t('billing.transactionType')"
+            />
             <el-table-column :label="$t('billing.documentNo')">
               <template slot-scope="scope">
-                <div v-if="scope.row.eventType == 'TOP_UP' || scope.row.eventType == 'REFUND'">{{scope.row.tradeNo}}</div>
-                <div v-if="scope.row.eventType == 'ORDER'">{{scope.row.orderNo}}</div>
+                <div
+                  v-if="
+                    scope.row.eventType == 'TOP_UP' ||
+                      scope.row.eventType == 'REFUND'
+                  "
+                >
+                  {{ scope.row.tradeNo }}
+                </div>
+                <div v-if="scope.row.eventType == 'ORDER'">
+                  {{ scope.row.orderNo }}
+                </div>
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.increase')">
               <template slot-scope="scope">
-                {{(scope.row.amountAfter-scope.row.amountBefore)>0?(scope.row.amount):0}}
+                {{
+                  scope.row.amountAfter - scope.row.amountBefore > 0
+                    ? scope.row.amount
+                    : 0
+                }}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.decrease')">
               <template slot-scope="scope">
-                {{(scope.row.amountAfter-scope.row.amountBefore)>0?0:(scope.row.amount)}}
+                {{
+                  scope.row.amountAfter - scope.row.amountBefore > 0
+                    ? 0
+                    : scope.row.amount
+                }}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.balance')">
               <template slot-scope="scope">
-                {{scope.row.amountAfter}}
+                {{ scope.row.amountAfter }}
               </template>
             </el-table-column>
           </el-table>
-          <el-pagination style="margin-top:10px;text-align: center;margin-bottom:50px;"
-                         background
-                         :page-sizes="[1,5,10,20,50]"
-                         :page-size="pagesize"
-                         @size-change="pageSizeChange"
-                         :current-page.sync="page.currentPage"
-                         @current-change="pageChange"
-                         layout="prev, pager, next, jumper"
-                         :total="page.total"></el-pagination>
+          <el-pagination
+            style="margin-top:10px;text-align: center;margin-bottom:50px;"
+            background
+            :page-sizes="[1, 5, 10, 20, 50]"
+            :page-size="pagesize"
+            @size-change="pageSizeChange"
+            :current-page.sync="page.currentPage"
+            @current-change="pageChange"
+            layout="prev, pager, next, jumper"
+            :total="page.total"
+          ></el-pagination>
         </div>
       </div>
     </div>
@@ -80,51 +104,51 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import { journalList } from '../../api/billing'
-import { getTime, parseTime, getLastMonthTime } from '../../utils/index'
+import { journalList } from "../../api/billing";
+import { getTime, parseTime, getLastMonthTime } from "../../utils/index";
 import bcTime from "@/components/bcTime";
-let self
+
+let self;
 export default {
   // import引入的组件需要注入到对象中才能使用
   components: {
     bcTime
   },
-  data () {
+  data() {
     return {
-      tabActive: 'GUARANTEE',
-      applyType: localStorage.getItem('curRole'),
+      tabActive: "GUARANTEE",
+      applyType: localStorage.getItem("curRole"),
       // value1: [parseTime((new Date().getTime() - 3600 * 1000 * 24 * 30), '{y}-{m}-{d}'), parseTime(new Date().getTime(), '{y}-{m}-{d}')],
       fromDate: getLastMonthTime(new Date()),
-      toDate: parseTime(new Date().getTime(), '{y}-{m}-{d}'),
+      toDate: parseTime(new Date().getTime(), "{y}-{m}-{d}"),
       dataList: [],
       page: {
         total: 0,
         currentPage: 1
       },
-      pagesize: 20,
+      pagesize: 20
     };
   },
   // 监听属性 类似于data概念
   computed: {
-    fromDateDeFault () {
-      return self.fromDate.split('-')
+    fromDateDeFault() {
+      return self.fromDate.split("-");
     },
-    toDateDeFault () {
-      return self.toDate.split('-')
-    },
-
+    toDateDeFault() {
+      return self.toDate.split("-");
+    }
   },
   // 监控data中的数据变化
   watch: {},
-  created () {
-    self = this
+  created() {
+    self = this;
   },
-  mounted () {
-    this.getJournalList()
+  mounted() {
+    this.getJournalList();
   },
   methods: {
-    getJournalList () {
-      const self = this
+    getJournalList() {
+      const self = this;
       journalList({
         accountType: self.tabActive,
         applyType: self.applyType,
@@ -133,41 +157,41 @@ export default {
         page: self.page.currentPage - 1,
         pagesize: self.pagesize
       }).then(res => {
-        self.dataList = res.data.content
+        self.dataList = res.data.content;
         self.page = {
           total: res.data.totalElements,
           currentPage: res.data.number + 1
-        }
-      })
+        };
+      });
     },
-    handleClick () {
-      this.getJournalList()
+    handleClick() {
+      this.getJournalList();
     },
-    searchIt () {
-      this.getJournalList()
+    searchIt() {
+      this.getJournalList();
     },
-    pageChange (val) {
-      let self = this
-      self.page.currentPage = val
-      self.getJournalList()
-    },
-    pageSizeChange (val) {
+    pageChange(val) {
       let self = this;
-      self.pagesize = val
-      self.getJournalList()
+      self.page.currentPage = val;
+      self.getJournalList();
     },
-    changeBCtimeFrom (time) {
-      const self = this
-      self.fromDate = time
+    pageSizeChange(val) {
+      let self = this;
+      self.pagesize = val;
+      self.getJournalList();
     },
-    changeBCtimeTo (time) {
-      const self = this
-      self.toDate = time
+    changeBCtimeFrom(time) {
+      const self = this;
+      self.fromDate = time;
+    },
+    changeBCtimeTo(time) {
+      const self = this;
+      self.toDate = time;
     }
   }
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 //@import url(); 引入公共css类
 .manage {
   box-sizing: border-box;
@@ -240,5 +264,3 @@ export default {
   width: 3px;
 }
 </style>
-
-

@@ -54,7 +54,7 @@ module.exports = {
     resolve: {
       alias: {
         "@": resolve("src")
-      },
+      }
     },
     externals: {
       google: "google"

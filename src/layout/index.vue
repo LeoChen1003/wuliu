@@ -1,27 +1,27 @@
 <template>
-  <div :class="classObj"
-       class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened"
-         class="drawer-bg"
-         @click="handleClickOutside" />
+  <div :class="classObj" class="app-wrapper">
+    <div
+      v-if="device === 'mobile' && sidebar.opened"
+      class="drawer-bg"
+      @click="handleClickOutside"
+    />
     <!-- <sidebar class="sidebar-container" /> -->
-    <div :class="{hasTagsView:needTagsView}"
-         class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
+    <div :class="{ hasTagsView: needTagsView }" class="main-container">
+      <div :class="{ 'fixed-header': fixedHeader }">
         <navbar />
-        <div class="subNav"
-             v-if="subRoutes.length > 1">
-          <div class="subNav-item"
-               :class="item.active ? 'subNav-item-active' : ''"
-               v-for="(item,index) in subRoutes"
-               @click="$router.push({path:item.path})"
-               v-if="permissions[item.meta.permission]"
-               v-show="!item.hidden">
-            {{generateTitle(item.meta.title)}}
+        <div class="subNav" v-if="subRoutes.length > 1">
+          <div
+            class="subNav-item"
+            :class="item.active ? 'subNav-item-active' : ''"
+            v-for="item in subRoutes"
+            @click="$router.push({ path: item.path })"
+            v-if="permissions[item.meta.permission]"
+            v-show="!item.hidden"
+          >
+            {{ generateTitle(item.meta.title) }}
           </div>
-          <div v-else
-               class="subNav-item noPermission">
-            {{generateTitle(item.meta.title)}}
+          <div v-else class="subNav-item noPermission">
+            {{ generateTitle(item.meta.title) }}
           </div>
         </div>
         <!-- <breadcrumb id="breadcrumb-container"
@@ -41,10 +41,8 @@ import RightPanel from "@/components/RightPanel";
 import Breadcrumb from "@/components/Breadcrumb";
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from "./components";
 import ResizeMixin from "./mixin/ResizeHandler";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { generateTitle } from "@/utils/i18n";
-import { mapGetters } from "vuex";
-
 
 let self;
 
@@ -54,12 +52,9 @@ export default {
     AppMain,
     Navbar,
     RightPanel,
-    Settings,
-    Sidebar,
-    TagsView,
-    Breadcrumb
+    Settings
   },
-  created () {
+  created() {
     self = this;
   },
   mixins: [ResizeMixin],
@@ -69,9 +64,9 @@ export default {
       device: state => state.app.device,
       showSettings: state => state.settings.showSettings,
       needTagsView: state => state.settings.tagsView,
-      fixedHeader: state => state.settings.fixedHeader,
+      fixedHeader: state => state.settings.fixedHeader
     }),
-    classObj () {
+    classObj() {
       return {
         hideSidebar: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
@@ -79,35 +74,37 @@ export default {
         mobile: this.device === "mobile"
       };
     },
-    ...mapGetters(["permissions"]),
+    ...mapGetters(["permissions"])
   },
-  data () {
+  data() {
     return {
       subRoutes: []
-    }
+    };
   },
   watch: {
     $route: {
-      handler: function (val, oldVal) {
+      handler: function(val, oldVal) {
         self.cRouter();
-      },
+      }
     }
   },
   methods: {
-    handleClickOutside () {
+    handleClickOutside() {
       this.$store.dispatch("app/closeSideBar", { withoutAnimation: false });
     },
     // 计算子路由
-    cRouter () {
+    cRouter() {
       let nowPath = self.$router.history.current.path;
       let nowSub = self.cNowSub(nowPath);
       let subRoutes = nowSub.children;
       self.subRoutes = subRoutes;
     },
     // 寻找当前子路由集
-    cNowSub (nowPath) {
+    cNowSub(nowPath) {
       // 依附当前权限的路由集
-      let routers = JSON.parse(JSON.stringify(self.$store.state.permission.addRoutes));
+      let routers = JSON.parse(
+        JSON.stringify(self.$store.state.permission.addRoutes)
+      );
       for (let i of routers) {
         /*
          * 不包含二级路由情况
@@ -116,13 +113,13 @@ export default {
          * 后期如果出现需要此处适配
          */
         if (i.path == nowPath) {
-          return []
+          return [];
         } else {
           // 其他情况
           for (let t of i.children) {
             if (`${i.path}/${t.path}` == nowPath) {
               t.active = true;
-              return i
+              return i;
             }
           }
         }
@@ -130,7 +127,7 @@ export default {
     },
     generateTitle
   },
-  mounted () {
+  mounted() {
     self.cRouter();
   }
 };

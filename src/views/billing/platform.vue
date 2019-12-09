@@ -166,8 +166,10 @@
               type="info"
               :disabled="!permissions.PlatformFianceConfirm"
               @click="
-                refuseVisible = true;
-                reason = '';
+                () => {
+                  refuseVisible = true;
+                  reason = '';
+                }
               "
               >{{ $t("billing.reject") }}</el-button
             >
@@ -195,11 +197,11 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="refuseVisible = false">{{
-          $t("member.cancel")
-        }}</el-button>
         <el-button type="info" :loading="refuseLoading" @click="rejectIt">{{
           $t("member.reject")
+        }}</el-button>
+        <el-button @click="refuseVisible = false">{{
+          $t("member.cancel")
         }}</el-button>
       </span>
     </el-dialog>
@@ -233,11 +235,11 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="confirmDialog = false">{{
-          $t("billing.cancel")
-        }}</el-button>
         <el-button type="primary" @click="confirmIt">{{
           $t("billing.confirm")
+        }}</el-button>
+        <el-button @click="confirmDialog = false">{{
+          $t("billing.cancel")
         }}</el-button>
       </span>
     </el-dialog>

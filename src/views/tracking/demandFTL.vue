@@ -583,7 +583,7 @@ export default {
         self.thisId,
         self.ratingForm.rating * 2,
         self.ratingForm.remark
-      ).then(res => {
+      ).then(() => {
         self.ratingDialog = false;
         self.loadData();
       });
@@ -607,7 +607,7 @@ export default {
     },
     rdConfirmIt() {
       self.rdLoading = true;
-      confirmRD(self.rdRow.id).then(res => {
+      confirmRD(self.rdRow.id).then(() => {
         self.loadData(() => {
           self.$message.success(self.$t("tracking.successful"));
           self.rdDialog = false;
