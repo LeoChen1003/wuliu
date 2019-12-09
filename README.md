@@ -31,10 +31,12 @@ Coding 时请注意以下事项：
   >   printA: `print:${a}`
   > };
   > ```
-  > 数组操作注意for-in和for-of的选择
+  > 数组操作注意for-in和for-of的选择  
   > **复杂逻辑请写注释**
 
+
 - HTML
+
   > XMLtag无需闭合，请使用`<... />`直接描述  
   > Int类型的绑定请使用`v-module.number`  
   > 如果是Number类型的`el-input`请注意设置`@mousewheel.native.prevent`   
@@ -42,7 +44,9 @@ Coding 时请注意以下事项：
   > 请注意`v-for`中`:key`的定义  
   > 请尽量用`===`代替`==`
 
+
 - CSS
+
   > 请使用`scss`的css语言类型  
   > 不要将常用类名直接写入非`scope`的style标签，如有需要请进行嵌套使用避免样式污染  
   > 在使用`scope`的情况下请不要过度嵌套，影响可读性  
