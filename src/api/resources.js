@@ -5,7 +5,7 @@ import requestJSON from "@/utils/requestJSON";
 export function driverList() {
   return request({
     url: "/api/supply/driver/my",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -14,7 +14,7 @@ export function driverAdd(data) {
   return request({
     url: "/api/supply/driver/add",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -23,7 +23,7 @@ export function driverEdit(id, data) {
   return request({
     url: "/api/supply/driver/" + id,
     method: "patch",
-    data
+    data,
   });
 }
 
@@ -31,7 +31,7 @@ export function driverEdit(id, data) {
 export function truckList() {
   return request({
     url: "/api/supply/trucks/my",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -40,7 +40,7 @@ export function truckAdd(data) {
   return request({
     url: "/api/supply/trucks/add",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -49,7 +49,7 @@ export function truckEdit(data) {
   return request({
     url: "/api/supply/trucks/modify",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -58,7 +58,7 @@ export function getRoute(params) {
   return request({
     url: "/api/supply/ftl/my",
     method: "get",
-    params
+    params,
   });
 }
 
@@ -67,7 +67,7 @@ export function addRoute(data) {
   return requestJSON({
     url: "/api/supply/ftl/add",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -76,7 +76,7 @@ export function updateRoute(id, data) {
   return requestJSON({
     url: "/api/supply/ftl/update/" + id,
     method: "post",
-    data
+    data,
   });
 }
 
@@ -86,8 +86,8 @@ export function resetPassword(id) {
     url: `/api/supply/trucks/reset`,
     method: "post",
     data: {
-      id: id
-    }
+      id: id,
+    },
   });
 }
 
@@ -99,7 +99,7 @@ export function getCityDT(originCode, destinationCodes, category) {
     data: {
       originCode: originCode,
       destinationCodes: destinationCodes,
-      category: category
-    }
+      category: category,
+    },
   });
 }

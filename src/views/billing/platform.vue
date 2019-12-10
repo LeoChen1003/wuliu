@@ -4,46 +4,25 @@
       <div class="status-txt">{{ $t("billing.billingStatus") }}</div>
       <div class="date-box">
         <span style="margin: 0 10px;">{{ $t("billing.date") }}</span>
-        <bcTime
-          @changeBCtime="changeBCtimeFrom"
-          :timeType="'all'"
-          :dateDefault="[0, 0, 0]"
-        ></bcTime>
+        <bcTime @changeBCtime="changeBCtimeFrom" :timeType="'all'" :dateDefault="[0, 0, 0]"></bcTime>
         <span style="margin:0 5px;">~</span>
-        <bcTime
-          @changeBCtime="changeBCtimeTo"
-          :dateDefault="[0, 0, 0]"
-          style="margin-left:5px;"
-          :timeType="'all'"
-        ></bcTime>
+        <bcTime @changeBCtime="changeBCtimeTo" :dateDefault="[0, 0, 0]" style="margin-left:5px;" :timeType="'all'"></bcTime>
       </div>
       <span style="margin: 0 10px 0 15px;">{{ $t("placeholder.amount") }}</span>
-      <el-input
-        type="number"
-        v-model.number="amount"
-        style="width:200px;"
-      ></el-input>
+      <el-input type="number" v-model.number="amount" style="width:200px;"></el-input>
       <span style="margin: 0 10px 0 15px;">{{ $t("billing.member") }}</span>
       <el-input v-model="member" style="width:200px;"></el-input>
-      <el-button style="margin-left:10px;width:100px;" @click="searchIt">{{
-        $t("billing.search")
-      }}</el-button>
+      <el-button style="margin-left:10px;width:100px;" @click="searchIt">{{ $t("billing.search") }}</el-button>
       <!-- <el-button @click="cancelIt">{{ $t("billing.cancel") }}</el-button> -->
     </div>
     <div class="content">
       <div>
-        <el-tabs
-          v-model="tabActive"
-          tab-position="left"
-          @tab-click="handleClick"
-          style="height:100%;"
-        >
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
           <el-tab-pane name="DEFAULT">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.toBeConfirmed")
-                  }}<sub class="badge red">{{ statusCount.DEFAULT }}</sub>
+                  {{ $t("billing.toBeConfirmed") }}<sub class="badge red">{{ statusCount.DEFAULT }}</sub>
                 </div>
               </div>
             </span>
@@ -52,8 +31,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.confirmed")
-                  }}<sub class="badge">{{ statusCount.ACCEPT }}</sub>
+                  {{ $t("billing.confirmed") }}<sub class="badge">{{ statusCount.ACCEPT }}</sub>
                 </div>
               </div>
             </span>
@@ -62,8 +40,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.rejected")
-                  }}<sub class="badge">{{ statusCount.REJECTED }}</sub>
+                  {{ $t("billing.rejected") }}<sub class="badge">{{ statusCount.REJECTED }}</sub>
                 </div>
               </div>
             </span>
@@ -72,34 +49,17 @@
       </div>
       <div class="container">
         <div class="center">
-          <el-table
-            :data="dataList"
-            highlight-current-row
-            @current-change="handleCurrentChange"
-            border
-          >
-            <el-table-column
-              prop="operateAt"
-              width="100"
-              :label="$t('billing.date')"
-            >
+          <el-table :data="dataList" highlight-current-row @current-change="handleCurrentChange" border>
+            <el-table-column prop="operateAt" width="100" :label="$t('billing.date')">
               <template slot-scope="scope">
-                {{
-                  scope.row.operateAt.slice(0, 10) +
-                    " " +
-                    scope.row.operateAt.slice(11, 19)
-                }}
+                {{ scope.row.operateAt.slice(0, 10) + " " + scope.row.operateAt.slice(11, 19) }}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.description')">
               <template slot-scope="scope">
                 <div>{{ scope.row.financeAccountType }}</div>
                 <div>
-                  {{
-                    scope.row.site.type == "COMPANY"
-                      ? scope.row.site.companyName
-                      : scope.row.site.humanName
-                  }}
+                  {{ scope.row.site.type == "COMPANY" ? scope.row.site.companyName : scope.row.site.humanName }}
                 </div>
               </template>
             </el-table-column>
@@ -122,24 +82,14 @@
           ></el-pagination>
         </div>
         <el-card class="right" shadow="never">
-          <el-image
-            :src="thisRow.resource.path"
-            style="height:400px;"
-            :preview-src-list="thisRow.preViewList"
-            v-if="thisRow"
-          >
+          <el-image :src="thisRow.resource.path" style="height:400px;" :preview-src-list="thisRow.preViewList" v-if="thisRow">
             <!-- <div slot="error"
                  class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div> -->
           </el-image>
-          <div class="note-box" v-if="thisRow">
-            {{ $t("billing.note") }}:{{ thisRow.remarks }}
-          </div>
-          <div
-            class="handle-box"
-            v-if="thisRow && (tabActive == 'ACCEPT' || tabActive == 'REJECTED')"
-          >
+          <div class="note-box" v-if="thisRow">{{ $t("billing.note") }}:{{ thisRow.remarks }}</div>
+          <div class="handle-box" v-if="thisRow && (tabActive == 'ACCEPT' || tabActive == 'REJECTED')">
             <el-form label-width="150px" label-position="left" size="small">
               <el-form-item :label="$t('billing.confirmedBy')">
                 {{ thisRow.handledName }}
@@ -147,21 +97,15 @@
               <el-form-item :label="$t('billing.date')">
                 {{ thisRow.handledAt }}
               </el-form-item>
-              <el-form-item
-                :label="$t('billing.note')"
-                v-if="tabActive == 'REJECTED'"
-              >
+              <el-form-item :label="$t('billing.note')" v-if="tabActive == 'REJECTED'">
                 {{ thisRow.handleNote }}
               </el-form-item>
             </el-form>
           </div>
           <div class="btn-box" v-if="thisRow && tabActive == 'DEFAULT'">
-            <el-button
-              type="primary"
-              :disabled="!permissions.PlatformFianceConfirm"
-              @click="confirmDialog = true"
-              >{{ $t("billing.confirm") }}</el-button
-            >
+            <el-button type="primary" :disabled="!permissions.PlatformFianceConfirm" @click="confirmDialog = true">{{
+              $t("billing.confirm")
+            }}</el-button>
             <el-button
               type="info"
               :disabled="!permissions.PlatformFianceConfirm"
@@ -177,51 +121,28 @@
         </el-card>
       </div>
     </div>
-    <el-dialog
-      :title="$t('billing.refuseTitle')"
-      :visible.sync="refuseVisible"
-      center
-      width="600px"
-    >
+    <el-dialog :title="$t('billing.refuseTitle')" :visible.sync="refuseVisible" center width="600px">
       <div>
         <div style="text-align:center;margin-bottom:20px;">
           {{ $t("member.reasonsForRefusal") }}
         </div>
         <div>
-          <el-input
-            v-model="reason"
-            type="textarea"
-            style="resize:none;width:100%;"
-            class="inp"
-          ></el-input>
+          <el-input v-model="reason" type="textarea" style="resize:none;width:100%;" class="inp"></el-input>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="info" :loading="refuseLoading" @click="rejectIt">{{
-          $t("member.reject")
-        }}</el-button>
-        <el-button @click="refuseVisible = false">{{
-          $t("member.cancel")
-        }}</el-button>
+        <el-button type="info" :loading="refuseLoading" @click="rejectIt">{{ $t("member.reject") }}</el-button>
+        <el-button @click="refuseVisible = false">{{ $t("member.cancel") }}</el-button>
       </span>
     </el-dialog>
-    <el-dialog
-      :title="$t('billing.confirmTitle')"
-      :visible.sync="confirmDialog"
-      center
-      width="700px"
-    >
+    <el-dialog :title="$t('billing.confirmTitle')" :visible.sync="confirmDialog" center width="700px">
       <div>
         <el-form label-width="200px" v-if="thisRow">
           <el-form-item :label="$t('billing.date')">
             {{ thisRow.operateAt }}
           </el-form-item>
           <el-form-item :label="$t('billing.member')">
-            {{
-              thisRow.site.type == "COMPANY"
-                ? thisRow.site.companyName
-                : thisRow.site.humanName
-            }}
+            {{ thisRow.site.type == "COMPANY" ? thisRow.site.companyName : thisRow.site.humanName }}
           </el-form-item>
           <el-form-item :label="$t('billing.rechargeType')">
             {{ thisRow.financeAccountType }}
@@ -235,12 +156,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="confirmIt">{{
-          $t("billing.confirm")
-        }}</el-button>
-        <el-button @click="confirmDialog = false">{{
-          $t("billing.cancel")
-        }}</el-button>
+        <el-button type="primary" @click="confirmIt">{{ $t("billing.confirm") }}</el-button>
+        <el-button @click="confirmDialog = false">{{ $t("billing.cancel") }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -249,12 +166,7 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import {
-  billingList,
-  billingAccept,
-  billingReject,
-  billplatformCount
-} from "../../api/billing";
+import { billingList, billingAccept, billingReject, billplatformCount } from "../../api/billing";
 import { getToken } from "@/utils/auth";
 import { getTime, parseTime, getLastMonthTime } from "../../utils/index";
 import bcTime from "@/components/bcTime";
@@ -279,7 +191,7 @@ export default {
       showUrl: "",
       page: {
         total: 0,
-        currentPage: 1
+        currentPage: 1,
       },
       pagesize: 20,
       amount: null,
@@ -288,7 +200,7 @@ export default {
       confirmDialog: false,
       fromDate: null,
       toDate: null,
-      member: ""
+      member: "",
     };
   },
   // 监听属性 类似于data概念
@@ -299,7 +211,7 @@ export default {
     toDateDeFault() {
       return self.toDate.split("-");
     },
-    ...mapGetters(["permissions"])
+    ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {},
@@ -317,16 +229,16 @@ export default {
         amount: self.amount ? self.amount : 0,
         memberName: self.member,
         start: self.fromDate,
-        end: self.toDate
+        end: self.toDate,
       };
       billingList(form, {
         page: self.page.currentPage - 1,
-        pagesize: self.pagesize
+        pagesize: self.pagesize,
       }).then(res => {
         self.dataList = res.data.content;
         self.page = {
           total: res.data.totalElements,
-          currentPage: res.data.number + 1
+          currentPage: res.data.number + 1,
         };
       });
     },
@@ -336,7 +248,7 @@ export default {
         amount: self.amount ? self.amount : 0,
         memberName: self.member,
         start: self.fromDate,
-        end: self.toDate
+        end: self.toDate,
       };
       billplatformCount(form).then(res => {
         self.statusCount = res.data;
@@ -381,7 +293,7 @@ export default {
     // 确认
     confirmIt() {
       billingAccept({
-        id: self.thisRow.id
+        id: self.thisRow.id,
       }).then(res => {
         self.$message.success(res.message);
         self.confirmDialog = false;
@@ -392,14 +304,12 @@ export default {
     // 拒绝
     rejectIt() {
       if (self.reason == "") {
-        return self.$message.warning(
-          self.$t("billing.pleaseEnterTheReasonForRejection")
-        );
+        return self.$message.warning(self.$t("billing.pleaseEnterTheReasonForRejection"));
       }
       self.refuseLoading = true;
       billingReject({
         id: self.thisRow.id,
-        note: self.reason
+        note: self.reason,
       })
         .then(res => {
           self.$message.success(res.message);
@@ -412,8 +322,8 @@ export default {
         .catch(el => {
           self.refuseLoading = false;
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

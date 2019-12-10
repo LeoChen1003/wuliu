@@ -3,7 +3,7 @@ import { debounce } from "@/utils";
 export default {
   data() {
     return {
-      $_sidebarElm: null
+      $_sidebarElm: null,
     };
   },
   mounted() {
@@ -46,21 +46,11 @@ export default {
       }
     },
     $_initSidebarResizeEvent() {
-      this.$_sidebarElm = document.getElementsByClassName(
-        "sidebar-container"
-      )[0];
-      this.$_sidebarElm &&
-        this.$_sidebarElm.addEventListener(
-          "transitionend",
-          this.$_sidebarResizeHandler
-        );
+      this.$_sidebarElm = document.getElementsByClassName("sidebar-container")[0];
+      this.$_sidebarElm && this.$_sidebarElm.addEventListener("transitionend", this.$_sidebarResizeHandler);
     },
     $_destroySidebarResizeEvent() {
-      this.$_sidebarElm &&
-        this.$_sidebarElm.removeEventListener(
-          "transitionend",
-          this.$_sidebarResizeHandler
-        );
-    }
-  }
+      this.$_sidebarElm && this.$_sidebarElm.removeEventListener("transitionend", this.$_sidebarResizeHandler);
+    },
+  },
 };

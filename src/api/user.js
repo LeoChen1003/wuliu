@@ -4,21 +4,21 @@ export function login(data) {
   return request({
     url: "/auth/login",
     method: "post",
-    data
+    data,
   });
 }
 
 export function getInfo() {
   return request({
     url: "/api/user/show",
-    method: "get"
+    method: "get",
   });
 }
 
 export function logout() {
   return request({
     url: "/auth/logout",
-    method: "post"
+    method: "post",
   });
 }
 
@@ -27,7 +27,7 @@ export function register(data) {
   return request({
     url: "/auth/register",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -35,7 +35,7 @@ export function register(data) {
 export function getCaptcha() {
   return request({
     url: "/misc/verify/verify",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -44,7 +44,7 @@ export function getMessageCode(data) {
   return request({
     url: "/misc/verify/sendSms",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -52,6 +52,6 @@ export function forgot(data) {
   return request({
     url: "/auth/forgot/password",
     method: "post",
-    data
+    data,
   });
 }

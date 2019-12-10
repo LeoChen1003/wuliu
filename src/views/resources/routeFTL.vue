@@ -1,35 +1,17 @@
 <template>
   <div class="wrapper">
     <div style="margin-bottom:20px;">
-      <el-button @click="add" type="primary">{{
-        $t("resources.add")
-      }}</el-button>
+      <el-button @click="add" type="primary">{{ $t("resources.add") }}</el-button>
     </div>
     <div class="container">
       <div class="table-box">
-        <el-table
-          border
-          v-loading="loading"
-          highlight-current-row
-          @current-change="tapRow"
-          :data="data.content"
-        >
-          <el-table-column
-            header-align="center"
-            align="center"
-            :label="$t('resources.route')"
-          >
+        <el-table border v-loading="loading" highlight-current-row @current-change="tapRow" :data="data.content">
+          <el-table-column header-align="center" align="center" :label="$t('resources.route')">
             <template slot-scope="scope">
-              <div>
-                {{ scope.row.fromProvince }} --> {{ scope.row.toProvinceName }}
-              </div>
+              <div>{{ scope.row.fromProvince }} --> {{ scope.row.toProvinceName }}</div>
             </template>
           </el-table-column>
-          <el-table-column
-            header-align="center"
-            align="center"
-            :label="$t('resources.truckType')"
-          >
+          <el-table-column header-align="center" align="center" :label="$t('resources.truckType')">
             <template slot-scope="scope">
               <div>{{ truckObj[scope.row.category] }}</div>
               <div>{{ scope.row.truck.plate }}</div>
@@ -44,11 +26,7 @@
               </div>
             </template>
           </el-table-column> -->
-          <el-table-column
-            header-align="center"
-            align="center"
-            :label="$t('resources.status')"
-          >
+          <el-table-column header-align="center" align="center" :label="$t('resources.status')">
             <template slot-scope="scope">
               {{ scope.row.status }}
             </template>
@@ -56,11 +34,7 @@
           <el-table-column header-align="center" align="center">
             <template slot-scope="scope">
               <div>
-                <el-button
-                  type="primary"
-                  style="margin-bottom:5px;width:100%;"
-                  @click="edit(scope.row)"
-                >
+                <el-button type="primary" style="margin-bottom:5px;width:100%;" @click="edit(scope.row)">
                   {{ $t("resources.edit") }}
                 </el-button>
               </div>
@@ -85,9 +59,7 @@
           <el-tab-pane name="0" :label="$t('resources.detailInformation')">
             <div style="background:#fff;box-sizing:border-box;padding:20px;">
               <el-form
-                :label-width="
-                  $store.getters.language === 'zh_CN' ? '150px' : '220px'
-                "
+                :label-width="$store.getters.language === 'zh_CN' ? '150px' : '220px'"
                 :show-message="false"
                 v-if="thisRow.citys"
               >
@@ -105,41 +77,23 @@
                   {{ thisRow.toProvinceName }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.quoteMode')">
-                  {{
-                    thisRow.ftlType === 0
-                      ? $t("resources.ftlType1")
-                      : $t("resources.ftlType2")
-                  }}
+                  {{ thisRow.ftlType === 0 ? $t("resources.ftlType1") : $t("resources.ftlType2") }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.cutOffTime')">
                   {{ thisRow.finishedAt }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.supportLoading')">
-                  {{
-                    thisRow.supportLoading === 0
-                      ? $t("resources.notRequired")
-                      : $t("resources.require")
-                  }}
+                  {{ thisRow.supportLoading === 0 ? $t("resources.notRequired") : $t("resources.require") }}
                 </el-form-item>
-                <el-form-item
-                  :label="$t('resources.humanWorkDay')"
-                  v-if="thisRow.supportLoading"
-                >
+                <el-form-item :label="$t('resources.humanWorkDay')" v-if="thisRow.supportLoading">
                   {{ thisRow.loadingOrUnloadingHumanWorkDay }}
                 </el-form-item>
-                <el-form-item
-                  :label="$t('resources.moneyPerDay')"
-                  v-if="thisRow.supportLoading"
-                >
+                <el-form-item :label="$t('resources.moneyPerDay')" v-if="thisRow.supportLoading">
                   {{ thisRow.moneyPerDay }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.status')">
-                  <el-tag v-if="thisRow.status === 'ACTIVE'" type="primary">{{
-                    $t("resources.activated")
-                  }}</el-tag>
-                  <el-tag v-if="thisRow.status === 'CLOSED'" type="info">{{
-                    $t("resources.closed")
-                  }}</el-tag>
+                  <el-tag v-if="thisRow.status === 'ACTIVE'" type="primary">{{ $t("resources.activated") }}</el-tag>
+                  <el-tag v-if="thisRow.status === 'CLOSED'" type="info">{{ $t("resources.closed") }}</el-tag>
                 </el-form-item>
               </el-form>
             </div>
@@ -147,39 +101,19 @@
           <el-tab-pane name="1" :label="$t('resources.price_2')">
             <div>
               <el-table border :data="priceList">
-                <el-table-column
-                  header-align="center"
-                  align="center"
-                  :label="$t('resources.origin')"
-                >
+                <el-table-column header-align="center" align="center" :label="$t('resources.origin')">
+                  <template slot-scope="scope">
+                    <div>{{ cityObj[scope.row.fromCityCode] }}-{{ thisRow.fromProvince }}</div>
+                  </template>
+                </el-table-column>
+                <el-table-column header-align="center" align="center" :label="$t('resources.dst')">
                   <template slot-scope="scope">
                     <div>
-                      {{ cityObj[scope.row.fromCityCode] }}-{{
-                        thisRow.fromProvince
-                      }}
+                      <div v-for="item in scope.row.toCitys">{{ cityObj[item.cityCode] }}-{{ proObj[item.provinceCode] }}</div>
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  header-align="center"
-                  align="center"
-                  :label="$t('resources.dst')"
-                >
-                  <template slot-scope="scope">
-                    <div>
-                      <div v-for="item in scope.row.toCitys">
-                        {{ cityObj[item.cityCode] }}-{{
-                          proObj[item.provinceCode]
-                        }}
-                      </div>
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  header-align="center"
-                  align="center"
-                  :label="$t('resources.distance_KM')"
-                >
+                <el-table-column header-align="center" align="center" :label="$t('resources.distance_KM')">
                   <template slot-scope="scope">
                     <div>
                       {{
@@ -190,19 +124,9 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  header-align="center"
-                  align="center"
-                  prop="transitTime"
-                  :label="$t('resources.transitTime')"
-                >
+                <el-table-column header-align="center" align="center" prop="transitTime" :label="$t('resources.transitTime')">
                 </el-table-column>
-                <el-table-column
-                  header-align="center"
-                  align="center"
-                  prop="charge"
-                  :label="$t('resources.price')"
-                >
+                <el-table-column header-align="center" align="center" prop="charge" :label="$t('resources.price')">
                 </el-table-column>
               </el-table>
             </div>
@@ -210,30 +134,11 @@
           <el-tab-pane :label="$t('resources.availableDate')" name="2">
             <div>
               <div class="date-header">
-                <el-select
-                  v-model="showDate.year"
-                  @change="showDateChange"
-                  placeholder=""
-                >
-                  <el-option
-                    v-for="item in showDateInfo"
-                    :key="item.year"
-                    :label="item.year"
-                    :value="item.year"
-                  >
-                  </el-option>
+                <el-select v-model="showDate.year" @change="showDateChange" placeholder="">
+                  <el-option v-for="item in showDateInfo" :key="item.year" :label="item.year" :value="item.year"> </el-option>
                 </el-select>
-                <el-select
-                  v-model="showDate.month"
-                  @change="showDateChange"
-                  placeholder=""
-                >
-                  <el-option
-                    v-for="item in showDateInfo[showDate.year].months"
-                    :key="item"
-                    :label="item"
-                    :value="item"
-                  >
+                <el-select v-model="showDate.month" @change="showDateChange" placeholder="">
+                  <el-option v-for="item in showDateInfo[showDate.year].months" :key="item" :label="item" :value="item">
                   </el-option>
                 </el-select>
               </div>
@@ -241,32 +146,13 @@
                 <div class="day-item" v-for="item in week" :key="item">
                   <el-tag class="day nop week" type="info">{{ item }}</el-tag>
                 </div>
-                <div
-                  class="day-item"
-                  v-for="(item, index) in showWeekPH"
-                  :key="index + item"
-                >
+                <div class="day-item" v-for="(item, index) in showWeekPH" :key="index + item">
                   <el-tag class="day nop day_ph"></el-tag>
                 </div>
-                <div
-                  class="day-item"
-                  v-for="(item, index) in dateList_show"
-                  :key="index"
-                >
+                <div class="day-item" v-for="(item, index) in dateList_show" :key="index">
                   <el-tag
                     class="day nop"
-                    :effect="
-                      showDateList[
-                        'show_' +
-                          showDate.year +
-                          '_' +
-                          showDate.month +
-                          '_' +
-                          item
-                      ]
-                        ? 'dark'
-                        : 'plain'
-                    "
+                    :effect="showDateList['show_' + showDate.year + '_' + showDate.month + '_' + item] ? 'dark' : 'plain'"
                     >{{ item }}</el-tag
                   >
                 </div>
@@ -277,56 +163,25 @@
       </div>
     </div>
     <!-- 编辑框 -->
-    <el-dialog
-      :visible.sync="editDialog"
-      :title="$t('resources.edit')"
-      :close-on-click-modal="false"
-      width="1200px"
-    >
+    <el-dialog :visible.sync="editDialog" :title="$t('resources.edit')" :close-on-click-modal="false" width="1200px">
       <el-tabs v-model="editActive" v-loading="editLoading">
         <el-tab-pane :label="$t('resources.basicData')" name="form">
           <div class="tab-wrapper">
             <div class="form-box">
               <el-form
-                :label-width="
-                  $store.getters.language === 'zh_CN' ? '150px' : '220px'
-                "
+                :label-width="$store.getters.language === 'zh_CN' ? '150px' : '220px'"
                 :show-message="false"
                 size="small"
                 :model="form"
                 ref="form"
               >
-                <el-form-item
-                  :label="$t('resources.plateLicense')"
-                  prop="truckId"
-                  required
-                >
-                  <el-select
-                    v-model="form.truckId"
-                    class="formSelect"
-                    @change="choosePlate"
-                    filterable
-                  >
-                    <el-option
-                      v-for="(item, index) in tdList"
-                      :key="index"
-                      :label="item.plate"
-                      :value="item.id"
-                    />
+                <el-form-item :label="$t('resources.plateLicense')" prop="truckId" required>
+                  <el-select v-model="form.truckId" class="formSelect" @change="choosePlate" filterable>
+                    <el-option v-for="(item, index) in tdList" :key="index" :label="item.plate" :value="item.id" />
                   </el-select>
                 </el-form-item>
-                <el-form-item
-                  :label="$t('resources.truckType')"
-                  prop="category"
-                  required
-                >
-                  <el-select
-                    v-model="form.category"
-                    disabled
-                    filterable
-                    class="formSelect"
-                    placeholder="Truck type"
-                  >
+                <el-form-item :label="$t('resources.truckType')" prop="category" required>
+                  <el-select v-model="form.category" disabled filterable class="formSelect" placeholder="Truck type">
                     <el-option
                       v-for="(item, index) in truckTypes.categories"
                       :key="index"
@@ -336,13 +191,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item prop="subCategory">
-                  <el-select
-                    v-model="form.subCategory"
-                    disabled
-                    filterable
-                    class="formSelect"
-                    placeholder="Truck sub type"
-                  >
+                  <el-select v-model="form.subCategory" disabled filterable class="formSelect" placeholder="Truck sub type">
                     <el-option
                       v-for="(item, index) in truckTypes.subCategories"
                       :key="index"
@@ -351,68 +200,29 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item
-                  :label="$t('resources.origin')"
-                  prop="fromProvinceCode"
-                  required
-                >
+                <el-form-item :label="$t('resources.origin')" prop="fromProvinceCode" required>
                   <el-select
                     v-model="form.fromProvinceCode"
                     class="formSelect"
-                    :disabled="
-                      form.cityList[0] &&
-                        form.cityList[0].maxMiles != '' &&
-                        form.cityList[0].toCityCodes.length != 0
-                    "
+                    :disabled="form.cityList[0] && form.cityList[0].maxMiles != '' && form.cityList[0].toCityCodes.length != 0"
                     @change="fromProvinceCodeChange"
                     filterable
                   >
-                    <el-option
-                      v-for="(item, index) in provinceList"
-                      :key="index"
-                      :label="item.name"
-                      :value="item.code"
-                    />
+                    <el-option v-for="(item, index) in provinceList" :key="index" :label="item.name" :value="item.code" />
                   </el-select>
                 </el-form-item>
-                <el-form-item
-                  :label="$t('resources.destination')"
-                  prop="toProvinceCodes"
-                  required
-                >
-                  <el-select
-                    v-model="form.toProvinceCodes"
-                    filterable
-                    multiple
-                    @change="toProvinceCodeChange"
-                    class="formSelect"
-                  >
-                    <el-option
-                      v-for="(item, index) in provinceList"
-                      :key="index"
-                      :label="item.name"
-                      :value="item.code"
-                    />
+                <el-form-item :label="$t('resources.destination')" prop="toProvinceCodes" required>
+                  <el-select v-model="form.toProvinceCodes" filterable multiple @change="toProvinceCodeChange" class="formSelect">
+                    <el-option v-for="(item, index) in provinceList" :key="index" :label="item.name" :value="item.code" />
                   </el-select>
                 </el-form-item>
-                <el-form-item
-                  :label="$t('resources.quoteMode')"
-                  prop="ftlType"
-                  required
-                >
+                <el-form-item :label="$t('resources.quoteMode')" prop="ftlType" required>
                   <el-select v-model="form.ftlType" class="formSelect">
                     <el-option :label="$t('resources.ftlType1')" :value="0" />
-                    <el-option
-                      :label="$t('resources.ftlType2')"
-                      disabled
-                      :value="1"
-                    />
+                    <el-option :label="$t('resources.ftlType2')" disabled :value="1" />
                   </el-select>
                 </el-form-item>
-                <el-form-item
-                  :label="$t('resources.cutOffTime')"
-                  prop="finishedAt"
-                >
+                <el-form-item :label="$t('resources.cutOffTime')" prop="finishedAt">
                   <el-time-select
                     v-model="form.finishedAt"
                     style="width:100%;"
@@ -421,56 +231,22 @@
                   >
                   </el-time-select>
                 </el-form-item>
-                <el-form-item
-                  :label="$t('resources.supportLoading')"
-                  prop="supportLoading"
-                  required
-                >
+                <el-form-item :label="$t('resources.supportLoading')" prop="supportLoading" required>
                   <el-select class="formSelect" v-model="form.supportLoading">
-                    <el-option :label="$t('resources.require')" :value="1">
-                    </el-option>
-                    <el-option :label="$t('resources.notRequired')" :value="0">
-                    </el-option>
+                    <el-option :label="$t('resources.require')" :value="1"> </el-option>
+                    <el-option :label="$t('resources.notRequired')" :value="0"> </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item
-                  :label="$t('resources.humanWorkDay')"
-                  required
-                  prop="humanWorkDay"
-                  v-if="form.supportLoading"
-                >
-                  <el-input
-                    v-model="form.humanWorkDay"
-                    @mousewheel.native.prevent
-                    type="number"
-                  ></el-input>
+                <el-form-item :label="$t('resources.humanWorkDay')" required prop="humanWorkDay" v-if="form.supportLoading">
+                  <el-input v-model="form.humanWorkDay" @mousewheel.native.prevent type="number"></el-input>
                 </el-form-item>
-                <el-form-item
-                  :label="$t('resources.moneyPerDay')"
-                  required
-                  prop="moneyPerDay"
-                  v-if="form.supportLoading"
-                >
-                  <el-input
-                    v-model="form.moneyPerDay"
-                    type="number"
-                    @mousewheel.native.prevent
-                  >
-                  </el-input>
+                <el-form-item :label="$t('resources.moneyPerDay')" required prop="moneyPerDay" v-if="form.supportLoading">
+                  <el-input v-model="form.moneyPerDay" type="number" @mousewheel.native.prevent> </el-input>
                 </el-form-item>
-                <el-form-item
-                  :label="$t('resources.status')"
-                  prop="status"
-                  required
-                >
+                <el-form-item :label="$t('resources.status')" prop="status" required>
                   <el-select class="formSelect" v-model="form.status">
-                    <el-option
-                      :label="$t('resources.activated')"
-                      value="ACTIVE"
-                    >
-                    </el-option>
-                    <el-option :label="$t('resources.closed')" value="CLOSED">
-                    </el-option>
+                    <el-option :label="$t('resources.activated')" value="ACTIVE"> </el-option>
+                    <el-option :label="$t('resources.closed')" value="CLOSED"> </el-option>
                   </el-select>
                 </el-form-item>
               </el-form>
@@ -479,45 +255,27 @@
         </el-tab-pane>
         <el-tab-pane :label="$t('resources.quotation')" name="quotation">
           <div class="tab-wrapper">
-            <el-table
-              :data="form.cityList"
-              border
-              v-loading="cityLoading"
-              style="width: 100%"
-            >
+            <el-table :data="form.cityList" border v-loading="cityLoading" style="width: 100%">
               <el-table-column width="200" :label="$t('resources.origin')">
                 <template slot-scope="scope">
                   <div>
                     <el-select
                       v-model="scope.row.fromCityCode"
-                      :disabled="
-                        form.category === '' || form.fromProvinceCode === ''
-                      "
+                      :disabled="form.category === '' || form.fromProvinceCode === ''"
                       @change="formCityChange(scope.row)"
                     >
-                      <el-option
-                        v-for="item in waitFrom_cityList"
-                        :key="item.code"
-                        :label="item.name"
-                        :value="item.code"
-                      >
+                      <el-option v-for="item in waitFrom_cityList" :key="item.code" :label="item.name" :value="item.code">
                       </el-option>
                     </el-select>
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column
-                width="400"
-                :label="$t('resources.destination_Dsitrict')"
-              >
+              <el-table-column width="400" :label="$t('resources.destination_Dsitrict')">
                 <template slot-scope="scope">
                   <div>
                     <el-select
                       v-model="scope.row.toCityCodes"
-                      :disabled="
-                        form.category === '' ||
-                          form.toProvinceCodes.length === 0
-                      "
+                      :disabled="form.category === '' || form.toProvinceCodes.length === 0"
                       class="formSelect"
                       filterable
                       remote
@@ -569,11 +327,7 @@
               <el-table-column :label="$t('resources.price')">
                 <template slot-scope="scope">
                   <div>
-                    <el-input
-                      v-model="scope.row.charge"
-                      @mousewheel.native.prevent
-                      type="number"
-                    ></el-input>
+                    <el-input v-model="scope.row.charge" @mousewheel.native.prevent type="number"></el-input>
                   </div>
                 </template>
               </el-table-column>
@@ -592,12 +346,7 @@
               </el-table-column>
             </el-table>
             <div class="add-citylist">
-              <el-button
-                type="primary"
-                @click="addRow"
-                icon="el-icon-plus"
-                circle
-              ></el-button>
+              <el-button type="primary" @click="addRow" icon="el-icon-plus" circle></el-button>
             </div>
           </div>
         </el-tab-pane>
@@ -605,65 +354,27 @@
           <div class="tab-wrapper">
             <div class="date-header">
               <div>{{ $t("resources.availableDate") }}</div>
-              <el-select
-                v-model="date.year"
-                @change="dateChange"
-                style="width:150px;"
-                placeholder=""
-              >
-                <el-option
-                  v-for="item in dateInfo"
-                  :key="item.year"
-                  :label="item.year"
-                  :value="item.year"
-                >
-                </el-option>
+              <el-select v-model="date.year" @change="dateChange" style="width:150px;" placeholder="">
+                <el-option v-for="item in dateInfo" :key="item.year" :label="item.year" :value="item.year"> </el-option>
               </el-select>
-              <el-select
-                v-model="date.month"
-                @change="dateChange"
-                style="width:150px;"
-                placeholder=""
-              >
-                <el-option
-                  v-for="item in dateInfo[date.year].months"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-                >
-                </el-option>
+              <el-select v-model="date.month" @change="dateChange" style="width:150px;" placeholder="">
+                <el-option v-for="item in dateInfo[date.year].months" :key="item" :label="item" :value="item"> </el-option>
               </el-select>
               <el-button @click="checkAll" type="primary">{{
-                allChecked
-                  ? $t("resources.deselectAll")
-                  : $t("resources.checkAll")
+                allChecked ? $t("resources.deselectAll") : $t("resources.checkAll")
               }}</el-button>
             </div>
             <div class="date-list" v-loading="dateLoading">
               <div class="day-item" v-for="item in week" :key="item">
                 <el-tag class="day nop week" type="info">{{ item }}</el-tag>
               </div>
-              <div
-                class="day-item"
-                v-for="(item, index) in weekPH"
-                :key="index + item"
-              >
+              <div class="day-item" v-for="(item, index) in weekPH" :key="index + item">
                 <el-tag class="day nop day_ph"></el-tag>
               </div>
-              <div
-                class="day-item"
-                v-for="(item, index) in dateList"
-                :key="index"
-              >
+              <div class="day-item" v-for="(item, index) in dateList" :key="index">
                 <el-tag
                   class="day"
-                  :effect="
-                    sendDateList[
-                      'show_' + date.year + '_' + date.month + '_' + item
-                    ]
-                      ? 'dark'
-                      : 'plain'
-                  "
+                  :effect="sendDateList['show_' + date.year + '_' + date.month + '_' + item] ? 'dark' : 'plain'"
                   @click="tapDay(item)"
                   >{{ item }}</el-tag
                 >
@@ -673,12 +384,8 @@
         </el-tab-pane>
       </el-tabs>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="confirmIt">{{
-          $t("resources.confirm")
-        }}</el-button>
-        <el-button type="primary" @click="cancel">{{
-          $t("resources.cancel")
-        }}</el-button>
+        <el-button type="primary" @click="confirmIt">{{ $t("resources.confirm") }}</el-button>
+        <el-button type="primary" @click="cancel">{{ $t("resources.cancel") }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -686,15 +393,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import {
-  getProvinceList,
-  getCityList,
-  getCityListGroup,
-  getTruckType,
-  getSupplyTD,
-  getBcYear,
-  getBcDay
-} from "@/api/data";
+import { getProvinceList, getCityList, getCityListGroup, getTruckType, getSupplyTD, getBcYear, getBcDay } from "@/api/data";
 import { getRoute, addRoute, updateRoute, getCityDT } from "@/api/resources";
 
 let self;
@@ -717,14 +416,14 @@ export default {
         cityList: [],
         dateList: [],
         truckId: "",
-        status: ""
+        status: "",
       },
       provinceList: [],
       cityList: [],
       priceList: [],
       truckTypes: {
         categories: [],
-        subCategories: []
+        subCategories: [],
       },
       tdList: [],
       truckObj: {},
@@ -732,16 +431,16 @@ export default {
       timeOptions: {
         start: "00:00",
         step: "00:15",
-        end: "23:45"
+        end: "23:45",
       },
       detailTab: "0",
       date: {
         year: "2019",
-        month: ""
+        month: "",
       },
       showDate: {
         year: "2019",
-        month: ""
+        month: "",
       },
       dateInfo: { 2019: { year: 2019, months: [] } },
       showDateInfo: { 2019: { year: 2019, months: [] } },
@@ -763,12 +462,12 @@ export default {
       week: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
       editActive: "form",
       waitFrom_cityList: [],
-      waitTo_cityList: []
+      waitTo_cityList: [],
     };
   },
   //监听属性 类似于data概念
   computed: {
-    ...mapGetters(["permissions"])
+    ...mapGetters(["permissions"]),
   },
   //监控data中的数据变化
   watch: {},
@@ -836,7 +535,7 @@ export default {
           dateInfo[years[x]] = {
             year: years[x],
             months: months,
-            start: x === 0 ? day : 1
+            start: x === 0 ? day : 1,
           };
         }
         // 生成展示可选日期
@@ -849,18 +548,18 @@ export default {
           showDateInfo[showYears[x]] = {
             year: showYears[x],
             months: months,
-            start: x === 0 ? day : 1
+            start: x === 0 ? day : 1,
           };
         }
         self.dateInfo = dateInfo;
         self.showDateInfo = showDateInfo;
         self.date = {
           year: year,
-          month: month
+          month: month,
         };
         self.showDate = {
           year: year,
-          month: month
+          month: month,
         };
         self.getDay("edit");
         self.getDay("show");
@@ -869,7 +568,7 @@ export default {
     pageChange(e) {
       self.loading = true;
       getRoute({
-        page: e - 1
+        page: e - 1,
       }).then(res => {
         self.data = res.data;
         self.loading = false;
@@ -887,8 +586,8 @@ export default {
           fromCityCode: "",
           toCityCodes: [],
           charge: "",
-          transitTime: ""
-        }
+          transitTime: "",
+        },
       ];
       self.editDialog = true;
     },
@@ -902,15 +601,11 @@ export default {
       //   i.toCityCode = JSON.parse(JSON.stringify(i.toCityCodes));
       // }
       for (let i of item.dateList) {
-        self.$set(
-          self.sendDateList,
-          ["show_" + i.bcYear + "_" + i.month + "_" + i.day],
-          {
-            bcYear: i.bcYear,
-            month: i.month,
-            day: i.day
-          }
-        );
+        self.$set(self.sendDateList, ["show_" + i.bcYear + "_" + i.month + "_" + i.day], {
+          bcYear: i.bcYear,
+          month: i.month,
+          day: i.day,
+        });
       }
       // 赋值
       self.form = {
@@ -926,7 +621,7 @@ export default {
         dateList: [],
         truckId: item.truckId,
         status: item.status,
-        ftlType: item.ftlType
+        ftlType: item.ftlType,
       };
       // 读取waitFrom和waitTo
       getCityListGroup(item.toProvinceCodes).then(res => {
@@ -947,15 +642,9 @@ export default {
         if (valid) {
           // 验证cityList是否有空值
           for (let i of form.cityList) {
-            if (
-              i.fromCityCode === "" ||
-              i.toCityCodes.length === 0 ||
-              i.charge === ""
-            ) {
+            if (i.fromCityCode === "" || i.toCityCodes.length === 0 || i.charge === "") {
               self.editActive = "quotation";
-              return self.$message.warning(
-                self.$t("resources.quotationIsRequired")
-              );
+              return self.$message.warning(self.$t("resources.quotationIsRequired"));
             }
           }
           self.editLoading = true;
@@ -977,18 +666,18 @@ export default {
             form.citys.push({
               fromCity: {
                 name: self.cityObj[form.cityList[x].fromCityCode],
-                code: form.cityList[x].fromCityCode
+                code: form.cityList[x].fromCityCode,
               },
               toCitys: [],
               maxMiles: form.cityList[x].maxMiles,
               minMiles: form.cityList[x].minMiles,
               transitTime: form.cityList[x].transitTime,
-              price: parseInt(form.cityList[x].charge)
+              price: parseInt(form.cityList[x].charge),
             });
             for (let t of form.cityList[x].toCityCodes) {
               form.citys[x].toCitys.push({
                 name: self.cityObj[t],
-                code: t
+                code: t,
               });
             }
           }
@@ -1039,30 +728,20 @@ export default {
         cityList: [],
         dateList: [],
         truckId: "",
-        status: ""
+        status: "",
       };
       self.sendDateList = [];
       this.$refs.form.resetFields();
     },
     tapDay(day) {
-      if (
-        self.sendDateList[
-          "show_" + self.date.year + "_" + self.date.month + "_" + day
-        ]
-      ) {
-        delete self.sendDateList[
-          "show_" + self.date.year + "_" + self.date.month + "_" + day
-        ];
+      if (self.sendDateList["show_" + self.date.year + "_" + self.date.month + "_" + day]) {
+        delete self.sendDateList["show_" + self.date.year + "_" + self.date.month + "_" + day];
       } else {
-        self.$set(
-          self.sendDateList,
-          ["show_" + self.date.year + "_" + self.date.month + "_" + day],
-          {
-            bcYear: self.date.year,
-            month: self.date.month,
-            day: day
-          }
-        );
+        self.$set(self.sendDateList, ["show_" + self.date.year + "_" + self.date.month + "_" + day], {
+          bcYear: self.date.year,
+          month: self.date.month,
+          day: day,
+        });
       }
       this.$forceUpdate();
       self.checkAllCheck();
@@ -1071,34 +750,16 @@ export default {
     checkAll() {
       if (self.allChecked) {
         for (let x in self.dateList) {
-          delete self.sendDateList[
-            "show_" +
-              self.date.year +
-              "_" +
-              self.date.month +
-              "_" +
-              self.dateList[x]
-          ];
+          delete self.sendDateList["show_" + self.date.year + "_" + self.date.month + "_" + self.dateList[x]];
         }
         self.allChecked = false;
       } else {
         for (let x in self.dateList) {
-          self.$set(
-            self.sendDateList,
-            [
-              "show_" +
-                self.date.year +
-                "_" +
-                self.date.month +
-                "_" +
-                self.dateList[x]
-            ],
-            {
-              bcYear: self.date.year,
-              month: self.date.month,
-              day: self.dateList[x]
-            }
-          );
+          self.$set(self.sendDateList, ["show_" + self.date.year + "_" + self.date.month + "_" + self.dateList[x]], {
+            bcYear: self.date.year,
+            month: self.date.month,
+            day: self.dateList[x],
+          });
         }
         self.allChecked = true;
       }
@@ -1129,20 +790,13 @@ export default {
           let days = res.data;
           let start = self.dateInfo[self.date.year].start;
           let dateList = {};
-          let yearInd = Object.keys(self.dateInfo).indexOf(
-            self.date.year.toString()
-          );
-          let year =
-            yearInd === 0
-              ? new Date().getFullYear()
-              : new Date().getFullYear() + 1;
+          let yearInd = Object.keys(self.dateInfo).indexOf(self.date.year.toString());
+          let year = yearInd === 0 ? new Date().getFullYear() : new Date().getFullYear() + 1;
           let week = new Date(`${year}/${self.date.month}/1`).getDay();
           let weekPD = week === 7 ? 0 : week;
           let weekPH = [];
           for (let x = 1; x <= days; x++) {
-            dateList[
-              "show_" + self.date.year + "_" + self.date.month + "_" + x
-            ] = x;
+            dateList["show_" + self.date.year + "_" + self.date.month + "_" + x] = x;
           }
           self.dateList = dateList;
           self.checkAllCheck();
@@ -1157,9 +811,7 @@ export default {
           let days = res.data;
           let start = self.showDateInfo[self.showDate.year].start;
           let showDateList = {};
-          let yearInd = Object.keys(self.showDateInfo).indexOf(
-            self.showDate.year.toString()
-          );
+          let yearInd = Object.keys(self.showDateInfo).indexOf(self.showDate.year.toString());
           let year =
             yearInd === 0
               ? new Date().getFullYear() - 1
@@ -1170,9 +822,7 @@ export default {
           let weekPD = week === 7 ? 0 : week;
           let weekPH = [];
           for (let x = 1; x <= days; x++) {
-            showDateList[
-              "show_" + self.showDate.year + "_" + self.showDate.month + "_" + x
-            ] = x;
+            showDateList["show_" + self.showDate.year + "_" + self.showDate.month + "_" + x] = x;
           }
           for (let x = 0; x < weekPD; x++) {
             weekPH.push("");
@@ -1192,8 +842,8 @@ export default {
             fromCityCode: "",
             toCityCodes: [],
             charge: "",
-            transitTime: ""
-          }
+            transitTime: "",
+          },
         ];
       });
     },
@@ -1234,16 +884,12 @@ export default {
             fromCityCode: "",
             toCityCodes: [],
             charge: "",
-            transitTime: ""
+            transitTime: "",
           });
         } else {
           // 重新计算距离
           for (let i of cityList) {
-            getCityDT(
-              i.fromCityCode,
-              i.toCityCodes.toString(),
-              self.form.category
-            )
+            getCityDT(i.fromCityCode, i.toCityCodes.toString(), self.form.category)
               .then(res => {
                 i.minMiles = res.data.minMiles;
                 i.maxMiles = res.data.maxMiles;
@@ -1263,9 +909,7 @@ export default {
       });
       // 目的地省为空
       if (e.length === 0) {
-        self.$message.warning(
-          self.$t("resources.pleaseSelectADdestinationFirst")
-        );
+        self.$message.warning(self.$t("resources.pleaseSelectADdestinationFirst"));
       }
     },
     choosePlate(e) {
@@ -1289,7 +933,7 @@ export default {
         dateList["show_" + i.bcYear + "_" + i.month + "_" + i.day] = {
           bcYear: i.bcYear,
           month: i.month,
-          day: i.day
+          day: i.day,
         };
       }
       self.showDateList = dateList;
@@ -1297,16 +941,8 @@ export default {
       this.$forceUpdate();
     },
     formCityChange(row) {
-      if (
-        row.fromCityCode != "" &&
-        row.toCityCodes.length != 0 &&
-        self.form.category != ""
-      ) {
-        getCityDT(
-          row.fromCityCode,
-          row.toCityCodes.toString(),
-          self.form.category
-        )
+      if (row.fromCityCode != "" && row.toCityCodes.length != 0 && self.form.category != "") {
+        getCityDT(row.fromCityCode, row.toCityCodes.toString(), self.form.category)
           .then(res => {
             row.minMiles = res.data.minMiles;
             row.maxMiles = res.data.maxMiles;
@@ -1326,7 +962,7 @@ export default {
         fromCityCode: "",
         toCityCodes: [],
         charge: "",
-        transitTime: ""
+        transitTime: "",
       });
       let e = document.getElementsByClassName("tab-wrapper");
       e[1].scrollTop = e[1].scrollHeight;
@@ -1373,14 +1009,14 @@ export default {
     },
     search(e) {
       console.log(e);
-    }
+    },
   },
   created() {
     self = this;
   },
   mounted() {
     self.loadData();
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>

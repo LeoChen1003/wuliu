@@ -13,25 +13,23 @@ Vue.use(VueI18n);
 const messages = {
   en_US: {
     ...enLocale,
-    ...elementEnLocale
+    ...elementEnLocale,
   },
   zh_CN: {
     ...zhLocale,
-    ...elementZhLocale
+    ...elementZhLocale,
   },
   th_TH: {
     ...thLocale,
-    ...elementThLocale
-  }
+    ...elementThLocale,
+  },
 };
 export function getLanguage() {
   const chooseLanguage = Cookies.get("language");
   if (chooseLanguage) return chooseLanguage;
 
   // if has not choose language
-  const language = (
-    navigator.language || navigator.browserLanguage
-  ).toLowerCase();
+  const language = (navigator.language || navigator.browserLanguage).toLowerCase();
   const locales = Object.keys(messages);
   for (const locale of locales) {
     if (language.indexOf(locale) > -1) {
@@ -46,7 +44,7 @@ const i18n = new VueI18n({
   locale: getLanguage(),
   // set locale messages
   messages,
-  silentTranslationWarn: true
+  silentTranslationWarn: true,
 });
 
 export default i18n;

@@ -13,25 +13,14 @@
         @contextmenu.prevent.native="openMenu(tag, $event)"
       >
         {{ generateTitle(tag.title) }}
-        <span
-          v-if="!tag.meta.affix"
-          class="el-icon-close"
-          @click.prevent.stop="closeSelectedTag(tag)"
-        />
+        <span v-if="!tag.meta.affix" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
       </router-link>
     </scroll-pane>
-    <ul
-      v-show="visible"
-      :style="{ left: left + 'px', top: top + 'px' }"
-      class="contextmenu"
-    >
+    <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
       <li @click="refreshSelectedTag(selectedTag)">
         {{ $t("tagsView.refresh") }}
       </li>
-      <li
-        v-if="!(selectedTag.meta && selectedTag.meta.affix)"
-        @click="closeSelectedTag(selectedTag)"
-      >
+      <li v-if="!(selectedTag.meta && selectedTag.meta.affix)" @click="closeSelectedTag(selectedTag)">
         {{ $t("tagsView.close") }}
       </li>
       <li @click="closeOthersTags">{{ $t("tagsView.closeOthers") }}</li>
@@ -53,7 +42,7 @@ export default {
       top: 0,
       left: 0,
       selectedTag: {},
-      affixTags: []
+      affixTags: [],
     };
   },
   computed: {
@@ -62,7 +51,7 @@ export default {
     },
     routes() {
       return this.$store.state.permission.routes;
-    }
+    },
   },
   watch: {
     $route() {
@@ -75,7 +64,7 @@ export default {
       } else {
         document.body.removeEventListener("click", this.closeMenu);
       }
-    }
+    },
   },
   mounted() {
     this.initTags();
@@ -95,7 +84,7 @@ export default {
             fullPath: tagPath,
             path: tagPath,
             name: route.name,
-            meta: { ...route.meta }
+            meta: { ...route.meta },
           });
         }
         if (route.children) {
@@ -143,27 +132,23 @@ export default {
         const { fullPath } = view;
         this.$nextTick(() => {
           this.$router.replace({
-            path: "/redirect" + fullPath
+            path: "/redirect" + fullPath,
           });
         });
       });
     },
     closeSelectedTag(view) {
-      this.$store
-        .dispatch("tagsView/delView", view)
-        .then(({ visitedViews }) => {
-          if (this.isActive(view)) {
-            this.toLastView(visitedViews, view);
-          }
-        });
+      this.$store.dispatch("tagsView/delView", view).then(({ visitedViews }) => {
+        if (this.isActive(view)) {
+          this.toLastView(visitedViews, view);
+        }
+      });
     },
     closeOthersTags() {
       this.$router.push(this.selectedTag);
-      this.$store
-        .dispatch("tagsView/delOthersViews", this.selectedTag)
-        .then(() => {
-          this.moveToCurrentTag();
-        });
+      this.$store.dispatch("tagsView/delOthersViews", this.selectedTag).then(() => {
+        this.moveToCurrentTag();
+      });
     },
     closeAllTags(view) {
       this.$store.dispatch("tagsView/delAllViews").then(({ visitedViews }) => {
@@ -207,8 +192,8 @@ export default {
     },
     closeMenu() {
       this.visible = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

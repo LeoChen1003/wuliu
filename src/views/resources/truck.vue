@@ -1,12 +1,7 @@
 <template>
   <div class="manage tabfix">
     <div>
-      <el-button
-        type="primary"
-        style="width:150px;margin-bottom:20px;"
-        @click="toAdd"
-        >{{ $t("resources.add") }}</el-button
-      >
+      <el-button type="primary" style="width:150px;margin-bottom:20px;" @click="toAdd">{{ $t("resources.add") }}</el-button>
     </div>
     <el-row :gutter="40">
       <el-col :span="12">
@@ -18,35 +13,18 @@
           @current-change="handleCurrentChange"
           :cell-style="cell"
         >
-          <el-table-column
-            prop="plate"
-            :highlight-current-row="true"
-            :label="$t('resources.licensePlate')"
-          ></el-table-column>
-          <el-table-column
-            prop="category"
-            :label="$t('resources.truckType')"
-          ></el-table-column>
-          <el-table-column
-            prop="activeStatus"
-            :label="$t('resources.status')"
-          ></el-table-column>
+          <el-table-column prop="plate" :highlight-current-row="true" :label="$t('resources.licensePlate')"></el-table-column>
+          <el-table-column prop="category" :label="$t('resources.truckType')"></el-table-column>
+          <el-table-column prop="activeStatus" :label="$t('resources.status')"></el-table-column>
           <el-table-column width="200px">
             <template slot-scope="scope">
               <div style="box-sizing:border-box;padding:0 5px;">
-                <el-button
-                  type="primary"
-                  style="margin-bottom:5px;width:100%;"
-                  @click="toEdit(scope.row)"
-                >
+                <el-button type="primary" style="margin-bottom:5px;width:100%;" @click="toEdit(scope.row)">
                   {{ $t("resources.edit") }}
                 </el-button>
-                <el-button
-                  type="primary"
-                  style="margin-left:0;width:100%;"
-                  @click="reset(scope.row)"
-                  >{{ $t("resources.reset") }}</el-button
-                >
+                <el-button type="primary" style="margin-left:0;width:100%;" @click="reset(scope.row)">{{
+                  $t("resources.reset")
+                }}</el-button>
               </div>
             </template>
           </el-table-column>
@@ -56,53 +34,20 @@
         <el-tabs v-model="activeTab" type="border-card">
           <el-tab-pane :label="$t('resources.task')" name="first">
             <el-table :data="[]" border :cell-style="cell">
-              <el-table-column
-                prop=""
-                :label="$t('resources.TaskNo')"
-              ></el-table-column>
-              <el-table-column
-                prop=""
-                :label="$t('resources.description')"
-              ></el-table-column>
-              <el-table-column
-                prop=""
-                :label="$t('resources.implementation')"
-              ></el-table-column>
+              <el-table-column prop="" :label="$t('resources.TaskNo')"></el-table-column>
+              <el-table-column prop="" :label="$t('resources.description')"></el-table-column>
+              <el-table-column prop="" :label="$t('resources.implementation')"></el-table-column>
             </el-table>
           </el-tab-pane>
-          <el-tab-pane
-            :label="$t('resources.detailedInformation')"
-            name="second"
-          >
-            <el-form
-              class="form"
-              size="small"
-              v-if="thisRow"
-              label-position="left"
-              label-width="160px"
-            >
+          <el-tab-pane :label="$t('resources.detailedInformation')" name="second">
+            <el-form class="form" size="small" v-if="thisRow" label-position="left" label-width="160px">
               <el-form-item :label="$t('resources.licensePlate')">
-                <el-input
-                  v-model="thisRow.plate"
-                  disabled
-                  class="inputWidth"
-                ></el-input>
+                <el-input v-model="thisRow.plate" disabled class="inputWidth"></el-input>
               </el-form-item>
               <el-form-item prop="category" :label="$t('resources.truckType')">
                 <div class="double">
-                  <el-select
-                    v-model="thisRow.category"
-                    disabled
-                    :placeholder="$t('placeholder.pleaseChoose')"
-                    class="inputWidth"
-                  >
-                    <el-option
-                      v-for="item in categoryList"
-                      :key="item.key"
-                      :label="item.value"
-                      :value="item.key"
-                    >
-                    </el-option>
+                  <el-select v-model="thisRow.category" disabled :placeholder="$t('placeholder.pleaseChoose')" class="inputWidth">
+                    <el-option v-for="item in categoryList" :key="item.key" :label="item.value" :value="item.key"> </el-option>
                   </el-select>
                   <el-select
                     v-model="thisRow.subCategory"
@@ -110,33 +55,18 @@
                     :placeholder="$t('placeholder.pleaseChoose')"
                     class="inputWidth"
                   >
-                    <el-option
-                      v-for="item in subCategoryList"
-                      :key="item.key"
-                      :label="item.value"
-                      :value="item.key"
-                    >
-                    </el-option>
+                    <el-option v-for="item in subCategoryList" :key="item.key" :label="item.value" :value="item.key"> </el-option>
                   </el-select>
                 </div>
               </el-form-item>
-              <el-form-item
-                prop="registerAtRegion"
-                :label="$t('resources.provinceOfRegistrationPlace')"
-              >
+              <el-form-item prop="registerAtRegion" :label="$t('resources.provinceOfRegistrationPlace')">
                 <el-select
                   v-model="thisRow.registerAtRegion"
                   disabled
                   :placeholder="$t('placeholder.pleaseChoose')"
                   class="inputWidth"
                 >
-                  <el-option
-                    v-for="item in provList"
-                    :key="item.code"
-                    :label="item.name"
-                    :value="item.code"
-                  >
-                  </el-option>
+                  <el-option v-for="item in provList" :key="item.code" :label="item.name" :value="item.code"> </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item v-if="regPreList.length != 0">
@@ -167,29 +97,16 @@
                   :placeholder="$t('placeholder.pleaseChoose')"
                   class="inputWidth"
                 >
-                  <el-option
-                    v-for="item in optionsStatus"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
+                  <el-option v-for="item in optionsStatus" :key="item.value" :label="item.label" :value="item.value"> </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item
-                prop="insuranceExpiredAt"
-                :label="$t('resources.annualProductDamageInsurancePolicy')"
-              >
+              <el-form-item prop="insuranceExpiredAt" :label="$t('resources.annualProductDamageInsurancePolicy')">
                 <template>
                   <div class="inputWidth">
-                    <el-tag
-                      v-if="thisRow.insuranceStatus == 'HAS_INSURANCE'"
-                      type="success"
-                      >{{ $t("resources.HAS_INSURANCE") }}</el-tag
-                    >
-                    <el-tag v-else type="info">{{
-                      $t("resources.DO_NOT_HAS_INSURANCE")
+                    <el-tag v-if="thisRow.insuranceStatus == 'HAS_INSURANCE'" type="success">{{
+                      $t("resources.HAS_INSURANCE")
                     }}</el-tag>
+                    <el-tag v-else type="info">{{ $t("resources.DO_NOT_HAS_INSURANCE") }}</el-tag>
                   </div>
                 </template>
               </el-form-item>
@@ -206,23 +123,14 @@
                     </el-image>
                   </div>
                 </el-form-item>
-                <el-form-item
-                  prop="insuranceExpiredAt"
-                  :label="$t('resources.expireDate')"
-                >
+                <el-form-item prop="insuranceExpiredAt" :label="$t('resources.expireDate')">
                   <div class="inputWidth">{{ thisRow.insuranceExpiredAt }}</div>
                 </el-form-item>
-                <el-form-item
-                  prop="insuranceAmount"
-                  :label="$t('resources.IinsuranceValue')"
-                >
+                <el-form-item prop="insuranceAmount" :label="$t('resources.IinsuranceValue')">
                   <div class="inputWidth">{{ thisRow.insuranceAmount }}</div>
                 </el-form-item>
               </div>
-              <el-form-item
-                :label="$t('resources.truckPhotos')"
-                v-if="truPreList.length != 0"
-              >
+              <el-form-item :label="$t('resources.truckPhotos')" v-if="truPreList.length != 0">
                 <div class="inputWidth">
                   <el-image
                     v-for="(img, index) in truPreList"
@@ -236,20 +144,11 @@
               </el-form-item>
             </el-form>
           </el-tab-pane>
-          <el-tab-pane
-            :label="$t('resources.locationTracking')"
-            name="third"
-          ></el-tab-pane>
+          <el-tab-pane :label="$t('resources.locationTracking')" name="third"></el-tab-pane>
         </el-tabs>
       </el-col>
     </el-row>
-    <el-dialog
-      :title="$t('resources.truck')"
-      :visible.sync="dialogVisible"
-      @close="dialogClose"
-      width="700px"
-      center
-    >
+    <el-dialog :title="$t('resources.truck')" :visible.sync="dialogVisible" @close="dialogClose" width="700px" center>
       <div>
         <el-form
           ref="detailform"
@@ -261,61 +160,24 @@
           label-width="160px"
         >
           <el-form-item prop="plate" :label="$t('resources.licensePlate')">
-            <el-input
-              v-model="detailform.plate"
-              :disabled="editType == 'edit' ? true : false"
-              class="inputWidth"
-            ></el-input>
+            <el-input v-model="detailform.plate" :disabled="editType == 'edit' ? true : false" class="inputWidth"></el-input>
           </el-form-item>
           <el-form-item prop="category" :label="$t('resources.truckType')">
             <div class="double">
-              <el-select
-                v-model="detailform.category"
-                :placeholder="$t('placeholder.pleaseChoose')"
-                class="inputWidth"
-              >
-                <el-option
-                  v-for="item in categoryList"
-                  :key="item.key"
-                  :label="item.value"
-                  :value="item.key"
-                >
-                </el-option>
+              <el-select v-model="detailform.category" :placeholder="$t('placeholder.pleaseChoose')" class="inputWidth">
+                <el-option v-for="item in categoryList" :key="item.key" :label="item.value" :value="item.key"> </el-option>
               </el-select>
-              <el-select
-                v-model="detailform.subCategory"
-                :placeholder="$t('placeholder.pleaseChoose')"
-                class="inputWidth"
-              >
-                <el-option
-                  v-for="item in subCategoryList"
-                  :key="item.key"
-                  :label="item.value"
-                  :value="item.key"
-                >
-                </el-option>
+              <el-select v-model="detailform.subCategory" :placeholder="$t('placeholder.pleaseChoose')" class="inputWidth">
+                <el-option v-for="item in subCategoryList" :key="item.key" :label="item.value" :value="item.key"> </el-option>
               </el-select>
             </div>
           </el-form-item>
           <!-- <el-form-item prop="subCategory">
 
           </el-form-item> -->
-          <el-form-item
-            prop="registerAtRegion"
-            :label="$t('resources.provinceOfRegistrationPlace')"
-          >
-            <el-select
-              v-model="detailform.registerAtRegion"
-              :placeholder="$t('placeholder.pleaseChoose')"
-              class="inputWidth"
-            >
-              <el-option
-                v-for="item in provList"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code"
-              >
-              </el-option>
+          <el-form-item prop="registerAtRegion" :label="$t('resources.provinceOfRegistrationPlace')">
+            <el-select v-model="detailform.registerAtRegion" :placeholder="$t('placeholder.pleaseChoose')" class="inputWidth">
+              <el-option v-for="item in provList" :key="item.code" :label="item.name" :value="item.code"> </el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -338,46 +200,22 @@
             </div>
           </el-form-item>
           <el-form-item prop="mobile" :label="$t('resources.phone')">
-            <el-input
-              v-model="detailform.mobile"
-              @mousewheel.native.prevent
-              type="number"
-              class="inputWidth"
-            ></el-input>
+            <el-input v-model="detailform.mobile" @mousewheel.native.prevent type="number" class="inputWidth"></el-input>
           </el-form-item>
           <el-form-item prop="status" :label="$t('resources.status')">
-            <el-select
-              v-model="detailform.status"
-              :placeholder="$t('placeholder.pleaseChoose')"
-              class="inputWidth"
-            >
-              <el-option
-                v-for="item in optionsStatus"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
+            <el-select v-model="detailform.status" :placeholder="$t('placeholder.pleaseChoose')" class="inputWidth">
+              <el-option v-for="item in optionsStatus" :key="item.value" :label="item.label" :value="item.value"> </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item
-            prop="insuranceExpiredAt"
-            :label="$t('resources.annualProductDamageInsurancePolicy')"
-          >
+          <el-form-item prop="insuranceExpiredAt" :label="$t('resources.annualProductDamageInsurancePolicy')">
             <template>
               <div class="inputWidth">
-                <el-radio
-                  v-model="detailform.insuranceStatus"
-                  label="HAS_INSURANCE"
-                  border
-                  >{{ $t("resources.HAS_INSURANCE") }}</el-radio
-                >
-                <el-radio
-                  v-model="detailform.insuranceStatus"
-                  label="DO_NOT_HAS_INSURANCE"
-                  border
-                  >{{ $t("resources.DO_NOT_HAS_INSURANCE") }}</el-radio
-                >
+                <el-radio v-model="detailform.insuranceStatus" label="HAS_INSURANCE" border>{{
+                  $t("resources.HAS_INSURANCE")
+                }}</el-radio>
+                <el-radio v-model="detailform.insuranceStatus" label="DO_NOT_HAS_INSURANCE" border>{{
+                  $t("resources.DO_NOT_HAS_INSURANCE")
+                }}</el-radio>
               </div>
             </template>
           </el-form-item>
@@ -401,10 +239,7 @@
                 </el-upload>
               </div>
             </el-form-item>
-            <el-form-item
-              prop="insuranceExpiredAt"
-              :label="$t('resources.expireDate')"
-            >
+            <el-form-item prop="insuranceExpiredAt" :label="$t('resources.expireDate')">
               <el-cascader
                 v-model="dateCascader"
                 class="innerInp"
@@ -415,15 +250,8 @@
                 @change="dateChange"
               ></el-cascader>
             </el-form-item>
-            <el-form-item
-              prop="insuranceAmount"
-              :label="$t('resources.IinsuranceValue')"
-            >
-              <el-input
-                type="number"
-                v-model="detailform.insuranceAmount"
-                class="inputWidth"
-              ></el-input>
+            <el-form-item prop="insuranceAmount" :label="$t('resources.IinsuranceValue')">
+              <el-input type="number" v-model="detailform.insuranceAmount" class="inputWidth"></el-input>
             </el-form-item>
           </div>
           <el-form-item :label="$t('resources.truckPhotos')">
@@ -446,14 +274,9 @@
             </div>
           </el-form-item>
           <el-form-item>
-            <el-button
-              type="primary"
-              style="margin-bottom:20px;"
-              :loading="loading"
-              class="inputWidth"
-              @click="toConfirm"
-              >{{ $t("resources.confirm") }}</el-button
-            >
+            <el-button type="primary" style="margin-bottom:20px;" :loading="loading" class="inputWidth" @click="toConfirm">{{
+              $t("resources.confirm")
+            }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -468,18 +291,8 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import { mapGetters } from "vuex";
-import {
-  truckList,
-  truckAdd,
-  truckEdit,
-  resetPassword
-} from "../../api/resources";
-import {
-  getTruckType,
-  getProvinceList,
-  getBcYear,
-  getBcDay
-} from "../../api/data";
+import { truckList, truckAdd, truckEdit, resetPassword } from "../../api/resources";
+import { getTruckType, getProvinceList, getBcYear, getBcDay } from "../../api/data";
 import { getToken } from "@/utils/auth";
 
 let self;
@@ -501,17 +314,17 @@ export default {
         plate: "",
         registerAtRegion: "",
         status: "ACTIVE",
-        mobile: ""
+        mobile: "",
       },
       optionsStatus: [
         {
           value: "ACTIVE",
-          label: "ACTIVE"
+          label: "ACTIVE",
         },
         {
           value: "CLOSED",
-          label: "CLOSED"
-        }
+          label: "CLOSED",
+        },
       ],
       categoryList: [],
       subCategoryList: [],
@@ -524,7 +337,7 @@ export default {
         category: [{ required: true, trigger: "change" }],
         subCategory: [{ required: true, trigger: "change" }],
         status: [{ required: true, trigger: "change" }],
-        mobile: [{ required: true, trigger: "change" }]
+        mobile: [{ required: true, trigger: "change" }],
       },
       loading: false,
       resetLoading: false,
@@ -544,7 +357,7 @@ export default {
               for (let x = -1; x < 20; x++) {
                 years.push({
                   label: self.bcYear + x,
-                  value: self.bcYear + x
+                  value: self.bcYear + x,
                 });
               }
               resolve(years);
@@ -554,7 +367,7 @@ export default {
             for (let y = 1; y <= 12; y++) {
               months.push({
                 label: y,
-                value: y
+                value: y,
               });
             }
             resolve(months);
@@ -566,26 +379,26 @@ export default {
                 dateList.push({
                   label: x,
                   value: x,
-                  leaf: true
+                  leaf: true,
                 });
               }
               resolve(dateList);
             });
           }
-        }
+        },
       },
       fileList1: [],
       fileList2: [],
       fileList3: [],
       headers: {
-        Authorization: getToken()
+        Authorization: getToken(),
       },
       previewDialog: false,
       previewImg: "",
       thisRow: null,
       insPreList: [],
       regPreList: [],
-      truPreList: []
+      truPreList: [],
     };
   },
   //监听属性 类似于data概念
@@ -599,13 +412,13 @@ export default {
     },
     truFileList: function() {
       return self.$refs.truckIds.uploadFiles;
-    }
+    },
   },
   //监控data中的数据变化
   watch: {
     "$store.getters.language"() {
       self.getData();
-    }
+    },
   },
   methods: {
     cell({ row, column, rowIndex, columnIndex }) {
@@ -629,7 +442,7 @@ export default {
         plate: "",
         registerAtRegion: "",
         status: "ACTIVE",
-        mobile: ""
+        mobile: "",
       };
       self.dateCascader = [];
       if (self.$refs.detailform) {
@@ -657,7 +470,7 @@ export default {
         plate: row.plate,
         registerAtRegion: row.registerAtRegion,
         status: row.activeStatus,
-        mobile: row.mobile
+        mobile: row.mobile,
       };
       let regPreList = [];
       let insPreList = [];
@@ -665,19 +478,19 @@ export default {
       for (let i of row.registrationResource) {
         regPreList.push({
           url: i.path,
-          id: i.id
+          id: i.id,
         });
       }
       for (let i of row.insuranceResource) {
         insPreList.push({
           url: i.path,
-          id: i.id
+          id: i.id,
         });
       }
       for (let i of row.truckResource) {
         truPreList.push({
           url: i.path,
-          id: i.id
+          id: i.id,
         });
       }
       self.fileList1 = regPreList;
@@ -785,7 +598,7 @@ export default {
       this.$confirm(self.$t("resources.resetThePassword"), "", {
         confirmButtonText: self.$t("resources.confirm"),
         cancelButtonText: self.$t("resources.cancel"),
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           self.resetLoading = true;
@@ -807,7 +620,7 @@ export default {
     },
     outLimit() {
       self.$message.warning(self.$t("resources.outLimit"));
-    }
+    },
   },
   created() {
     self = this;
@@ -815,7 +628,7 @@ export default {
   mounted() {
     this.getTruckList();
     self.getData();
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>

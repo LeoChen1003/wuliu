@@ -20,12 +20,12 @@ export default {
   props: {
     timeType: {
       type: String,
-      default: ""
+      default: "",
     },
     dateDefault: {
       type: Array,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -36,12 +36,7 @@ export default {
         lazyLoad(node, resolve) {
           let year = self.bcYear;
           let date = new Date();
-          let month =
-            self.timeType == "all"
-              ? 1
-              : node.label == year
-              ? date.getMonth() + 1
-              : 1;
+          let month = self.timeType == "all" ? 1 : node.label == year ? date.getMonth() + 1 : 1;
           let day = date.getDate();
           let options = [];
           if (node.level == 0) {
@@ -50,12 +45,12 @@ export default {
               let years = [
                 {
                   label: self.bcYear,
-                  value: self.bcYear
+                  value: self.bcYear,
                 },
                 {
                   label: self.bcYear + 1,
-                  value: self.bcYear + 1
-                }
+                  value: self.bcYear + 1,
+                },
               ];
               resolve(years);
             });
@@ -64,7 +59,7 @@ export default {
             for (let y = month; y <= 12; y++) {
               months.push({
                 label: y,
-                value: y
+                value: y,
               });
             }
             resolve(months);
@@ -73,37 +68,32 @@ export default {
               let days = res.data;
               let dateList = [];
               let d =
-                self.timeType == "all"
-                  ? 1
-                  : node.parent.value == self.bcYear &&
-                    node.value == date.getMonth() + 1
-                  ? day
-                  : 1;
+                self.timeType == "all" ? 1 : node.parent.value == self.bcYear && node.value == date.getMonth() + 1 ? day : 1;
               for (let x = d; x <= days; x++) {
                 dateList.push({
                   label: x,
                   value: x,
-                  leaf: true
+                  leaf: true,
                 });
               }
               resolve(dateList);
             });
           }
-        }
-      }
+        },
+      },
     };
   },
   methods: {
     dateChange(e) {
       let time = `${e[0]}-${e[1]}-${e[2]}`;
       this.$emit("changeBCtime", time);
-    }
+    },
   },
   created() {
     self = this;
     self.dateCascader = self.dateDefault.map(Number);
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 <style scope lang="scss"></style>

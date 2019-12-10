@@ -7,7 +7,7 @@ export function ftlLine(data, data2) {
     url: "/api/demand/order/search/ftlLine",
     method: "post",
     data,
-    params: data2
+    params: data2,
   });
 }
 
@@ -16,7 +16,7 @@ export function ftlLines(data) {
   return request({
     url: "/api/demand/order/search/ftlLines",
     method: "get",
-    params: data
+    params: data,
   });
 }
 
@@ -25,7 +25,7 @@ export function ftlCharge(data) {
   return request({
     url: "/api/demand/order/ftl/charge",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -34,7 +34,7 @@ export function placeOrder(data) {
   return requestJSON({
     url: "/api/demand/order/list",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -43,6 +43,6 @@ export function releaseOrder(data) {
   return requestJSON({
     url: "/api/demand/order/demand",
     method: "post",
-    data
+    data,
   });
 }
