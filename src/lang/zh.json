@@ -305,7 +305,10 @@
     "truckPhotos": "卡车照片",
     "license": "驾照",
     "identityCard": "身份证",
-    "resetThePassword": "重置密码， 你确认吗？"
+    "resetThePassword": "重置密码， 你确认吗？",
+    "deliverableDistrict": "可派送地区",
+    "priceCoefficient": "价格系数",
+    "map": "地图"
   },
   "billing": {
     "billingStatus": "状态",

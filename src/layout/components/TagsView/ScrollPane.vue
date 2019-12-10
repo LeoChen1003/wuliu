@@ -1,10 +1,5 @@
 <template>
-  <el-scrollbar
-    ref="scrollContainer"
-    :vertical="false"
-    class="scroll-container"
-    @wheel.native.prevent="handleScroll"
-  >
+  <el-scrollbar ref="scrollContainer" :vertical="false" class="scroll-container" @wheel.native.prevent="handleScroll">
     <slot />
   </el-scrollbar>
 </template>
@@ -16,13 +11,13 @@ export default {
   name: "ScrollPane",
   data() {
     return {
-      left: 0
+      left: 0,
     };
   },
   computed: {
     scrollWrapper() {
       return this.$refs.scrollContainer.$refs.wrap;
-    }
+    },
   },
   methods: {
     handleScroll(e) {
@@ -48,8 +43,7 @@ export default {
       if (firstTag === currentTag) {
         $scrollWrapper.scrollLeft = 0;
       } else if (lastTag === currentTag) {
-        $scrollWrapper.scrollLeft =
-          $scrollWrapper.scrollWidth - $containerWidth;
+        $scrollWrapper.scrollLeft = $scrollWrapper.scrollWidth - $containerWidth;
       } else {
         // find preTag and nextTag
         const currentIndex = tagList.findIndex(item => item === currentTag);
@@ -57,24 +51,19 @@ export default {
         const nextTag = tagList[currentIndex + 1];
 
         // the tag's offsetLeft after of nextTag
-        const afterNextTagOffsetLeft =
-          nextTag.$el.offsetLeft + nextTag.$el.offsetWidth + tagAndTagSpacing;
+        const afterNextTagOffsetLeft = nextTag.$el.offsetLeft + nextTag.$el.offsetWidth + tagAndTagSpacing;
 
         // the tag's offsetLeft before of prevTag
-        const beforePrevTagOffsetLeft =
-          prevTag.$el.offsetLeft - tagAndTagSpacing;
+        const beforePrevTagOffsetLeft = prevTag.$el.offsetLeft - tagAndTagSpacing;
 
-        if (
-          afterNextTagOffsetLeft >
-          $scrollWrapper.scrollLeft + $containerWidth
-        ) {
+        if (afterNextTagOffsetLeft > $scrollWrapper.scrollLeft + $containerWidth) {
           $scrollWrapper.scrollLeft = afterNextTagOffsetLeft - $containerWidth;
         } else if (beforePrevTagOffsetLeft < $scrollWrapper.scrollLeft) {
           $scrollWrapper.scrollLeft = beforePrevTagOffsetLeft;
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

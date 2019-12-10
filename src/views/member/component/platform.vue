@@ -9,13 +9,7 @@
       </el-table-column>
       <el-table-column prop="phone" :label="$t('member.platform_name')">
         <template slot-scope="scope">
-          {{
-            scope.row.site
-              ? scope.row.site.type == "PERSONAL"
-                ? scope.row.site.humanName
-                : scope.row.site.companyName
-              : ""
-          }}
+          {{ scope.row.site ? (scope.row.site.type == "PERSONAL" ? scope.row.site.humanName : scope.row.site.companyName) : "" }}
         </template>
       </el-table-column>
       <el-table-column prop="userName" :label="$t('member.userName')">
@@ -23,24 +17,13 @@
           {{scope.row.financeGranteeAccount?scope.row.financeGranteeAccount.name:''}}
         </template> -->
       </el-table-column>
-      <el-table-column
-        prop="applyType"
-        :label="$t('member.partnerType')"
-      ></el-table-column>
+      <el-table-column prop="applyType" :label="$t('member.partnerType')"></el-table-column>
       <el-table-column :label="$t('member.guarantee')">
         <template slot-scope="scope">
-          {{
-            scope.row.financeGranteeAccount
-              ? scope.row.financeGranteeAccount.currentBalance
-              : null
-          }}
+          {{ scope.row.financeGranteeAccount ? scope.row.financeGranteeAccount.currentBalance : null }}
         </template>
       </el-table-column>
-      <el-table-column
-        prop="contractNo"
-        v-if="auditStatus != 'DEFAULT'"
-        :label="$t('member.contract')"
-      >
+      <el-table-column prop="contractNo" v-if="auditStatus != 'DEFAULT'" :label="$t('member.contract')">
         <template slot-scope="scope">
           <div style="cursor: pointer;">
             <el-link :href="scope.row.contract" target="_blank" type="primary">
@@ -49,10 +32,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="auditStatus"
-        :label="$t('member.status')"
-      ></el-table-column>
+      <el-table-column prop="auditStatus" :label="$t('member.status')"></el-table-column>
       <el-table-column width="80px;">
         <template slot-scope="scope">
           <div style="cursor: pointer;" @click="toShow(scope.row)">
@@ -72,30 +52,21 @@
       layout="prev, pager, next, jumper"
       :total="page.total"
     ></el-pagination>
-    <el-dialog
-      :title="$t('member.essentialData')"
-      center
-      top="0vh"
-      :visible.sync="dialogVisible"
-      width="70%"
-    >
+    <el-dialog :title="$t('member.essentialData')" center top="0vh" :visible.sync="dialogVisible" width="70%">
       <div class="container">
         <el-form ref="form" label-width="150px">
           <!-- 会员类型 -->
           <el-form-item class="choose-type" :label="$t('member.memberType')">
             <el-checkbox-group v-model="typeList" disabled>
               <el-checkbox label="DEMAND">
-                {{ $t("member.demand") }} ผู้ใช้บริการว่าจ้างขนส่งสินค้า
-                ผ่านการให้บริการของ แพลตฟอร์ม
+                {{ $t("member.demand") }} ผู้ใช้บริการว่าจ้างขนส่งสินค้า ผ่านการให้บริการของ แพลตฟอร์ม
               </el-checkbox>
               <el-checkbox label="SUPPLY">
-                {{ $t("member.supply") }} ผู้ให้บริการขนส่ง
-                ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่งผู้รับปลายทาง
+                {{ $t("member.supply") }} ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่งผู้รับปลายทาง
                 โดยผ่านการบริการของแพลตฟอร์ม
               </el-checkbox>
               <el-checkbox label="HUB" disabled>
-                {{ $t("member.hub") }} ศูนย์รวบรวมและแลกเปลี่ยนสินค้า
-                ระหว่างผู้ส่งสินค้าและผู้ขนส่ง โดยผ่านการบริการของแพลตฟอร์ม
+                {{ $t("member.hub") }} ศูนย์รวบรวมและแลกเปลี่ยนสินค้า ระหว่างผู้ส่งสินค้าและผู้ขนส่ง โดยผ่านการบริการของแพลตฟอร์ม
               </el-checkbox>
             </el-checkbox-group>
           </el-form-item>
@@ -103,9 +74,7 @@
           <el-form-item :label="$t('member.typeOfRegistration')">
             <el-radio-group v-model="infoForm.type" disabled>
               <el-radio label="PERSONAL">{{ $t("member.personal") }}</el-radio>
-              <el-radio label="COMPANY">{{
-                $t("member.juristicPerson")
-              }}</el-radio>
+              <el-radio label="COMPANY">{{ $t("member.juristicPerson") }}</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item :label="$t('member.companyName')">
@@ -125,12 +94,7 @@
           </el-form-item>
           <el-form-item :label="$t('member.fullAddress')">
             <el-input class="inp" disabled v-model="infoForm.address" />
-            <el-input
-              class="inp"
-              disabled
-              placeholder="Region"
-              v-model="infoForm.region"
-            />
+            <el-input class="inp" disabled placeholder="Region" v-model="infoForm.region" />
           </el-form-item>
           <el-form-item />
           <el-form-item :label="$t('member.bankname')">
@@ -144,22 +108,11 @@
           </el-form-item>
           <el-form-item :label="$t('member.billingAddress')">
             <el-input class="inp" disabled v-model="infoForm.bankBillAddress" />
-            <el-input
-              class="inp"
-              placeholder="Region"
-              disabled
-              v-model="infoForm.bankBillRegion"
-            />
+            <el-input class="inp" placeholder="Region" disabled v-model="infoForm.bankBillRegion" />
           </el-form-item>
           <el-form-item />
           <el-form-item :label="$t('member.profileDiscription')">
-            <el-input
-              class="inp"
-              disabled
-              v-model="infoForm.description"
-              type="textarea"
-              resize="none"
-            />
+            <el-input class="inp" disabled v-model="infoForm.description" type="textarea" resize="none" />
           </el-form-item>
           <el-form-item :label="$t('member.qualificationInformation')">
             <div style="width:40%;margin-left:15px;">
@@ -168,29 +121,13 @@
                 :key="index"
                 style="display:flex;justify-content:space-between;align-items:center;font-size:16px;cursor:pointer;margin-bottom:15px;"
               >
-                <span v-if="item.credentialsType == 'affidavit'">{{
-                  $t("member.affidavit")
-                }}</span>
-                <span
-                  v-else-if="item.credentialsType == 'transportation_license'"
-                  >{{ $t("member.transportationLicense") }}</span
-                >
-                <span v-else-if="item.credentialsType == 'idcard'">{{
-                  $t("member.IDcard")
-                }}</span>
-                <span v-else-if="item.credentialsType == 'house_particulars'">{{
-                  $t("member.houseParticulars")
-                }}</span>
-                <span v-else-if="item.credentialsType == 'bank_account_copy'">{{
-                  $t("member.bangAccount")
-                }}</span>
-                <span v-else-if="item.credentialsType == 'center_map'">{{
-                  $t("member.mapForDistributionCenters")
-                }}</span>
-                <span
-                  v-else-if="item.credentialsType == 'truck_register_copy'"
-                  >{{ $t("member.carRegistration") }}</span
-                >
+                <span v-if="item.credentialsType == 'affidavit'">{{ $t("member.affidavit") }}</span>
+                <span v-else-if="item.credentialsType == 'transportation_license'">{{ $t("member.transportationLicense") }}</span>
+                <span v-else-if="item.credentialsType == 'idcard'">{{ $t("member.IDcard") }}</span>
+                <span v-else-if="item.credentialsType == 'house_particulars'">{{ $t("member.houseParticulars") }}</span>
+                <span v-else-if="item.credentialsType == 'bank_account_copy'">{{ $t("member.bangAccount") }}</span>
+                <span v-else-if="item.credentialsType == 'center_map'">{{ $t("member.mapForDistributionCenters") }}</span>
+                <span v-else-if="item.credentialsType == 'truck_register_copy'">{{ $t("member.carRegistration") }}</span>
                 <el-image
                   v-if="item.credentialsType != 'top_up_copy'"
                   style="width: 25px; height: 25px"
@@ -208,14 +145,8 @@
           </el-form-item> -->
           <el-form-item :label="$t('member.dc')" v-if="applyType == 'SUPPLY'">
             <el-table :data="dcList" border>
-              <el-table-column
-                prop="address"
-                :label="$t('member.dcAddress')"
-              ></el-table-column>
-              <el-table-column
-                prop="years"
-                :label="$t('member.transportationExperience')"
-              ></el-table-column>
+              <el-table-column prop="address" :label="$t('member.dcAddress')"></el-table-column>
+              <el-table-column prop="years" :label="$t('member.transportationExperience')"></el-table-column>
             </el-table>
           </el-form-item>
           <el-form-item>
@@ -251,22 +182,14 @@
         </el-form>
       </div>
     </el-dialog>
-    <el-dialog
-      :title="$t('member.reasonsForRefusal')"
-      :visible.sync="refuseVisible"
-      width="40%"
-    >
+    <el-dialog :title="$t('member.reasonsForRefusal')" :visible.sync="refuseVisible" width="40%">
       <div style="display:flex;justify-content:center;align-items:center;">
         {{ $t("member.reason") }}：
         <el-input v-model="reason" class="inp"></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="refuseVisible = false">{{
-          $t("member.cancel")
-        }}</el-button>
-        <el-button type="info" :loading="refuseLoading" @click="rejectIt">{{
-          $t("member.reject")
-        }}</el-button>
+        <el-button @click="refuseVisible = false">{{ $t("member.cancel") }}</el-button>
+        <el-button type="info" :loading="refuseLoading" @click="rejectIt">{{ $t("member.reject") }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -275,14 +198,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import {
-  platformList,
-  platformAccept,
-  platformRefuse,
-  platformActive,
-  dcInfo,
-  appliedInfo
-} from "../../../api/member";
+import { platformList, platformAccept, platformRefuse, platformActive, dcInfo, appliedInfo } from "../../../api/member";
 import { mapGetters } from "vuex";
 
 export default {
@@ -291,15 +207,15 @@ export default {
   props: {
     auditStatus: {
       type: String,
-      default: "DEFAULT"
-    }
+      default: "DEFAULT",
+    },
   },
   data() {
     return {
       dataList: [],
       page: {
         total: 0,
-        currentPage: 1
+        currentPage: 1,
       },
       pagesize: 20,
       dialogVisible: false,
@@ -313,12 +229,12 @@ export default {
       refuseLoading: false,
       url: "",
       srcList: [],
-      dcList: []
+      dcList: [],
     };
   },
   //监听属性 类似于data概念
   computed: {
-    ...mapGetters(["permissions"])
+    ...mapGetters(["permissions"]),
   },
   //监控data中的数据变化
   watch: {},
@@ -335,12 +251,12 @@ export default {
       let self = this;
       platformList(self.auditStatus, {
         page: self.page.currentPage - 1,
-        pagesize: self.pagesize
+        pagesize: self.pagesize,
       }).then(res => {
         self.dataList = res.data.content;
         self.page = {
           total: res.data.totalElements,
-          currentPage: res.data.number + 1
+          currentPage: res.data.number + 1,
         };
       });
     },
@@ -378,11 +294,11 @@ export default {
       self
         .$confirm(this.$t("confirm.aysAgree"), this.$t("confirm.tips"), {
           confirmButtonText: this.$t("member.accept"),
-          cancelButtonText: this.$t("member.cancel")
+          cancelButtonText: this.$t("member.cancel"),
         })
         .then(() => {
           platformAccept({
-            id: self.curId
+            id: self.curId,
           }).then(res => {
             self.$message.success(res.message);
             self.dialogVisible = false;
@@ -401,7 +317,7 @@ export default {
       self.refuseLoading = true;
       platformRefuse({
         id: self.curId,
-        reason: self.reason
+        reason: self.reason,
       })
         .then(res => {
           self.$message.success(res.message);
@@ -420,11 +336,11 @@ export default {
       self
         .$confirm(this.$t("confirm.aysActivate"), this.$t("confirm.tips"), {
           confirmButtonText: this.$t("member.activate"),
-          cancelButtonText: this.$t("member.cancel")
+          cancelButtonText: this.$t("member.cancel"),
         })
         .then(() => {
           platformActive({
-            id: self.curId
+            id: self.curId,
           }).then(res => {
             self.$message.success(res.message);
             self.dialogVisible = false;
@@ -443,12 +359,12 @@ export default {
           self.srcList.push(self.credentials[x].resource.path);
         }
       }
-    }
+    },
   },
   created() {},
   mounted() {
     this.getPlatformList();
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>

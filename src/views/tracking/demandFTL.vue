@@ -4,18 +4,12 @@
       <!-- 导航 -->
       <div style="height:100%;">
         <div class="statusText">{{ $t("billing.billingStatus") }}</div>
-        <el-tabs
-          v-model="tabActive"
-          tab-position="left"
-          @tab-click="changeTab"
-          style="height:calc(100% - 50px);"
-        >
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="changeTab" style="height:calc(100% - 50px);">
           <el-tab-pane name="WAITTING">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.Pending")
-                  }}<sub class="badge">{{ statusCount.WAITTING }}</sub>
+                  {{ $t("tracking.Pending") }}<sub class="badge">{{ statusCount.WAITTING }}</sub>
                 </div>
               </div>
             </span>
@@ -24,8 +18,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.canceled")
-                  }}<sub class="badge">{{ statusCount.CANCELED }}</sub>
+                  {{ $t("tracking.canceled") }}<sub class="badge">{{ statusCount.CANCELED }}</sub>
                 </div>
               </div>
             </span>
@@ -35,9 +28,7 @@
               <div class="tabLabel">
                 <div class="text">
                   {{ $t("tracking.toBeconfirmedOrderbyDemand")
-                  }}<sub class="badge red">{{
-                    statusCount.WAIT_DEMAND_TO_ACCEPT
-                  }}</sub>
+                  }}<sub class="badge red">{{ statusCount.WAIT_DEMAND_TO_ACCEPT }}</sub>
                 </div>
               </div>
             </span>
@@ -46,10 +37,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.toBeconfirmedOrderbySupply")
-                  }}<sub class="badge">{{
-                    statusCount.WAIT_SUPPLY_TO_ACCEPT
-                  }}</sub>
+                  {{ $t("tracking.toBeconfirmedOrderbySupply") }}<sub class="badge">{{ statusCount.WAIT_SUPPLY_TO_ACCEPT }}</sub>
                 </div>
               </div>
             </span>
@@ -58,8 +46,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.tobePickedUp")
-                  }}<sub class="badge">{{ statusCount.WILL_PICK }}</sub>
+                  {{ $t("tracking.tobePickedUp") }}<sub class="badge">{{ statusCount.WILL_PICK }}</sub>
                 </div>
               </div>
             </span>
@@ -68,8 +55,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.intransit")
-                  }}<sub class="badge">{{ statusCount.SENDING }}</sub>
+                  {{ $t("tracking.intransit") }}<sub class="badge">{{ statusCount.SENDING }}</sub>
                 </div>
               </div>
             </span>
@@ -78,8 +64,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.documentTobereturned")
-                  }}<sub class="badge">{{ statusCount.WILL_RETURN }}</sub>
+                  {{ $t("tracking.documentTobereturned") }}<sub class="badge">{{ statusCount.WILL_RETURN }}</sub>
                 </div>
               </div>
             </span>
@@ -88,8 +73,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.completed")
-                  }}<sub class="badge">{{ statusCount.COMPLETE }}</sub>
+                  {{ $t("tracking.completed") }}<sub class="badge">{{ statusCount.COMPLETE }}</sub>
                 </div>
               </div>
             </span>
@@ -101,10 +85,7 @@
         <el-table :data="data.content" style="width:98%;" border>
           <el-table-column :label="$t('tracking.tracking')">
             <template slot-scope="scope">
-              <el-button
-                style="width:100%;text-align:left;"
-                @click="orderLog(scope.row.id)"
-              >
+              <el-button style="width:100%;text-align:left;" @click="orderLog(scope.row.id)">
                 <div>{{ scope.row.orderNo }}</div>
                 <div>{{ scope.row.outNumber }}</div>
                 <div>{{ scope.row.createdAt }}</div>
@@ -127,12 +108,7 @@
           </el-table-column>
           <el-table-column :label="$t('tracking.supply')">
             <template slot-scope="scope">
-              <div
-                v-if="
-                  !(tabActive == '0' || tabActive == '1') &&
-                    scope.row.transport.supply
-                "
-              >
+              <div v-if="!(tabActive == '0' || tabActive == '1') && scope.row.transport.supply">
                 <div>
                   {{
                     scope.row.transport.supply.companyName == ""
@@ -178,17 +154,11 @@
                 <el-button
                   type="primary"
                   :disabled="!permissions.DemandOrderManage"
-                  v-if="
-                    scope.row.status == 'COMPLETE' && scope.row.rating == null
-                  "
+                  v-if="scope.row.status == 'COMPLETE' && scope.row.rating == null"
                   @click="rating(scope.row)"
                   >{{ $t("tracking.rating") }}</el-button
                 >
-                <el-rate
-                  v-if="scope.row.status == 'COMPLETE' && scope.row.rating"
-                  disabled
-                  v-model="scope.row.rating.rating / 2"
-                >
+                <el-rate v-if="scope.row.status == 'COMPLETE' && scope.row.rating" disabled v-model="scope.row.rating.rating / 2">
                 </el-rate>
                 <el-button
                   type="primary"
@@ -216,37 +186,18 @@
       </div>
     </div>
 
-    <el-dialog
-      :title="$t('tracking.print')"
-      :visible.sync="printeDialog"
-      width="65%"
-      class="comfirmDialog"
-    >
+    <el-dialog :title="$t('tracking.print')" :visible.sync="printeDialog" width="65%" class="comfirmDialog">
       打印
       <span slot="footer">
         <div class="footerBtn">
-          <el-button
-            size="small"
-            plain
-            style="width:300px;"
-            @click="printeDialog = false"
-            >{{ $t("tracking.confirm") }}</el-button
-          >
+          <el-button size="small" plain style="width:300px;" @click="printeDialog = false">{{
+            $t("tracking.confirm")
+          }}</el-button>
         </div>
       </span>
     </el-dialog>
-    <el-dialog
-      :title="$t('tracking.confirm')"
-      width="50%"
-      :visible.sync="confirmDialog"
-      center
-    >
-      <el-table
-        :data="quotedata"
-        highlight-current-row
-        @row-click="showRow"
-        border
-      >
+    <el-dialog :title="$t('tracking.confirm')" width="50%" :visible.sync="confirmDialog" center>
+      <el-table :data="quotedata" highlight-current-row @row-click="showRow" border>
         <!-- <el-table-column width="55">
           <template slot-scope="scope">
             <div style="width:100%;text-align:center;">
@@ -267,11 +218,7 @@
               }}
             </div>
             <div v-if="scope.row.supply.companyLogo">
-              <el-image
-                style="width: 50px;max-height:100px;"
-                :src="scope.row.supply.companyLogo"
-                fit="contain"
-              ></el-image>
+              <el-image style="width: 50px;max-height:100px;" :src="scope.row.supply.companyLogo" fit="contain"></el-image>
             </div>
           </template>
         </el-table-column>
@@ -301,48 +248,27 @@
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="confirmDialog = false">取 消</el-button>
-        <el-button :disabled="radio === ''" type="primary" @click="confirmIt">{{
-          $t("tracking.confirm")
-        }}</el-button>
+        <el-button :disabled="radio === ''" type="primary" @click="confirmIt">{{ $t("tracking.confirm") }}</el-button>
       </span>
     </el-dialog>
     <el-dialog :title="$t('tracking.orderLog')" :visible.sync="logDialog">
       <el-timeline :reverse="true">
-        <el-timeline-item
-          v-for="(item, index) in logs"
-          :key="index"
-          :timestamp="item.createdAt"
-        >
+        <el-timeline-item v-for="(item, index) in logs" :key="index" :timestamp="item.createdAt">
           {{ item.introduce }}
         </el-timeline-item>
       </el-timeline>
     </el-dialog>
-    <el-dialog
-      :title="$t('tracking.rating')"
-      :visible.sync="ratingDialog"
-      width="500px"
-    >
+    <el-dialog :title="$t('tracking.rating')" :visible.sync="ratingDialog" width="500px">
       <div style="text-align:center;">
-        <el-rate style="margin-bottom:20px;" v-model="ratingForm.rating">
-        </el-rate>
-        <el-input
-          v-model="ratingForm.remark"
-          type="textarea"
-          :placeholder="$t('tracking.remark')"
-          resize="none"
-        ></el-input>
+        <el-rate style="margin-bottom:20px;" v-model="ratingForm.rating"> </el-rate>
+        <el-input v-model="ratingForm.remark" type="textarea" :placeholder="$t('tracking.remark')" resize="none"></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="ratingDialog = false">取 消</el-button>
         <el-button type="primary" @click="ratingConfirm">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog
-      :title="$t('tracking.confirmReceiptOfDocument')"
-      :visible.sync="rdDialog"
-      center
-      width="600px"
-    >
+    <el-dialog :title="$t('tracking.confirmReceiptOfDocument')" :visible.sync="rdDialog" center width="600px">
       <div style="text-alitn:center;">
         <div style="text-align:center;margin-bottom:10px;">
           {{ $t("tracking.areYouSure") }}
@@ -358,12 +284,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="rdDialog = false">{{
-          $t("tracking.cancel")
-        }}</el-button>
-        <el-button type="primary" :loading="rdLoading" @click="rdConfirmIt">{{
-          $t("tracking.confirm")
-        }}</el-button>
+        <el-button @click="rdDialog = false">{{ $t("tracking.cancel") }}</el-button>
+        <el-button type="primary" :loading="rdLoading" @click="rdConfirmIt">{{ $t("tracking.confirm") }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -372,13 +294,7 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import {
-  getTruckType,
-  getProvinceList,
-  getCityList,
-  getExtraServer,
-  getGoodsProperty
-} from "../../api/data";
+import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty } from "../../api/data";
 import {
   demandOrderList,
   demandStatusCount,
@@ -387,7 +303,7 @@ import {
   getOrderLog,
   orderRating,
   getImg,
-  confirmRD
+  confirmRD,
 } from "../../api/tracking.js";
 import { mapGetters } from "vuex";
 
@@ -416,18 +332,18 @@ export default {
         supportLoading: "",
         humanWorkDay: "",
         moneyPerDay: "",
-        status: ""
+        status: "",
       },
       provinceList: [],
       cityList: [],
       truckTypes: {
         categories: [],
-        subCategories: []
+        subCategories: [],
       },
       timeOptions: {
         start: "00:00",
         step: "00:15",
-        end: "23:45"
+        end: "23:45",
       },
       serveObj: {},
       propertyObj: {},
@@ -443,17 +359,17 @@ export default {
       colors: ["#99A9BF", "#F7BA2A", "#FF9900"],
       ratingForm: {
         rating: 0,
-        remark: ""
+        remark: "",
       },
       rdDialog: false,
       imgList: [],
       rdRow: {},
-      rdLoading: false
+      rdLoading: false,
     };
   },
   // 监听属性 类似于data概念
   computed: {
-    ...mapGetters(["permissions"])
+    ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {},
@@ -530,7 +446,7 @@ export default {
       self.tableLoading = true;
       demandOrderList({
         status: self.tabActive,
-        page: e - 1
+        page: e - 1,
       }).then(res => {
         self.data = res.data;
         self.tableLoading = false;
@@ -579,11 +495,7 @@ export default {
       if (self.ratingForm.rating == 0) {
         return self.$message.warning(self.$t("tracking.ratingIsRequired"));
       }
-      orderRating(
-        self.thisId,
-        self.ratingForm.rating * 2,
-        self.ratingForm.remark
-      ).then(() => {
+      orderRating(self.thisId, self.ratingForm.rating * 2, self.ratingForm.remark).then(() => {
         self.ratingDialog = false;
         self.loadData();
       });
@@ -614,8 +526,8 @@ export default {
           self.rdLoading = false;
         });
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

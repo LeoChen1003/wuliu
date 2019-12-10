@@ -15,12 +15,7 @@
         {{item}}
       </el-button>
     </div> -->
-    <el-button
-      @click="logout"
-      type="text"
-      style="color:#333;margin-right:15px;"
-      >{{ $t("layout.logout") }}</el-button
-    >
+    <el-button @click="logout" type="text" style="color:#333;margin-right:15px;">{{ $t("layout.logout") }}</el-button>
   </div>
 </template>
 
@@ -31,13 +26,11 @@ export default {
       get() {
         return this.$store.getters.language;
       },
-      set() {}
+      set() {},
     },
     roles() {
-      return this.$store.getters.userInfo.chosenRoles
-        ? this.$store.getters.userInfo.chosenRoles.split(",")
-        : [];
-    }
+      return this.$store.getters.userInfo.chosenRoles ? this.$store.getters.userInfo.chosenRoles.split(",") : [];
+    },
   },
   methods: {
     handleSetLanguage(lang) {
@@ -57,8 +50,8 @@ export default {
     async logout() {
       await this.$store.dispatch("user/logout");
       this.$router.push(`/login?redirect=${this.$route.fullPath}`);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scope lang="scss">

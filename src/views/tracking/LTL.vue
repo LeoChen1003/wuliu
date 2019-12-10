@@ -18,7 +18,7 @@ export default {
   watch: {},
   created() {},
   mounted() {},
-  methods: {}
+  methods: {},
 };
 </script>
 <style lang="scss" scoped>

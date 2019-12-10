@@ -12,28 +12,18 @@
       </div>
       <el-button size="small"
                  style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button> -->
-      <el-button
-        size="small"
-        type="primary"
-        style="width:150px;margin-left:50px;"
-        @click="toTopup"
-        >{{ $t("billing.topUp") }}</el-button
-      >
+      <el-button size="small" type="primary" style="width:150px;margin-left:50px;" @click="toTopup">{{
+        $t("billing.topUp")
+      }}</el-button>
     </div>
     <div class="content">
       <div>
-        <el-tabs
-          v-model="tabActive"
-          tab-position="left"
-          @tab-click="handleClick"
-          style="height:100%;"
-        >
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
           <el-tab-pane name="DEFAULT">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.toBeConfirmed")
-                  }}<sub class="badge red">{{ statusCount.DEFAULT }}</sub>
+                  {{ $t("billing.toBeConfirmed") }}<sub class="badge red">{{ statusCount.DEFAULT }}</sub>
                 </div>
               </div>
             </span>
@@ -42,8 +32,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.confirmed")
-                  }}<sub class="badge">{{ statusCount.ACCEPT }}</sub>
+                  {{ $t("billing.confirmed") }}<sub class="badge">{{ statusCount.ACCEPT }}</sub>
                 </div>
               </div>
             </span>
@@ -52,8 +41,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.rejected")
-                  }}<sub class="badge">{{ statusCount.REJECTED }}</sub>
+                  {{ $t("billing.rejected") }}<sub class="badge">{{ statusCount.REJECTED }}</sub>
                 </div>
               </div>
             </span>
@@ -62,25 +50,13 @@
       </div>
       <div class="container">
         <div class="center">
-          <el-table
-            :data="dataList"
-            highlight-current-row
-            @current-change="handleCurrentChange"
-            border
-          >
+          <el-table :data="dataList" highlight-current-row @current-change="handleCurrentChange" border>
             <el-table-column prop="operateAt" :label="$t('billing.date')">
               <template slot-scope="scope">
-                {{
-                  scope.row.operateAt.slice(0, 10) +
-                    " " +
-                    scope.row.operateAt.slice(11, 19)
-                }}
+                {{ scope.row.operateAt.slice(0, 10) + " " + scope.row.operateAt.slice(11, 19) }}
               </template>
             </el-table-column>
-            <el-table-column
-              prop="financeAccountType"
-              :label="$t('billing.type')"
-            ></el-table-column>
+            <el-table-column prop="financeAccountType" :label="$t('billing.type')"></el-table-column>
             <el-table-column :label="$t('billing.amount')">
               <template slot-scope="scope">
                 {{ scope.row.amount }}
@@ -109,13 +85,7 @@
         </el-card>
       </div>
     </div>
-    <el-dialog
-      :title="$t('billing.topUp')"
-      :visible.sync="dialogVisible"
-      width="60%"
-      top="10vh"
-      center
-    >
+    <el-dialog :title="$t('billing.topUp')" :visible.sync="dialogVisible" width="60%" top="10vh" center>
       <div>
         <el-form
           ref="topUpform"
@@ -127,18 +97,8 @@
           label-width="160px"
         >
           <el-form-item prop="fee_ype" :label="$t('billing.topUptype')">
-            <el-select
-              v-model="topUpform.fee_ype"
-              :placeholder="$t('placeholder.pleaseChoose')"
-              class="inputWidth"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
+            <el-select v-model="topUpform.fee_ype" :placeholder="$t('placeholder.pleaseChoose')" class="inputWidth">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="operate_at" :label="$t('billing.date')">
@@ -148,16 +108,8 @@
                             value-format='yyyy-MM-dd HH:mm:ss'
                             :placeholder="$t('placeholder.pleaseChoose')">
             </el-date-picker> -->
-            <div
-              style="display:flex;align-items:center;justify-content:space-between;"
-              class="inputWidth"
-            >
-              <bcTime
-                @changeBCtime="changeBCtime"
-                :dateDefault="[]"
-                style="width:50%;"
-                :timeType="'all'"
-              ></bcTime>
+            <div style="display:flex;align-items:center;justify-content:space-between;" class="inputWidth">
+              <bcTime @changeBCtime="changeBCtime" :dateDefault="[]" style="width:50%;" :timeType="'all'"></bcTime>
               <el-time-picker
                 v-model="time"
                 format="HH:mm:ss"
@@ -170,22 +122,13 @@
             </div>
           </el-form-item>
           <el-form-item prop="amount" :label="$t('billing.amount')">
-            <el-input
-              v-model="amount"
-              type="number"
-              @change="changeAmount"
-              class="inputWidth"
-            ></el-input>
+            <el-input v-model="amount" type="number" @change="changeAmount" class="inputWidth"></el-input>
           </el-form-item>
           <el-form-item prop="resource_id" :label="$t('billing.attachment')">
             <div class="inputWidth">
               <el-upload
                 class="upload"
-                :action="
-                  baseUrl +
-                    '?credentials_type=top_up_copy&apply_type=' +
-                    apply_type
-                "
+                :action="baseUrl + '?credentials_type=top_up_copy&apply_type=' + apply_type"
                 :headers="headers"
                 :limit="1"
                 ref="upload"
@@ -193,39 +136,23 @@
                 :on-success="uploadSuccess"
                 :on-remove="handleRemove"
               >
-                <el-button size="small" icon="el-icon-upload2" type="primary"
-                  >{{ $t("member.upload") }}
-                </el-button>
+                <el-button size="small" icon="el-icon-upload2" type="primary">{{ $t("member.upload") }} </el-button>
               </el-upload>
             </div>
           </el-form-item>
           <el-form-item prop="remarks" :label="$t('billing.remarks')">
-            <el-input
-              class="inputWidth"
-              v-model="topUpform.remarks"
-              type="textarea"
-              resize="none"
-            />
+            <el-input class="inputWidth" v-model="topUpform.remarks" type="textarea" resize="none" />
           </el-form-item>
 
           <el-form-item>
-            <el-button
-              type="primary"
-              style="margin-top:20px;"
-              :loading="loading"
-              class="inputWidth"
-              @click="toConfirm"
-              >{{ $t("resources.confirm") }}</el-button
-            >
+            <el-button type="primary" style="margin-top:20px;" :loading="loading" class="inputWidth" @click="toConfirm">{{
+              $t("resources.confirm")
+            }}</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button
-              type="info"
-              style="margin-bottom:20px;"
-              class="inputWidth"
-              @click="dialogVisible = false"
-              >{{ $t("resources.cancel") }}</el-button
-            >
+            <el-button type="info" style="margin-bottom:20px;" class="inputWidth" @click="dialogVisible = false">{{
+              $t("resources.cancel")
+            }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -264,7 +191,7 @@ export default {
         operate_at: "",
         amount: null,
         resource_id: null,
-        apply_type: localStorage.getItem("curRole")
+        apply_type: localStorage.getItem("curRole"),
       },
       amount: null,
       dataList: [],
@@ -272,40 +199,38 @@ export default {
       options: [
         {
           value: "GUARANTEE",
-          label: "GUARANTEE"
+          label: "GUARANTEE",
         },
         {
           value: "FEE",
-          label: "FEE"
-        }
+          label: "FEE",
+        },
       ],
       topUpRules: {
         fee_ype: [{ required: true }],
-        operate_at: [
-          { required: true, trigger: "blur", validator: validateTimeAt }
-        ],
+        operate_at: [{ required: true, trigger: "blur", validator: validateTimeAt }],
         amount: [{ required: true, trigger: "blur" }],
-        resource_id: [{ required: true }]
+        resource_id: [{ required: true }],
       },
       baseUrl: process.env.VUE_APP_BASE_API + "/api/member/upload",
       headers: {
         authorization: getToken(),
-        locale: self.$store.getters.language
+        locale: self.$store.getters.language,
       },
       showUrl: "",
       page: {
         total: 0,
-        currentPage: 1
+        currentPage: 1,
       },
       pagesize: 20,
       time_at: "",
       time: "",
-      statusCount: {}
+      statusCount: {},
     };
   },
   // 监听属性 类似于data概念
   computed: {
-    ...mapGetters(["permissions"])
+    ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {
@@ -316,7 +241,7 @@ export default {
     time(val) {
       let t = val ? val : "00:00:00";
       self.topUpform.operate_at = self.time_at + ` ${val}`;
-    }
+    },
   },
   created() {
     self = this;
@@ -336,12 +261,12 @@ export default {
       let applyType = localStorage.getItem("curRole");
       topUpList(applyType, self.tabActive, {
         page: self.page.currentPage - 1,
-        pagesize: self.pagesize
+        pagesize: self.pagesize,
       }).then(res => {
         self.dataList = res.data.content;
         self.page = {
           total: res.data.totalElements,
-          currentPage: res.data.number + 1
+          currentPage: res.data.number + 1,
         };
       });
     },
@@ -380,7 +305,7 @@ export default {
         operate_at: "",
         amount: null,
         resource_id: null,
-        apply_type: localStorage.getItem("curRole")
+        apply_type: localStorage.getItem("curRole"),
       };
       self.amount = null;
     },
@@ -420,8 +345,8 @@ export default {
       if (val) {
         self.showUrl = val.resource.path;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

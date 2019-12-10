@@ -1,10 +1,6 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div
-      v-if="device === 'mobile' && sidebar.opened"
-      class="drawer-bg"
-      @click="handleClickOutside"
-    />
+    <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <!-- <sidebar class="sidebar-container" /> -->
     <div :class="{ hasTagsView: needTagsView }" class="main-container">
       <div :class="{ 'fixed-header': fixedHeader }">
@@ -52,7 +48,7 @@ export default {
     AppMain,
     Navbar,
     RightPanel,
-    Settings
+    Settings,
   },
   created() {
     self = this;
@@ -64,29 +60,29 @@ export default {
       device: state => state.app.device,
       showSettings: state => state.settings.showSettings,
       needTagsView: state => state.settings.tagsView,
-      fixedHeader: state => state.settings.fixedHeader
+      fixedHeader: state => state.settings.fixedHeader,
     }),
     classObj() {
       return {
         hideSidebar: !this.sidebar.opened,
         openSidebar: this.sidebar.opened,
         withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === "mobile"
+        mobile: this.device === "mobile",
       };
     },
-    ...mapGetters(["permissions"])
+    ...mapGetters(["permissions"]),
   },
   data() {
     return {
-      subRoutes: []
+      subRoutes: [],
     };
   },
   watch: {
     $route: {
       handler: function(val, oldVal) {
         self.cRouter();
-      }
-    }
+      },
+    },
   },
   methods: {
     handleClickOutside() {
@@ -102,9 +98,7 @@ export default {
     // 寻找当前子路由集
     cNowSub(nowPath) {
       // 依附当前权限的路由集
-      let routers = JSON.parse(
-        JSON.stringify(self.$store.state.permission.addRoutes)
-      );
+      let routers = JSON.parse(JSON.stringify(self.$store.state.permission.addRoutes));
       for (let i of routers) {
         /*
          * 不包含二级路由情况
@@ -125,11 +119,11 @@ export default {
         }
       }
     },
-    generateTitle
+    generateTitle,
   },
   mounted() {
     self.cRouter();
-  }
+  },
 };
 </script>
 

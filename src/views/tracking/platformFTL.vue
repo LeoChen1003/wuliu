@@ -7,20 +7,12 @@
       <!-- 导航 -->
       <div style="height:100%;padding-right:18px;">
         <div class="statusText">{{ $t("billing.billingStatus") }}</div>
-        <el-tabs
-          v-model="tabActive"
-          tab-position="left"
-          @tab-click="tabChange"
-          style="height:calc(100% - 50px);"
-        >
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="tabChange" style="height:calc(100% - 50px);">
           <el-tab-pane name="WAIT_DEMAND_TO_ACCEPT">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.toBeconfirmedOrderbyDemand")
-                  }}<sub class="badge">{{
-                    orderStatus.WAIT_DEMAND_TO_ACCEPT
-                  }}</sub>
+                  {{ $t("tracking.toBeconfirmedOrderbyDemand") }}<sub class="badge">{{ orderStatus.WAIT_DEMAND_TO_ACCEPT }}</sub>
                 </div>
               </div>
             </span>
@@ -30,9 +22,7 @@
               <div class="tabLabel">
                 <div class="text">
                   {{ $t("tracking.toBeconfirmedOrderbySupply")
-                  }}<sub class="badge red">{{
-                    orderStatus.WAIT_SUPPLY_TO_ACCEPT
-                  }}</sub>
+                  }}<sub class="badge red">{{ orderStatus.WAIT_SUPPLY_TO_ACCEPT }}</sub>
                 </div>
               </div>
             </span>
@@ -41,8 +31,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.tobePickedUp")
-                  }}<sub class="badge red">{{ orderStatus.WILL_PICK }}</sub>
+                  {{ $t("tracking.tobePickedUp") }}<sub class="badge red">{{ orderStatus.WILL_PICK }}</sub>
                 </div>
               </div>
             </span>
@@ -51,8 +40,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.intransit")
-                  }}<sub class="badge">{{ orderStatus.SENDING }}</sub>
+                  {{ $t("tracking.intransit") }}<sub class="badge">{{ orderStatus.SENDING }}</sub>
                 </div>
               </div>
             </span>
@@ -61,8 +49,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.documentTobereturned")
-                  }}<sub class="badge">{{ orderStatus.WILL_RETURN }}</sub>
+                  {{ $t("tracking.documentTobereturned") }}<sub class="badge">{{ orderStatus.WILL_RETURN }}</sub>
                 </div>
               </div>
             </span>
@@ -71,8 +58,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.completed")
-                  }}<sub class="badge">{{ orderStatus.COMPLETE }}</sub>
+                  {{ $t("tracking.completed") }}<sub class="badge">{{ orderStatus.COMPLETE }}</sub>
                 </div>
               </div>
             </span>
@@ -102,10 +88,7 @@
         <el-table :data="data.content" v-loading="loading" border>
           <el-table-column :label="$t('tracking.tracking')">
             <template slot-scope="scope">
-              <el-button
-                style="width:100%;text-align:left;"
-                @click="orderLog(scope.row.id)"
-              >
+              <el-button style="width:100%;text-align:left;" @click="orderLog(scope.row.id)">
                 <div>{{ scope.row.orderNo }}</div>
                 <div>{{ scope.row.outNumber }}</div>
                 <div>{{ scope.row.createdAt }}</div>
@@ -114,10 +97,7 @@
           </el-table-column>
           <el-table-column :label="$t('tracking.cargo_VAS')">
             <template slot-scope="scope">
-              <el-card
-                v-for="(item, index) in scope.row.propertyList"
-                :key="index"
-              >
+              <el-card v-for="(item, index) in scope.row.propertyList" :key="index">
                 <div>{{ propertyObj[item.propertyType] }}</div>
                 <div>
                   {{ item.number }} {{ unitObj[item.unit] }} {{ item.name }}
@@ -204,68 +184,30 @@
       </div>
     </div>
 
-    <el-dialog
-      :title="$t('tracking.print')"
-      :visible.sync="printeDialog"
-      width="65%"
-      class="comfirmDialog"
-    >
+    <el-dialog :title="$t('tracking.print')" :visible.sync="printeDialog" width="65%" class="comfirmDialog">
       打印
       <span slot="footer">
         <div class="footerBtn">
-          <el-button
-            size="small"
-            plain
-            style="width:300px;"
-            @click="printeDialog = false"
-            >{{ $t("tracking.confirm") }}</el-button
-          >
+          <el-button size="small" plain style="width:300px;" @click="printeDialog = false">{{
+            $t("tracking.confirm")
+          }}</el-button>
         </div>
       </span>
     </el-dialog>
-    <el-dialog
-      :title="$t('tracking.edit')"
-      width="600px"
-      :visible.sync="editDialog"
-    >
+    <el-dialog :title="$t('tracking.edit')" width="600px" :visible.sync="editDialog">
       <el-form ref="form" :model="form" label-width="120px">
         <el-form-item :label="$t('tracking.origin')" required>
-          <el-select
-            v-model="form.fromProvinceCode"
-            class="formSelect"
-            filterable
-            placeholder="province"
-          >
-            <el-option
-              v-for="(item, index) in provinceList"
-              :key="index"
-              :label="item.name"
-              :value="item.code"
-            ></el-option>
+          <el-select v-model="form.fromProvinceCode" class="formSelect" filterable placeholder="province">
+            <el-option v-for="(item, index) in provinceList" :key="index" :label="item.name" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('tracking.destination')" required>
-          <el-select
-            v-model="form.toCityCode"
-            filterable
-            class="formSelect"
-            placeholder="city"
-          >
-            <el-option
-              v-for="(item, index) in cityList"
-              :key="index"
-              :label="item.name"
-              :value="item.code"
-            ></el-option>
+          <el-select v-model="form.toCityCode" filterable class="formSelect" placeholder="city">
+            <el-option v-for="(item, index) in cityList" :key="index" :label="item.name" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('tracking.truckType')" required>
-          <el-select
-            v-model="form.category"
-            filterable
-            class="formSelect"
-            placeholder="Truck type"
-          >
+          <el-select v-model="form.category" filterable class="formSelect" placeholder="Truck type">
             <el-option
               v-for="(item, index) in truckTypes.categories"
               :key="index"
@@ -281,29 +223,15 @@
           <el-input v-model="form.payload"></el-input>
         </el-form-item>
         <el-form-item :label="$t('tracking.cutoffTime')" required>
-          <el-time-select
-            v-model="form.finishedAt"
-            style="width:100%;"
-            :picker-options="timeOptions"
-            default-value="18:00"
-          >
+          <el-time-select v-model="form.finishedAt" style="width:100%;" :picker-options="timeOptions" default-value="18:00">
           </el-time-select>
         </el-form-item>
         <el-form-item :label="$t('tracking.quotation')" required>
-          <el-input
-            v-model="form.charge"
-            @mousewheel.native.prevent
-            type="number"
-          ></el-input>
+          <el-input v-model="form.charge" @mousewheel.native.prevent type="number"></el-input>
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog
-      :title="$t('tracking.confirmOrder')"
-      width="600px"
-      v-if="orderInfo"
-      :visible.sync="confirmDialog"
-    >
+    <el-dialog :title="$t('tracking.confirmOrder')" width="600px" v-if="orderInfo" :visible.sync="confirmDialog">
       <el-form label-width="130px">
         <el-form-item :label="$t('tracking.trackingNo')">
           <div>{{ orderInfo.orderNo }}</div>
@@ -322,24 +250,12 @@
         </el-form-item>
         <el-form-item :label="$t('tracking.driver')">
           <el-select v-model="confirmForm.driverId" filterable>
-            <el-option
-              v-for="item in td.drivers"
-              :key="item.value"
-              :label="item.name"
-              :value="item.id"
-            >
-            </el-option>
+            <el-option v-for="item in td.drivers" :key="item.value" :label="item.name" :value="item.id"> </el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('tracking.plateLicense')">
           <el-select v-model="confirmForm.truckId" filterable>
-            <el-option
-              v-for="item in td.trucks"
-              :key="item.value"
-              :label="item.plate"
-              :value="item.id"
-            >
-            </el-option>
+            <el-option v-for="item in td.trucks" :key="item.value" :label="item.plate" :value="item.id"> </el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -355,11 +271,7 @@
     </el-dialog>
     <el-dialog :title="$t('tracking.orderLog')" :visible.sync="logDialog">
       <el-timeline :reverse="true">
-        <el-timeline-item
-          v-for="(item, index) in logs"
-          :key="index"
-          :timestamp="item.createdAt"
-        >
+        <el-timeline-item v-for="(item, index) in logs" :key="index" :timestamp="item.createdAt">
           {{ item.introduce }}
         </el-timeline-item>
       </el-timeline>
@@ -370,21 +282,8 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import {
-  getTruckType,
-  getProvinceList,
-  getCityList,
-  getExtraServer,
-  getGoodsProperty
-} from "../../api/data";
-import {
-  confirmOrder,
-  updateOrderInfo,
-  rejectOrder,
-  getOrderPF,
-  getOrderLogPF,
-  getOrderStatusPF
-} from "../../api/tracking.js";
+import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty } from "../../api/data";
+import { confirmOrder, updateOrderInfo, rejectOrder, getOrderPF, getOrderLogPF, getOrderStatusPF } from "../../api/tracking.js";
 
 let self;
 export default {
@@ -410,18 +309,18 @@ export default {
         supportLoading: "",
         humanWorkDay: "",
         moneyPerDay: "",
-        status: ""
+        status: "",
       },
       provinceList: [],
       cityList: [],
       truckTypes: {
         categories: [],
-        subCategories: []
+        subCategories: [],
       },
       timeOptions: {
         start: "00:00",
         step: "00:15",
-        end: "23:45"
+        end: "23:45",
       },
       serveObj: {},
       propertyObj: {},
@@ -434,21 +333,21 @@ export default {
         WAIT_SUPPLY_TO_ACCEPT: 0,
         WAITTING: 0,
         WILL_PICK: 0,
-        WILL_RETURN: 0
+        WILL_RETURN: 0,
       },
       orderInfo: null,
       td: {},
       confirmForm: {
         dirverId: "",
-        truckId: ""
+        truckId: "",
       },
       loading: false,
       confirmLoading: false,
       orderDialog: false,
       searchForm: {
-        province: ""
+        province: "",
       },
-      logs: []
+      logs: [],
     };
   },
   // 监听属性 类似于data概念
@@ -505,7 +404,7 @@ export default {
       let page = self.data.number ? self.data.number : 0;
       getOrderPF({
         status: self.tabActive,
-        page: page
+        page: page,
       }).then(res => {
         self.data = res.data;
         self.loading = false;
@@ -521,7 +420,7 @@ export default {
       self.loading = true;
       getOrderPF({
         status: self.tabActive,
-        page: e - 1
+        page: e - 1,
       }).then(res => {
         self.data = res.data;
         self.loading = false;
@@ -539,7 +438,7 @@ export default {
       self
         .$prompt(self.$t("tracking.pleaseEnterTheRejectionReason"), "", {
           confirmButtonText: self.$t("tracking.confirm"),
-          cancelButtonText: self.$t("tracking.cancel")
+          cancelButtonText: self.$t("tracking.cancel"),
         })
         .then(({ value }) => {
           rejectOrder(item.id, value).then(() => {
@@ -550,32 +449,24 @@ export default {
     confirmIt() {
       self.confirmLoading = true;
       if (self.orderInfo.status == "WAIT_DEMAND_TO_ACCEPT") {
-        confirmOrder(
-          self.orderInfo.id,
-          self.confirmForm.truckId,
-          self.confirmForm.driverId
-        ).then(() => {
+        confirmOrder(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(() => {
           self.loadData(() => {
             self.confirmDialog = false;
             self.confirmForm = {
               dirverId: "",
-              truckId: ""
+              truckId: "",
             };
             self.$message.success(self.$t("tracking.successful"));
             self.confirmLoading = false;
           });
         });
       } else if (self.orderInfo.status == "WILL_PICK") {
-        updateOrderInfo(
-          self.orderInfo.id,
-          self.confirmForm.truckId,
-          self.confirmForm.driverId
-        ).then(() => {
+        updateOrderInfo(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(() => {
           self.loadData(() => {
             self.confirmDialog = false;
             self.confirmForm = {
               dirverId: "",
-              truckId: ""
+              truckId: "",
             };
             self.$message.success(self.$t("tracking.successful"));
             self.confirmLoading = false;
@@ -588,8 +479,8 @@ export default {
         self.logs = res.data;
         self.logDialog = true;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

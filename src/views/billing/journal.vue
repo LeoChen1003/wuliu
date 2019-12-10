@@ -3,36 +3,16 @@
     <div class="statusHeader">
       <div class="status-txt">{{ $t("billing.account") }}</div>
       <div class="timePicker">
-        <bcTime
-          @changeBCtime="changeBCtimeFrom"
-          :timeType="'all'"
-          :dateDefault="fromDateDeFault"
-        ></bcTime>
+        <bcTime @changeBCtime="changeBCtimeFrom" :timeType="'all'" :dateDefault="fromDateDeFault"></bcTime>
         <span style="margin:0 5px;">至</span>
-        <bcTime
-          @changeBCtime="changeBCtimeTo"
-          :dateDefault="toDateDeFault"
-          style="margin-left:5px;"
-          :timeType="'all'"
-        ></bcTime>
-        <el-button
-          size="small"
-          @click="searchIt"
-          style="width:100px;margin-left:20px;"
-          >{{ $t("billing.search") }}</el-button
-        >
+        <bcTime @changeBCtime="changeBCtimeTo" :dateDefault="toDateDeFault" style="margin-left:5px;" :timeType="'all'"></bcTime>
+        <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
       </div>
     </div>
     <div class="content">
       <div>
-        <el-tabs
-          v-model="tabActive"
-          tab-position="left"
-          @tab-click="handleClick"
-          style="height:100%;"
-        >
-          <el-tab-pane name="GUARANTEE" :label="$t('billing.gaurantee')">
-          </el-tab-pane>
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
+          <el-tab-pane name="GUARANTEE" :label="$t('billing.gaurantee')"> </el-tab-pane>
           <el-tab-pane name="FEE" :label="$t('billing.freight')"> </el-tab-pane>
         </el-tabs>
       </div>
@@ -41,18 +21,10 @@
         <div class="center">
           <el-table :data="dataList" border>
             <el-table-column prop="createdAt" :label="$t('billing.date')" />
-            <el-table-column
-              prop="eventType"
-              :label="$t('billing.transactionType')"
-            />
+            <el-table-column prop="eventType" :label="$t('billing.transactionType')" />
             <el-table-column :label="$t('billing.documentNo')">
               <template slot-scope="scope">
-                <div
-                  v-if="
-                    scope.row.eventType == 'TOP_UP' ||
-                      scope.row.eventType == 'REFUND'
-                  "
-                >
+                <div v-if="scope.row.eventType == 'TOP_UP' || scope.row.eventType == 'REFUND'">
                   {{ scope.row.tradeNo }}
                 </div>
                 <div v-if="scope.row.eventType == 'ORDER'">
@@ -62,20 +34,12 @@
             </el-table-column>
             <el-table-column :label="$t('billing.increase')">
               <template slot-scope="scope">
-                {{
-                  scope.row.amountAfter - scope.row.amountBefore > 0
-                    ? scope.row.amount
-                    : 0
-                }}
+                {{ scope.row.amountAfter - scope.row.amountBefore > 0 ? scope.row.amount : 0 }}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.decrease')">
               <template slot-scope="scope">
-                {{
-                  scope.row.amountAfter - scope.row.amountBefore > 0
-                    ? 0
-                    : scope.row.amount
-                }}
+                {{ scope.row.amountAfter - scope.row.amountBefore > 0 ? 0 : scope.row.amount }}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.balance')">
@@ -112,7 +76,7 @@ let self;
 export default {
   // import引入的组件需要注入到对象中才能使用
   components: {
-    bcTime
+    bcTime,
   },
   data() {
     return {
@@ -124,9 +88,9 @@ export default {
       dataList: [],
       page: {
         total: 0,
-        currentPage: 1
+        currentPage: 1,
       },
-      pagesize: 20
+      pagesize: 20,
     };
   },
   // 监听属性 类似于data概念
@@ -136,7 +100,7 @@ export default {
     },
     toDateDeFault() {
       return self.toDate.split("-");
-    }
+    },
   },
   // 监控data中的数据变化
   watch: {},
@@ -155,12 +119,12 @@ export default {
         fromDate: self.fromDate,
         toDate: self.toDate,
         page: self.page.currentPage - 1,
-        pagesize: self.pagesize
+        pagesize: self.pagesize,
       }).then(res => {
         self.dataList = res.data.content;
         self.page = {
           total: res.data.totalElements,
-          currentPage: res.data.number + 1
+          currentPage: res.data.number + 1,
         };
       });
     },
@@ -187,8 +151,8 @@ export default {
     changeBCtimeTo(time) {
       const self = this;
       self.toDate = time;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

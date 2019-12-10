@@ -13,9 +13,9 @@ const state = {
   roles: {
     Demand: false,
     Supply: false,
-    Platform: false
+    Platform: false,
   },
-  permissions: {}
+  permissions: {},
 };
 
 const mutations = {
@@ -42,7 +42,7 @@ const mutations = {
   SET_PERMISSIONS: (state, permissions) => {
     // state.permissions = permissions;
     Vue.set(state, "permissions", permissions);
-  }
+  },
 };
 
 const actions = {
@@ -75,7 +75,7 @@ const actions = {
           let roles = {
             Demand: false,
             Supply: false,
-            Platform: false
+            Platform: false,
           };
           for (let i of data.roles) {
             roles[i.name] = true;
@@ -136,7 +136,7 @@ const actions = {
 
       // generate accessible routes map based on roles
       const accessRoutes = await dispatch("permission/generateRoutes", roles, {
-        root: true
+        root: true,
       });
 
       // dynamically add accessible routes
@@ -147,12 +147,12 @@ const actions = {
 
       resolve();
     });
-  }
+  },
 };
 
 export default {
   namespaced: true,
   state,
   mutations,
-  actions
+  actions,
 };

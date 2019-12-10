@@ -5,10 +5,7 @@
 
       <div class="drawer-item">
         <span>{{ $t("settings.theme") }}</span>
-        <theme-picker
-          style="float: right;height: 26px;margin: -3px 8px 0 0;"
-          @change="themeChange"
-        />
+        <theme-picker style="float: right;height: 26px;margin: -3px 8px 0 0;" @change="themeChange" />
       </div>
 
       <div class="drawer-item">
@@ -45,9 +42,9 @@ export default {
       set(val) {
         this.$store.dispatch("settings/changeSetting", {
           key: "fixedHeader",
-          value: val
+          value: val,
         });
-      }
+      },
     },
     tagsView: {
       get() {
@@ -56,9 +53,9 @@ export default {
       set(val) {
         this.$store.dispatch("settings/changeSetting", {
           key: "tagsView",
-          value: val
+          value: val,
         });
-      }
+      },
     },
     sidebarLogo: {
       get() {
@@ -67,19 +64,19 @@ export default {
       set(val) {
         this.$store.dispatch("settings/changeSetting", {
           key: "sidebarLogo",
-          value: val
+          value: val,
         });
-      }
-    }
+      },
+    },
   },
   methods: {
     themeChange(val) {
       this.$store.dispatch("settings/changeSetting", {
         key: "theme",
-        value: val
+        value: val,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
