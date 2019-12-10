@@ -3,6 +3,7 @@ import { getToken, setToken, removeToken } from "@/utils/auth";
 import router, { resetRouter } from "@/router";
 import Vue from "vue";
 import Vuex from "vuex";
+
 Vue.use(Vuex);
 
 const state = {
@@ -14,7 +15,7 @@ const state = {
     Supply: false,
     Platform: false
   },
-  permissions:{}
+  permissions: {}
 };
 
 const mutations = {

@@ -1,52 +1,73 @@
 <template>
   <div class="manage billing">
     <div class="statusHeader">
-      <div class="status-txt">{{ $t('billing.billingStatus') }}</div>
+      <div class="status-txt">{{ $t("billing.billingStatus") }}</div>
       <div class="timePicker">
-        <bcTime @changeBCtime="changeBCtimeFrom"
-                :timeType="'all'"
-                :dateDefault='fromDateDeFault'></bcTime>
+        <bcTime
+          @changeBCtime="changeBCtimeFrom"
+          :timeType="'all'"
+          :dateDefault="fromDateDeFault"
+        ></bcTime>
         <span style="margin:0 5px;">至</span>
-        <bcTime @changeBCtime="changeBCtimeTo"
-                :dateDefault='toDateDeFault'
-                style="margin-left:5px;"
-                :timeType="'all'"></bcTime>
-        <el-button size="small"
-                   @click="searchIt"
-                   style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button>
+        <bcTime
+          @changeBCtime="changeBCtimeTo"
+          :dateDefault="toDateDeFault"
+          style="margin-left:5px;"
+          :timeType="'all'"
+        ></bcTime>
+        <el-button
+          size="small"
+          @click="searchIt"
+          style="width:100px;margin-left:20px;"
+          >{{ $t("billing.search") }}</el-button
+        >
       </div>
     </div>
     <div class="content">
       <div>
-        <el-tabs v-model="tabActive"
-                 tab-position="left"
-                 @tab-click="handleClick"
-                 style="height:calc(100% - 50px);">
+        <el-tabs
+          v-model="tabActive"
+          tab-position="left"
+          @tab-click="handleClick"
+          style="height:calc(100% - 50px);"
+        >
           <el-tab-pane name="WAIT_SETTLE">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.orderPending')}}<sub class="badge red">{{statusCount.WAIT_SETTLE}}</sub></div>
+                <div class="text">
+                  {{ $t("billing.orderPending")
+                  }}<sub class="badge red">{{ statusCount.WAIT_SETTLE }}</sub>
+                </div>
               </div>
             </span>
           </el-tab-pane>
           <el-tab-pane name="SETTLED">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.orderCompleted')}}<sub class="badge">{{statusCount.SETTLED}}</sub></div>
+                <div class="text">
+                  {{ $t("billing.orderCompleted")
+                  }}<sub class="badge">{{ statusCount.SETTLED }}</sub>
+                </div>
               </div>
             </span>
           </el-tab-pane>
           <el-tab-pane name="PAID">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.paid2')}}<sub class="badge">{{statusCount.PAID}}</sub></div>
+                <div class="text">
+                  {{ $t("billing.paid2")
+                  }}<sub class="badge">{{ statusCount.PAID }}</sub>
+                </div>
               </div>
             </span>
           </el-tab-pane>
           <el-tab-pane name="REJECTED">
             <span slot="label">
               <div class="tabLabel">
-                <div class="text">{{$t('billing.orderRejected')}}<sub class="badge">{{statusCount.REJECTED}}</sub></div>
+                <div class="text">
+                  {{ $t("billing.orderRejected")
+                  }}<sub class="badge">{{ statusCount.REJECTED }}</sub>
+                </div>
               </div>
             </span>
           </el-tab-pane>
@@ -54,66 +75,75 @@
       </div>
       <div class="container">
         <div class="center">
-          <el-table :data="tableData"
-                    highlight-current-row
-                    v-loading="loading"
-                    @current-change="handleCurrentChange"
-                    border>
-            <el-table-column prop="createdAt"
-                             :label="$t('billing.bookingTime')" />
-            <el-table-column prop="orderNo"
-                             :label="$t('billing.trackingNo')" />
-            <el-table-column prop="settlementAmount"
-                             :label="$t('billing.totalAmount')" />
+          <el-table
+            :data="tableData"
+            highlight-current-row
+            v-loading="loading"
+            @current-change="handleCurrentChange"
+            border
+          >
+            <el-table-column
+              prop="createdAt"
+              :label="$t('billing.bookingTime')"
+            />
+            <el-table-column prop="orderNo" :label="$t('billing.trackingNo')" />
+            <el-table-column
+              prop="settlementAmount"
+              :label="$t('billing.totalAmount')"
+            />
           </el-table>
-          <el-pagination style="margin-top:10px;text-align: center;margin-bottom:50px;"
-                         background
-                         :page-sizes="[1,5,10,20,50]"
-                         :page-size="pagesize"
-                         @size-change="pageSizeChange"
-                         :current-page.sync="page.currentPage"
-                         @current-change="pageChange"
-                         layout="prev, pager, next, jumper"
-                         :total="page.total"></el-pagination>
+          <el-pagination
+            style="margin-top:10px;text-align: center;margin-bottom:50px;"
+            background
+            :page-sizes="[1, 5, 10, 20, 50]"
+            :page-size="pagesize"
+            @size-change="pageSizeChange"
+            :current-page.sync="page.currentPage"
+            @current-change="pageChange"
+            layout="prev, pager, next, jumper"
+            :total="page.total"
+          ></el-pagination>
         </div>
         <div class="right">
-          <el-table :data="detailData"
-                    border>
+          <el-table :data="detailData" border>
             <el-table-column :label="$t('billing.supply')">
               <template slot-scope="scope">
-                {{scope.row.transport.supply?scope.row.transport.supply.companyName:''}}
+                {{
+                  scope.row.transport.supply
+                    ? scope.row.transport.supply.companyName
+                    : ""
+                }}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.amount')">
               <template slot-scope="scope">
-                {{$t('billing.freight')}}: {{scope.row.settlementAmount}}
+                {{ $t("billing.freight") }}: {{ scope.row.settlementAmount }}
               </template>
             </el-table-column>
           </el-table>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import { supplyFinance, billsupplyCount } from '../../api/billing'
-import { getTime, parseTime, getLastMonthTime } from '../../utils/index'
+import { supplyFinance, billsupplyCount } from "../../api/billing";
+import { getTime, parseTime, getLastMonthTime } from "../../utils/index";
 import bcTime from "@/components/bcTime";
 import { mapGetters } from "vuex";
 
-let self
+let self;
 export default {
   // import引入的组件需要注入到对象中才能使用
   components: { bcTime },
-  data () {
+  data() {
     return {
-      tabActive: 'WAIT_SETTLE',
+      tabActive: "WAIT_SETTLE",
       fromDate: getLastMonthTime(new Date()),
-      toDate: parseTime(new Date().getTime(), '{y}-{m}-{d}'),
+      toDate: parseTime(new Date().getTime(), "{y}-{m}-{d}"),
       tableData: [],
       page: {
         total: 0,
@@ -127,76 +157,80 @@ export default {
   },
   // 监听属性 类似于data概念
   computed: {
-    fromDateDeFault () {
-      return self.fromDate.split('-')
+    fromDateDeFault() {
+      return self.fromDate.split("-");
     },
-    toDateDeFault () {
-      return self.toDate.split('-')
+    toDateDeFault() {
+      return self.toDate.split("-");
     },
-    ...mapGetters(["permissions"]),
+    ...mapGetters(["permissions"])
   },
   // 监控data中的数据变化
   watch: {},
-  created () {
-    self = this
+  created() {
+    self = this;
   },
-  mounted () { self.loadData() },
+  mounted() {
+    self.loadData();
+  },
   methods: {
-    changeBCtimeFrom (time) {
-      self.fromDate = time
+    changeBCtimeFrom(time) {
+      self.fromDate = time;
     },
-    changeBCtimeTo (time) {
-      self.toDate = time
+    changeBCtimeTo(time) {
+      self.toDate = time;
     },
-    pageChange (val) {
-      let self = this
-      self.page.currentPage = val
-      self.loadData()
-    },
-    pageSizeChange (val) {
+    pageChange(val) {
       let self = this;
-      self.pagesize = val
-      self.loadData()
+      self.page.currentPage = val;
+      self.loadData();
     },
-    loadData () {
-      self.loading = true
+    pageSizeChange(val) {
+      let self = this;
+      self.pagesize = val;
+      self.loadData();
+    },
+    loadData() {
+      self.loading = true;
       supplyFinance(self.tabActive, {
-        start: self.fromDate + ' 00:00:00',
-        end: self.toDate + ' 23:59:59',
+        start: self.fromDate + " 00:00:00",
+        end: self.toDate + " 23:59:59",
         page: self.page.currentPage - 1,
         pagesize: self.pagesize
-      }).then(res => {
-        self.tableData = res.data.content
-        self.page = {
-          total: res.data.totalElements,
-          currentPage: res.data.number + 1
-        }
-        self.loading = false
-      }).catch(() => {
-        self.loading = false
       })
+        .then(res => {
+          self.tableData = res.data.content;
+          self.page = {
+            total: res.data.totalElements,
+            currentPage: res.data.number + 1
+          };
+          self.loading = false;
+        })
+        .catch(() => {
+          self.loading = false;
+        });
       billsupplyCount({
-        start: self.fromDate + ' 00:00:00',
-        end: self.toDate + ' 23:59:59',
+        start: self.fromDate + " 00:00:00",
+        end: self.toDate + " 23:59:59"
       }).then(res => {
-        self.statusCount = res.data
-      })
+        self.statusCount = res.data;
+      });
     },
-    searchIt () {
-      self.loadData()
+    searchIt() {
+      self.loadData();
     },
-    handleClick () {
-      self.loadData()
+    handleClick() {
+      self.loadData();
     },
-    handleCurrentChange (val) {
-      const self = this
-      self.detailData = []
-      self.detailData.push(val)
+    handleCurrentChange(val) {
+      const self = this;
+      self.detailData = [];
+      self.detailData.push(val);
     }
   }
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 //@import url(); 引入公共css类
 .manage {
   height: 100%;
@@ -275,5 +309,3 @@ export default {
   width: 3px;
 }
 </style>
-
-

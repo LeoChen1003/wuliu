@@ -1,10 +1,10 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-Vue.use(Router);
-
 /* Layout */
 import Layout from "@/layout";
+
+Vue.use(Router);
 
 export const constantRoutes = [
   {
@@ -40,6 +40,7 @@ export const asyncRoutes = [
         path: "priceConsulting",
         component: () => import("@/views/booking/priceConsulting"),
         name: "priceConsulting",
+        hidden: true,
         meta: {
           title: "priceConsulting",
           roles: ["DEMAND"],
@@ -61,6 +62,7 @@ export const asyncRoutes = [
         path: "releaseToMarket",
         component: () => import("@/views/booking/releaseToMarket"),
         name: "releaseToMarket",
+        hidden: true,
         meta: {
           title: "releaseToMarket",
           roles: ["DEMAND"],
@@ -171,16 +173,16 @@ export const asyncRoutes = [
           roles: ["SUPPLY"],
           permission: "SupplyResourceManage"
         }
-      },
-      {
-        path: "planningLTL",
-        component: () => import("@/views/resources/planningLTL"),
-        meta: {
-          title: "planningLTL",
-          roles: ["SUPPLY"],
-          permission: "SupplyResourceManage"
-        }
       }
+      // {
+      //   path: "planningLTL",
+      //   component: () => import("@/views/resources/planningLTL"),
+      //   meta: {
+      //     title: "planningLTL",
+      //     roles: ["SUPPLY"],
+      //     permission: "SupplyResourceManage"
+      //   }
+      // }
     ]
   },
   {

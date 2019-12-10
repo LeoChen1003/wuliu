@@ -10,7 +10,7 @@ export default {
   // import引入的组件需要注入到对象中才能使用
   components: {},
   data() {
-    return {}
+    return {};
   },
   // 监听属性 类似于data概念
   computed: {},
@@ -19,8 +19,8 @@ export default {
   created() {},
   mounted() {},
   methods: {}
-}
+};
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 //@import url(); 引入公共css类
 </style>

@@ -7,43 +7,43 @@
       @toggleClick="toggleSideBar"
     />-->
     <div class="right">
-      <img src="../../assets/image/logo.png"
-           alt="logo"
-           class="logo" />
+      <img src="../../assets/image/logo.png" alt="logo" class="logo" />
       <div class="role">
-        <el-popover placement="top"
-                    width="160"
-                    trigger="hover"
-                    v-model="visible">
+        <el-popover
+          placement="top"
+          width="160"
+          trigger="hover"
+          v-model="visible"
+        >
           <div class="btnWrapper">
-            <el-button type="primary"
-                       class="versionBtn"
-                       :key='index'
-                       @click="changeVer(item)"
-                       size="mini"
-                       v-for="(item,index) in roles">
-              {{item}}
+            <el-button
+              type="primary"
+              class="versionBtn"
+              :key="index"
+              @click="changeVer(item)"
+              size="mini"
+              v-for="(item, index) in roles"
+            >
+              {{ item }}
             </el-button>
           </div>
-          <div slot="reference"
-               style="width:100px;text-align:center;">{{nowRole}}</div>
+          <div slot="reference" style="width:100px;text-align:center;">
+            {{ nowRole }}
+          </div>
         </el-popover>
       </div>
       <sidebar class="slidebar" />
     </div>
     <div class="left">
       <div style="margin-right:40px;">
-        <div>{{$t('route.welcome')}},{{userInfo.name}}</div>
+        <div>{{ $t("route.welcome") }},{{ userInfo.name }}</div>
       </div>
-      <el-popover placement="bottom-start"
-                  width="160">
+      <el-popover placement="bottom-start" width="160">
         <div>
           <LangSelect :toggleLang="true"></LangSelect>
         </div>
-        <i slot="reference"
-           class="el-icon-setting"></i>
+        <i slot="reference" class="el-icon-setting"></i>
       </el-popover>
-
     </div>
   </div>
 </template>
@@ -60,49 +60,43 @@ import Sidebar from "@/components/Sidebar";
 
 export default {
   components: {
-    Hamburger,
-    ErrorLog,
-    Screenfull,
-    SizeSelect,
     LangSelect,
-    Search,
     Sidebar
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device", "userInfo"]),
-    roles () {
-      return this.$store.getters.userInfo.chosenRoles ? this.$store.getters.userInfo.chosenRoles.split(',') : [];
+    roles() {
+      return this.$store.getters.userInfo.chosenRoles
+        ? this.$store.getters.userInfo.chosenRoles.split(",")
+        : [];
     }
   },
   methods: {
-    toggleSideBar () {
+    toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
-    async logout () {
+    async logout() {
       await this.$store.dispatch("user/logout");
       this.$router.push(`/login?redirect=${this.$route.fullPath}`);
     },
-    changeVer (ver) {
+    changeVer(ver) {
       let self = this;
-      self.$store.dispatch(
-        'user/chooseRole',
-        ver
-      )
+      self.$store.dispatch("user/chooseRole", ver);
       localStorage.curRole = ver;
-      self.$router.push('/home')
+      self.$router.push("/home");
     }
   },
-  data () {
+  data() {
     return {
       visible: false,
-      nowRole: localStorage.getItem('curRole')
-    }
+      nowRole: localStorage.getItem("curRole")
+    };
   },
   watch: {
     $route: {
-      handler: function (val, oldVal) {
-        this.nowRole = localStorage.getItem('curRole');
-      },
+      handler: function(val, oldVal) {
+        this.nowRole = localStorage.getItem("curRole");
+      }
     }
   }
 };

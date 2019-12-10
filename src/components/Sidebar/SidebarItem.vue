@@ -1,6 +1,5 @@
 <template>
-  <div v-if="!item.hidden"
-       class="menu-wrapper">
+  <div v-if="!item.hidden" class="menu-wrapper">
     <!-- <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta"
                 :to="resolvePath(onlyOneChild.path)">
@@ -12,22 +11,42 @@
       </app-link>
     </template> -->
     <template>
-      <app-link v-if="item.children[0].meta && permissions[item.children[0].meta.permission]"
-                :to="resolvePath(item.children[0].path)">
+      <app-link
+        v-if="
+          item.children[0].meta && permissions[item.children[0].meta.permission]
+        "
+        :to="resolvePath(item.children[0].path)"
+      >
         <!-- 设定父级path为index，引导default-active -->
-        <el-menu-item :index="resolvePath(item.path)"
-                      :class="{'submenu-title-noDropdown':!isNest}">
-          <item :icon="item.children[0].meta.icon||(item.meta&&item.meta.icon)"
-                :title="item.meta.title ? generateTitle(item.meta.title) : generateTitle(item.children[0].meta.title)" />
+        <el-menu-item
+          :index="resolvePath(item.path)"
+          :class="{ 'submenu-title-noDropdown': !isNest }"
+        >
+          <item
+            :icon="item.children[0].meta.icon || (item.meta && item.meta.icon)"
+            :title="
+              item.meta.title
+                ? generateTitle(item.meta.title)
+                : generateTitle(item.children[0].meta.title)
+            "
+          />
         </el-menu-item>
       </app-link>
       <div v-else class="noPermission">
         <!-- 设定父级path为index，引导default-active -->
-        <el-menu-item :index="resolvePath(item.path)"
-                      disabled
-                      :class="{'submenu-title-noDropdown':!isNest}">
-          <item :icon="item.children[0].meta.icon||(item.meta&&item.meta.icon)"
-                :title="item.meta.title ? generateTitle(item.meta.title) : generateTitle(item.children[0].meta.title)" />
+        <el-menu-item
+          :index="resolvePath(item.path)"
+          disabled
+          :class="{ 'submenu-title-noDropdown': !isNest }"
+        >
+          <item
+            :icon="item.children[0].meta.icon || (item.meta && item.meta.icon)"
+            :title="
+              item.meta.title
+                ? generateTitle(item.meta.title)
+                : generateTitle(item.children[0].meta.title)
+            "
+          />
         </el-menu-item>
       </div>
     </template>
@@ -81,16 +100,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["permissions"]),
+    ...mapGetters(["permissions"])
   },
-  data () {
+  data() {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null;
     return {};
   },
   methods: {
-    hasOneShowingChild (children = [], parent) {
+    hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {
         if (item.hidden) {
           return false;
@@ -114,7 +133,7 @@ export default {
 
       return false;
     },
-    resolvePath (routePath) {
+    resolvePath(routePath) {
       // if (isExternal(routePath)) {
       //   return routePath;
       // }

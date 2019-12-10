@@ -161,8 +161,21 @@
     "central": "ภาคกลาง",
     "southern": "ภาคใต้",
     "northern": "ภาคเหนือ",
-    "northeastern": "ตะวันออกเฉียงเหนือ",
-    "expectedDeliveryTime": "เวลาประมาณการถถึงปลายทาง"
+    "northeastern": " ตะวันออกเฉียงเหนือ",
+    "expectedDeliveryTime": "เวลาประมาณการถถึงปลายทาง",
+    "FTL": "เหมาคัน",
+    "LTL": "รายชิ้น",
+    "bookingNow": "Booking Now",
+    "4_wheel": "รถกระบะ 4 ล้อ",
+    "6_wheel": "รถบรรทุก 6 ล้อ",
+    "10_wheel": "รถบรรทุก 10 ล้อ",
+    "12_wheel": "รถบรรทุก 12 ล้อ",
+    "18_wheel": "รถบรรทุก 18 ล้อ",
+    "22_wheel": "รถบรรทุก 22 ล้อ",
+    "back": "ย้อนกล",
+    "truckTypechoose": "โปรดเลือกประเภท",
+    "distance": "กิโลเมตร",
+    "days": "วัน"
   },
   "tracking": {
     "status": "สถานะรายการ",
