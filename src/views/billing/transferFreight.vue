@@ -11,9 +11,9 @@
       </div>
       <span style="margin:0 10px 0 20px;">{{ $t("billing.deliveredDate") }}</span>
       <div class="timePicker">
-        <bcTime @changeBCtime="changeBCtimeFrom" :timeType="'all'" :dateDefault="[0, 0, 0]"></bcTime>
+        <bcTime @changeBCtime="changeBCtimeFrom" :timeType="'all'" :dateDefault="[0, 0, 0]" />
         <span style="margin:0 5px;">-</span>
-        <bcTime @changeBCtime="changeBCtimeTo" :dateDefault="[0, 0, 0]" style="margin-left:5px;" :timeType="'all'"></bcTime>
+        <bcTime @changeBCtime="changeBCtimeTo" :dateDefault="[0, 0, 0]" style="margin-left:5px;" :timeType="'all'" />
         <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
         <el-button
           size="small"
