@@ -75,10 +75,132 @@
                   <span>{{ $t(`${item.value}`) }}</span>
                   <el-popover
                     placement="right-start"
-                    width="200"
+                    width="404"
                     trigger="click"
+                    popper-class="truck_type_popover"
                   >
-                    <div>Truck description</div>
+                    <div>
+                      <div style="" class="truck_type_detail_title">
+                        {{ $t(`${item.value}`) }}
+                      </div>
+                      <div class="truck_type_detail">
+                        <div class="truck_type_dec" v-if="!searchForm.truckSubCategory || searchForm.truckSubCategory=='Corral'">
+                          <div class="truck_type_img">
+                            <img
+                              :src="
+                                item.image_Corral
+                                  ? require(`../../assets/image/${item.image_Corral}`)
+                                  : ''
+                              "
+                              alt="image_Corral"
+                            />
+                          </div>
+                          <div
+                            class="truck_type_dec_item"
+                            v-for="(truckItem, x) in item.typeList"
+                            :key="x"
+                            v-if="truckItem.type == 'type_Corral'"
+                          >
+                            <div class="truck_type_dec_item_right">
+                              <div class="name">
+                                {{ $t(`booking.${truckItem.truck}`) }}
+                              </div>
+                              <div>
+                                <span class="unit">Width</span>
+                                <span class="number">{{
+                                  truckItem.width
+                                }}</span>
+                              </div>
+                              <div>
+                                <span class="unit">Length</span>
+                                <span class="number">{{
+                                  truckItem.length
+                                }}</span>
+                              </div>
+                              <div>
+                                <span class="unit">Height</span>
+                                <span class="number">{{
+                                  truckItem.height
+                                }}</span>
+                              </div>
+                              <div>
+                                <span class="unit">Volume</span>
+                                <span class="number">{{
+                                  truckItem.volume
+                                }}</span>
+                              </div>
+                            </div>
+                            <div class="truck_type_dec_item_left">
+                              <div class="number">
+                                <span v-if="truckItem.isOver">{{
+                                  $t("booking.noMoreThan")
+                                }}</span>
+                                {{ truckItem.weight }}
+                              </div>
+                              <div>MAX</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="truck_type_dec" v-if="!searchForm.truckSubCategory || searchForm.truckSubCategory=='SolidCabinet'">
+                          <div class="truck_type_img">
+                            <img
+                              :src="
+                                item.image_Solid
+                                  ? require(`../../assets/image/${item.image_Solid}`)
+                                  : ''
+                              "
+                              alt="image_Solid"
+                            />
+                          </div>
+                          <div
+                            class="truck_type_dec_item"
+                            v-for="(truckItem, x) in item.typeList"
+                            :key="x"
+                            v-if="truckItem.type == 'type_Solid'"
+                          >
+                            <div class="truck_type_dec_item_right">
+                              <div class="name">
+                                {{ $t(`booking.${truckItem.truck}`) }}
+                              </div>
+                              <div>
+                                <span class="unit">Width</span>
+                                <span class="number">{{
+                                  truckItem.width
+                                }}</span>
+                              </div>
+                              <div>
+                                <span class="unit">Length</span>
+                                <span class="number">{{
+                                  truckItem.length
+                                }}</span>
+                              </div>
+                              <div>
+                                <span class="unit">Height</span>
+                                <span class="number">{{
+                                  truckItem.height
+                                }}</span>
+                              </div>
+                              <div>
+                                <span class="unit">Volume</span>
+                                <span class="number">{{
+                                  truckItem.volume
+                                }}</span>
+                              </div>
+                            </div>
+                            <div class="truck_type_dec_item_left">
+                              <div class="number">
+                                <span v-if="truckItem.isOver">{{
+                                  $t("booking.noMoreThan")
+                                }}</span>
+                                {{ truckItem.weight }}
+                              </div>
+                              <div>MAX</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     <svg-icon
                       icon-class="booking_eye"
                       class-name="truck_type_item_svg"
@@ -544,27 +666,391 @@ export default {
       categoryList: [
         {
           key: "4",
-          value: "booking.4_wheel"
+          value: "booking.4_wheel",
+          image_Corral: "4wheel-Corral.png",
+          image_Solid: "4wheel-Solid cabinet.png",
+          typeList: [
+            {
+              truck: "Normal_4",
+              type: "type_Corral",
+              width: "1.5",
+              length: "2.2",
+              height: "1.8",
+              volume: "5.00-6.00",
+              weight: "2,000",
+              isOver: true
+            },
+            {
+              truck: "Normal_4",
+              type: "type_Solid",
+              width: "1.4",
+              length: "2.2",
+              height: "1.8",
+              volume: "5.00-6.00",
+              weight: "2,000",
+              isOver: true
+            },
+            {
+              truck: "Big_4",
+              type: "type_Corral",
+              width: "1.7",
+              length: "3",
+              height: "2.2",
+              volume: "10.00-12.00",
+              weight: "2,500",
+              isOver: true
+            },
+            {
+              truck: "Big_4",
+              type: "type_Solid",
+              width: "1.7",
+              length: "3",
+              height: "2.2",
+              volume: "10.00-12.00",
+              weight: "2,500",
+              isOver: true
+            }
+          ]
         },
         {
           key: "6",
-          value: "booking.6_wheel"
+          value: "booking.6_wheel",
+          image_Corral: "6wheel-Corral.png",
+          image_Solid: "6wheel-Solid cabinet.png",
+          typeList: [
+            {
+              truck: "Short_6",
+              type: "type_Corral",
+              width: "2.1",
+              length: "5",
+              height: "2",
+              volume: "20.00-25.00",
+              weight: "8,000-9,500",
+              isOver: false
+            },
+            {
+              truck: "Short_6",
+              type: "type_Solid",
+              width: "2.1",
+              length: "5",
+              height: "2.3",
+              volume: "20.00-25.00",
+              weight: "8,000-9,500",
+              isOver: false
+            },
+            {
+              truck: "Normal_6",
+              type: "type_Corral",
+              width: "2.3",
+              length: "6",
+              height: "2",
+              volume: "25.00-30.00",
+              weight: "8,000-9,000",
+              isOver: false
+            },
+            {
+              truck: "Normal_6",
+              type: "type_Solid",
+              width: "2.3",
+              length: "6",
+              height: "2.3",
+              volume: "25.00-30.00",
+              weight: "8,000-9,000",
+              isOver: false
+            },
+            {
+              truck: "Long_6",
+              type: "type_Corral",
+              width: "2.3",
+              length: "7",
+              height: "2",
+              volume: "30.00-35.00",
+              weight: "8,000-9,000",
+              isOver: false
+            },
+            {
+              truck: "Long_6",
+              type: "type_Solid",
+              width: "2.3",
+              length: "7",
+              height: "2.4",
+              volume: "30.00-35.00",
+              weight: "8,000-9,000",
+              isOver: false
+            }
+          ]
         },
         {
           key: "10",
-          value: "booking.10_wheel"
+          value: "booking.10_wheel",
+          image_Corral: "10wheel-Corral.png",
+          image_Solid: "10wheel-Solid cabinet.png",
+          typeList: [
+            {
+              truck: "Normal_10",
+              type: "type_Corral",
+              width: "2.3",
+              length: "6.5",
+              height: "2",
+              volume: "30.00-35.00",
+              weight: "15,000-16,000",
+              isOver: false
+            },
+            {
+              truck: "Normal_10",
+              type: "type_Solid",
+              width: "2.3",
+              length: "6.5",
+              height: "2.4",
+              volume: "30.00-35.00",
+              weight: "15,000-16,000",
+              isOver: false
+            },
+            {
+              truck: "Long_10",
+              type: "type_Corral",
+              width: "2.3",
+              length: "7.5",
+              height: "2",
+              volume: "30.00-40.00",
+              weight: "13,000-14,000",
+              isOver: false
+            },
+            {
+              truck: "Long_10",
+              type: "type_Solid",
+              width: "2.3",
+              length: "7.5",
+              height: "2.4",
+              volume: "30.00-40.00",
+              weight: "13,000-14,000",
+              isOver: false
+            },
+            {
+              truck: "Ultra_long_10",
+              type: "type_Corral",
+              width: "2.3",
+              length: "9",
+              height: "2",
+              volume: "45.00 - 50.00",
+              weight: "12,000-13,000",
+              isOver: false
+            },
+            {
+              truck: "Ultra_long_10",
+              type: "type_Solid",
+              width: "2.3",
+              length: "9",
+              height: "2.4",
+              volume: "45.00 - 50.00",
+              weight: "12,000-13,000",
+              isOver: false
+            }
+          ]
         },
         {
           key: "12",
-          value: "booking.12_wheel"
+          value: "booking.12_wheel",
+          image_Corral: "12wheel-Corral.png",
+          image_Solid: "12wheel-Solid cabinet.png",
+          typeList: [
+            {
+              truck: "Short_12",
+              type: "type_Corral",
+              width: "2.3",
+              length: "6.5",
+              height: "2",
+              volume: "30.00-40.00",
+              weight: "19,000-20,000",
+              isOver: false
+            },
+            {
+              truck: "Short_12",
+              type: "type_Solid",
+              width: "2.3",
+              length: "6.5",
+              height: "2.5",
+              volume: "30.00-40.00",
+              weight: "19,000-20,000",
+              isOver: false
+            },
+            {
+              truck: "Long_12",
+              type: "type_Corral",
+              width: "2.3",
+              length: "7.5",
+              height: "2",
+              volume: "35.00-40.00",
+              weight: "18,000-19,000",
+              isOver: false
+            },
+            {
+              truck: "Long_12",
+              type: "type_Solid",
+              width: "2.3",
+              length: "7.5",
+              height: "2.4",
+              volume: "35.00-40.00",
+              weight: "18,000-19,000",
+              isOver: false
+            },
+            {
+              truck: "Extra_long_12",
+              type: "type_Corral",
+              width: "2.3",
+              length: "9",
+              height: "2",
+              volume: "40.00-45.00",
+              weight: "17,000-18,000",
+              isOver: false
+            },
+            {
+              truck: "Extra_long_12",
+              type: "type_Solid",
+              width: "2.3",
+              length: "9",
+              height: "2.4",
+              volume: "40.00-45.00",
+              weight: "17,000-18,000",
+              isOver: false
+            }
+          ]
         },
         {
           key: "18",
-          value: "booking.18_wheel"
+          value: "booking.18_wheel",
+          image_Corral: "18wheel-Corral.png",
+          image_Solid: "18wheel-Solid cabinet.png",
+          typeList: [
+            {
+              truck: "Short_18",
+              type: "type_Corral",
+              width: "2.3",
+              length: "6.5",
+              height: "2",
+              volume: "60.00-70.00",
+              weight: "31,000-32,000",
+              isOver: false
+            },
+            {
+              truck: "Short_18",
+              type: "type_Solid",
+              width: "2.3",
+              length: "6.5",
+              height: "2.4",
+              volume: "60.00-70.00",
+              weight: "31,000-32,000",
+              isOver: false
+            },
+            {
+              truck: "Long_18",
+              type: "type_Corral",
+              width: "2.3",
+              length: "7.5",
+              height: "2",
+              volume: "70.00-80.00",
+              weight: "30,000-31,000",
+              isOver: false
+            },
+            {
+              truck: "Long_18",
+              type: "type_Solid",
+              width: "2.3",
+              length: "7.5",
+              height: "2.4",
+              volume: "70.00-80.00",
+              weight: "30,000-31,000",
+              isOver: false
+            },
+            {
+              truck: "Normal_18",
+              type: "type_Corral",
+              width: "2.3",
+              length: "12",
+              height: "2",
+              volume: "50.00-60.00",
+              weight: "25,000-27,000",
+              isOver: false
+            },
+            {
+              truck: "Normal_18",
+              type: "type_Solid",
+              width: "2.3",
+              length: "12",
+              height: "2.4",
+              volume: "50.00-60.00",
+              weight: "25,000-27,000",
+              isOver: false
+            }
+          ]
         },
         {
           key: "22",
-          value: "booking.22_wheel"
+          value: "booking.22_wheel",
+          image_Corral: "22wheel-Corral.png",
+          image_Solid: "22wheel-Solid cabinet.png",
+          typeList: [
+            {
+              truck: "Short_22",
+              type: "type_Corral",
+              width: "2.3",
+              length: "6.5",
+              height: "2",
+              volume: "60.00-70.00",
+              weight: "31,000-32,000",
+              isOver: false
+            },
+            {
+              truck: "Short_22",
+              type: "type_Solid",
+              width: "2.3",
+              length: "6.5",
+              height: "2.4",
+              volume: "60.00-70.00",
+              weight: "30,000-31,000",
+              isOver: false
+            },
+            {
+              truck: "Long_22",
+              type: "type_Corral",
+              width: "2.3",
+              length: "7.5",
+              height: "2",
+              volume: "70.00-80.00",
+              weight: "31,000-32,000",
+              isOver: false
+            },
+            {
+              truck: "Long_22",
+              type: "type_Solid",
+              width: "2.3",
+              length: "7.5",
+              height: "2.4",
+              volume: "70.00-80.00",
+              weight: "30,000-31,000",
+              isOver: false
+            },
+            {
+              truck: "Normal_22",
+              type: "type_Corral",
+              width: "2.3",
+              length: "12",
+              height: "2",
+              volume: "60.00-65.00",
+              weight: "31,000-32,000",
+              isOver: false
+            },
+            {
+              truck: "Normal_22",
+              type: "type_Solid",
+              width: "2.3",
+              length: "12",
+              height: "2.4",
+              volume: "60.00-65.00",
+              weight: "30,000-31,000",
+              isOver: false
+            }
+          ]
         }
       ],
       subCategoryList: [],
@@ -1521,6 +2007,92 @@ export default {
 
   .el-loading-spinner i {
     color: #8a8a8a;
+  }
+}
+
+.truck_type_popover {
+  padding: 12px 0;
+
+  .truck_type_detail_title {
+    width: 100%;
+    color: #333;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .truck_type_detail {
+    height: 600px;
+    width: 100%;
+    overflow: auto;
+  }
+
+  .truck_type_dec {
+    .truck_type_img {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      height: 50px;
+      margin: 20px 0;
+
+      img {
+        height: 100%;
+      }
+    }
+
+    .truck_type_dec_item {
+      background: #f2f2f2;
+      margin-bottom: 10px;
+      height: 145px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+      padding: 10px 44px;
+
+      .truck_type_dec_item_right {
+        .name {
+          font-size: 14px;
+          color: #333;
+          font-weight: 600;
+          margin-bottom: 20px;
+        }
+
+        .unit {
+          font-size: 13px;
+          color: #999;
+          width: 75px;
+          display: inline-block;
+        }
+
+        .number {
+          font-size: 14px;
+          font-weight: 500;
+          color: #333;
+        }
+      }
+
+      .truck_type_dec_item_left {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 1px solid #e7e7e7;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #fff;
+        font-size: 12px;
+
+        .number {
+          font-weight: 600;
+          font-size: 13px;
+          color: #333;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          text-align: center;
+        }
+      }
+    }
   }
 }
 </style>
