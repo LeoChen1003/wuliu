@@ -58,7 +58,8 @@
     "LTLCargoViaHUB": "零担物流（货物经过HUB）",
     "receivable": "应收账单",
     "transferFreight": "返款",
-    "topUpConfirm": "确认充值"
+    "topUpConfirm": "确认充值",
+    "setting": "设置"
   },
   "layout": {
     "logout": "退出"
