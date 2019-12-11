@@ -25,11 +25,14 @@
                 <div
                   class="logistic_type_item"
                   :class="logisticType == 'FTL' ? 'logistic_type_active' : ''"
-                  @click="logisticType = 'FTL'"
+                  @click="changeLogisticType('FTL')"
                 >
                   {{ $t("booking.FTL") }}
                 </div>
-                <div class="logistic_type_item" :class="logisticType == 'LTL' ? 'logistic_type_active' : 'logistic_type_jy'">
+                <div
+                  class="logistic_type_item"
+                  :class="logisticType == 'LTL' ? 'logistic_type_active' : 'logistic_type_jy'"
+                >
                   {{ $t("booking.LTL") }}
                 </div>
               </div>
@@ -458,7 +461,7 @@ export default {
   data() {
     const self = this;
     const validatorTruck = (rule, value, callback) => {
-      if (!self.searchForm.truckgroup) {
+      if (!self.searchForm.truckgroup && self.logisticType == "FTL") {
         callback(new Error(self.$t("booking.truckTypechoose")));
       } else {
         callback();
@@ -1469,6 +1472,10 @@ export default {
     dateChange(e) {
       self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
     },
+    // 改变物流类型
+    changeLogisticType(type) {
+      self.logisticType = type;
+    },
     previewImg(row) {
       let arr = [];
       for (let i of row.truckResource) {
@@ -1831,6 +1838,92 @@ export default {
 
   .el-loading-spinner i {
     color: #8a8a8a;
+  }
+}
+
+.truck_type_popover {
+  padding: 12px 0;
+
+  .truck_type_detail_title {
+    width: 100%;
+    color: #333;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .truck_type_detail {
+    height: 600px;
+    width: 100%;
+    overflow: auto;
+  }
+
+  .truck_type_dec {
+    .truck_type_img {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      height: 50px;
+      margin: 20px 0;
+
+      img {
+        height: 100%;
+      }
+    }
+
+    .truck_type_dec_item {
+      background: #f2f2f2;
+      margin-bottom: 10px;
+      height: 145px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+      padding: 10px 44px;
+
+      .truck_type_dec_item_right {
+        .name {
+          font-size: 14px;
+          color: #333;
+          font-weight: 600;
+          margin-bottom: 20px;
+        }
+
+        .unit {
+          font-size: 13px;
+          color: #999;
+          width: 75px;
+          display: inline-block;
+        }
+
+        .number {
+          font-size: 14px;
+          font-weight: 500;
+          color: #333;
+        }
+      }
+
+      .truck_type_dec_item_left {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 1px solid #e7e7e7;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #fff;
+        font-size: 12px;
+
+        .number {
+          font-weight: 600;
+          font-size: 13px;
+          color: #333;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          text-align: center;
+        }
+      }
+    }
   }
 }
 </style>
