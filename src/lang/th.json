@@ -196,7 +196,8 @@
     "truckTypechoose": "โปรดเลือกประเภท",
     "distance": "กิโลเมตร",
     "days": "วัน",
-    "noMoreThan": "ไม่เกิน"
+    "noMoreThan": "ไม่เกิน",
+    "cutOffTime": "ตัดรอบการจัดส่ง"
   },
   "tracking": {
     "status": "สถานะรายการ",

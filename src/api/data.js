@@ -92,6 +92,15 @@ export function findDistrictFullList(data) {
   });
 }
 
+// 所有包含HUB的区（全名搜索）
+export function findDistrictOfHubFullList(data) {
+  return request({
+    url: "/misc/geo/district/searchOfHub/fullname",
+    method: "get",
+    params: data,
+  });
+}
+
 // 收费服务翻译
 export function getExtraServer() {
   return request({

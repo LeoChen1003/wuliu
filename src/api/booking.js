@@ -11,6 +11,16 @@ export function ftlLine(data, data2) {
   });
 }
 
+// ltlLine
+export function ltlLine(data, data2) {
+  return requestJSON({
+    url: "/api/ltl/line/lineSearch",
+    method: "post",
+    data,
+    params: data2,
+  });
+}
+
 // 获取所有路线s
 export function ftlLines(data) {
   return request({
@@ -33,6 +43,24 @@ export function ftlCharge(data) {
 export function placeOrder(data) {
   return requestJSON({
     url: "/api/demand/order/list",
+    method: "post",
+    data,
+  });
+}
+
+// LTL下单
+export function placeOrderLTL(data) {
+  return requestJSON({
+    url: "/api/ltl/line/placeOrder",
+    method: "post",
+    data,
+  });
+}
+
+// LTL下单 前计算运费
+export function calculationOrder(data) {
+  return requestJSON({
+    url: "/api/ltl/line/calculationOrder",
     method: "post",
     data,
   });
