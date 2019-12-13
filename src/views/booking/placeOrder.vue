@@ -139,51 +139,74 @@
       <el-row class="itemRow">
         <el-col :span="8">
           <el-form-item :label="$t('booking.valueAddedService')">
-            <el-checkbox
-              v-model="unloading"
-              class="inputWidth inputBottom"
-              style="margin-left: 10px;"
-              :disabled="consultInfo.data.supportLoading == 0"
-              :label="$t('booking.unloading')"
-              border
-            ></el-checkbox>
-            <el-checkbox
-              v-model="loading"
-              class="inputWidth inputBottom"
-              :disabled="consultInfo.data.supportLoading == 0"
-              :label="$t('booking.loading')"
-              border
-            ></el-checkbox>
-            <el-checkbox
-              v-model="documentReturn"
-              class="inputWidth inputBottom"
-              :label="$t('booking.documentReturn')"
-              border
-            ></el-checkbox>
-            <el-checkbox
-              v-model="liability"
-              disabled
-              class="inputWidth inputBottom"
-              :label="$t('booking.liability')"
-              border
-            ></el-checkbox>
-            <el-input
-              :placeholder="$t('placeholder.amount')"
-              type="number"
-              v-if="liability"
-              style="margin-left:10px;"
-              v-model="liabilityCon"
-              class="inputWidth"
-            >
-              <el-select v-model="liabilitySelect" slot="append" :placeholder="$t('placeholder.pleaseChoose')">
-                <el-option label="PCS" value="PCS"></el-option>
-                <el-option label="Shipment" value="Shipment"></el-option>
-              </el-select>
-            </el-input>
+            <div v-if="bookingForm.orderInfo.lineType == 'FTL'">
+              <el-checkbox
+                v-model="unloading"
+                class="inputWidth inputBottom"
+                style="margin-left: 10px;"
+                :disabled="consultInfo.data.supportLoading == 0"
+                :label="$t('booking.unloading')"
+                border
+              ></el-checkbox>
+              <el-checkbox
+                v-model="loading"
+                class="inputWidth inputBottom"
+                :disabled="consultInfo.data.supportLoading == 0"
+                :label="$t('booking.loading')"
+                border
+              ></el-checkbox>
+              <el-checkbox
+                v-model="documentReturn"
+                class="inputWidth inputBottom"
+                :label="$t('booking.documentReturn')"
+                border
+              ></el-checkbox>
+              <el-checkbox
+                v-model="liability"
+                disabled
+                class="inputWidth inputBottom"
+                :label="$t('booking.liability')"
+                border
+              ></el-checkbox>
+              <el-input
+                :placeholder="$t('placeholder.amount')"
+                type="number"
+                v-if="liability"
+                style="margin-left:10px;"
+                v-model="liabilityCon"
+                class="inputWidth"
+              >
+                <el-select v-model="liabilitySelect" slot="append" :placeholder="$t('placeholder.pleaseChoose')">
+                  <el-option label="PCS" value="PCS"></el-option>
+                  <el-option label="Shipment" value="Shipment"></el-option>
+                </el-select>
+              </el-input>
+            </div>
+            <div v-else>
+              <el-checkbox
+                v-model="documentReturn"
+                class="inputWidth inputBottom"
+                :label="$t('booking.documentReturn')"
+                border
+              ></el-checkbox>
+              <el-checkbox
+                v-model="printSticker"
+                class="inputWidth inputBottom"
+                style="margin-left:0px;"
+                :label="$t('booking.printSticker')"
+                border
+              ></el-checkbox>
+            </div>
+          </el-form-item>
+          <el-form-item :label="$t('booking.cargoList')" class="el_item" v-if="bookingForm.orderInfo.lineType == 'LTL'">
+            <el-input v-model="propertyListContent" :rows="3" disabled resize="none" type="textarea" class="inputWidth" />
+            <div class="el_item_icon" @click="cargoListDialog = true">
+              <i class="el-icon-edit cargo_edit"></i>
+            </div>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item :label="$t('booking.truckType')">
+          <el-form-item :label="$t('booking.truckType')" v-if="bookingForm.orderInfo.lineType == 'FTL'">
             <el-select
               v-model="bookingForm.transportInfo.carType"
               disabled
@@ -215,7 +238,7 @@
             <el-input v-model="bookingForm.orderInfo.outNumber" class="inputWidth" />
           </el-form-item>
           <el-form-item :label="$t('booking.remarks')">
-            <el-input v-model="bookingForm.orderInfo.remark" type="textarea" class="inputWidth" />
+            <el-input v-model="bookingForm.orderInfo.remark" resize="none" type="textarea" class="inputWidth" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -249,152 +272,120 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <!-- <el-row class="itemRow"
-              type="flex"
-              :gutter="40">
-        <el-col :span="15">
+    </el-form>
+    <!-- 货物清单 -->
+    <el-dialog :visible.sync="cargoListDialog" :title="$t('booking.cargoList')" width="85%" center>
+      <!-- size 说明 -->
+      <el-table :data="cargoTip" border style="width:730px;margin-bottom:20px;">
+        <el-table-column prop="unit" width="130"></el-table-column>
+        <el-table-column prop="ss" label="Size-SS" width="100"></el-table-column>
+        <el-table-column prop="s" label="Size-S" width="100"></el-table-column>
+        <el-table-column prop="m" label="Size-M" width="100"></el-table-column>
+        <el-table-column prop="l" label="Size-L" width="100"></el-table-column>
+        <el-table-column prop="xl" label="Size-XL" width="100"></el-table-column>
+        <el-table-column prop="eSize" label="Extra size" width="100"></el-table-column>
+      </el-table>
+      <!-- 清单列表 -->
+      <div style="display:flex;align-items: flex-end;">
+        <el-form ref="cargoform" :model="bookingForm" :rules="cargoRules" :show-message="false" style="width:95%;">
           <el-form-item prop="propertyList">
-            <el-button type="primary"
-                       @click="pushIt"
-                       style="margin-bottom:10px;"
-                       icon="el-icon-circle-plus-outline">{{$t('booking.add')}}</el-button>
-            <el-table border
-                      :data="bookingForm.propertyList">
-              <el-table-column prop="propertyType"
-                               :label="$t('booking.cargoType')">
+            <el-table border :data="bookingForm.propertyList">
+              <el-table-column prop="propertyType" :label="$t('booking.cargoType')">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.propertyType"
-                             :placeholder="$t('placeholder.pleaseChoose')">
-                    <el-option v-for="item in propertyTypeList"
-                               :key="item.key"
-                               :label="item.trans"
-                               :value="item.key"></el-option>
+                  <el-select v-model="scope.row.propertyType" :placeholder="$t('placeholder.pleaseChoose')">
+                    <el-option v-for="item in propertyTypeList" :key="item.key" :label="item.trans" :value="item.key"></el-option>
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column prop="name"
-                               :label="$t('booking.commodity')">
+              <el-table-column prop="name" :label="$t('booking.commodity')">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.name"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column prop="number"
-                               :label="$t('booking.qty')">
+              <el-table-column prop="number" :label="$t('booking.qty')">
                 <template slot-scope="scope">
-                  <el-input type="number"
-                            v-model="scope.row.number"></el-input>
+                  <el-input type="number" v-model="scope.row.number"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column prop="unit"
-                               :label="$t('booking.unit')">
+              <el-table-column prop="unit" :label="$t('booking.unit')">
                 <template slot-scope="scope">
-                  <el-select :placeholder="$t('placeholder.pleaseChoose')"
-                             v-model="scope.row.unit">
-                    <el-option v-for="item in unitList"
-                               :key="item.key"
-                               :label="item.trans"
-                               :value="item.key"></el-option>
+                  <el-select :placeholder="$t('placeholder.pleaseChoose')" v-model="scope.row.unit">
+                    <el-option v-for="item in unitList" :key="item.key" :label="item.trans" :value="item.key"></el-option>
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column prop="sizeType"
-                               :label="$t('booking.size')">
+              <el-table-column prop="sizeType" :label="$t('booking.size')">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.sizeType"
-                             @change="(val)=>sizeSelect(val,scope.$index)"
-                             :placeholder="$t('placeholder.pleaseChoose')">
-                    <el-option v-for="item in sizeTypeList"
-                               :key="item.key"
-                               :label="item.trans"
-                               :value="item.key"></el-option>
-
+                  <el-select
+                    v-model="scope.row.sizeType"
+                    :placeholder="$t('placeholder.pleaseChoose')"
+                    @change="val => sizeSelect(val, scope.$index)"
+                  >
+                    <el-option v-for="item in sizeTypeList" :key="item.key" :label="item.trans" :value="item.key"></el-option>
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column prop="weightOfEach"
-                               :label="$t('booking.weight')">
+              <el-table-column prop="wide" :label="$t('booking.weight')">
                 <template slot-scope="scope">
-                  <el-input type="number"
-                            v-model="scope.row.weightOfEach"></el-input>
+                  <el-input
+                    type="number"
+                    v-model="scope.row.wide"
+                    :disabled="scope.row.sizeType != 'EXTRA_SIZE'"
+                    @keyup.native="checkNumInt(scope.row.wide, scope.$index, 'wide')"
+                  ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column width="50">
+              <el-table-column prop="length" :label="$t('booking.weight')">
+                <template slot-scope="scope">
+                  <el-input
+                    type="number"
+                    v-model="scope.row.length"
+                    :disabled="scope.row.sizeType != 'EXTRA_SIZE'"
+                    @keyup.native="checkNumInt(scope.row.length, scope.$index, 'length')"
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column prop="high" :label="$t('booking.weight')">
+                <template slot-scope="scope">
+                  <el-input
+                    type="number"
+                    v-model="scope.row.high"
+                    :disabled="scope.row.sizeType != 'EXTRA_SIZE'"
+                    @keyup.native="checkNumInt(scope.row.high, scope.$index, 'high')"
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column prop="weightOfEach" :label="$t('booking.weight')">
+                <template slot-scope="scope">
+                  <el-input
+                    type="number"
+                    v-model="scope.row.weightOfEach"
+                    @keyup.native="checkNumfloat(scope.row.weightOfEach, scope.$index, 'weightOfEach')"
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column width="50" align="center">
                 <template slot-scope="scope">
                   <div class="table-op">
-
-                    <div @click="delIt(scope.row,scope.$index)">
-                      <i class="el-icon-delete"
-                         style="color:#F25C5C;"></i>
+                    <div @click="delIt(scope.row, scope.$index)">
+                      <i
+                        class="el-icon-delete"
+                        :style="bookingForm.propertyList.length > 1 ? 'color:#F25C5C;' : 'color: #ccc;cursor: no-drop;'"
+                      ></i>
                     </div>
                   </div>
                 </template>
               </el-table-column>
             </el-table>
           </el-form-item>
-        </el-col>
-        <el-col :span="7">
-          <el-button type="primary"
-                     @click="viewIt"
-                     style="margin-bottom:10px;"
-                     icon="el-icon-s-order">{{$t('booking.viewValuation')}}</el-button>
-          <el-table :data="amountList"
-                    ref="amountTable"
-                    show-summary
-                    :sum-text="$t('booking.totalamt')"
-                    border>
-            <el-table-column prop="label"
-                             label="item"></el-table-column>
-            <el-table-column prop="amount"
-                             label="Amount"></el-table-column>
-
-          </el-table>
-          <el-form-item :label="$t('booking.accountBalance')"
-                        style="margin-top:30px;">
-            <div style="display:flex;justify-content:space-between;">
-              <el-tag style="width:100px;text-align:center;">{{currentBalance}}</el-tag>
-              <el-button style="width:150px;"
-                         @click="toTopUp"
-                         type="info">{{$t('booking.topUp')}}</el-button>
-            </div>
-          </el-form-item>
-        </el-col>
-      </el-row> -->
-    </el-form>
-    <el-dialog :visible.sync="sizeDialog" width="30%" title="extra_size" center>
-      <div>
-        <el-form label-position="right" label-width="120px">
-          <el-form-item :label="$t('placeholder.width') + ':'">
-            <el-input
-              type="number"
-              :placeholder="$t('placeholder.width')"
-              style="width:200px;"
-              v-model="size_width"
-              size="small"
-            ></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('placeholder.length') + ':'">
-            <el-input
-              type="number"
-              :placeholder="$t('placeholder.length')"
-              style="width:200px;"
-              v-model="size_length"
-              size="small"
-            ></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('placeholder.height') + ':'">
-            <el-input
-              type="number"
-              :placeholder="$t('placeholder.height')"
-              style="width:200px;"
-              v-model="size_height"
-              size="small"
-            ></el-input>
-          </el-form-item>
         </el-form>
+        <div style="margin-bottom: 30px;margin-left: 10px;">
+          <el-button type="primary" icon="el-icon-plus" circle @click="pushIt" />
+        </div>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="sizeConfirm" style="width:150px;">{{ $t("booking.confirm") }}</el-button>
-      </span>
+      <div slot="footer">
+        <el-button type="primary" style="width:250px;" @click="propertyListConfirm">{{ $t("booking.confirm") }}</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -402,7 +393,7 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-import { ftlCharge, placeOrder } from "../../api/booking";
+import { ftlCharge, placeOrder, placeOrderLTL, calculationOrder } from "../../api/booking";
 import { getTruckType, findDistrictFullList, getGoodsProperty, getSenderList, getTransportList, myAccount } from "../../api/data";
 import path from "path";
 
@@ -440,7 +431,7 @@ export default {
         callback();
       }
     };
-    const validatorPropertyList = (rule, value, callback) => {
+    const validatorPropertyListDialog = (rule, value, callback) => {
       for (let x in value) {
         if (
           !value[x].propertyType ||
@@ -448,18 +439,26 @@ export default {
           !value[x].number ||
           !value[x].unit ||
           !value[x].sizeType ||
-          !value[x].weightOfEach
+          !value[x].weightOfEach ||
+          (value[x].sizeType && value[x].sizeType == "EXTRA_SIZE" && (!value[x].high || !value[x].length || !value[x].wide))
         ) {
-          callback(new Error(""));
-        } else {
+          callback(new Error(" "));
+        } else if (x == value.length - 1) {
           callback();
         }
+      }
+    };
+    const validatorPropertyList = (rule, value, callback) => {
+      if (self.propertyListContent.length > 0) {
+        callback();
+      } else {
+        callback(new Error(" "));
       }
     };
     return {
       bookingForm: {
         orderInfo: {
-          lineType: "FTL",
+          lineType: "",
           outNumber: "",
           remark: "",
         },
@@ -483,13 +482,7 @@ export default {
           carriage: "",
           supplyId: null,
         },
-        chargeList: [
-          {
-            chargeType: "CARPOOL",
-            chargeIntro: "false",
-            money: 0,
-          },
-        ],
+        chargeList: [],
         propertyList: [
           //   {
           //   propertyType: '',
@@ -518,6 +511,16 @@ export default {
           },
         ],
       },
+      cargoRules: {
+        propertyList: [
+          {
+            required: true,
+            trigger: "change",
+            validator: validatorPropertyListDialog,
+          },
+        ],
+      },
+      printSticker: false,
       documentReturn: false,
       liability: false,
       liabilityCon: null,
@@ -535,9 +538,6 @@ export default {
       curSelect: "",
       categoryList: [],
       subCategoryList: [],
-      propertyTypeList: [],
-      sizeTypeList: [],
-      unitList: [],
       supplyList: [],
       shareTruck: false,
       cargoShape: "1",
@@ -563,6 +563,34 @@ export default {
       consultInfo: {},
       currentBalance: null,
       todoLoading: false,
+      propertyListContent: "",
+      cargoListDialog: false,
+      cargoTip: [
+        {
+          unit: "Dimension(cm)",
+          ss: "0.01-90",
+          s: "90.01-110",
+          m: "110.01-130",
+          l: "130.01-150",
+          xl: "150.01-170",
+          eSize: ">170.00",
+        },
+        {
+          unit: "Weight(kg)",
+          ss: "0.01-10",
+          s: "10.01-20",
+          m: "20.01-30",
+          l: "30.01-40",
+          xl: "40.01-50",
+          eSize: ">50",
+        },
+      ],
+      propertyTypeList: [],
+      sizeTypeList: [],
+      unitList: [],
+      propertyTypeListObj: {},
+      sizeTypeListObj: {},
+      unitListObj: {},
     };
   },
   // 监听属性 类似于data概念
@@ -590,6 +618,17 @@ export default {
         });
       } else {
         self.amountWatch("RETURN_DOCUMENT");
+      }
+    },
+    printSticker(val) {
+      if (val) {
+        self.amountList.push({
+          key: "PRINT_STICKER",
+          amount: 0,
+          label: self.$t("booking.printSticker"),
+        });
+      } else {
+        self.amountWatch("PRINT_STICKER");
       }
     },
     loading(val) {
@@ -640,22 +679,37 @@ export default {
     let consultInfo = self.consultInfo;
     if (consultInfo) {
       let booking = self.bookingForm;
+      let type = consultInfo.logisticType;
       self.pickUpRegionList = consultInfo.pickUpRegionList;
       self.delRegionList = consultInfo.delRegionList;
-      booking.orderInfo.lineType = consultInfo.logisticType;
+      booking.orderInfo.lineType = type;
       booking.senderAddress.code = consultInfo.searchForm.pickUpRegion;
+      // booking.senderAddress.code = 2100;
       booking.senderAddress.pickAt = consultInfo.searchForm.pickUpDate;
       self.time = consultInfo.time;
+      self.propertyListContent = type == "LTL" ? consultInfo.searchForm.propertyListContent : "";
       booking.receiverAddress.code = consultInfo.searchForm.deliveryRegion;
+      // booking.receiverAddress.code = 1111;
       booking.transportInfo.carType = consultInfo.searchForm.truckCategory;
       booking.transportInfo.carriage = consultInfo.searchForm.truckSubCategory;
       booking.transportInfo.companyName = consultInfo.data.supply.name;
-      booking.transportInfo.ftlLineId = consultInfo.data.ftlLineId;
+      booking.transportInfo.ftlLineId = type == "FTL" ? consultInfo.data.ftlLineId : consultInfo.data.ltlLine.id;
       booking.transportInfo.ftlLineInstanceId = consultInfo.data.id;
       booking.transportInfo.supplyId = consultInfo.data.supplyId;
+      booking.chargeList =
+        type == "FTL"
+          ? [
+              {
+                chargeType: "CARPOOL",
+                chargeIntro: "false",
+                money: 0,
+              },
+            ]
+          : [];
+      booking.propertyList = type == "FTL" ? [] : consultInfo.searchForm.propertyList;
       self.amountList.push({
         label: self.$t("booking.feight"),
-        amount: consultInfo.data.charge,
+        amount: type == "FTL" ? consultInfo.data.charge : consultInfo.data.money,
         key: "FREIGHT",
       });
     }
@@ -682,6 +736,21 @@ export default {
           self.propertyTypeList = res.data.propertyType;
           self.sizeTypeList = res.data.sizeType;
           self.unitList = res.data.unit;
+          let propertyTypeListObj = new Object();
+          for (let i of self.propertyTypeList) {
+            propertyTypeListObj[i.key] = i.trans;
+          }
+          self.propertyTypeListObj = propertyTypeListObj;
+          let sizeTypeListObj = new Object();
+          for (let i of self.sizeTypeList) {
+            sizeTypeListObj[i.key] = i.trans;
+          }
+          self.sizeTypeListObj = sizeTypeListObj;
+          let unitListObj = new Object();
+          for (let i of self.unitList) {
+            unitListObj[i.key] = i.trans;
+          }
+          self.unitListObj = unitListObj;
         });
       });
     },
@@ -763,6 +832,7 @@ export default {
         if (valid) {
           self.todoLoading = true;
           self.bookingForm.chargeList.splice(1);
+          self.bookingForm.senderAddress.pickAt = self.bookingForm.senderAddress.pickAt.split(" ")[0] + ` ${self.time}`;
           for (let x in self.amountList) {
             if (self.amountList[x].key != "FREIGHT") {
               self.bookingForm.chargeList.push({
@@ -772,16 +842,28 @@ export default {
               });
             }
           }
-          self.bookingForm.senderAddress.pickAt = self.bookingForm.senderAddress.pickAt.split(" ")[0] + ` ${self.time}`;
-          placeOrder(self.bookingForm)
-            .then(res => {
+          if (self.bookingForm.orderInfo.lineType == "FTL") {
+            placeOrder(self.bookingForm)
+              .then(res => {
+                self.todoLoading = false;
+                self.$message.success(res.message);
+                self.$router.replace("/tracking/FTL");
+              })
+              .catch(el => {
+                self.todoLoading = false;
+              });
+          } else {
+            self.bookingForm.ltlLineId = self.bookingForm.transportInfo.ftlLineId;
+            self.bookingForm.outNumber = self.bookingForm.orderInfo.outNumber;
+            self.bookingForm.remark = self.bookingForm.orderInfo.remark;
+            console.log(self.bookingForm);
+            // return;
+            placeOrderLTL(self.bookingForm).then(res => {
               self.todoLoading = false;
               self.$message.success(res.message);
-              self.$router.replace("/tracking/FTL");
-            })
-            .catch(el => {
-              self.todoLoading = false;
+              // self.$router.replace('')
             });
+          }
         }
       });
     },
@@ -800,6 +882,15 @@ export default {
         self.amountList = res.data;
       });
     },
+    checkNumInt(val, index, type) {
+      val = val.split(".")[0];
+      self.bookingForm.propertyList[index][type] = val;
+    },
+    checkNumfloat(obj, index, type) {
+      obj = Number(obj.toString().match(/^\d+(?:\.\d{0,2})?/));
+      self.searchForm.propertyList[index][type] = obj == 0 ? "" : obj;
+    },
+    // 新增一行货物清单
     pushIt() {
       self.bookingForm.propertyList.push({
         propertyType: "",
@@ -810,37 +901,67 @@ export default {
         weightOfEach: null,
       });
     },
+    // 删除一行货物清单
     delIt(row, index) {
-      self
-        .$confirm(this.$t("booking.aysDel"), this.$t("confirm.tips"), {
-          confirmButtonText: this.$t("booking.delete"),
-          cancelButtonText: this.$t("member.cancel"),
-        })
-        .then(() => {
-          self.bookingForm.propertyList.splice(index, 1);
-        })
-        .catch(() => {});
-    },
-    sizeSelect(val, index) {
-      if (val == "EXTRA_SIZE") {
-        self.sizeDialog = true;
-        self.sizeCurIndex = index;
+      if (self.bookingForm.propertyList.length > 1) {
+        self
+          .$confirm(this.$t("booking.aysDel"), this.$t("confirm.tips"), {
+            confirmButtonText: this.$t("booking.delete"),
+            cancelButtonText: this.$t("member.cancel"),
+          })
+          .then(() => {
+            self.bookingForm.propertyList.splice(index, 1);
+          })
+          .catch(() => {});
       }
     },
-    sizeConfirm() {
-      self.sizeDialog = false;
-      let size = self.size_length + "*" + self.size_width + "*" + self.size_height;
-      self.sizeTypeList.push({
-        key: size,
-        value: size,
-        trans: size,
+    // 选择非额外尺寸时 删除长宽高属性
+    sizeSelect(val, index) {
+      if (val != "EXTRA_SIZE") {
+        delete self.bookingForm.propertyList[index].high;
+        delete self.bookingForm.propertyList[index].wide;
+        delete self.bookingForm.propertyList[index].length;
+        console.log(self.bookingForm.propertyList);
+      }
+    },
+    // 货物清单确认
+    propertyListConfirm() {
+      this.$refs.cargoform.validate(valid => {
+        if (valid) {
+          self.cargoListDialog = false;
+          self.propertyListContent = "";
+          let list = self.bookingForm.propertyList;
+          let content = "";
+          for (let x in list) {
+            content += `${parseInt(x) + 1}.${self.propertyTypeListObj[list[x].propertyType]} ${list[x].name} ${
+              self.sizeTypeListObj[list[x].sizeType]
+            } ${list[x].number}${self.unitListObj[list[x].unit]} `;
+          }
+          self.propertyListContent = content;
+          self.bookingForm.ltlLineId = self.bookingForm.transportInfo.ftlLineId;
+          self.bookingForm.outNumber = self.bookingForm.orderInfo.outNumber;
+          self.bookingForm.remark = self.bookingForm.orderInfo.remark;
+          self.bookingForm.senderAddress.pickAt = self.bookingForm.senderAddress.pickAt.split(" ")[0] + ` ${self.time}`;
+          calculationOrder(self.bookingForm).then(res => {
+            console.log(res);
+            for (let i of self.amountList) {
+              if (i.key == "FREIGHT") {
+                i.amount = res.data.orderMoney;
+              }
+            }
+          });
+        }
       });
-      self.bookingForm.propertyList[self.sizeCurIndex].sizeType = size;
     },
     toTopUp() {
       self.$router.replace("/billing/topUp");
     },
     goBack() {
+      if (self.bookingForm.orderInfo.lineType == "LTL") {
+        self.consultInfo.searchForm.propertyList = self.bookingForm.propertyList;
+        self.consultInfo.searchForm.propertyListContent = self.propertyListContent;
+        localStorage.setItem("consultInfo", JSON.stringify(self.consultInfo));
+      }
       self.$router.replace({
         path: "/booking/priceConsulting",
         query: { return: 1 },
@@ -868,6 +989,33 @@ export default {
       width: 100%;
       text-align: center;
       cursor: pointer;
+    }
+  }
+
+  .el_item {
+    position: relative;
+
+    .el_item_icon {
+      position: absolute;
+      right: 20%;
+      z-index: 1;
+      width: 35px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: -42px;
+      cursor: pointer;
+
+      .pick_up_location_svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .cargo_edit {
+        font-size: 20px;
+        color: #45a3df;
+      }
     }
   }
 }

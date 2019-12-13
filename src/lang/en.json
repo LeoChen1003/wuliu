@@ -197,7 +197,8 @@
     "back": "Back",
     "truckTypechoose": "Please select Truck Type",
     "max": "MAX",
-    "noMoreThan": "At Most"
+    "noMoreThan": "At Most",
+    "cutOffTime": "Cut-off Time"
   },
   "tracking": {
     "status": "Order Status",

@@ -197,7 +197,8 @@
     "type_Cold_room": "冷柜",
     "truckTypechoose": "请选择车型",
     "back": "返回",
-    "noMoreThan": "不超过"
+    "noMoreThan": "不超过",
+    "cutOffTime": "截至时间"
   },
   "tracking": {
     "status": "订单状态",
