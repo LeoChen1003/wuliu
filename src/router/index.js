@@ -336,6 +336,15 @@ export const asyncRoutes = [
           permission: "PlatformOrderManage",
         },
       },
+      {
+        path: "user",
+        component: () => import("@views/setting/user"),
+        meta: {
+          title: "user",
+          roles: ["PLATFORM"],
+          permission: "PlatformOrderManage",
+        },
+      },
     ],
   },
 ];
