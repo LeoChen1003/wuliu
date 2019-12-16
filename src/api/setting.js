@@ -10,12 +10,20 @@ export function saveLineTemplate(data) {
   });
 }
 
-// 模板查询
+// 模板列表查询
 export function getLineTemplate(params) {
   return request({
     url: "/api/ltl/lineTemplate/show",
     method: "get",
     params: params,
+  });
+}
+
+// 模板详情查询
+export function getLineTemplateDetail(id) {
+  return request({
+    url: "/api/ltl/lineTemplate/show/id",
+    method: "get",
   });
 }
 
