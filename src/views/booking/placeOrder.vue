@@ -274,7 +274,7 @@
       </el-row>
     </el-form>
     <!-- 货物清单 -->
-    <el-dialog :visible.sync="cargoListDialog" :title="$t('booking.cargoList')" width="85%" center>
+    <el-dialog :visible.sync="cargoListDialog" :title="$t('booking.cargoList')" width="1250px" center>
       <!-- size 说明 -->
       <el-table :data="cargoTip" border style="width:730px;margin-bottom:20px;">
         <el-table-column prop="unit" width="130"></el-table-column>
@@ -325,7 +325,7 @@
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column prop="wide" :label="$t('booking.weight')">
+              <el-table-column prop="wide" :label="$t('booking.width')">
                 <template slot-scope="scope">
                   <el-input
                     type="number"
@@ -335,7 +335,7 @@
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column prop="length" :label="$t('booking.weight')">
+              <el-table-column prop="length" :label="$t('booking.Length')">
                 <template slot-scope="scope">
                   <el-input
                     type="number"
@@ -345,7 +345,7 @@
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column prop="high" :label="$t('booking.weight')">
+              <el-table-column prop="high" :label="$t('booking.height')">
                 <template slot-scope="scope">
                   <el-input
                     type="number"
@@ -360,6 +360,7 @@
                   <el-input
                     type="number"
                     v-model="scope.row.weightOfEach"
+                    :disabled="scope.row.sizeType != 'EXTRA_SIZE'"
                     @keyup.native="checkNumfloat(scope.row.weightOfEach, scope.$index, 'weightOfEach')"
                   ></el-input>
                 </template>
@@ -439,8 +440,9 @@ export default {
           !value[x].number ||
           !value[x].unit ||
           !value[x].sizeType ||
-          !value[x].weightOfEach ||
-          (value[x].sizeType && value[x].sizeType == "EXTRA_SIZE" && (!value[x].high || !value[x].length || !value[x].wide))
+          (value[x].sizeType &&
+            value[x].sizeType == "EXTRA_SIZE" &&
+            (!value[x].weightOfEach || !value[x].high || !value[x].length || !value[x].wide))
         ) {
           callback(new Error(" "));
         } else if (x == value.length - 1) {
@@ -856,7 +858,6 @@ export default {
             self.bookingForm.ltlLineId = self.bookingForm.transportInfo.ftlLineId;
             self.bookingForm.outNumber = self.bookingForm.orderInfo.outNumber;
             self.bookingForm.remark = self.bookingForm.orderInfo.remark;
-            console.log(self.bookingForm);
             // return;
             placeOrderLTL(self.bookingForm).then(res => {
               self.todoLoading = false;
@@ -921,7 +922,6 @@ export default {
         delete self.bookingForm.propertyList[index].high;
         delete self.bookingForm.propertyList[index].wide;
         delete self.bookingForm.propertyList[index].length;
-        console.log(self.bookingForm.propertyList);
       }
     },
     // 货物清单确认
@@ -943,7 +943,6 @@ export default {
           self.bookingForm.remark = self.bookingForm.orderInfo.remark;
           self.bookingForm.senderAddress.pickAt = self.bookingForm.senderAddress.pickAt.split(" ")[0] + ` ${self.time}`;
           calculationOrder(self.bookingForm).then(res => {
-            console.log(res);
             for (let i of self.amountList) {
               if (i.key == "FREIGHT") {
                 i.amount = res.data.orderMoney;
