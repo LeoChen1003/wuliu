@@ -50,6 +50,7 @@
     "resources": "资源",
     "truck": "卡车",
     "driver": "司机",
+    "route": "路线",
     "routeFTL": "路线（FTL）",
     "routeLTL": "路线（LTL）",
     "planningLTL": "规划（LTL）",
@@ -58,7 +59,8 @@
     "LTLCargoViaHUB": "零担物流（货物经过HUB）",
     "receivable": "应收账单",
     "transferFreight": "返款",
-    "topUpConfirm": "确认充值"
+    "topUpConfirm": "确认充值",
+    "setting": "设置"
   },
   "layout": {
     "logout": "退出"
@@ -509,5 +511,19 @@
     "loaderType": "车型类型",
     "confirm": "确认",
     "theSearchTermCannotBeEmpty": "搜索条件不能为空"
+  },
+  "setting": {
+    "route": "路线",
+    "routeName": "路线名称",
+    "cutOffTime": "截至时间",
+    "status": "状态",
+    "operation": "操作",
+    "routeDetails": "路线详情",
+    "map": "地图",
+    "province": "省份",
+    "deliverableDistrict": "可派送的地区",
+    "undeliverableDistrict": "不可派送的地区",
+    "origin": "始发地",
+    "edit": "编辑"
   }
 }
