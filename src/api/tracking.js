@@ -1,4 +1,5 @@
 import request from "@/utils/request";
+import requestJSON from "@/utils/requestJSON";
 
 // 订单列表
 export function getOrder(params) {
@@ -170,5 +171,32 @@ export function getImg(ids) {
     params: {
       ids: ids,
     },
+  });
+}
+
+// supplyLTL 订单列表
+export function getSupplyLTLOrder(data) {
+  return request({
+    url: `/api/ltl/supply/statusOrder`,
+    method: "get",
+    params: data,
+  });
+}
+
+// (supply）查看订单各个状态对应的订单数量
+export function supplyStatusCount(data) {
+  return request({
+    url: "/api/ltl/supply/show",
+    method: "get",
+    params: data,
+  });
+}
+
+// (supply）查看订单各个状态对应的订单数量
+export function chooseDriverAndTruck(data) {
+  return requestJSON({
+    url: "/api/ltl/supply/chooseDriverAndTruck",
+    method: "post",
+    data,
   });
 }

@@ -124,7 +124,12 @@ export const asyncRoutes = [
       {
         path: "LTL",
         component: () => import("@/views/tracking/LTL"),
-        meta: { title: "LTLHUB", roles: ["DEMAND", "SUPPLY"] },
+        meta: { title: "LTLHUB", roles: ["DEMAND"] },
+      },
+      {
+        path: "supplyLTL",
+        component: () => import("@/views/tracking/supplyLTL"),
+        meta: { title: "LTLHUB", roles: ["SUPPLY"], permission: "MyOrders" },
       },
     ],
   },
@@ -183,6 +188,46 @@ export const asyncRoutes = [
       //     permission: "SupplyResourceManage"
       //   }
       // }
+    ],
+  },
+  {
+    path: "/inbound",
+    component: Layout,
+    redirect: "/inbound",
+    name: "inbound",
+    meta: {
+      roles: ["HUB"],
+    },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/inbound/index"),
+        meta: {
+          title: "inbound",
+          roles: ["HUB"],
+          permission: "HubInBound",
+        },
+      },
+    ],
+  },
+  {
+    path: "/outbound",
+    component: Layout,
+    redirect: "/outbound",
+    name: "outbound",
+    meta: {
+      roles: ["HUB"],
+    },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/outbound/index"),
+        meta: {
+          title: "Outbound",
+          roles: ["HUB"],
+          permission: "HubInBound",
+        },
+      },
     ],
   },
   {

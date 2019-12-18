@@ -60,6 +60,8 @@
     "receivable": "应收账单",
     "transferFreight": "返款",
     "topUpConfirm": "确认充值",
+    "inbound": "入库",
+    "Outbound": "出库",
     "setting": "设置"
   },
   "layout": {
@@ -135,7 +137,7 @@
     "qty": "件数",
     "unit": "单位",
     "size": "尺寸",
-    "weight": "单件重量",
+    "weight": "单件重量(kg)",
     "cargoShape": "货物形状",
     "myQuotaion": "我的报价(泰铢)",
     "cargoList": "货物清单",
@@ -199,7 +201,10 @@
     "truckTypechoose": "请选择车型",
     "back": "返回",
     "noMoreThan": "不超过",
-    "cutOffTime": "截至时间"
+    "cutOffTime": "截至时间",
+    "width": "宽(厘米)",
+    "Length": "长(厘米)",
+    "height": "高(厘米)"
   },
   "tracking": {
     "status": "订单状态",
@@ -259,7 +264,20 @@
     "courierNumberRequired": "快递单号不能为空",
     "expressWaybillNo": "快递单号",
     "confirmReceiptOfDocument": "确认收到文件",
-    "areYouSure": "你已收到文件，确认吗？"
+    "areYouSure": "你已收到文件，确认吗？",
+    "toBeSentCargoToHub": "待发货到HUB",
+    "toBeconfirmedReceiptByHub": "待HUB收货",
+    "toBeHandedOverToSupply": "待交接给运输公司",
+    "destinaiton": "目的地",
+    "pickupDate": "揽件日期",
+    "assignTruckAndDriver": "指定车辆和司机",
+    "Discription": "描述",
+    "Operation": "操作",
+    "VechicleDriver": "车辆和司机",
+    "truck": "车辆",
+    "orderQty": "订单数量",
+    "VAS": "增值服务",
+    "TrackingNoAndDemand": "物流单号 & 需求方"
   },
   "resources": {
     "add": "添加",
@@ -512,6 +530,27 @@
     "confirm": "确认",
     "theSearchTermCannotBeEmpty": "搜索条件不能为空"
   },
+<<<<<<< HEAD
+  "inbound": {
+    "toBePrinted": "待打印",
+    "TobeConfirmedReceipt": "待确认收货",
+    "Received": "已收货",
+    "Demand": " 需求方",
+    "LicensePlate": "车牌号",
+    "EstimateTimeofArrival": "预计到HUB的时间",
+    "TrackingNo": "物流单号",
+    "QtyofShipment": "订单的货物件数",
+    "QtyofHUBScanIn": " 收货件数",
+    "Operation": " 操作",
+    "print": "打印",
+    "all": "全部",
+    "needPrint": "需要打印",
+    "sendNo": "送货单号",
+    "ConfirmReceipt": "确认收货",
+    "TobeConfirmedbyDriver": "待司机确认",
+    "TobeHandedOver": "待交接",
+    "HandedOver": "已交接"
+=======
   "setting": {
     "route": "路线",
     "routeName": "路线名称",
@@ -525,5 +564,6 @@
     "undeliverableDistrict": "不可派送的地区",
     "origin": "始发地",
     "edit": "编辑"
+>>>>>>> 9d0af3a108c71e1ff1e9a5f4949cef1394ab7980
   }
 }

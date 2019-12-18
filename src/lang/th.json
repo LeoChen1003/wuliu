@@ -58,7 +58,9 @@
     "receivable": "บัญชีลูกหนี้",
     "transferFreight": "โอนงินค่าขนส่ง",
     "topUpConfirm": "ยืนยันการโอนเงิน",
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "inbound": "ขาเข้า",
+    "Outbound": "ขาออก"
   },
   "layout": {
     "logout": "ออกจากระบบ"
@@ -197,7 +199,10 @@
     "distance": "กิโลเมตร",
     "days": "วัน",
     "noMoreThan": "ไม่เกิน",
-    "cutOffTime": "ตัดรอบการจัดส่ง"
+    "cutOffTime": "ตัดรอบการจัดส่ง",
+    "width": "กว้าง(cm)",
+    "Length": "ยาว(cm)",
+    "height": "สูง(cm)"
   },
   "tracking": {
     "status": "สถานะรายการ",

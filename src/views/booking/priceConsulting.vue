@@ -40,7 +40,7 @@
               </div>
             </el-form-item>
             <!-- FTL 车型选择 -->
-            <el-form-item prop="truckgroup" v-if="logisticType == 'FTL'">
+            <el-form-item prop="truckgroup" v-show="logisticType == 'FTL'">
               <!-- <el-select
                 v-model="searchForm.truckCategory"
                 class="innerInp"
@@ -173,7 +173,7 @@
               </div>
             </el-form-item>
             <!-- FTL 车厢选择 -->
-            <el-form-item v-if="logisticType == 'FTL'">
+            <el-form-item v-show="logisticType == 'FTL'">
               <el-select v-model="searchForm.truckSubCategory" class="inputWidth" :placeholder="$t('placeholder.pleaseChoose')">
                 <el-option v-for="item in subCategoryList" :key="item.key" :label="item.value" :value="item.key" />
               </el-select>
@@ -260,7 +260,7 @@
                 </el-time-picker>
               </div>
             </el-form-item>
-            <el-form-item v-if="logisticType == 'LTL'" prop="propertyList">
+            <el-form-item v-show="logisticType == 'LTL'" prop="propertyList">
               <svg-icon icon-class="booking_cargo" class-name="cargo_label" style="font-size:27px;" slot="label"></svg-icon>
               <div class="el_item edit_input">
                 <el-input
@@ -439,7 +439,7 @@
       </div>
     </el-dialog>
     <!-- 货物清单 -->
-    <el-dialog :visible.sync="cargoListDialog" :title="$t('booking.cargoList')" width="85%" center>
+    <el-dialog :visible.sync="cargoListDialog" :title="$t('booking.cargoList')" width="1250px" center>
       <!-- size 说明 -->
       <el-table :data="cargoTip" border style="width:730px;margin-bottom:20px;">
         <el-table-column prop="unit" width="130"></el-table-column>
@@ -490,7 +490,7 @@
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column prop="wide" :label="$t('booking.weight')">
+              <el-table-column prop="wide" :label="$t('booking.width')">
                 <template slot-scope="scope">
                   <el-input
                     type="number"
@@ -500,7 +500,7 @@
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column prop="length" :label="$t('booking.weight')">
+              <el-table-column prop="length" :label="$t('booking.Length')">
                 <template slot-scope="scope">
                   <el-input
                     type="number"
@@ -510,7 +510,7 @@
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column prop="high" :label="$t('booking.weight')">
+              <el-table-column prop="high" :label="$t('booking.height')">
                 <template slot-scope="scope">
                   <el-input
                     type="number"
@@ -525,6 +525,7 @@
                   <el-input
                     type="number"
                     v-model="scope.row.weightOfEach"
+                    :disabled="scope.row.sizeType != 'EXTRA_SIZE'"
                     @keyup.native="checkNumfloat(scope.row.weightOfEach, scope.$index, 'weightOfEach')"
                   ></el-input>
                 </template>
@@ -635,8 +636,9 @@ export default {
           !value[x].number ||
           !value[x].unit ||
           !value[x].sizeType ||
-          !value[x].weightOfEach ||
-          (value[x].sizeType && value[x].sizeType == "EXTRA_SIZE" && (!value[x].high || !value[x].length || !value[x].wide))
+          (value[x].sizeType &&
+            value[x].sizeType == "EXTRA_SIZE" &&
+            (!value[x].weightOfEach || !value[x].high || !value[x].length || !value[x].wide))
         ) {
           callback(new Error(" "));
         } else if (x == value.length - 1) {
@@ -666,7 +668,7 @@ export default {
       searchRules: {
         deliveryRegion: [{ required: true, message: " ", trigger: "change" }],
         pickUpRegion: [{ required: true, message: " ", trigger: "change" }],
-        pickUpDate: [{ required: true, validator: validatorDate, trigger: "change" }],
+        pickUpDate: [{ required: true, message: " ", trigger: "change" }],
         // truckCategory: [{ required: true, validator: validatorTruck }]
         truckgroup: [{ required: true, validator: validatorTruck }],
         propertyList: [{ required: true, trigger: "change", validator: validatorPropertySearch }],
@@ -1660,9 +1662,9 @@ export default {
             self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
             self.showDisInfo = true;
           } else {
-            // searchForm.fromCityCode = 2100;
-            // searchForm.toCityCode = 1111;
-            // searchForm.pickUpDate = "2019-12-05 00:00:00";
+            searchForm.fromCityCode = 2100;
+            searchForm.toCityCode = 1111;
+            searchForm.pickUpDate = "2019-12-05 00:00:00";
             ltlLine(searchForm, {
               page: self.page.currentPage - 1,
               pagesize: self.pagesize,
@@ -1677,8 +1679,6 @@ export default {
                 //   }
                 // }
                 self.tableList = tableList;
-                console.log(self.tableList);
-                console.log(self.tableList[0]);
                 self.page = {
                   total: res.data.totalElements,
                   currentPage: res.data.number + 1,
@@ -1721,7 +1721,9 @@ export default {
       self.logisticType = type;
       if (type == "LTL") {
         self.searchForm.pickUpRegion = "";
+        self.hideMap();
       }
+      self.$refs.searchform.clearValidate();
     },
     checkNumInt(val, index, type) {
       val = val.split(".")[0];
@@ -1762,7 +1764,6 @@ export default {
         delete self.searchForm.propertyList[index].high;
         delete self.searchForm.propertyList[index].wide;
         delete self.searchForm.propertyList[index].length;
-        console.log(self.searchForm.propertyList);
       }
     },
     // 货物清单确认
