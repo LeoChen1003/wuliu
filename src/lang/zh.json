@@ -548,7 +548,15 @@
     "ConfirmReceipt": "确认收货",
     "TobeConfirmedbyDriver": "待司机确认",
     "TobeHandedOver": "待交接",
-    "HandedOver": "已交接"
+    "HandedOver": "已交接",
+    "GotIt": "知道了",
+    "Outboundquantityisnotequaltoorderquantity": "出库数量不等于订单数量，不可以确认！",
+    "Reprint": "Reprint",
+    "Supply": "运输公司",
+    "TotalQty": "总件数",
+    "QtyofHUBScanout": "交接件数",
+    "Receiptquantityisnotequaltoorderquantity": "入库数量不等于订单数量，不可以确认！",
+    "ActualTimeofArrival": "实际到达HUB的时间"
   },
   "setting": {
     "route": "路线",
