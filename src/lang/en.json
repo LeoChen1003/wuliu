@@ -536,13 +536,21 @@
     "EstimateTimeofArrival": "Estimate Time of Arrival",
     "TrackingNo": "Tracking No.",
     "QtyofShipment": "Qty of Shipment",
-    "QtyofHUBScanIn": "Qty of HUB Scan In",
+    "QtyofHUBScanIn": "Qty of HUB Scan in",
     "Operation": " Operation",
     "print": "print",
     "all": "All",
     "ConfirmReceipt": "Confirm Receipt",
     "TobeConfirmedbyDriver": "To be Confirmed by Driver",
     "TobeHandedOver": "To be Handed  Over ",
-    "HandedOver": "Handed  Over "
+    "HandedOver": "Handed  Over ",
+    "Outboundquantityisnotequaltoorderquantity": "Outbound quantity is not equal to order quantity, cannot be confirmed!",
+    "GotIt": "Got it",
+    "Reprint": "Reprint",
+    "Supply": "Supply",
+    "TotalQty": "Total Qty",
+    "QtyofHUBScanout": "Qty of HUB Scan out",
+    "Receiptquantityisnotequaltoorderquantity": "Receipt quantity is not equal to order quantity, cannot be confirmed!",
+    "ActualTimeofArrival": "Actual Time of Arrival"
   }
 }

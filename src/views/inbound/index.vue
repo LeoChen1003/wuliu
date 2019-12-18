@@ -10,12 +10,12 @@
         </div>
       </div>
       <div class="search_box">
-        <el-select v-model="searchType" :placeholder="$t('placeholder.pleaseChoose')" class="select_btn">
-          <el-option :label="$t('inbound.LicensePlate')" :value="'plate'"> </el-option>
+        <el-select v-model="searchType" :placeholder="$t('placeholder.pleaseChoose')" style="margin:0;" class="select_btn">
           <el-option :label="$t('inbound.sendNo')" :value="'sendNo'"> </el-option>
+          <el-option :label="$t('inbound.LicensePlate')" :value="'plate'"> </el-option>
         </el-select>
         <el-input v-model="like" :placeholder="$t('placeholder.pleaseInput')" class="input_btn"></el-input>
-        <div style="margin-right:10px;">{{ $t("inbound.print") }}:</div>
+        <div style="margin-right:10px;font-size:14px;">{{ $t("inbound.print") }}</div>
         <el-select v-model="needPrint" :placeholder="$t('placeholder.pleaseChoose')" class="select_btn">
           <el-option :label="$t('inbound.all')" :value="'all'"> </el-option>
           <el-option :label="$t('inbound.needPrint')" :value="'print'"> </el-option>
@@ -25,7 +25,14 @@
     </div>
     <div class="content">
       <div class="content_left">
-        <el-table :data="data.content" highlight-current-row @current-change="handleCurrentChange" border v-loading="loading">
+        <el-table
+          ref="leftData"
+          :data="data.content"
+          highlight-current-row
+          @current-change="handleCurrentChange"
+          border
+          v-loading="loading"
+        >
           <el-table-column :label="$t('inbound.Demand')">
             <template slot-scope="scope">
               <div>{{ scope.row.demandName }}</div>
@@ -39,9 +46,18 @@
               <div>{{ scope.row.phone }}</div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('inbound.EstimateTimeofArrival')">
+          <el-table-column
+            :label="status == 'HANDOVER' ? $t('inbound.ActualTimeofArrival') : $t('inbound.EstimateTimeofArrival')"
+          >
             <template slot-scope="scope">
-              <div>{{ scope.row.estimateTime.slice(0, 10) + " " + scope.row.estimateTime.slice(11, 19) }}</div>
+              <div v-if="status == 'WAIT_PUT'">
+                {{
+                  scope.row.estimateTime ? scope.row.estimateTime.slice(0, 10) + " " + scope.row.estimateTime.slice(11, 19) : ""
+                }}
+              </div>
+              <div v-if="status == 'HANDOVER'">
+                {{ scope.row.actualTime ? scope.row.actualTime.slice(0, 10) + " " + scope.row.actualTime.slice(11, 19) : "" }}
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -59,16 +75,25 @@
         </div>
       </div>
       <div class="content_right">
-        <el-table :data="rightData" border v-loading="rightLoading">
+        <el-table
+          :data="rightData"
+          border
+          v-loading="rightLoading"
+          ref="rightData"
+          :row-style="rowStyle"
+          :row-class-name="rowClassName"
+        >
           <el-table-column prop="orderNo" :label="$t('inbound.TrackingNo')"></el-table-column>
           <el-table-column :label="$t('inbound.QtyofShipment')">
             <template slot-scope="scope">
-              <div>{{ scope.row.sum }} {{ unitObj[scope.row.unit] }} {{ sizeObj[scope.row.sizeType] }}</div>
+              <!-- <div>{{ scope.row.sum }} {{ unitObj[scope.row.unit] }} {{ sizeObj[scope.row.sizeType] }}</div> -->
+              <div>{{ scope.row.sum }} {{ scope.row.unit }} {{ scope.row.sizeType }}</div>
             </template>
           </el-table-column>
           <el-table-column :label="$t('inbound.QtyofHUBScanIn')">
             <template slot-scope="scope">
-              <el-input></el-input>
+              <div v-if="scope.row.hubLtLStatus">{{ scope.row.sum }}</div>
+              <el-input v-model="scope.row.number" type="number" v-else></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('inbound.Operation')">
@@ -82,21 +107,39 @@
               >
               <el-button
                 type="primary"
-                v-if="!scope.row.hubLtLStatus"
+                :disabled="scope.row.hubLtLStatus != null"
+                v-if="status == 'WAIT_PUT'"
                 style="width:90%;margin:0;"
-                @click="receiptIt(scope.row)"
+                @click="receiptIt(scope.row, scope.$index)"
                 >{{ $t("inbound.ConfirmReceipt") }}</el-button
+              >
+              <el-button
+                type="primary"
+                v-if="status == 'HANDOVER' && RegExp(/PRINT_STICKER/).test(scope.row.services)"
+                style="width:90%;margin:0;"
+                @click="reprintIt(scope.row, scope.$index)"
+                >{{ $t("inbound.Reprint") }}</el-button
               >
             </template>
           </el-table-column>
         </el-table>
       </div>
     </div>
+    <el-dialog :title="$t('inbound.print')" :visible.sync="printeDialog" width="65%" class="comfirmDialog" center>
+      打印
+      <span slot="footer">
+        <div class="footerBtn">
+          <el-button size="small" plain style="width:300px;" @click="printeDialog = false">{{
+            $t("tracking.confirm")
+          }}</el-button>
+        </div>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getInboundList, getInboundProperty } from "../../api/inbound";
+import { getInboundList, getInboundProperty, confirmput } from "../../api/inbound";
 import { getGoodsProperty } from "../../api/data";
 
 let self;
@@ -106,16 +149,34 @@ export default {
       status: "WAIT_PUT",
       loading: false,
       rightLoading: false,
+      printeDialog: false,
       data: [],
       rightData: [],
       sizeObj: {},
       unitObj: {},
-      searchType: "plate",
+      searchType: "sendNo",
       like: "",
       needPrint: "all",
+      selectionRow: [],
     };
   },
   methods: {
+    rowStyle({ row, rowIndex }) {
+      Object.defineProperty(row, "rowIndex", {
+        //给每一行添加不可枚举属性rowIndex来标识当前行
+        value: rowIndex,
+        writable: true,
+        enumerable: false,
+      });
+    },
+    rowClassName({ row, rowIndex }) {
+      let rowName = "";
+      let findRow = self.selectionRow.find(c => c.rowIndex === row.rowIndex);
+      if (findRow) {
+        rowName = "current-row "; // elementUI 默认高亮行的class类 不用再样式了^-^,也可通过css覆盖改变背景颜色
+      }
+      return rowName; //也可以再加上其他类名 如果有需求的话
+    },
     loadData(cb) {
       self.loading = true;
       self.rightData = [];
@@ -127,6 +188,7 @@ export default {
         page: page,
       }).then(res => {
         self.data = res.data;
+        self.$refs.leftData.setCurrentRow(self.data.content[0]);
         self.loading = false;
         if (cb) {
           cb();
@@ -169,12 +231,48 @@ export default {
           needPrint: self.needPrint,
         }).then(res => {
           self.rightData = res.data;
+          // let x = self.rightData[1];
+          // x.rowIndex = 1;
+          // self.selectionRow = [x];
           self.rightLoading = false;
         });
       }
     },
-    printIt() {},
-    receiptIt() {},
+    // 打印
+    printIt() {
+      self.printeDialog = true;
+    },
+    reprintIt() {
+      self.printeDialog = true;
+    },
+    // 确认收货
+    receiptIt(item, index) {
+      if (item.number && item.number > 0) {
+        if (item.number == item.sum) {
+          console.log(self.rightData);
+          confirmput({
+            count: item.number,
+            orderId: item.orderId,
+            sizeType: item.sizeType,
+            unit: item.unit,
+          }).then(res => {
+            self.rightData[index].hubLtLStatus = 1;
+          });
+        } else {
+          self.$alert(
+            `<div style="margin:50px auto;">${self.$t("inbound.Receiptquantityisnotequaltoorderquantity")}</div>`,
+            self.$t("inbound.ConfirmReceipt"),
+            {
+              confirmButtonText: self.$t("inbound.GotIt"),
+              center: true,
+              dangerouslyUseHTMLString: true,
+            },
+          );
+        }
+      } else {
+        self.$message.warning("请输入收货件数");
+      }
+    },
   },
   created() {
     self = this;

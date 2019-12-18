@@ -21,9 +21,9 @@
         </div>
       </div>
       <div class="search_box">
-        <el-select v-model="searchType" :placeholder="$t('placeholder.pleaseChoose')" class="select_btn">
+        <el-select v-model="searchType" :placeholder="$t('placeholder.pleaseChoose')" style="margin:0;" class="select_btn">
           <el-option :label="$t('inbound.LicensePlate')" :value="'plate'"> </el-option>
-          <el-option :label="$t('inbound.sendNo')" :value="'sendNo'"> </el-option>
+          <el-option :label="$t('inbound.TrackingNo')" :value="'sendNo'"> </el-option>
         </el-select>
         <el-input v-model="like" :placeholder="$t('placeholder.pleaseInput')" class="input_btn"></el-input>
         <el-button @click="searchIt">{{ $t("tracking.search") }}</el-button>
@@ -31,23 +31,29 @@
     </div>
     <div class="content">
       <div class="content_left">
-        <el-table :data="data.content" highlight-current-row @current-change="handleCurrentChange" border v-loading="loading">
-          <el-table-column :label="$t('inbound.Demand')">
+        <el-table
+          ref="leftData"
+          :data="data.content"
+          highlight-current-row
+          @current-change="handleCurrentChange"
+          border
+          v-loading="loading"
+        >
+          <el-table-column :label="$t('inbound.Supply')">
             <template slot-scope="scope">
-              <div>{{ scope.row.demand.name }}</div>
-              <div>{{ scope.row.deliveryNo }}</div>
+              <div>{{ scope.row.supplyName }}</div>
             </template>
           </el-table-column>
           <el-table-column :label="$t('inbound.LicensePlate')">
             <template slot-scope="scope">
-              <div>{{ scope.row.plate }}</div>
+              <div>{{ scope.row.truckPlate }}</div>
               <div>{{ scope.row.driverName }}</div>
-              <div>{{ scope.row.phone }}</div>
+              <div>{{ scope.row.driverPhone }}</div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('inbound.EstimateTimeofArrival')">
+          <el-table-column :label="$t('inbound.TotalQty')">
             <template slot-scope="scope">
-              <div>{{ scope.row.estimateTime }}</div>
+              <div>{{ scope.row.count }}</div>
             </template>
           </el-table-column>
         </el-table>
@@ -65,26 +71,37 @@
         </div>
       </div>
       <div class="content_right">
-        <el-table :data="rightData" border v-loading="rightLoading">
+        <el-table
+          :data="rightData"
+          border
+          v-loading="rightLoading"
+          ref="rightData"
+          :row-style="rowStyle"
+          :row-class-name="rowClassName"
+        >
           <el-table-column prop="orderNo" :label="$t('inbound.TrackingNo')"></el-table-column>
           <el-table-column :label="$t('inbound.QtyofShipment')">
             <template slot-scope="scope">
-              <div>{{ scope.row.sum }} {{ unitObj[scope.row.unit] }} {{ sizeObj[scope.row.sizeType] }}</div>
+              <!-- <div>{{ scope.row.sum }} {{ unitObj[scope.row.unit] }} {{ sizeObj[scope.row.sizeType] }}</div> -->
+              <div>{{ scope.row.sum }} {{ scope.row.unit }} {{ scope.row.sizeType }}</div>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('inbound.QtyofHUBScanIn')">
+          <el-table-column :label="$t('inbound.QtyofHUBScanout')">
             <template slot-scope="scope">
-              <el-input></el-input>
+              <div v-if="scope.row.hubLtLStatus == 2">{{ scope.row.sum }}</div>
+              <el-input v-model="scope.row.number" type="number" v-else></el-input>
             </template>
           </el-table-column>
           <el-table-column :label="$t('inbound.Operation')">
             <template slot-scope="scope">
-              <el-button type="primary" style="width:90%;margin:0;margin-bottom:5px;" @click="printIt(scope.row)">{{
-                $t("inbound.print")
-              }}</el-button>
-              <el-button type="primary" style="width:90%;margin:0;" @click="receiptIt(scope.row)">{{
-                $t("inbound.ConfirmReceipt")
-              }}</el-button>
+              <el-button
+                v-if="status == 'WAIT_HANDOVER'"
+                type="primary"
+                :disabled="scope.row.hubLtLStatus != 1"
+                style="width:90%;margin:0;"
+                @click="confirmIt(scope.row, scope.$index)"
+                >{{ $t("tracking.confirm") }}</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -94,7 +111,7 @@
 </template>
 
 <script>
-import { getOutboundList, getInboundProperty } from "../../api/inbound";
+import { getOutboundList, getOutorders, confirmhand } from "../../api/inbound";
 import { getGoodsProperty } from "../../api/data";
 
 let self;
@@ -110,9 +127,26 @@ export default {
       unitObj: {},
       searchType: "plate",
       like: "",
+      selectionRow: [],
     };
   },
   methods: {
+    rowStyle({ row, rowIndex }) {
+      Object.defineProperty(row, "rowIndex", {
+        //给每一行添加不可枚举属性rowIndex来标识当前行
+        value: rowIndex,
+        writable: true,
+        enumerable: false,
+      });
+    },
+    rowClassName({ row, rowIndex }) {
+      let rowName = "";
+      let findRow = self.rightData.find(c => c.highLight == rowIndex);
+      if (findRow) {
+        rowName = "current-row "; // elementUI 默认高亮行的class类 不用再样式了^-^,也可通过css覆盖改变背景颜色
+      }
+      return rowName; //也可以再加上其他类名 如果有需求的话
+    },
     loadData(cb) {
       self.loading = true;
       self.rightData = [];
@@ -123,6 +157,7 @@ export default {
         page: page,
       }).then(res => {
         self.data = res.data;
+        self.$refs.leftData.setCurrentRow(self.data.content[0]);
         self.loading = false;
         if (cb) {
           cb();
@@ -159,14 +194,47 @@ export default {
     handleCurrentChange(val) {
       if (val) {
         self.rightLoading = true;
-        getInboundProperty(val.id, self.status).then(res => {
+        getOutorders({
+          driverId: val.driverId,
+          searchType: self.searchType,
+          like: self.like,
+          status: self.status,
+          supplyId: val.supplyId,
+          truckId: val.truckId,
+        }).then(res => {
           self.rightData = res.data;
           self.rightLoading = false;
         });
       }
     },
-    printIt() {},
-    receiptIt() {},
+    // 确认
+    confirmIt(item, index) {
+      if (item.number && item.number > 0) {
+        if (item.number == item.sum) {
+          console.log(self.rightData);
+          confirmhand({
+            count: item.number,
+            orderId: item.orderId,
+            sizeType: item.sizeType,
+            unit: item.unit,
+          }).then(res => {
+            self.rightData[index].hubLtLStatus = 2;
+          });
+        } else {
+          self.$alert(
+            `<div style="margin:50px auto;">${self.$t("inbound.Outboundquantityisnotequaltoorderquantity")}</div>`,
+            self.$t("inbound.ConfirmReceipt"),
+            {
+              confirmButtonText: self.$t("inbound.GotIt"),
+              center: true,
+              dangerouslyUseHTMLString: true,
+            },
+          );
+        }
+      } else {
+        self.$message.warning("请输入交货件数");
+      }
+    },
   },
   created() {
     self = this;
@@ -189,7 +257,7 @@ export default {
       self.sizeObj = sizeObj;
       self.unitObj = unitObj;
     });
-    // self.loadData();
+    self.loadData();
   },
 };
 </script>

@@ -504,5 +504,8 @@
     "loaderType": "ประเภทกระบะบรรทุก",
     "confirm": "ยืนยัน",
     "theSearchTermCannotBeEmpty": "คำค้นหาต้องไม่ว่างเปล่า"
+  },
+  "inbound": {
+    "ActualTimeofArrival": "เวลาจริงมาถึง"
   }
 }

@@ -1662,9 +1662,9 @@ export default {
             self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
             self.showDisInfo = true;
           } else {
-            searchForm.fromCityCode = 2100;
-            searchForm.toCityCode = 1111;
-            searchForm.pickUpDate = "2019-12-05 00:00:00";
+            // searchForm.fromCityCode = 2100;
+            // searchForm.toCityCode = 1111;
+            // searchForm.pickUpDate = "2019-12-05 00:00:00";
             ltlLine(searchForm, {
               page: self.page.currentPage - 1,
               pagesize: self.pagesize,
