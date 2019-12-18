@@ -362,6 +362,36 @@ export const asyncRoutes = [
       },
     ],
   },
+  {
+    path: "/setting",
+    redirect: "/setting",
+    component: Layout,
+    name: "member",
+    meta: {
+      title: "setting",
+      roles: ["PLATFORM"],
+    },
+    children: [
+      {
+        path: "route",
+        component: () => import("@views/setting/route"),
+        meta: {
+          title: "route",
+          roles: ["PLATFORM"],
+          permission: "PlatformOrderManage",
+        },
+      },
+      {
+        path: "user",
+        component: () => import("@views/setting/user"),
+        meta: {
+          title: "user",
+          roles: ["PLATFORM"],
+          permission: "PlatformOrderManage",
+        },
+      },
+    ],
+  },
 ];
 
 const createRouter = () =>
