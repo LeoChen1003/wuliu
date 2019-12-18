@@ -530,7 +530,6 @@
     "confirm": "确认",
     "theSearchTermCannotBeEmpty": "搜索条件不能为空"
   },
-<<<<<<< HEAD
   "inbound": {
     "toBePrinted": "待打印",
     "TobeConfirmedReceipt": "待确认收货",
@@ -550,7 +549,7 @@
     "TobeConfirmedbyDriver": "待司机确认",
     "TobeHandedOver": "待交接",
     "HandedOver": "已交接"
-=======
+  },
   "setting": {
     "route": "路线",
     "routeName": "路线名称",
@@ -564,6 +563,5 @@
     "undeliverableDistrict": "不可派送的地区",
     "origin": "始发地",
     "edit": "编辑"
->>>>>>> 9d0af3a108c71e1ff1e9a5f4949cef1394ab7980
   }
 }
