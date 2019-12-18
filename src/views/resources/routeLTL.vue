@@ -5,16 +5,15 @@
     </div>
     <div class="container">
       <div class="table-box">
-        <el-table border v-loading="loading" highlight-current-row :data="data.content">
+        <el-table border v-loading="loading" highlight-current-row @current-change="tapRow" :data="data.content">
           <el-table-column header-align="center" align="center" :label="$t('resources.route')">
             <template slot-scope="scope">
-              <div>{{ scope.row.fromProvince }} --> {{ scope.row.toProvinceName }}</div>
+              <div>{{ scope.row.name }}</div>
             </template>
           </el-table-column>
           <el-table-column header-align="center" align="center" :label="$t('resources.origin')">
             <template slot-scope="scope">
-              <div>{{ truckObj[scope.row.category] }}</div>
-              <div>{{ scope.row.truck.plate }}</div>
+              <div>{{ scope.row.hubName }}</div>
             </template>
           </el-table-column>
           <el-table-column header-align="center" align="center" :label="$t('resources.status')">
@@ -45,15 +44,204 @@
           </el-pagination>
         </div>
       </div>
-      <div class="table-box">
-        <el-tabs v-model="detailTab"> </el-tabs>
+      <div class="detail-box">
+        <el-tabs v-model="detailTab">
+          <el-tab-pane :label="$t('resources.map')" name="map">
+            <div style="text-align: center;height: 50%;">
+              <el-image fit="cover" v-if="thisRow" :src="thisRow.mapUrl" :preview-src-list="preViewList"></el-image>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane :label="$t('resources.deliverableDistrict')" name="deli">
+            <el-table border :data="thisRow.cityList" v-if="thisRow" style="width: 100%">
+              <el-table-column prop="date" :label="$t('setting.province')" width="180">
+                <template slot-scope="scope">
+                  <div>{{ scope.row.provinceName }}</div>
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('setting.deliverableDistrict')">
+                <template slot-scope="scope">
+                  <el-tag
+                    :type="item.kind === 'CAPITAL' ? 'success' : 'primary'"
+                    style="margin-right: 5px;"
+                    v-for="item in scope.row.cityCodes"
+                    >{{ cityObj[item].name }}</el-tag
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+          <el-tab-pane :label="$t('resources.quotation')" name="quot">
+            <div>
+              <div style="display: flex;align-items: center;">
+                <el-table border :data="sizeInfo" size="mini">
+                  <el-table-column prop="date">
+                    <template slot-scope="scope">
+                      {{ scope.row.type }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="date" label="Size-SS">
+                    <template slot-scope="scope">
+                      {{ scope.row.size_ss }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="date" label="Size-S">
+                    <template slot-scope="scope">
+                      {{ scope.row.size_s }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="date" label="Size-M">
+                    <template slot-scope="scope">
+                      {{ scope.row.size_m }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="date" label="Size-L">
+                    <template slot-scope="scope">
+                      {{ scope.row.size_l }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="date" label="Size-XL">
+                    <template slot-scope="scope">
+                      {{ scope.row.size_xl }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="date" label="Extra size">
+                    <template slot-scope="scope">
+                      {{ scope.row.size_ex }}
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <div style="width: 30%;margin-left: 20px;">
+                  <div style="display: flex;align-items: center;">
+                    <div style="margin-right: 15px;width: 100px;">体积重量换算</div>
+                  </div>
+                  <div>
+                    <p>假设换算比为2500、体积=100*80*20=160000cm³,那么，重量=160000/2500=64kg</p>
+                  </div>
+                </div>
+              </div>
+              <el-table v-if="thisRow" border style="margin-top: 15px;" :data="thisRow.lineList">
+                <el-table-column label="Line" width="200px">
+                  <template slot-scope="scope"> {{ scope.row.provinceName }} - {{ scope.row.kind }} </template>
+                </el-table-column>
+                <el-table-column label="Size_SS">
+                  <template slot-scope="scope">
+                    {{ scope.row.sizeSSPrice }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="Size_S">
+                  <template slot-scope="scope">
+                    {{ scope.row.sizeSPrice }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="Size_M">
+                  <template slot-scope="scope">
+                    {{ scope.row.sizeMPrice }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="Size_L">
+                  <template slot-scope="scope">
+                    {{ scope.row.sizeLPrice }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="Size_XL">
+                  <template slot-scope="scope">
+                    {{ scope.row.sizeXLPrice }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="Size_EX">
+                  <template slot-scope="scope">
+                    {{ scope.row.unitPrice }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="minPrice">
+                  <template slot-scope="scope">
+                    {{ scope.row.minPrice }}
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane :label="$t('resources.priceCoefficient')" name="pic">
+            <div style="display: flex;justify-content: space-around;width: 100%;" v-if="thisRow">
+              <div style="width: 49%;">
+                <el-table border :data="thisRow.propertyDiscountList">
+                  <el-table-column label="货物类型" align="center" header-align="center">
+                    <template slot-scope="scope">
+                      {{ scope.row.propertyType }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="价格系数" align="center" header-align="center">
+                    <template slot-scope="scope"> {{ scope.row.discount }} % </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+              <div style="width: 49%;">
+                <el-table border :data="thisRow.numberDiscountList">
+                  <el-table-column label="总件数" align="center" header-align="center">
+                    <template slot-scope="scope">
+                      {{ scope.row.minNumber }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="≤" align="center" header-align="center">
+                    <template slot-scope="scope">
+                      {{ scope.row.maxNumber }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="折扣率" align="center" header-align="center">
+                    <template slot-scope="scope"> {{ scope.row.discount }} % </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane :label="$t('resources.availableDate')" name="ava">
+            <div>
+              <div class="date-header">
+                <el-select v-model="showDate.year" @change="showDateChange" placeholder="">
+                  <el-option v-for="item in showDateInfo" :key="item.year" :label="item.year" :value="item.year"> </el-option>
+                </el-select>
+                <el-select v-model="showDate.month" @change="showDateChange" placeholder="">
+                  <el-option v-for="item in showDateInfo[showDate.year].months" :key="item" :label="item" :value="item">
+                  </el-option>
+                </el-select>
+              </div>
+              <div class="date-list">
+                <div class="day-item" v-for="item in week" :key="item">
+                  <el-tag class="day nop week" type="info">{{ item }}</el-tag>
+                </div>
+                <div class="day-item" v-for="(item, index) in showWeekPH" :key="index + item">
+                  <el-tag class="day nop day_ph"></el-tag>
+                </div>
+                <div class="day-item" v-for="(item, index) in dateList_show" :key="index">
+                  <el-tag
+                    class="day nop"
+                    :effect="
+                      showDateList[
+                        'show_' +
+                          showDate.year +
+                          '_' +
+                          (showDate.month > 9 ? showDate.month : `0${showDate.month}`) +
+                          '_' +
+                          (item > 9 ? item : `0${item}`)
+                      ]
+                        ? 'dark'
+                        : 'plain'
+                    "
+                  >
+                    {{ item }}
+                  </el-tag>
+                </div>
+              </div>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
       </div>
     </div>
     <el-dialog :title="$t('route.routeLTL')" :visible.sync="editDialog" center width="1000px" :close-on-click-modal="false">
       <div class="form-box" v-loading="editLoading">
         <el-form label-width="120px">
           <el-form-item required :label="$t('resources.origin')">
-            <el-select v-model="form.hubId" placeholder="placeholder">
+            <el-select v-model="form.hubId" @change="hubChange">
               <el-option v-for="item in hubList" :key="item.id" :label="item.hubName" :value="item.id"> </el-option>
             </el-select>
           </el-form-item>
@@ -69,7 +257,7 @@
         </el-form>
         <el-form label-width="120px">
           <el-form-item required :label="$t('resources.route')">
-            <el-select v-model="form.templateId" placeholder="placeholder" @change="templateChange">
+            <el-select v-model="form.templateId" @change="templateChange">
               <el-option v-for="item in templateList" :key="item.id" :label="item.name" :value="item.id"> </el-option>
             </el-select>
           </el-form-item>
@@ -334,7 +522,7 @@
         </el-tabs>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="editDialog = false">取 消</el-button>
         <el-button type="primary" @click="confirmIt">
           确 定
         </el-button>
@@ -348,7 +536,7 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import { getBcDay, getBcYear, getCityList, getHub } from "@api/data";
 import { getLineTemplate } from "@api/setting";
-import { addLTLRoute } from "@api/resources";
+import { addLTLRoute, getLTLRoute } from "@api/resources";
 
 let self;
 
@@ -360,10 +548,11 @@ export default {
       loading: false,
       plmodel: 2500,
       data: [],
-      detailTab: 0,
       editDialog: false,
       editLoading: false,
+      thisRow: null,
       editTab: "map",
+      detailTab: "map",
       hubList: [],
       templateList: [],
       form: {
@@ -403,9 +592,16 @@ export default {
         year: "2019",
         month: "",
       },
+      showDate: {
+        year: "2019",
+        month: "",
+      },
       dateInfo: { 2019: { year: 2019, months: [] } },
+      showDateInfo: { 2019: { year: 2019, months: [] } },
       dateList: [],
+      dateList_show: [],
       sendDateList: {},
+      showDateList: {},
       dateLoading: false,
       weekPH: [],
       showWeekPH: [],
@@ -446,6 +642,7 @@ export default {
       let month = date.getMonth() + 1;
       let day = date.getDate();
       let years = [year, year + 1];
+      let showYears = [year - 1, year, year + 1];
       let dateInfo = {};
       let showDateInfo = {};
       // 生成编辑可选日期
@@ -464,19 +661,79 @@ export default {
           start: x === 0 ? day : 1,
         };
       }
+      // 生成展示可选日期
+      for (let x in showYears) {
+        let months = [];
+        let m = 1;
+        for (let y = m; y <= 12; y++) {
+          months.push(y);
+        }
+        showDateInfo[showYears[x]] = {
+          year: showYears[x],
+          months: months,
+          start: x === 0 ? day : 1,
+        };
+      }
       self.dateInfo = dateInfo;
       self.showDateInfo = showDateInfo;
       self.date = {
         year: year,
         month: month,
       };
+      self.showDate = {
+        year: year,
+        month: month,
+      };
       self.getDay("edit");
       self.getDay("show");
     });
+    self.loadData();
   },
   methods: {
+    loadData(cb) {
+      self.loading = true;
+      let params = {
+        page: self.data.number ? self.data.number : 0,
+        hubId: self.activeHub,
+      };
+      if (self.status !== "") {
+        params.status = self.status;
+      }
+      getLTLRoute(params).then(res => {
+        self.data = res.data;
+        self.loading = false;
+        if (cb) {
+          cb();
+        }
+      });
+    },
+    pageChange(e) {
+      self.loading = true;
+      getLTLRoute({
+        page: e - 1,
+      }).then(res => {
+        self.data = res.data;
+        self.loading = false;
+      });
+    },
     add() {
+      self.sendDateList = {};
+      self.lineList = [];
+      self.form = {
+        hubId: self.hubList[0].id,
+        templateId: "",
+        mapUrl: "",
+      };
       self.editDialog = true;
+    },
+    hubChange(id) {
+      self.sendDateList = {};
+      self.lineList = [];
+      self.form = {
+        hubId: id,
+        templateId: "",
+        mapUrl: "",
+      };
     },
     templateChange(id) {
       let form = JSON.parse(JSON.stringify(self.form));
@@ -599,9 +856,6 @@ export default {
       }
       self.lineList = lineList;
     },
-    pageChange(e) {
-      self.loading = true;
-    },
     // 最大值更变
     maxNumberChange(val, index) {
       let list = JSON.parse(JSON.stringify(self.form.numberDiscountList));
@@ -703,6 +957,9 @@ export default {
     dateChange(e) {
       self.getDay("edit");
     },
+    showDateChange(e) {
+      self.getDay("show");
+    },
     // 检测是否全选
     checkAllCheck() {
       let allChecked = true;
@@ -737,6 +994,30 @@ export default {
           }
           self.weekPH = weekPH;
           self.dateLoading = false;
+        });
+      } else {
+        getBcDay(self.showDate.year, self.showDate.month).then(res => {
+          let days = res.data;
+          let start = self.showDateInfo[self.showDate.year].start;
+          let showDateList = {};
+          let yearInd = Object.keys(self.showDateInfo).indexOf(self.showDate.year.toString());
+          let year =
+            yearInd === 0
+              ? new Date().getFullYear() - 1
+              : yearInd === 1
+              ? new Date().getFullYear()
+              : new Date().getFullYear() + 1;
+          let week = new Date(`${year}/${self.showDate.month}/1`).getDay();
+          let weekPD = week === 7 ? 0 : week;
+          let weekPH = [];
+          for (let x = 1; x <= days; x++) {
+            showDateList["show_" + self.showDate.year + "_" + self.showDate.month + "_" + (x > 9 ? x : `0${x}`)] = x;
+          }
+          for (let x = 0; x < weekPD; x++) {
+            weekPH.push("");
+          }
+          self.showWeekPH = weekPH;
+          self.dateList_show = showDateList;
         });
       }
     },
@@ -808,11 +1089,100 @@ export default {
         optionalTimeList: optionalTimeList,
       };
 
-      addLTLRoute(data).then(res=>{
-
-      })
-
-      console.log(data);
+      addLTLRoute(data).then(res => {
+        self.loadData(() => {
+          self.editDialog = false;
+        });
+      });
+    },
+    tapRow(row) {
+      let template = row;
+      let index = 0;
+      let list = [];
+      if (row === null) {
+        self.showDateList = {};
+        self.thisRow = {};
+        return;
+      }
+      let dateList = {};
+      self.priceList = row.citys;
+      for (let i of row.optionalTimeList) {
+        let arr = i.optTime.split("-");
+        dateList["show_" + arr[0] + "_" + arr[1] + "_" + arr[2]] = {
+          bcYear: arr[0],
+          month: arr[1],
+          day: arr[2],
+        };
+      }
+      // 整理cityList格式
+      parse();
+      function parse() {
+        let params = `provinceCodes=${template.ltlLineProvinceList[index].provinceCode}`;
+        getCityList(params).then(res => {
+          list.push({
+            provinceCode: template.ltlLineProvinceList[index].provinceCode,
+            provinceName: template.ltlLineProvinceList[index].provinceName,
+            cityList: res.data,
+            cityCodes: [],
+          });
+          for (let i of template.ltlLineProvinceList[index].ltlLineCityList) {
+            list[index].cityCodes.push(i.cityCode);
+          }
+          if (index < parseInt(template.ltlLineProvinceList.length) - 1) {
+            index++;
+            parse();
+          } else {
+            let lineList = [];
+            for (let x in list) {
+              let cap;
+              let com;
+              for (let t of template.ltlLineProvinceList[x].ltlLineCityList) {
+                if (t.kind === "CAPITAL") {
+                  cap = {
+                    provinceName: list[x].provinceName,
+                    provinceCode: list[x].provinceCode,
+                    kind: "CAPITAL",
+                    minPrice: t.minPrice,
+                    sizeLPrice: t.sizeLPrice,
+                    sizeMPrice: t.sizeMPrice,
+                    sizeSPrice: t.sizeSPrice,
+                    sizeSSPrice: t.sizeSSPrice,
+                    sizeXLPrice: t.sizeXLPrice,
+                    unitPrice: t.unitPrice,
+                  };
+                } else if (t.kind === "COMMON") {
+                  com = {
+                    provinceName: list[x].provinceName,
+                    provinceCode: list[x].provinceCode,
+                    kind: "COMMON",
+                    minPrice: t.minPrice,
+                    sizeLPrice: t.sizeLPrice,
+                    sizeMPrice: t.sizeMPrice,
+                    sizeSPrice: t.sizeSPrice,
+                    sizeSSPrice: t.sizeSSPrice,
+                    sizeXLPrice: t.sizeXLPrice,
+                    unitPrice: t.unitPrice,
+                  };
+                }
+              }
+              if (cap) {
+                lineList.push(cap);
+              }
+              if (com) {
+                lineList.push(com);
+              }
+              // 计算是否禁用
+            }
+            row.lineList = lineList;
+            row.cityList = list;
+            row.numberDiscountList[parseInt(row.numberDiscountList.length - 1)].maxNumber = "";
+            self.showDateList = dateList;
+            self.thisRow = row;
+            self.$forceUpdate();
+            self.editLoading = false;
+          }
+        });
+      }
     },
   },
   created() {
@@ -844,6 +1214,10 @@ export default {
     z-index: 50;
     top: 6px;
   }
+}
+
+.detail-box {
+  width: 49%;
 }
 
 .formSelect {
@@ -929,5 +1303,12 @@ export default {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   padding-bottom: 25px;
+}
+</style>
+<style lang="scss">
+.detail-box {
+  .el-input-group__append {
+    padding: 0 10px !important;
+  }
 }
 </style>

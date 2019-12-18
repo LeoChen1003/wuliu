@@ -112,3 +112,12 @@ export function addLTLRoute(data) {
     data,
   });
 }
+
+// ltl线路查询
+export function getLTLRoute(params) {
+  return requestJSON({
+    url: "/api/ltl/line/show",
+    method: "get",
+    params,
+  });
+}
