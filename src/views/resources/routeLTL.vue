@@ -535,8 +535,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import { getBcDay, getBcYear, getCityList, getHub } from "@api/data";
-import { getLineTemplate } from "@api/setting";
-import { addLTLRoute, getLTLRoute } from "@api/resources";
+import { addLTLRoute, getLTLRoute, getLineTemplate } from "@api/resources";
 
 let self;
 
@@ -725,6 +724,93 @@ export default {
         mapUrl: "",
       };
       self.editDialog = true;
+    },
+    edit(row) {
+      self.editDialog = true;
+      self.editLoading = true;
+      let template = row;
+      let index = 0;
+      let list = [];
+      let dateList = {};
+      self.priceList = row.citys;
+      for (let i of row.optionalTimeList) {
+        let arr = i.optTime.split("-");
+        dateList["show_" + arr[0] + "_" + arr[1] + "_" + arr[2]] = {
+          bcYear: arr[0],
+          month: arr[1],
+          day: arr[2],
+        };
+      }
+      // 整理cityList格式
+      parse();
+      function parse() {
+        console.log(template);
+        let params = `provinceCodes=${template.ltlLineProvinceList[index].provinceCode}`;
+        getCityList(params).then(res => {
+          list.push({
+            provinceCode: template.ltlLineProvinceList[index].provinceCode,
+            provinceName: template.ltlLineProvinceList[index].provinceName,
+            cityList: res.data,
+            cityCodes: [],
+          });
+          for (let i of template.ltlLineProvinceList[index].ltlLineCityList) {
+            list[index].cityCodes.push(i.cityCode);
+          }
+          if (index < parseInt(template.ltlLineProvinceList.length) - 1) {
+            index++;
+            parse();
+          } else {
+            let lineList = [];
+            for (let x in list) {
+              let cap;
+              let com;
+              for (let t of template.ltlLineProvinceList[x].ltlLineCityList) {
+                if (t.kind === "CAPITAL") {
+                  cap = {
+                    provinceName: list[x].provinceName,
+                    provinceCode: list[x].provinceCode,
+                    kind: "CAPITAL",
+                    minPrice: t.minPrice,
+                    sizeLPrice: t.sizeLPrice,
+                    sizeMPrice: t.sizeMPrice,
+                    sizeSPrice: t.sizeSPrice,
+                    sizeSSPrice: t.sizeSSPrice,
+                    sizeXLPrice: t.sizeXLPrice,
+                    unitPrice: t.unitPrice,
+                  };
+                } else if (t.kind === "COMMON") {
+                  com = {
+                    provinceName: list[x].provinceName,
+                    provinceCode: list[x].provinceCode,
+                    kind: "COMMON",
+                    minPrice: t.minPrice,
+                    sizeLPrice: t.sizeLPrice,
+                    sizeMPrice: t.sizeMPrice,
+                    sizeSPrice: t.sizeSPrice,
+                    sizeSSPrice: t.sizeSSPrice,
+                    sizeXLPrice: t.sizeXLPrice,
+                    unitPrice: t.unitPrice,
+                  };
+                }
+              }
+              if (cap) {
+                lineList.push(cap);
+              }
+              if (com) {
+                lineList.push(com);
+              }
+              // 计算是否禁用
+            }
+            self.lineList = lineList;
+            row.cityList = list;
+            row.numberDiscountList[parseInt(row.numberDiscountList.length - 1)].maxNumber = "";
+            self.sendDateList = dateList;
+            self.form = row;
+            self.$forceUpdate();
+            self.editLoading = false;
+          }
+        });
+      }
     },
     hubChange(id) {
       self.sendDateList = {};
