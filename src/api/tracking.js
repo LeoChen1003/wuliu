@@ -1,4 +1,5 @@
 import request from "@/utils/request";
+import requestJSON from "@/utils/requestJSON";
 
 // 订单列表
 export function getOrder(params) {
@@ -34,6 +35,15 @@ export function getOrderPF(params) {
   });
 }
 
+// 平台订单列表
+export function getOrderLTLPF(params) {
+  return request({
+    url: "/api/ltl/platform/statusOrder",
+    method: "get",
+    params,
+  });
+}
+
 // 平台订单进度
 export function getOrderLogPF(id) {
   return request({
@@ -47,6 +57,15 @@ export function getOrderStatusPF() {
   return request({
     url: "/api/platform/order/status/count",
     method: "get",
+  });
+}
+
+// 平台获取订单数量
+export function getOrderLTLStatusPF(params) {
+  return request({
+    url: "/api/ltl/platform/show",
+    method: "get",
+    params,
   });
 }
 
@@ -170,5 +189,31 @@ export function getImg(ids) {
     params: {
       ids: ids,
     },
+  });
+}
+
+//ltl获取跟单列表
+export function getLtlOrders(orderStatus, data) {
+  return request({
+    url: `/api/ltl/order/demand/${orderStatus}`,
+    method: "get",
+    params: data,
+  });
+}
+
+//ltl路线各个订单状态数量
+export function getLtlOrdersCount() {
+  return request({
+    url: "/api/ltl/order/demand/count",
+    method: "get",
+  });
+}
+
+//DEMAND发货到HUB
+export function postsendtohub(data) {
+  return requestJSON({
+    url: `/api/ltl/sendtohub/send`,
+    method: "post",
+    data,
   });
 }
