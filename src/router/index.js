@@ -113,6 +113,11 @@ export const asyncRoutes = [
         meta: { title: "FTLNotHUB", roles: ["SUPPLY"], permission: "MyOrders" },
       },
       {
+        path: "demandLTL",
+        component: () => import("@/views/tracking/demandLTL"),
+        meta: { title: "LTLHUB", roles: ["DEMAND"], permission: "MyOrders" },
+      },
+      {
         path: "platformFTL",
         component: () => import("@/views/tracking/platformFTL"),
         meta: {
@@ -122,9 +127,13 @@ export const asyncRoutes = [
         },
       },
       {
-        path: "LTL",
-        component: () => import("@/views/tracking/LTL"),
-        meta: { title: "LTLHUB", roles: ["DEMAND"] },
+        path: "platformLTL",
+        component: () => import("@/views/tracking/platformLTL"),
+        meta: {
+          title: "LTLHUB",
+          roles: ["PLATFORM"],
+          permission: "PlatformOrderManage",
+        },
       },
       {
         path: "supplyLTL",

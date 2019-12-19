@@ -7,6 +7,7 @@
       :props="props"
       separator="-"
       style="width:100%;"
+      :disabled="isChange"
       @change="dateChange"
     ></el-cascader>
   </div>
@@ -25,6 +26,10 @@ export default {
     dateDefault: {
       type: Array,
       default: () => {},
+    },
+    isChange: {
+      type: Boolean,
+      default:false,
     },
   },
   data() {
