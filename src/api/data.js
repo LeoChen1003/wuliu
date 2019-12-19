@@ -141,3 +141,11 @@ export function upload(file) {
     data: file,
   });
 }
+
+// 获取hub列表
+export function getHub() {
+  return request({
+    url: "/api/ltl/hub/search/allStartHub",
+    method: "post",
+  });
+}

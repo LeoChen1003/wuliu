@@ -58,7 +58,9 @@
     "receivable": "บัญชีลูกหนี้",
     "transferFreight": "โอนงินค่าขนส่ง",
     "topUpConfirm": "ยืนยันการโอนเงิน",
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "inbound": "ขาเข้า",
+    "Outbound": "ขาออก"
   },
   "layout": {
     "logout": "ออกจากระบบ"
@@ -197,7 +199,10 @@
     "distance": "กิโลเมตร",
     "days": "วัน",
     "noMoreThan": "ไม่เกิน",
-    "cutOffTime": "ตัดรอบการจัดส่ง"
+    "cutOffTime": "ตัดรอบการจัดส่ง",
+    "width": "กว้าง(cm)",
+    "Length": "ยาว(cm)",
+    "height": "สูง(cm)"
   },
   "tracking": {
     "status": "สถานะรายการ",
@@ -424,8 +429,8 @@
     "bankname": "ชื่อธนาคาร",
     "accountName": "ชื่อบัญชี",
     "bankAccount_No": "เลขที่บัญชีธนาคาร",
-    "billingAddress": "เลขที่บัญชีธนาคาร",
-    "profileDiscription": "อธิบายเกี่ยวกับบริษัท",
+    "billingAddress": "ที่อยู่การจัดส่งเอกสาร",
+    "profileDiscription": "เกี่ยวกับเรา/บริษัท",
     "region": "แขวง/ตำบล-เขต/อำเภอ-จังหวัด-รหัสไปรษณีย์",
     "affidavit": "หนังสือรับรอง",
     "transportationLicense": "ใบอนุญาติประกอบการขนส่ง",
@@ -499,5 +504,8 @@
     "loaderType": "ประเภทกระบะบรรทุก",
     "confirm": "ยืนยัน",
     "theSearchTermCannotBeEmpty": "คำค้นหาต้องไม่ว่างเปล่า"
+  },
+  "inbound": {
+    "ActualTimeofArrival": "เวลาจริงมาถึง"
   }
 }

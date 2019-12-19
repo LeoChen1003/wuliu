@@ -115,7 +115,7 @@ export const asyncRoutes = [
       {
         path: "demandLTL",
         component: () => import("@/views/tracking/demandLTL"),
-        meta: { title: "LTLHUB", roles: ["DEMAND"],permission: "MyOrders" },
+        meta: { title: "LTLHUB", roles: ["DEMAND"], permission: "MyOrders" },
       },
       {
         path: "platformFTL",
@@ -135,11 +135,11 @@ export const asyncRoutes = [
           permission: "PlatformOrderManage",
         },
       },
-      // {
-      //   path: "LTL",
-      //   component: () => import("@/views/tracking/LTL"),
-      //   meta: { title: "LTLHUB", roles: ["DEMAND", "SUPPLY"] },
-      // },
+      {
+        path: "supplyLTL",
+        component: () => import("@/views/tracking/supplyLTL"),
+        meta: { title: "LTLHUB", roles: ["SUPPLY"], permission: "MyOrders" },
+      },
     ],
   },
   {
@@ -197,6 +197,46 @@ export const asyncRoutes = [
       //     permission: "SupplyResourceManage"
       //   }
       // }
+    ],
+  },
+  {
+    path: "/inbound",
+    component: Layout,
+    redirect: "/inbound",
+    name: "inbound",
+    meta: {
+      roles: ["HUB"],
+    },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/inbound/index"),
+        meta: {
+          title: "inbound",
+          roles: ["HUB"],
+          permission: "HubInBound",
+        },
+      },
+    ],
+  },
+  {
+    path: "/outbound",
+    component: Layout,
+    redirect: "/outbound",
+    name: "outbound",
+    meta: {
+      roles: ["HUB"],
+    },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/outbound/index"),
+        meta: {
+          title: "Outbound",
+          roles: ["HUB"],
+          permission: "HubInBound",
+        },
+      },
     ],
   },
   {
@@ -327,6 +367,36 @@ export const asyncRoutes = [
           title: "closed",
           roles: ["PLATFORM"],
           permission: "PlatformMemberView",
+        },
+      },
+    ],
+  },
+  {
+    path: "/setting",
+    redirect: "/setting",
+    component: Layout,
+    name: "member",
+    meta: {
+      title: "setting",
+      roles: ["PLATFORM"],
+    },
+    children: [
+      {
+        path: "route",
+        component: () => import("@views/setting/route"),
+        meta: {
+          title: "route",
+          roles: ["PLATFORM"],
+          permission: "PlatformOrderManage",
+        },
+      },
+      {
+        path: "user",
+        component: () => import("@views/setting/user"),
+        meta: {
+          title: "user",
+          roles: ["PLATFORM"],
+          permission: "PlatformOrderManage",
         },
       },
     ],

@@ -103,3 +103,21 @@ export function getCityDT(originCode, destinationCodes, category) {
     },
   });
 }
+
+// ltl线路保存
+export function addLTLRoute(data) {
+  return requestJSON({
+    url: "/api/ltl/line/save",
+    method: "post",
+    data,
+  });
+}
+
+// ltl线路查询
+export function getLTLRoute(params) {
+  return requestJSON({
+    url: "/api/ltl/line/show",
+    method: "get",
+    params,
+  });
+}

@@ -198,6 +198,15 @@ export function getLtlOrders(orderStatus, data) {
     url: `/api/ltl/order/demand/${orderStatus}`,
     method: "get",
     params: data,
+  })
+}
+
+// supplyLTL 订单列表
+export function getSupplyLTLOrder(data) {
+  return request({
+    url: `/api/ltl/supply/statusOrder`,
+    method: "get",
+    params: data,
   });
 }
 
@@ -213,6 +222,24 @@ export function getLtlOrdersCount() {
 export function postsendtohub(data) {
   return requestJSON({
     url: `/api/ltl/sendtohub/send`,
+    method: "get",
+    params: data,
+  });
+}
+
+// (supply）查看订单各个状态对应的订单数量
+export function supplyStatusCount(data) {
+  return request({
+    url: "/api/ltl/supply/show",
+    method: "get",
+    params: data,
+  });
+}
+
+// (supply）查看订单各个状态对应的订单数量
+export function chooseDriverAndTruck(data) {
+  return requestJSON({
+    url: "/api/ltl/supply/chooseDriverAndTruck",
     method: "post",
     data,
   });

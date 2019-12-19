@@ -58,7 +58,9 @@
     "receivable": "Receivable",
     "welcome": "Welcome",
     "transferFreight": "Transfer Freight",
-    "topUpConfirm": "Top-Up Confirmation"
+    "topUpConfirm": "Top-Up Confirmation",
+    "inbound": "Inbound",
+    "Outbound": "Outbound"
   },
   "layout": {
     "logout": "Logout"
@@ -198,7 +200,10 @@
     "truckTypechoose": "Please select Truck Type",
     "max": "MAX",
     "noMoreThan": "At Most",
-    "cutOffTime": "Cut-off Time"
+    "cutOffTime": "Cut-off Time",
+    "width": "Width(cm)",
+    "Length": "Length(cm)",
+    "height": "Height(cm)"
   },
   "tracking": {
     "status": "Order Status",
@@ -259,7 +264,20 @@
     "expressWaybillNo": "Express Waybill No.",
     "courierNumberRequired": "Express Waybill No. Cannot be Empty",
     "confirmReceiptOfDocument": "Confirm Receipt of Document",
-    "areYouSure": "You have received the document, are you sure?"
+    "areYouSure": "You have received the document, are you sure?",
+    "toBeSentCargoToHub": "To be Sent Cargo to HUB",
+    "toBeconfirmedReceiptByHub": "To be Sent Cargo to HUB",
+    "toBeHandedOverToSupply": "To be Handed Over to Supply",
+    "assignTruckAndDriver": "Assign Truck & Driver",
+    "destinaiton": "Destinaiton",
+    "pickupDate": " Pickup Date",
+    "Discription": "Discription",
+    "Operation": "Operation",
+    "VechicleDriver": "Vechicle & Driver",
+    "truck": "Truck",
+    "orderQty": "Order Qty",
+    "VAS": "VAS",
+    "TrackingNoAndDemand": "Tracking No. & Demand"
   },
   "resources": {
     "add": "Add",
@@ -508,5 +526,31 @@
   },
   "resrouces": {
     "quotation": "Quotation"
+  },
+  "inbound": {
+    "toBePrinted": "To be Printed",
+    "TobeConfirmedReceipt": "To be Confirmed Receipt",
+    "Received": "Received",
+    "Demand": "Demand",
+    "LicensePlate": "License Plate",
+    "EstimateTimeofArrival": "Estimate Time of Arrival",
+    "TrackingNo": "Tracking No.",
+    "QtyofShipment": "Qty of Shipment",
+    "QtyofHUBScanIn": "Qty of HUB Scan in",
+    "Operation": " Operation",
+    "print": "print",
+    "all": "All",
+    "ConfirmReceipt": "Confirm Receipt",
+    "TobeConfirmedbyDriver": "To be Confirmed by Driver",
+    "TobeHandedOver": "To be Handed  Over ",
+    "HandedOver": "Handed  Over ",
+    "Outboundquantityisnotequaltoorderquantity": "Outbound quantity is not equal to order quantity, cannot be confirmed!",
+    "GotIt": "Got it",
+    "Reprint": "Reprint",
+    "Supply": "Supply",
+    "TotalQty": "Total Qty",
+    "QtyofHUBScanout": "Qty of HUB Scan out",
+    "Receiptquantityisnotequaltoorderquantity": "Receipt quantity is not equal to order quantity, cannot be confirmed!",
+    "ActualTimeofArrival": "Actual Time of Arrival"
   }
 }
