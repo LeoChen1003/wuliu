@@ -504,7 +504,9 @@
     "passed": "已通过",
     "uploadSuccess": "上传成功",
     "logo": "Logo",
-    "address": "详细地址"
+    "address": "详细地址",
+    "setting": "基础设置",
+    "VolumeWeightDivisor": "体积重量换算"
   },
   "confirm": {
     "tips": "提示",

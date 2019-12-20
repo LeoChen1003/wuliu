@@ -130,3 +130,12 @@ export function downContract(applyType) {
     },
   });
 }
+
+// 体积重量换算
+export function setExchange(data) {
+  return request({
+    url: "/api/member/fill/additionalInfo",
+    method: "post",
+    data,
+  });
+}

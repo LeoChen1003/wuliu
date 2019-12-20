@@ -42,6 +42,11 @@
           <el-table-column :label="$t('inbound.Supply')">
             <template slot-scope="scope">
               <div>{{ scope.row.supplyName }}</div>
+              <div v-if="status == 'HANDOVER'">
+                {{
+                  scope.row.handoverTime ? scope.row.handoverTime.slice(0, 10) + " " + scope.row.handoverTime.slice(11, 19) : ""
+                }}
+              </div>
             </template>
           </el-table-column>
           <el-table-column :label="$t('inbound.LicensePlate')">

@@ -498,7 +498,8 @@
     "applyStatusRejected": "Audited not pass",
     "goToDownload": "Download contract",
     "uploadContract": "Upload Contract",
-    "address": "Address"
+    "address": "Address",
+    "VolumeWeightDivisor": "Volume Weight Divisor"
   },
   "confirm": {
     "tips": "Tips",

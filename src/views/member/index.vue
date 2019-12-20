@@ -522,6 +522,30 @@
           </el-form>
         </div>
       </el-tab-pane>
+      <!-- 基础设置 -->
+      <el-tab-pane name="setting" :label="$t('member.setting')">
+        <div class="container">
+          <el-form hide-required-asterisk label-width="200px" ref="setForm" :model="setForm" :rules="setRules">
+            <el-form-item prop="exchange" :label="$t('member.VolumeWeightDivisor')">
+              <el-select v-model="setForm.exchange" :placeholder="$t('placeholder.pleaseChoose')" class="inp">
+                <el-option :label="2500" :value="2500"> </el-option>
+                <el-option :label="3000" :value="3000"> </el-option>
+                <el-option :label="3500" :value="3500"> </el-option>
+              </el-select>
+              <div style="color:#ccc;">
+                <div>体积换算成重量举例：</div>
+                <div class="inp">
+                  假设换算比为2500、体积=100*80*20=160000cm³,<br />
+                  那么，重量=160000/2500=64kg
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="saveSet" class="submitBtn">{{ $t("member.save") }} </el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-tab-pane>
       <!-- 我的会员合同 -->
       <el-tab-pane name="contract" :label="$t('member.myContract')">
         <div class="container">
@@ -575,7 +599,7 @@
 </template>
 
 <script>
-import { fillInfo, getInfo, getCredentials, submitApply, getApplying, getDc, getContract } from "@/api/member";
+import { fillInfo, getInfo, getCredentials, submitApply, getApplying, getDc, getContract, setExchange } from "@/api/member";
 import { getToken } from "@/utils/auth";
 
 let self;
@@ -638,6 +662,12 @@ export default {
         SUPPLY: "",
       },
       activated: false,
+      setForm: {
+        exchange: null,
+      },
+      setRules: {
+        exchange: [{ required: true, message: " ", trigger: "change" }],
+      },
     };
   },
   watch: {
@@ -665,6 +695,8 @@ export default {
     loadData_info() {
       getInfo().then(res => {
         self.infoForm = res.data.site;
+        self.setForm.exchange = res.data.site.exchange;
+        console.log(self.setForm);
         if (res.data.site.contactMobile == "" || res.data.site.contactMobile == null) {
           self.infoForm.contactMobile = res.data.user.phone;
         }
@@ -824,6 +856,16 @@ export default {
       window.open(`${process.env.VUE_APP_BASE_API}/api/token/pdf/download?applyType=${path.type}&token=${getToken()}`);
       // console.log(path.type)
       // window.open()
+    },
+    // 保存基础设置
+    saveSet() {
+      self.$refs.setForm.validate(valid => {
+        if (valid) {
+          setExchange(self.setForm).then(res => {
+            self.$message.success(self.$t("member.saveSuccess"));
+          });
+        }
+      });
     },
   },
 };

@@ -460,12 +460,13 @@
                 } `
               }}
             </span>
-            <div style="display:flex;margin-top:5px;" v-for="(item, index) in scope.row.order.chargeList" :key="index + '1'">
-              <div>{{ serveObj[item.chargeType] }}</div>
-            </div>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('tracking.VAS')"> </el-table-column>
+        <el-table-column :label="$t('tracking.VAS')">
+          <div style="display:flex;margin-top:5px;" v-for="(item, index) in scope.row.order.chargeList" :key="index + '1'">
+            <div>{{ serveObj[item.chargeType] }}</div>
+          </div>
+        </el-table-column>
       </el-table>
       <div style="display:flex;justify-content:flex-end;margin-top:20px;">
         <el-button @click="assignDialog = false" type="info">取 消</el-button>
