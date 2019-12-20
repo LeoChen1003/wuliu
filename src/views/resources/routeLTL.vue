@@ -1,7 +1,12 @@
 <template>
   <div class="wrapper">
     <div style="margin-bottom:20px;">
-      <el-button @click="add" type="primary">{{ $t("resources.add") }}</el-button>
+      <el-button @click="add" type="primary" style="width: 200px;margin-right: 30px;">{{ $t("resources.add") }}</el-button>
+      <el-select v-model="status" clearable>
+        <el-option label="Activated" value="ACTIVE" />
+        <el-option label="Closed" value="CLOSED" />
+      </el-select>
+      <el-button type="primary" style="margin-left: 20px;" @click="loadData()">Search</el-button>
     </div>
     <div class="container">
       <div class="table-box">
@@ -18,7 +23,7 @@
           </el-table-column>
           <el-table-column header-align="center" align="center" :label="$t('resources.status')">
             <template slot-scope="scope">
-              {{ scope.row.status }}
+              {{ scope.row.status === "ACTIVE" ? "Activated" : "Closed" }}
             </template>
           </el-table-column>
           <el-table-column header-align="center" align="center">
@@ -110,9 +115,10 @@
                     </template>
                   </el-table-column>
                 </el-table>
-                <div style="width: 30%;margin-left: 20px;">
-                  <div style="display: flex;align-items: center;">
+                <div style="width: 20%;margin-left: 20px;">
+                  <div style="display: flex;align-items: center;" v-if="userInfo">
                     <div style="margin-right: 15px;width: 100px;">体积重量换算</div>
+                    {{ userInfo.site.exchange }}
                   </div>
                   <div>
                     <p>假设换算比为2500、体积=100*80*20=160000cm³,那么，重量=160000/2500=64kg</p>
@@ -120,7 +126,7 @@
                 </div>
               </div>
               <el-table v-if="thisRow" border style="margin-top: 15px;" :data="thisRow.lineList">
-                <el-table-column label="Line" width="200px">
+                <el-table-column label="Station" width="200px">
                   <template slot-scope="scope"> {{ scope.row.provinceName }} - {{ scope.row.kind }} </template>
                 </el-table-column>
                 <el-table-column label="Size_SS">
@@ -148,12 +154,12 @@
                     {{ scope.row.sizeXLPrice }}
                   </template>
                 </el-table-column>
-                <el-table-column label="Size_EX">
+                <el-table-column label="Extra Size / KG">
                   <template slot-scope="scope">
                     {{ scope.row.unitPrice }}
                   </template>
                 </el-table-column>
-                <el-table-column label="minPrice">
+                <el-table-column label="Minimum Charge/Shipment">
                   <template slot-scope="scope">
                     {{ scope.row.minPrice }}
                   </template>
@@ -238,7 +244,7 @@
       </div>
     </div>
     <el-dialog :title="$t('route.routeLTL')" :visible.sync="editDialog" center width="1000px" :close-on-click-modal="false">
-      <div class="form-box" v-loading="editLoading">
+      <div class="form-box">
         <el-form label-width="120px">
           <el-form-item required :label="$t('resources.origin')">
             <el-select v-model="form.hubId" @change="hubChange">
@@ -326,20 +332,16 @@
                       {{ scope.row.size_xl }}
                     </template>
                   </el-table-column>
-                  <el-table-column prop="date" label="Extra size">
+                  <el-table-column prop="date" label="Extra Size / KG">
                     <template slot-scope="scope">
                       {{ scope.row.size_ex }}
                     </template>
                   </el-table-column>
                 </el-table>
                 <div style="width: 30%;margin-left: 20px;">
-                  <div style="display: flex;align-items: center;">
+                  <div style="display: flex;align-items: center;" v-if="userInfo">
                     <div style="margin-right: 15px;width: 100px;">体积重量换算</div>
-                    <el-select v-model="plmodel" placeholder="placeholder">
-                      <el-option label="2500" :value="2500"> </el-option>
-                      <el-option label="3000" :value="3000"> </el-option>
-                      <el-option label="3500" :value="3500"> </el-option>
-                    </el-select>
+                    {{ userInfo.site.exchange }}
                   </div>
                   <div>
                     <p>假设换算比为2500、体积=100*80*20=160000cm³,那么，重量=160000/2500=64kg</p>
@@ -347,7 +349,7 @@
                 </div>
               </div>
               <el-table border style="margin-top: 15px;" :data="lineList">
-                <el-table-column label="Line" width="200px">
+                <el-table-column label="Station" width="200px">
                   <template slot-scope="scope"> {{ scope.row.provinceName }} - {{ scope.row.kind }} </template>
                 </el-table-column>
                 <el-table-column label="Size_SS">
@@ -400,7 +402,7 @@
                     />
                   </template>
                 </el-table-column>
-                <el-table-column label="Size_EX">
+                <el-table-column label="Extra Size / KG">
                   <template slot-scope="scope">
                     <el-input
                       :disabled="scope.row.disable"
@@ -410,7 +412,7 @@
                     />
                   </template>
                 </el-table-column>
-                <el-table-column label="minPrice">
+                <el-table-column label="Minimum Charge/Shipment">
                   <template slot-scope="scope">
                     <el-input
                       :disabled="scope.row.disable"
@@ -523,7 +525,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialog = false">取 消</el-button>
-        <el-button type="primary" @click="confirmIt">
+        <el-button :loading="confirmLoading" type="primary" @click="confirmIt">
           确 定
         </el-button>
       </span>
@@ -535,8 +537,9 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import { getBcDay, getBcYear, getCityList, getHub } from "@api/data";
-import { addLTLRoute, getLTLRoute, getLineTemplate } from "@api/resources";
-
+import { addLTLRoute, getLTLRoute, getLineTemplateShow } from "@api/resources";
+import { getLineTemplate } from "@api/setting";
+import { getInfo } from "@api/member";
 let self;
 
 export default {
@@ -549,6 +552,8 @@ export default {
       data: [],
       editDialog: false,
       editLoading: false,
+      confirmLoading: false,
+      status: "",
       thisRow: null,
       editTab: "map",
       detailTab: "map",
@@ -606,6 +611,7 @@ export default {
       showWeekPH: [],
       week: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
       allChecked: false,
+      userInfo: null,
     };
   },
   //监听属性 类似于data概念
@@ -616,13 +622,17 @@ export default {
       let params = {
         hubId: id,
         pagesize: 999,
+        status: "ACTIVE",
       };
-      getLineTemplate(params).then(res => {
+      getLineTemplateShow(params).then(res => {
         self.templateList = res.data.content;
       });
     },
   },
   mounted() {
+    getInfo().then(res => {
+      self.userInfo = res.data;
+    });
     getHub().then(res => {
       self.hubList = res.data;
       self.form.hubId = res.data[0].id;
@@ -708,9 +718,14 @@ export default {
     },
     pageChange(e) {
       self.loading = true;
-      getLTLRoute({
+      let params = {
         page: e - 1,
-      }).then(res => {
+        hubId: self.activeHub,
+      };
+      if (self.status !== "") {
+        params.status = self.status;
+      }
+      getLTLRoute(params).then(res => {
         self.data = res.data;
         self.loading = false;
       });
@@ -723,7 +738,14 @@ export default {
         templateId: "",
         mapUrl: "",
       };
-      self.editDialog = true;
+      getLineTemplateShow({
+        hubId: self.form.hubId,
+        pagesize: 999,
+        status: "ACTIVE",
+      }).then(res => {
+        self.templateList = res.data.content;
+        self.editDialog = true;
+      });
     },
     edit(row) {
       self.editDialog = true;
@@ -735,7 +757,7 @@ export default {
       self.priceList = row.citys;
       for (let i of row.optionalTimeList) {
         let arr = i.optTime.split("-");
-        dateList["show_" + arr[0] + "_" + arr[1] + "_" + arr[2]] = {
+        dateList["show_" + arr[0] + "_" + arr[1] + "_" + (parseInt(arr[2]))] = {
           bcYear: arr[0],
           month: arr[1],
           day: arr[2],
@@ -744,7 +766,6 @@ export default {
       // 整理cityList格式
       parse();
       function parse() {
-        console.log(template);
         let params = `provinceCodes=${template.ltlLineProvinceList[index].provinceCode}`;
         getCityList(params).then(res => {
           list.push({
@@ -807,7 +828,28 @@ export default {
             self.sendDateList = dateList;
             self.form = row;
             self.$forceUpdate();
-            self.editLoading = false;
+            getLineTemplateShow({
+              hubId: self.form.hubId,
+              pagesize: 999,
+              status: "ACTIVE",
+            }).then(res => {
+              let arr = res.data.content;
+              getLineTemplate({
+                hubId: self.form.hubId,
+                pagesize: 999,
+              }).then(res => {
+                let arr2 = res.data.content;
+                for (let i of arr2) {
+                  if (row.templateId == i.id) {
+                    arr.push(i);
+                    self.templateList = arr;
+                    self.editDialog = true;
+                    self.editLoading = false;
+                    break;
+                  }
+                }
+              });
+            });
           }
         });
       }
@@ -1114,6 +1156,13 @@ export default {
       let ltlLineProvinceList = [];
       let optionalTimeList = [];
 
+      if (form.templateId === "") {
+        return self.$message.warning("路线不能为空");
+      } else if (form.status === "" || !form.status) {
+        return self.$message.warning("status不能为空");
+      }
+      self.confirmLoading = true;
+
       // 寻找hubName
       for (let i of self.hubList) {
         if (i.id === form.hubId) {
@@ -1154,6 +1203,24 @@ export default {
         }
       }
 
+      // 验证报价模板不能为空
+      for (let i of ltlLineProvinceList) {
+        for (let t of i.ltlLineCityList) {
+          if (
+            t.minPrice === "" ||
+            t.sizeLPrice === "" ||
+            t.minPrice === "" ||
+            t.sizeSPrice === "" ||
+            t.sizeSSPrice === "" ||
+            t.sizeXLPrice === "" ||
+            t.unitPrice === ""
+          ) {
+            self.confirmLoading = false;
+            return self.$message.warning("报价不能为空");
+          }
+        }
+      }
+
       // 设置optionalTimeList
       for (let x in sendDateList) {
         optionalTimeList.push({
@@ -1175,11 +1242,20 @@ export default {
         optionalTimeList: optionalTimeList,
       };
 
-      addLTLRoute(data).then(res => {
-        self.loadData(() => {
-          self.editDialog = false;
+      if (form.id) {
+        data.id = form.id;
+      }
+
+      addLTLRoute(data)
+        .then(res => {
+          self.loadData(() => {
+            self.editDialog = false;
+            self.confirmLoading = false;
+          });
+        })
+        .catch(() => {
+          self.confirmLoading = false;
         });
-      });
     },
     tapRow(row) {
       let template = row;
