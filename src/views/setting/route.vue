@@ -5,7 +5,7 @@
         <el-button @click="add" class="full-width" type="primary">{{ $t("resources.add") }}</el-button>
       </el-col>
       <el-col :span="10">
-        <el-select v-model="status" placeholder="placeholder" clearable>
+        <el-select v-model="status" clearable>
           <el-option label="Activated" value="ACTIVE" />
           <el-option label="Closed" value="CLOSED" />
         </el-select>
@@ -113,28 +113,30 @@
             </el-form-item>
             <el-form-item required :label="$t('setting.status')">
               <el-select v-model="form.status">
-                <el-option label="Activated" value="ACTIVE" />
+                <el-option label="Active" value="ACTIVE" />
                 <el-option label="Closed" value="CLOSED" />
               </el-select>
             </el-form-item>
           </el-form>
           <el-form label-width="120px">
             <el-form-item required :label="$t('setting.map')">
-              <el-upload
-                class="upload-box"
-                ref="upload1"
-                :action="env + '/api/file/upload'"
-                :on-preview="handlePreview"
-                multiple
-                :file-list="fileList1"
-                :headers="headers"
-                :limit="1"
-                :on-exceed="outLimit"
-                accept="image/*"
-                list-type="picture-card"
-              >
-                <i class="el-icon-plus" />
-              </el-upload>
+              <div class="upload-box">
+                <el-upload
+                  class="upload-box"
+                  ref="upload1"
+                  :action="env + '/api/file/upload'"
+                  :on-preview="handlePreview"
+                  multiple
+                  :file-list="fileList1"
+                  :headers="headers"
+                  :limit="1"
+                  :on-exceed="outLimit"
+                  accept="image/*"
+                  list-type="picture-card"
+                >
+                  <i class="el-icon-plus" />
+                </el-upload>
+              </div>
             </el-form-item>
           </el-form>
         </div>
@@ -434,6 +436,8 @@ export default {
         return self.$message.warning("hub不能为空");
       } else if (self.fileList.length === 0) {
         return self.$message.warning("map不能为空");
+      } else if (form.status === "") {
+        return self.$message.warning("status不能为空");
       }
       if (self.fileList[0].response) {
         form.mapUrl = self.fileList[0].response.data.path;
@@ -617,17 +621,21 @@ div::-webkit-scrollbar {
 }
 </style>
 <style lang="scss">
-.el-upload {
-  width: 90px !important;
-  height: 90px !important;
-}
+.upload-box {
+  height: 110px;
 
-.el-upload-list {
-  .is-success,
-  .is-uploading,
-  .is-ready {
+  .el-upload {
     width: 90px !important;
     height: 90px !important;
+  }
+
+  .el-upload-list {
+    .is-success,
+    .is-uploading,
+    .is-ready {
+      width: 90px !important;
+      height: 90px !important;
+    }
   }
 }
 </style>

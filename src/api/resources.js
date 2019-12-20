@@ -105,7 +105,7 @@ export function getCityDT(originCode, destinationCodes, category) {
 }
 
 // ltl可用路线模板
-export function getLineTemplate(params) {
+export function getLineTemplateShow(params) {
   return request({
     url: "/api/ltl/lineTemplate/supplyShow",
     method: "get",
