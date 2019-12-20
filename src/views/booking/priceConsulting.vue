@@ -1665,6 +1665,8 @@ export default {
             // searchForm.fromCityCode = 2100;
             // searchForm.toCityCode = 1111;
             // searchForm.pickUpDate = "2019-12-05 00:00:00";
+            searchForm.fromCityCode = searchForm.pickUpRegion;
+            searchForm.toCityCode = searchForm.deliveryRegion;
             ltlLine(searchForm, {
               page: self.page.currentPage - 1,
               pagesize: self.pagesize,
