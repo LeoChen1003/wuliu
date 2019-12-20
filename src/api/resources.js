@@ -104,6 +104,15 @@ export function getCityDT(originCode, destinationCodes, category) {
   });
 }
 
+// ltl可用路线模板
+export function getLineTemplate(params) {
+  return request({
+    url: "/api/ltl/lineTemplate/supplyShow",
+    method: "get",
+    params: params,
+  });
+}
+
 // ltl线路保存
 export function addLTLRoute(data) {
   return requestJSON({

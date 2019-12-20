@@ -87,13 +87,7 @@
         </el-tabs>
       </el-col>
     </el-row>
-    <el-dialog
-      class="edit-box"
-      :title="$t('setting.edit')"
-      :visible.sync="editDialog"
-      width="1000px"
-      :close-on-click-modal="false"
-    >
+    <el-dialog class="edit-box" title="路线模板（LTL）" :visible.sync="editDialog" width="1000px" :close-on-click-modal="false">
       <div>
         <div class="edit-form-box">
           <el-form label-width="120px">
@@ -311,7 +305,7 @@ export default {
     pageChange(e) {
       self.tableLoading = true;
       let params = {
-        page: self.data.number ? self.data.number : 0,
+        page: e - 1,
         hubId: self.activeHub,
       };
       if (self.status !== "") {
@@ -382,7 +376,7 @@ export default {
       this.previewDialog = true;
     },
     outLimit() {
-      self.$message.warning(self.$t("resources.outLimit"));
+      self.$message.warning("最多上传1张图片");
     },
     addRow() {
       let list = JSON.parse(JSON.stringify(self.list));
