@@ -463,9 +463,11 @@
           </template>
         </el-table-column>
         <el-table-column :label="$t('tracking.VAS')">
-          <div style="display:flex;margin-top:5px;" v-for="(item, index) in scope.row.order.chargeList" :key="index + '1'">
-            <div>{{ serveObj[item.chargeType] }}</div>
-          </div>
+          <template slot-scope="scope">
+            <div style="display:flex;margin-top:5px;" v-for="(item, index) in scope.row.order.chargeList" :key="index + '1'">
+              <div>{{ serveObj[item.chargeType] }}</div>
+            </div>
+          </template>
         </el-table-column>
       </el-table>
       <div style="display:flex;justify-content:flex-end;margin-top:20px;">
