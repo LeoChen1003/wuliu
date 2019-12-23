@@ -125,7 +125,7 @@
     "route": "路线",
     "price": "报价(泰铢)",
     "save": "保存",
-    "placeOrder": "现在下单",
+    "placeOrder": "提交订单",
     "sender": "寄件人",
     "destination": "目的地",
     "referenceNo": "外部订单号",
@@ -204,7 +204,13 @@
     "cutOffTime": "截至时间",
     "width": "宽(厘米)",
     "Length": "长(厘米)",
-    "height": "高(厘米)"
+    "height": "高(厘米)",
+    "Back": "返回",
+    "truckWidth": "宽",
+    "truckLength": "长",
+    "truckHeight": "高",
+    "truckVolume": "容量",
+    "truckMax": "最大载重"
   },
   "tracking": {
     "status": "订单状态",
