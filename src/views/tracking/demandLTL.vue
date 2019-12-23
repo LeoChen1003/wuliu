@@ -166,7 +166,7 @@
               >
                 发货到HUB
               </el-button>
-              <el-button type="primary" style="width:120px;margin-left:20px" v-if="tabActive === 'WAIT_HUB_TO_PUT'">
+              <el-button type="primary" style="width:120px;margin-left:20px" v-if="tabActive === 'WAIT_HUB_TO_PUT'" @click="print(scope.row)" :loading="scope.row.loading1 == 1">
                 {{ $t("tracking.print") }}
               </el-button>
             </template>
@@ -281,7 +281,7 @@
         <el-table-column :label="$t('booking.size')"> </el-table-column>
         <el-table-column :label="$t('booking.weight')"> </el-table-column>
       </el-table>
-      <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 100px;" :disabled="btn_show">
+      <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 100px;" :disabled="btn_show" @click="print1">
         {{ $t("tracking.print") }}
       </el-button>
       <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 200px;" @click="confirm">
@@ -302,8 +302,9 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 let self;
-import { getLtlOrders, getLtlOrdersCount, postsendtohub, getOrderLog } from "../../api/tracking.js";
+import { getLtlOrders, getLtlOrdersCount, postsendtohub,ordersPrint,getOrderLog } from "../../api/tracking.js";
 import { getGoodsProperty, getTruckType } from "../../api/data.js";
+import { getToken} from '../../utils/auth' 
 import bcTime from "@/components/bcTime";
 export default {
   // import引入的组件需要注入到对象中才能使用
@@ -378,6 +379,8 @@ export default {
       truckType: [],
       truckValue: "",
       btn_show: true,
+      sendtohubid: "",
+      loading1: false,
     };
   },
   // 监听属性 类似于data概念
@@ -459,17 +462,15 @@ export default {
         }
         self.dialogVisible = true;
         self.totalNumber = 0;
-        // self.sendToHub(self.allOrder);
         self.gridData = self.allOrder;
         for (let i in self.gridData) {
           self.proList1 = self.gridData[i].propertyList;
-          // console.log(self.proList1);
           for (let j in self.proList1) {
             self.totalNumber += self.proList1[j].number;
           }
         }
-      }
 
+      }
     },
     handleSelectionChange(val) {
       // window.console.log(val);
@@ -491,9 +492,11 @@ export default {
       getLtlOrders(self.tabActive, { no: this.trackingNo, page: this.page }).then(res => {
         // window.console.log(res.data);
         self.tableLoading = false;
+        for(let i of res.data.content){
+          i.loading1 = 0
+        }
         self.data = res.data;
         this.page = self.data.number ? self.data.number : 0;
-        self.orderNo = res.data.content.orderNo;
       });
 
       // self.sendToHub();
@@ -567,6 +570,7 @@ export default {
             self.isChange = true;
             self.timeArr = self.time_at.split("-");
             self.btn_show = false;
+            self.sendtohubid = res.data.id;
           });
         }
       });
@@ -577,6 +581,17 @@ export default {
         self.logDialog = true;
       });
     },
+    print(row,index){
+      row.loading1 = 1;
+      // window.printJS(ordersPrint(6489).then(res=>{}));
+      window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=6489&token=${getToken()}`,onLoadingEnd:()=>{row.loading1 = 0}});
+      // setTimeout(()=>{row.loading1 = 0;console.log(row.loading1)},3000)
+      
+    },
+    print1(){
+      self.loading1 = 1;
+     window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=6489&token=${getToken()}`,onLoadingEnd:()=>{self.loading1 = 0}});
+    }
   },
 };
 </script>
