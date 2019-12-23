@@ -5,6 +5,7 @@
         <el-button
           icon="el-icon-arrow-left
 "
+          @click="$router.go(-1)"
           >{{ $t("booking.back") }}</el-button
         >
       </div>
@@ -48,7 +49,7 @@
                               style="margin-right:5px;"
                               :placeholder="$t('placeholder.chooseDate')">
               </el-date-picker> -->
-              <bcTime @changeBCtime="changeBCtime" :dateDefault="[]" style="margin-right:5px;"></bcTime>
+              <bcTime @changeBCtime="changeBCtime" :dateDefault="pickDateDefault" style="margin-right:5px;"></bcTime>
               <el-time-picker
                 v-model="time"
                 format="HH:mm:ss"
@@ -557,6 +558,8 @@ export default {
       time_at: "",
       receive_time_at: "",
       receive_time: "",
+      releaseInfo: {},
+      pickDateDefault: [],
     };
   },
   // 监听属性 类似于data概念
@@ -622,6 +625,7 @@ export default {
       }
     },
     time_at(val) {
+      console.log(val);
       let t = self.time ? self.time : "23:59:59";
       self.releaseForm.senderAddress.pickAt = val + ` ${t}`;
     },
@@ -640,8 +644,26 @@ export default {
   },
   created() {
     self = this;
+    let releaseInfo = JSON.parse(localStorage.getItem("releaseInfo"));
+    self.releaseInfo = releaseInfo;
+    self.pickDateDefault = releaseInfo.searchForm.pickUpDate.split("-").map(Number);
   },
   mounted() {
+    let releaseInfo = self.releaseInfo;
+    console.log(releaseInfo);
+    if (releaseInfo) {
+      let release = self.releaseForm;
+      let type = releaseInfo.logisticType;
+      self.pickUpRegionList = releaseInfo.pickUpRegionList;
+      self.delRegionList = releaseInfo.delRegionList;
+      release.orderInfo.lineType = type;
+      release.senderAddress.code = releaseInfo.searchForm.pickUpRegion;
+      self.time_at = releaseInfo.searchForm.pickUpDate;
+      self.time = releaseInfo.time;
+      release.receiverAddress.code = releaseInfo.searchForm.deliveryRegion;
+      console;
+      console.log(self.releaseForm);
+    }
     // 卡车类型
     getTruckType().then(res => {
       self.categoryList = res.data.categories;

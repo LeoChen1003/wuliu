@@ -173,7 +173,7 @@
               </div>
             </el-form-item>
             <!-- FTL 车厢选择 -->
-            <el-form-item prop="truckgroup" v-show="logisticType == 'FTL'">
+            <el-form-item v-show="logisticType == 'FTL'">
               <el-select v-model="searchForm.truckSubCategory" class="inputWidth" :placeholder="$t('placeholder.pleaseChoose')">
                 <el-option v-for="item in subCategoryList" :key="item.key" :label="item.value" :value="item.key" />
               </el-select>
@@ -302,7 +302,7 @@
                   <el-button type="primary" style="width:160px;" @click="hideMap">{{ $t("booking.bookingNow") }}</el-button>
                 </div>
                 <div class="btn_item">
-                  <el-button type="primary" style="width:160px;" @click="$router.push('/booking/releaseToMarket')">{{
+                  <el-button type="primary" style="width:160px;" @click="toMarket">{{
                     $t("booking.releaseToMarket")
                   }}</el-button>
                 </div>
@@ -1506,7 +1506,17 @@ export default {
       consultInfo.searchForm.truckSubCategory = row.subCategory;
       consultInfo.searchForm.truckCategory = row.category;
       localStorage.setItem("consultInfo", JSON.stringify(consultInfo));
-      this.$router.replace("/booking/placeOrder");
+      self.$router.replace("/booking/placeOrder");
+    },
+    toMarket(){
+      let releaseInfo = {}
+      releaseInfo.pickUpRegionList = self.pickUpRegionList;
+      releaseInfo.delRegionList = self.delRegionList;
+      releaseInfo.searchForm = self.searchForm;
+      releaseInfo.logisticType = self.logisticType;
+      releaseInfo.time = self.time ? self.time : "00:00:00";
+      localStorage.setItem("releaseInfo", JSON.stringify(releaseInfo));
+      self.$router.push('/booking/releaseToMarket')
     },
     pickUpMethod(query) {
       if (query !== "") {
