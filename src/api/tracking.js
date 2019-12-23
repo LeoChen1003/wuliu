@@ -222,8 +222,8 @@ export function getLtlOrdersCount() {
 export function postsendtohub(data) {
   return requestJSON({
     url: `/api/ltl/sendtohub/send`,
-    method: "get",
-    params: data,
+    method: "post",
+    data,
   });
 }
 
