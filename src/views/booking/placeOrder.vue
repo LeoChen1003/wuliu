@@ -13,12 +13,9 @@
           type="info"
         ></el-alert>
         <el-button style="width:200px;margin-left:20px;" size="small" @click="goBack" type="info">{{
-          $t("booking.returnConsulting")
+          $t("booking.Back")
         }}</el-button>
       </div>
-      <el-button style="width:200px;" @click="todoIt" :loading="todoLoading" type="primary">{{
-        $t("booking.placeOrder")
-      }}</el-button>
     </div>
     <el-form ref="bookingform" :model="bookingForm" :rules="bookingRules" :show-message="false" label-position="top" size="small">
       <el-row class="itemRow">
@@ -267,7 +264,14 @@
           <el-form-item :label="$t('booking.accountBalance')" style="margin-top:30px;">
             <div style="display:flex;justify-content:space-between;">
               <el-tag style="width:100px;text-align:center;">{{ currentBalance }}</el-tag>
-              <el-button style="width:150px;" @click="toTopUp" type="info">{{ $t("booking.topUp") }}</el-button>
+            </div>
+          </el-form-item>
+          <el-form-item style="margin-top:70px;">
+            <div style="display:flex;justify-content:space-between;">
+              <el-button style="width:48%;" @click="toTopUp" type="primary">{{ $t("booking.topUp") }}</el-button>
+              <el-button style="width:48%;" @click="todoIt" :loading="todoLoading" type="primary">{{
+                $t("booking.placeOrder")
+              }}</el-button>
             </div>
           </el-form-item>
         </el-col>
@@ -620,7 +624,6 @@ export default {
         });
       } else {
         self.amountWatch("RETURN_DOCUMENT");
-        console.log(self.amountList)
       }
     },
     printSticker(val) {
@@ -863,7 +866,7 @@ export default {
             placeOrderLTL(self.bookingForm).then(res => {
               self.todoLoading = false;
               self.$message.success(res.message);
-              // self.$router.replace('')
+              self.$router.replace("/tracking/demandLTL")
             });
           }
         }
