@@ -198,7 +198,7 @@ export function getLtlOrders(orderStatus, data) {
     url: `/api/ltl/order/demand/${orderStatus}`,
     method: "get",
     params: data,
-  })
+  });
 }
 
 // supplyLTL 订单列表
