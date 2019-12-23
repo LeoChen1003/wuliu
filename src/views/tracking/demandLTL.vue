@@ -86,7 +86,9 @@
           <el-table-column type="selection" align="center" width="55"> </el-table-column>
           <el-table-column :label="$t('tracking.tracking')">
             <template slot-scope="scope">
-              <div style="width: 120px;">{{ scope.row.orderNo }}</div>
+              <el-button @click="orderLog(scope.row.id)" style="width:100%;text-align:left;">
+                <div>{{ scope.row.orderNo }}</div>
+              </el-button>
               <!-- <div>{{ scope.row.outNumber }}</div>
 							<div>{{ scope.row.createdAt }}</div> -->
             </template>
@@ -245,7 +247,7 @@
         <el-table-column prop="outNumber" :label="$t('booking.referenceNo')" width="140"> </el-table-column>
         <el-table-column :label="$t('booking.cargoType')">
           <template slot-scope="scope">
-            <el-table :data="scope.row.propertyList" border :show-header="false" style="width:780px;">
+            <el-table :data="scope.row.propertyList" border :show-header="false" style="width:100%;">
               <el-table-column>
                 <template slot-scope="prop">
                   <div>{{ propertyObj[prop.row.propertyType] }}</div>
@@ -286,6 +288,13 @@
         {{ $t("tracking.confirm") }}
       </el-button>
     </el-dialog>
+    <el-dialog :title="$t('tracking.orderLog')" :visible.sync="logDialog">
+      <el-timeline :reverse="true">
+        <el-timeline-item v-for="(item, index) in logs" :key="index" :timestamp="item.createdAt">
+          {{ item.introduce }}
+        </el-timeline-item>
+      </el-timeline>
+    </el-dialog>
   </div>
 </template>
 
@@ -293,7 +302,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 let self;
-import { getLtlOrders, getLtlOrdersCount, postsendtohub } from "../../api/tracking.js";
+import { getLtlOrders, getLtlOrdersCount, postsendtohub, getOrderLog } from "../../api/tracking.js";
 import { getGoodsProperty, getTruckType } from "../../api/data.js";
 import bcTime from "@/components/bcTime";
 export default {
@@ -310,6 +319,8 @@ export default {
       }
     };
     return {
+      logDialog: false,
+      logs: [],
       statusCount: [],
       tableLoading: false,
       data: {},
@@ -560,6 +571,12 @@ export default {
         }
       });
     },
+    orderLog(id) {
+      getOrderLog(id).then(res => {
+        self.logs = res.data;
+        self.logDialog = true;
+      });
+    },
   },
 };
 </script>
@@ -598,6 +615,9 @@ export default {
       color: red;
     }
   }
+}
+.mouse{
+  cursor:pointer !important;
 }
 </style>
 
