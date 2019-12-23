@@ -620,6 +620,7 @@ export default {
         });
       } else {
         self.amountWatch("RETURN_DOCUMENT");
+        console.log(self.amountList)
       }
     },
     printSticker(val) {
@@ -835,6 +836,7 @@ export default {
           self.todoLoading = true;
           self.bookingForm.chargeList.splice(1);
           self.bookingForm.senderAddress.pickAt = self.bookingForm.senderAddress.pickAt.split(" ")[0] + ` ${self.time}`;
+          self.bookingForm.chargeList = [];
           for (let x in self.amountList) {
             if (self.amountList[x].key != "FREIGHT") {
               self.bookingForm.chargeList.push({
@@ -858,7 +860,6 @@ export default {
             self.bookingForm.ltlLineId = self.bookingForm.transportInfo.ftlLineId;
             self.bookingForm.outNumber = self.bookingForm.orderInfo.outNumber;
             self.bookingForm.remark = self.bookingForm.orderInfo.remark;
-            // return;
             placeOrderLTL(self.bookingForm).then(res => {
               self.todoLoading = false;
               self.$message.success(res.message);

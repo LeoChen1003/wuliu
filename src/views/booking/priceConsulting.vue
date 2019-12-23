@@ -324,7 +324,7 @@
         <div v-if="!mapMode">
           <el-table :data="tableList" border style="width: 97%;">
             <el-table-column :label="$t('booking.supply')" align="center">
-              <template slot-scope="scope">
+              <template slot-scope="scope" v-if="scope.row.supply">
                 <div>
                   <div>{{ scope.row.supply ? scope.row.supply.name : "" }}</div>
                   <div>
