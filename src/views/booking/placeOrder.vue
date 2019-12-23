@@ -690,12 +690,10 @@ export default {
       self.delRegionList = consultInfo.delRegionList;
       booking.orderInfo.lineType = type;
       booking.senderAddress.code = consultInfo.searchForm.pickUpRegion;
-      // booking.senderAddress.code = 2100;
       booking.senderAddress.pickAt = consultInfo.searchForm.pickUpDate;
       self.time = consultInfo.time;
       self.propertyListContent = type == "LTL" ? consultInfo.searchForm.propertyListContent : "";
       booking.receiverAddress.code = consultInfo.searchForm.deliveryRegion;
-      // booking.receiverAddress.code = 1111;
       booking.transportInfo.carType = consultInfo.searchForm.truckCategory;
       booking.transportInfo.carriage = consultInfo.searchForm.truckSubCategory;
       booking.transportInfo.companyName = consultInfo.data.supply.name;
