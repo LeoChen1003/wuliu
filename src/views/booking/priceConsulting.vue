@@ -91,28 +91,28 @@
                                   {{ $t(`booking.${truckItem.truck}`) }}
                                 </div>
                                 <div>
-                                  <span class="unit">Width</span>
-                                  <span class="number">{{ truckItem.width }}</span>
+                                  <span class="unit">{{$t('booking.truckWidth')}}</span>
+                                  <span class="number">{{ truckItem.width }} m</span>
                                 </div>
                                 <div>
-                                  <span class="unit">Length</span>
-                                  <span class="number">{{ truckItem.length }}</span>
+                                  <span class="unit">{{$t('booking.truckLength')}}</span>
+                                  <span class="number">{{ truckItem.length }} m</span>
                                 </div>
                                 <div>
-                                  <span class="unit">Height</span>
-                                  <span class="number">{{ truckItem.height }}</span>
+                                  <span class="unit">{{$t('booking.truckHeight')}}</span>
+                                  <span class="number">{{ truckItem.height }} m</span>
                                 </div>
                                 <div>
-                                  <span class="unit">Volume</span>
-                                  <span class="number">{{ truckItem.volume }}</span>
+                                  <span class="unit">{{$t('booking.truckVolume')}}</span>
+                                  <span class="number">{{ truckItem.volume }} m³</span>
                                 </div>
                               </div>
                               <div class="truck_type_dec_item_left">
                                 <div class="number">
                                   <span v-if="truckItem.isOver">{{ $t("booking.noMoreThan") }}</span>
-                                  {{ truckItem.weight }}
+                                  {{ truckItem.weight }} kg
                                 </div>
-                                <div>MAX</div>
+                                <div>{{$t('booking.truckMax')}}</div>
                               </div>
                             </div>
                           </div>
@@ -134,28 +134,28 @@
                                   {{ $t(`booking.${truckItem.truck}`) }}
                                 </div>
                                 <div>
-                                  <span class="unit">Width</span>
-                                  <span class="number">{{ truckItem.width }}</span>
+                                  <span class="unit">{{$t('booking.truckWidth')}}</span>
+                                  <span class="number">{{ truckItem.width }} m</span>
                                 </div>
                                 <div>
-                                  <span class="unit">Length</span>
-                                  <span class="number">{{ truckItem.length }}</span>
+                                  <span class="unit">{{$t('booking.truckLength')}}</span>
+                                  <span class="number">{{ truckItem.length }} m</span>
                                 </div>
                                 <div>
-                                  <span class="unit">Height</span>
-                                  <span class="number">{{ truckItem.height }}</span>
+                                  <span class="unit">{{$t('booking.truckHeight')}}</span>
+                                  <span class="number">{{ truckItem.height }} m</span>
                                 </div>
                                 <div>
-                                  <span class="unit">Volume</span>
-                                  <span class="number">{{ truckItem.volume }}</span>
+                                  <span class="unit">{{$t('booking.truckVolume')}}</span>
+                                  <span class="number">{{ truckItem.volume }} m³</span>
                                 </div>
                               </div>
                               <div class="truck_type_dec_item_left">
                                 <div class="number">
                                   <span v-if="truckItem.isOver">{{ $t("booking.noMoreThan") }}</span>
-                                  {{ truckItem.weight }}
+                                  {{ truckItem.weight }} kg
                                 </div>
-                                <div>MAX</div>
+                                <div>{{$t('booking.truckMax')}}</div>
                               </div>
                             </div>
                           </div>
@@ -240,16 +240,17 @@
             <el-form-item prop="pickUpDate">
               <i class="el-icon-time" slot="label" style="font-size:22px;color:#8a8a8a;"></i>
               <div style="display:flex;" class="inputWidth">
-                <el-cascader
+                <!-- <el-cascader
                   v-model="dateCascader"
                   class="innerInp"
-                  :options="options"
+                  :options="DateDeFault"
                   :props="props"
                   separator="-"
                   style="margin-right:5px;"
                   :placeholder="$t('booking.pickupTime')"
                   @change="dateChange"
-                ></el-cascader>
+                ></el-cascader> -->
+                <bcTime @changeBCtime="dateChange" :dateDefault="DateDeFault" style="margin-right:5px;" :timeType="''"></bcTime>
                 <el-time-picker
                   v-model="time"
                   format="HH:mm:ss"
@@ -301,7 +302,7 @@
                   <el-button type="primary" style="width:160px;" @click="hideMap">{{ $t("booking.bookingNow") }}</el-button>
                 </div>
                 <div class="btn_item">
-                  <el-button type="primary" style="width:160px;" @click="$router.push('/booking/releaseToMarket')">{{
+                  <el-button type="primary" style="width:160px;" @click="toMarket">{{
                     $t("booking.releaseToMarket")
                   }}</el-button>
                 </div>
@@ -359,7 +360,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              header-align="center"
+              align="center"
               :label="logisticType == 'FTL' ? $t('booking.truckType') : $t('booking.cutOffTime')"
             >
               <template slot-scope="scope">
@@ -408,7 +409,7 @@
             <el-table-column>
               <template slot-scope="scope">
                 <div style="text-align:center;">
-                  <el-button type="primary" :disabled="!permissions.DemandNewOrderOrRelease" @click="toBooking(scope.row)">{{
+                  <el-button type="primary" :disabled="!permissions.DemandNewOrderOrRelease || (scope.row.check && scope.row.check=='false')" @click="toBooking(scope.row)">{{
                     $t("booking.placeOrder")
                   }}</el-button>
                 </div>
@@ -565,10 +566,10 @@ import {
   getTruckType,
   findDistrictFullList,
   findDistrictOfHubFullList,
-  getBcYear,
-  getBcDay,
   getGoodsProperty,
 } from "../../api/data";
+import { getTime, parseTime } from "../../utils/index";
+import bcTime from "@/components/bcTime";
 import Search from "@/components/HeaderSearch";
 
 let self;
@@ -576,7 +577,7 @@ let map, infoWindow, directionsService, directionsRenderer;
 
 export default {
   // import引入的组件需要注入到对象中才能使用
-  components: {},
+  components: { bcTime},
   directives: {
     "el-select-loadmore": {
       bind(el, binding) {
@@ -647,7 +648,7 @@ export default {
       }
     };
     const validatorPropertySearch = (rule, value, callback) => {
-      if (self.searchForm.propertyListContent.length > 0) {
+      if (self.searchForm.propertyListContent.length > 0 || self.logisticType == "FTL") {
         callback();
       } else {
         callback(new Error(" "));
@@ -658,13 +659,14 @@ export default {
       searchForm: {
         truckCategory: "",
         truckSubCategory: "",
-        pickUpDate: "",
+        pickUpDate: parseTime(new Date().getTime(), "{y}-{m}-{d}"),
         deliveryRegion: "",
         pickUpRegion: "",
         truckgroup: "",
         propertyList: [{}],
         propertyListContent: "",
       },
+      today: parseTime(new Date().getTime(), "{y}-{m}-{d}"),
       searchRules: {
         deliveryRegion: [{ required: true, message: " ", trigger: "change" }],
         pickUpRegion: [{ required: true, message: " ", trigger: "change" }],
@@ -683,7 +685,6 @@ export default {
         ],
       },
       time: "",
-      options: [],
       logisticType: "FTL",
       logisticTypeOption: [
         {
@@ -1102,57 +1103,6 @@ export default {
       },
       pagesize: 20,
       documentReturn: 10,
-      bcYear: "",
-      dateCascader: "",
-      props: {
-        lazy: true,
-        lazyLoad(node, resolve) {
-          let year = self.bcYear;
-          let date = new Date();
-          let month = node.label == year ? date.getMonth() + 1 : 1;
-          let day = date.getDate();
-          let options = [];
-          if (node.level == 0) {
-            getBcYear().then(res => {
-              self.bcYear = res.data;
-              let years = [
-                {
-                  label: self.bcYear,
-                  value: self.bcYear,
-                },
-                {
-                  label: self.bcYear + 1,
-                  value: self.bcYear + 1,
-                },
-              ];
-              resolve(years);
-            });
-          } else if (node.level == 1) {
-            let months = [];
-            for (let y = month; y <= 12; y++) {
-              months.push({
-                label: y,
-                value: y,
-              });
-            }
-            resolve(months);
-          } else if (node.level == 2) {
-            getBcDay(node.parent.value, node.value).then(res => {
-              let days = res.data;
-              let dateList = [];
-              let d = node.parent.value == self.bcYear && node.value == date.getMonth() + 1 ? day : 1;
-              for (let x = d; x <= days; x++) {
-                dateList.push({
-                  label: x,
-                  value: x,
-                  leaf: true,
-                });
-              }
-              resolve(dateList);
-            });
-          }
-        },
-      },
       truckObj: {},
       subObj: {},
       previewImgList: [],
@@ -1197,6 +1147,9 @@ export default {
   },
   // 监听属性 类似于data概念
   computed: {
+    DateDeFault() {
+      return self.today.split("-");
+    },
     ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
@@ -1523,7 +1476,7 @@ export default {
         let consultInfo = JSON.parse(localStorage.getItem("consultInfo"));
         self.searchForm = consultInfo.searchForm;
         self.logisticType = consultInfo.logisticType;
-        self.dateCascader = consultInfo.searchForm.pickUpDate.split("-").map(Number);
+        self.today = consultInfo.searchForm.pickUpDate;
         self.time = consultInfo.time;
         self.pickUpRegionList = consultInfo.pickUpRegionList;
         self.delRegionList = consultInfo.delRegionList;
@@ -1553,7 +1506,17 @@ export default {
       consultInfo.searchForm.truckSubCategory = row.subCategory;
       consultInfo.searchForm.truckCategory = row.category;
       localStorage.setItem("consultInfo", JSON.stringify(consultInfo));
-      this.$router.replace("/booking/placeOrder");
+      self.$router.replace("/booking/placeOrder");
+    },
+    toMarket(){
+      let releaseInfo = {}
+      releaseInfo.pickUpRegionList = self.pickUpRegionList;
+      releaseInfo.delRegionList = self.delRegionList;
+      releaseInfo.searchForm = self.searchForm;
+      releaseInfo.logisticType = self.logisticType;
+      releaseInfo.time = self.time ? self.time : "00:00:00";
+      localStorage.setItem("releaseInfo", JSON.stringify(releaseInfo));
+      self.$router.push('/booking/releaseToMarket')
     },
     pickUpMethod(query) {
       if (query !== "") {
@@ -1662,9 +1625,6 @@ export default {
             self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
             self.showDisInfo = true;
           } else {
-            // searchForm.fromCityCode = 2100;
-            // searchForm.toCityCode = 1111;
-            // searchForm.pickUpDate = "2019-12-05 00:00:00";
             searchForm.fromCityCode = searchForm.pickUpRegion;
             searchForm.toCityCode = searchForm.deliveryRegion;
             ltlLine(searchForm, {
@@ -1674,12 +1634,6 @@ export default {
               .then(res => {
                 self.searchloading = false;
                 let tableList = res.data.content;
-                // for (let i of tableList) {
-                //   i.truckImgList = [];
-                //   for (let t of i.registrationResource) {
-                //     i.truckImgList.push(t.path)
-                //   }
-                // }
                 self.tableList = tableList;
                 self.page = {
                   total: res.data.totalElements,
@@ -1715,8 +1669,13 @@ export default {
       self.searchSupply();
     },
     // 揽件时间改变时
-    dateChange(e) {
-      self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
+    // dateChange(e) {
+    //   self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
+    // },
+    // 揽件时间改变时
+    dateChange(time) {
+      self.searchForm.pickUpDate = time;
+      console.log(time)
     },
     // 改变物流类型
     changeLogisticType(type) {
@@ -1725,6 +1684,7 @@ export default {
         self.searchForm.pickUpRegion = "";
         self.hideMap();
       }
+      self.tableList = []
       self.$refs.searchform.clearValidate();
     },
     checkNumInt(val, index, type) {
@@ -2212,8 +2172,8 @@ export default {
       }
 
       .truck_type_dec_item_left {
-        width: 100px;
-        height: 100px;
+        width: 110px;
+        height: 110px;
         border-radius: 50%;
         border: 1px solid #e7e7e7;
         display: flex;
@@ -2227,7 +2187,7 @@ export default {
           font-weight: 600;
           font-size: 13px;
           color: #333;
-          margin-top: 10px;
+          margin-top: 20px;
           margin-bottom: 10px;
           text-align: center;
         }

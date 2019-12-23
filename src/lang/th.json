@@ -123,7 +123,7 @@
     "route": "เส้นทาง",
     "price": "ค่าขนส่ง",
     "save": "บันทึก",
-    "placeOrder": "Booking Now",
+    "placeOrder": "ยืนยันรายการ",
     "sender": "ผู้ส่ง",
     "destination": "จังหวัดปลายทาง",
     "referenceNo": "หมายเลขอ้างอิง",
@@ -202,7 +202,13 @@
     "cutOffTime": "ตัดรอบการจัดส่ง",
     "width": "กว้าง(cm)",
     "Length": "ยาว(cm)",
-    "height": "สูง(cm)"
+    "height": "สูง(cm)",
+    "Back": "ย้อนกลับ",
+    "truckWidth": "กว้าง",
+    "truckLength": "ยาว",
+    "truckHeight": "สูง",
+    "truckVolume": "ความจุ",
+    "truckMax": "สูงสุด"
   },
   "tracking": {
     "status": "สถานะรายการ",
