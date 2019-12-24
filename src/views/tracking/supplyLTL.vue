@@ -55,6 +55,15 @@
               </div>
             </span>
           </el-tab-pane>
+          <el-tab-pane name="HUB_PUT">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">
+                  {{ $t("tracking.confirmedReceiptByHub") }}<sub class="badge">{{ orderStatus.HUB_PUT }}</sub>
+                </div>
+              </div>
+            </span>
+          </el-tab-pane>
           <el-tab-pane name="WILL_PICK">
             <span slot="label">
               <div class="tabLabel">

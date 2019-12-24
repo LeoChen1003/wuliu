@@ -302,7 +302,8 @@
     "TrackingNoAndDemand": "物流单号 & 需求方",
     "toBeConfirmedReceiptByHUB": "待HUB收货",
     "toBeSentCargoToHUB": "待发货到HUB",
-    "cargoArrivedAtHUB": "HUB已收货"
+    "cargoArrivedAtHUB": "HUB已收货",
+    "confirmedReceiptByHub": "HUB已收货"
   },
   "resources": {
     "add": "添加",
