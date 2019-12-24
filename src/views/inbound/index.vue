@@ -118,7 +118,7 @@
                 v-if="status == 'HANDOVER' && RegExp(/PRINT_STICKER/).test(scope.row.services)"
                 style="width:90%;margin:0;"
                 @click="reprintIt(scope.row, scope.$index)"
-                >{{ $t("inbound.Reprint") }}</el-button
+                >{{ $t("inbound.print") }}</el-button
               >
             </template>
           </el-table-column>

@@ -135,7 +135,7 @@
     "qty": "จำนวน",
     "unit": "หน่วย",
     "size": "ขนาดสินค้า",
-    "weight": " น้ำหนัก/PCS(kg)",
+    "weight": "น้ำหนักของแต่ละชิ้น",
     "cargoShape": "รูปร่างสินค้า",
     "myQuotaion": "ใบเสนอราคาของฉัน(฿)",
     "cargoList": "รายการสินค้า",
@@ -200,15 +200,17 @@
     "days": "วัน",
     "noMoreThan": "ไม่เกิน",
     "cutOffTime": "ตัดรอบการจัดส่ง",
-    "width": "กว้าง(cm)",
-    "Length": "ยาว(cm)",
-    "height": "สูง(cm)",
+    "width": "ความกว้าง",
+    "Length": "ความยาว",
+    "height": "ความสูง",
     "Back": "ย้อนกลับ",
     "truckWidth": "กว้าง",
     "truckLength": "ยาว",
     "truckHeight": "สูง",
     "truckVolume": "ความจุ",
-    "truckMax": "สูงสุด"
+    "truckMax": "สูงสุด",
+    "Dimension": "ขนาด(cm)",
+    "Weight": "น้ำหนัก(kg)"
   },
   "tracking": {
     "status": "สถานะรายการ",
@@ -512,6 +514,27 @@
     "theSearchTermCannotBeEmpty": "คำค้นหาต้องไม่ว่างเปล่า"
   },
   "inbound": {
-    "ActualTimeofArrival": "เวลาจริงมาถึง"
+    "ActualTimeofArrival": "เวลาจริงที่มาถึงHUB",
+    "ConfirmReceipt": "ยืนยันรับสินค้า",
+    "Demand": "ผู้ใช้บริการ",
+    "EstimateTimeofArrival": "เวลาที่คาดว่าจะถึงHUB",
+    "GotIt": "รู้แล้ว",
+    "HandedOver": "ส่งมอบแล้ว",
+    "LicensePlate": "เลขทะเบียนรถ",
+    "Operation": "ดำเนินการ",
+    "Outboundquantityisnotequaltoorderquantity": "จำนวนสินค้าที่สแกนออกคลังไม่ตรงกับจำนวนสินค้าของออเดอร์ ไม่สามารถกดยืนยันได้",
+    "QtyofHUBScanIn": "จำนวนสินค้าที่รับเข้า",
+    "QtyofHUBScanout": "จำนวนชิ้นที่สแกนออก",
+    "QtyofShipment": "จำนวนสินค้า",
+    "Receiptquantityisnotequaltoorderquantity": "จำนวนสินค้าที่รับเข้าคลังไม่ตรงกับจำนวนสินค้าของออเดอร์ ไม่สามารถกดยืนยันได้",
+    "Received": "รับสินค้าแล้ว",
+    "Supply": "ผู้ให้บริการ",
+    "TobeConfirmedReceipt": "รอยืนยันรับสินค้า",
+    "TobeConfirmedbyDriver": "รอคนขับรถยืนยัน",
+    "TobeHandedOver": "รอส่งมอบ",
+    "TotalQty": "จำนวนชิ้นทั้งหมด",
+    "TrackingNo": "เลขออเดอร์",
+    "print": "พิมพ์",
+    "toBePrinted": "รอพิมพ์"
   }
 }
