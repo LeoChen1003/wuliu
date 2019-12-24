@@ -215,6 +215,21 @@
     "Weight": "重量"
   },
   "tracking": {
+    "sendCargoToHUB": "发货到HUB",
+    "deliveryNoteNo": "送货单号",
+    "orderQuatity": "订单数",
+    "cargoQuatity": "货物件数",
+    "licensePlate": "车牌号",
+    "Driver": "送货司机",
+    "estiameteTimeOfArrival": "预计到达HUB的时间",
+    "referenceNo": "外部单号",
+    "cargoType": "货物类型",
+    "commodity": "商品",
+    "qty": "件数",
+    "size": "尺寸",
+    "weight": "单件重量",
+    "printPreview": "打印预览",
+    "truckTypeAll": "所有车型",
     "status": "订单状态",
     "Pending": "待运输公司抢单",
     "toBeconfirmedOrderbyDemand": "待需求方确认",
@@ -248,7 +263,6 @@
     "confirmOrder": "确认订单",
     "trackingNo": "物流单号",
     "logisticType": "物流类型",
-    "qty": "件数",
     "driver": "司机",
     "plateLicense": "车牌号",
     "successful": "成功",
@@ -285,7 +299,10 @@
     "truck": "车辆",
     "orderQty": "订单数量",
     "VAS": "增值服务",
-    "TrackingNoAndDemand": "物流单号 & 需求方"
+    "TrackingNoAndDemand": "物流单号 & 需求方",
+    "toBeConfirmedReceiptByHUB": "待HUB收货",
+    "toBeSentCargoToHUB": "待发货到HUB",
+    "cargoArrivedAtHUB": "HUB已收货"
   },
   "resources": {
     "add": "添加",

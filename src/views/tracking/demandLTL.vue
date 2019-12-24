@@ -2,7 +2,7 @@
   <div class="LTL_manage">
     <el-input :placeholder="$t('tracking.trackingNo')" style="margin-left: 300px; width: 200px;" v-model="trackingNo"></el-input>
     <el-button type="primary" style="margin-left: 20px;" @click="search">{{ $t("tracking.search") }}</el-button>
-    <el-button type="primary" class="ltl_btn" @click="sendToHubAll()">发货到HUB</el-button>
+    <el-button type="primary" class="ltl_btn" @click="sendToHubAll()">{{$t('tracking.sendCargoToHUB')}}</el-button>
     <div style="display:flex;box-sizing:border-box;padding:0 20px;">
       <!-- 导航 -->
       <div style="height:100%;">
@@ -12,7 +12,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  发货到HUB<sub class="badge red">{{ orderStatus.WAIT_SEND_TO_HUB }}</sub>
+                  {{$t('tracking.toBeSentCargoToHUB')}}<sub class="badge red">{{ orderStatus.WAIT_SEND_TO_HUB }}</sub>
                 </div>
               </div>
             </span>
@@ -21,7 +21,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  待HUB收货<sub class="badge">{{ orderStatus.WAIT_HUB_TO_PUT }}</sub>
+                  {{$t('tracking.toBeConfirmedReceiptByHUB')}}<sub class="badge">{{ orderStatus.WAIT_HUB_TO_PUT }}</sub>
                 </div>
               </div>
             </span>
@@ -30,7 +30,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  HUB已收货<sub class="badge">{{ orderStatus.HUB_PUT }}</sub>
+                  {{$t('tracking.cargoArrivedAtHUB')}}<sub class="badge">{{ orderStatus.HUB_PUT }}</sub>
                 </div>
               </div>
             </span>
@@ -164,7 +164,7 @@
                 v-if="tabActive === 'WAIT_SEND_TO_HUB'"
                 @click="sendToHub(scope.row)"
               >
-                发货到HUB
+                {{$t('tracking.sendCargoToHUB')}}
               </el-button>
               <el-button type="primary" style="width:120px;margin-left:20px" v-if="tabActive === 'WAIT_HUB_TO_PUT'" @click="print(scope.row)" :loading="scope.row.loading1 == 1">
                 {{ $t("tracking.print") }}
@@ -186,27 +186,27 @@
         </div>
       </div>
     </div>
-    <el-dialog :visible.sync="dialogVisible" title="发货到HUB" width="90%" center>
+    <el-dialog :visible.sync="dialogVisible" :title="$t('tracking.sendCargoToHUB')" width="90%" center>
       <el-form :model="form" :rules="rules" :show-message="false" ref="ruleForm" :label-width="formLabelWidth">
-        <el-form-item label="送货单号" >
+        <el-form-item :label="$t('tracking.deliveryNoteNo')" >
           <span class="span">{{ randomNumber }}</span>
         </el-form-item>
-        <el-form-item :label="$t('billing.orderQty')" >
+        <el-form-item :label="$t('tracking.orderQuatity')" >
           <!-- <el-input v-model="form.name" style="width: 50%;margin-left:137px;"></el-input> -->
           <span class="span">{{ gridData.length }}</span>
         </el-form-item>
-        <el-form-item label="货物件数" >
+        <el-form-item :label="$t('tracking.cargoQuatity')" >
           <span class="span">{{ totalNumber }}</span>
         </el-form-item>
-        <el-form-item label="所有车型" prop="truckCategory">
+        <el-form-item :label="$t('tracking.truckTypeAll')" prop="truckCategory">
           <el-select v-model="form.truckCategory" :disabled="isChange">
             <el-option v-for="(index, i) of truckType" :label="index.value" :value="index.key" :key="i"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('tracking.plateLicense')" prop="plate">
+        <el-form-item :label="$t('tracking.licensePlate')" prop="plate">
           <el-input v-model="form.plate" style="width: 50%;" :disabled="isChange"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('route.driver')">
+        <el-form-item :label="$t('tracking.Driver')">
           <el-input
             v-model="form.driverName"
             style="width: 24%;"
@@ -220,7 +220,7 @@
             :disabled="isChange"
           ></el-input>
         </el-form-item>
-        <el-form-item label="预计到达HUB的时间" :show-message="false" prop="estimateTime">
+        <el-form-item :label="$t('tracking.estiameteTimeOfArrival')" :show-message="false" prop="estimateTime">
           <div style="display:flex;align-items:center" class="inputWidth">
             <bcTime
               @changeBCtime="changeBCtime"
@@ -243,9 +243,9 @@
         </el-form-item>
       </el-form>
       <el-table :data="gridData" :span-method="objectSpanMethod" border show-summary :summary-method="getSummaries">
-        <el-table-column prop="orderNo" :label="$t('tracking.tracking')" width="140"> </el-table-column>
-        <el-table-column prop="outNumber" :label="$t('booking.referenceNo')" width="140"> </el-table-column>
-        <el-table-column :label="$t('booking.cargoType')">
+        <el-table-column prop="orderNo" :label="$t('tracking.trackingNo')" width="140"> </el-table-column>
+        <el-table-column prop="outNumber" :label="$t('tracking.referenceNo')" width="140"> </el-table-column>
+        <el-table-column :label="$t('tracking.cargoType')">
           <template slot-scope="scope">
             <el-table :data="scope.row.propertyList" border :show-header="false" style="width:100%;">
               <el-table-column>
@@ -276,13 +276,13 @@
             </el-table>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('booking.commodity')"> </el-table-column>
-        <el-table-column :label="$t('booking.qty')"> </el-table-column>
-        <el-table-column :label="$t('booking.size')"> </el-table-column>
-        <el-table-column :label="$t('booking.weight')"> </el-table-column>
+        <el-table-column :label="$t('tracking.commodity')"> </el-table-column>
+        <el-table-column :label="$t('tracking.qty')"> </el-table-column>
+        <el-table-column :label="$t('tracking.size')"> </el-table-column>
+        <el-table-column :label="$t('tracking.weight')"> </el-table-column>
       </el-table>
       <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 100px;" :disabled="btn_show" @click="print1">
-        {{ $t("tracking.print") }}
+        {{ $t("tracking.printPreview") }}
       </el-button>
       <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 200px;" @click="confirm">
         {{ $t("tracking.confirm") }}
@@ -584,13 +584,13 @@ export default {
     print(row,index){
       row.loading1 = 1;
       // window.printJS(ordersPrint(6489).then(res=>{}));
-      window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=6489&token=${getToken()}`,onLoadingEnd:()=>{row.loading1 = 0}});
+      window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=6489&token=${getToken()}&Locale=${self.$store.state.app.language}`,onLoadingEnd:()=>{row.loading1 = 0}});
       // setTimeout(()=>{row.loading1 = 0;console.log(row.loading1)},3000)
       
     },
     print1(){
       self.loading1 = 1;
-     window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=6489&token=${getToken()}`,onLoadingEnd:()=>{self.loading1 = 0}});
+     window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=6489&token=${getToken()}&Locale=${self.$store.state.app.language}`,onLoadingEnd:()=>{self.loading1 = 0}});
     }
   },
 };
