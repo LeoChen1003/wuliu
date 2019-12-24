@@ -73,7 +73,13 @@
           <el-table :data="detailData" border>
             <el-table-column :label="$t('billing.supply')">
               <template slot-scope="scope">
-                {{ scope.row.transport.supply ? scope.row.transport.supply.companyName : "" }}
+                {{
+                  scope.row.supply
+                    ? scope.row.supply.type == "COMPANY"
+                      ? scope.row.supply.companyName
+                      : scope.row.supply.humanName
+                    : ""
+                }}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.amount')">
