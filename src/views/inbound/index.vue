@@ -113,13 +113,13 @@
                 @click="receiptIt(scope.row, scope.$index)"
                 >{{ $t("inbound.ConfirmReceipt") }}</el-button
               >
-              <el-button
+              <!-- <el-button
                 type="primary"
                 v-if="status == 'HANDOVER' && RegExp(/PRINT_STICKER/).test(scope.row.services)"
                 style="width:90%;margin:0;"
                 @click="reprintIt(scope.row, scope.$index)"
                 >{{ $t("inbound.print") }}</el-button
-              >
+              > -->
             </template>
           </el-table-column>
         </el-table>
