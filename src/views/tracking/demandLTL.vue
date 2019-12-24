@@ -2,7 +2,7 @@
   <div class="LTL_manage">
     <el-input :placeholder="$t('tracking.trackingNo')" style="margin-left: 300px; width: 200px;" v-model="trackingNo"></el-input>
     <el-button type="primary" style="margin-left: 20px;" @click="search">{{ $t("tracking.search") }}</el-button>
-    <el-button type="primary" class="ltl_btn" @click="sendToHubAll()">{{$t('tracking.sendCargoToHUB')}}</el-button>
+    <el-button type="primary" class="ltl_btn" @click="sendToHubAll()">{{ $t("tracking.sendCargoToHUB") }}</el-button>
     <div style="display:flex;box-sizing:border-box;padding:0 20px;">
       <!-- 导航 -->
       <div style="height:100%;">
@@ -12,7 +12,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{$t('tracking.toBeSentCargoToHUB')}}<sub class="badge red">{{ orderStatus.WAIT_SEND_TO_HUB }}</sub>
+                  {{ $t("tracking.toBeSentCargoToHUB") }}<sub class="badge red">{{ orderStatus.WAIT_SEND_TO_HUB }}</sub>
                 </div>
               </div>
             </span>
@@ -21,7 +21,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{$t('tracking.toBeConfirmedReceiptByHUB')}}<sub class="badge">{{ orderStatus.WAIT_HUB_TO_PUT }}</sub>
+                  {{ $t("tracking.toBeConfirmedReceiptByHUB") }}<sub class="badge">{{ orderStatus.WAIT_HUB_TO_PUT }}</sub>
                 </div>
               </div>
             </span>
@@ -30,7 +30,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{$t('tracking.cargoArrivedAtHUB')}}<sub class="badge">{{ orderStatus.HUB_PUT }}</sub>
+                  {{ $t("tracking.cargoArrivedAtHUB") }}<sub class="badge">{{ orderStatus.HUB_PUT }}</sub>
                 </div>
               </div>
             </span>
@@ -164,9 +164,15 @@
                 v-if="tabActive === 'WAIT_SEND_TO_HUB'"
                 @click="sendToHub(scope.row)"
               >
-                {{$t('tracking.sendCargoToHUB')}}
+                {{ $t("tracking.sendCargoToHUB") }}
               </el-button>
-              <el-button type="primary" style="width:120px;margin-left:20px" v-if="tabActive === 'WAIT_HUB_TO_PUT'" @click="print(scope.row)" :loading="scope.row.loading1 == 1">
+              <el-button
+                type="primary"
+                style="width:120px;margin-left:20px"
+                v-if="tabActive === 'WAIT_HUB_TO_PUT'"
+                @click="print(scope.row)"
+                :loading="scope.row.loading1 == 1"
+              >
                 {{ $t("tracking.print") }}
               </el-button>
             </template>
@@ -188,14 +194,14 @@
     </div>
     <el-dialog :visible.sync="dialogVisible" :title="$t('tracking.sendCargoToHUB')" width="90%" center>
       <el-form :model="form" :rules="rules" :show-message="false" ref="ruleForm" :label-width="formLabelWidth">
-        <el-form-item :label="$t('tracking.deliveryNoteNo')" >
+        <el-form-item :label="$t('tracking.deliveryNoteNo')">
           <span class="span">{{ randomNumber }}</span>
         </el-form-item>
-        <el-form-item :label="$t('tracking.orderQuatity')" >
+        <el-form-item :label="$t('tracking.orderQuatity')">
           <!-- <el-input v-model="form.name" style="width: 50%;margin-left:137px;"></el-input> -->
           <span class="span">{{ gridData.length }}</span>
         </el-form-item>
-        <el-form-item :label="$t('tracking.cargoQuatity')" >
+        <el-form-item :label="$t('tracking.cargoQuatity')">
           <span class="span">{{ totalNumber }}</span>
         </el-form-item>
         <el-form-item :label="$t('tracking.truckTypeAll')" prop="truckCategory">
@@ -213,12 +219,7 @@
             :placeholder="$t('resources.name')"
             :disabled="isChange"
           ></el-input>
-          <el-input
-            v-model="form.phone"
-            style="width: 24%;"
-            :placeholder="$t('resources.phone')"
-            :disabled="isChange"
-          ></el-input>
+          <el-input v-model="form.phone" style="width: 24%;" :placeholder="$t('resources.phone')" :disabled="isChange"></el-input>
         </el-form-item>
         <el-form-item :label="$t('tracking.estiameteTimeOfArrival')" :show-message="false" prop="estimateTime">
           <div style="display:flex;align-items:center" class="inputWidth">
@@ -302,9 +303,9 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 let self;
-import { getLtlOrders, getLtlOrdersCount, postsendtohub,ordersPrint,getOrderLog } from "../../api/tracking.js";
+import { getLtlOrders, getLtlOrdersCount, postsendtohub, ordersPrint, getOrderLog } from "../../api/tracking.js";
 import { getGoodsProperty, getTruckType } from "../../api/data.js";
-import { getToken} from '../../utils/auth' 
+import { getToken } from "../../utils/auth";
 import bcTime from "@/components/bcTime";
 export default {
   // import引入的组件需要注入到对象中才能使用
@@ -374,7 +375,7 @@ export default {
       rules: {
         plate: [{ required: true, trigger: "blur" }],
         estimateTime: [{ required: true, validator: validatePass, trigger: "change" }],
-        truckCategory: [{required: true, trigger: "change"}],
+        truckCategory: [{ required: true, trigger: "change" }],
       },
       truckType: [],
       truckValue: "",
@@ -418,17 +419,17 @@ export default {
     });
   },
   methods: {
-    getSummaries(param){
-       const { columns, data } = param;
-        const sums = [];
-        columns.forEach((column, index) => {
-          if (index === 0) {
-            sums[index] = 'Total';
-            return;
-          }
-        })
-        sums[4] = self.totalNumber;
-        return sums;
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = "Total";
+          return;
+        }
+      });
+      sums[4] = self.totalNumber;
+      return sums;
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 2) {
@@ -469,7 +470,6 @@ export default {
             self.totalNumber += self.proList1[j].number;
           }
         }
-
       }
     },
     handleSelectionChange(val) {
@@ -493,8 +493,8 @@ export default {
       getLtlOrders(self.tabActive, { no: this.trackingNo, page: this.page }).then(res => {
         // window.console.log(res.data);
         self.tableLoading = false;
-        for(let i of res.data.content){
-          i.loading1 = 0
+        for (let i of res.data.content) {
+          i.loading1 = 0;
         }
         self.data = res.data;
         this.page = self.data.number ? self.data.number : 0;
@@ -566,7 +566,8 @@ export default {
             console.log(res.data);
             this.$message({
               message: "保存成功",
-              type: 'success'});
+              type: "success",
+            });
             self.randomNumber = res.data.deliveryNo;
             self.isChange = true;
             self.timeArr = self.time_at.split("-");
@@ -582,17 +583,39 @@ export default {
         self.logDialog = true;
       });
     },
-    print(row,index){
+    print(row, index) {
       row.loading1 = 1;
       // window.printJS(ordersPrint(6489).then(res=>{}));
-      window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${row.sendToHubId}&token=${getToken()}&Locale=${self.$store.state.app.language}`,onLoadingEnd:()=>{row.loading1 = 0}});
-      // setTimeout(()=>{row.loading1 = 0;console.log(row.loading1)},3000)
-      
+      console.log(window);
+      // window.printJS({
+      //   printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
+      //     row.sendToHubId
+      //   }&token=${getToken()}&Locale=${self.$store.state.app.language}`,
+      //   onLoadingEnd: () => {
+      //     row.loading1 = 0;
+      //   },
+      // });
+      window.printJS(
+        `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
+          row.sendToHubId
+        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,
+      );
+      setTimeout(() => {
+        row.loading1 = 0;
+        console.log(row.loading1);
+      }, 1000);
     },
-    print1(){
+    print1() {
       self.loading1 = 1;
-     window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${self.sendtohubid}&token=${getToken()}&Locale=${self.$store.state.app.language}`,onLoadingEnd:()=>{self.loading1 = 0}});
-    }
+      window.printJS({
+        printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
+          self.sendtohubid
+        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,
+        onLoadingEnd: () => {
+          self.loading1 = 0;
+        },
+      });
+    },
   },
 };
 </script>
@@ -632,8 +655,8 @@ export default {
     }
   }
 }
-.mouse{
-  cursor:pointer !important;
+.mouse {
+  cursor: pointer !important;
 }
 </style>
 
@@ -642,7 +665,7 @@ export default {
   .el-form-item__label {
     text-align: left;
   }
-  .el-table__footer-wrapper{
+  .el-table__footer-wrapper {
     background-color: #fff;
   }
 }
