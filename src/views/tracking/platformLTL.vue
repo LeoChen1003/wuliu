@@ -15,7 +15,7 @@
                     <span slot="label">
                     <div class="tabLabel">
                         <div class="text">
-                        待发货到HUB<sub class="badge">{{ orderStatus.WAIT_SEND_TO_HUB }}</sub>
+                        {{$t('tracking.toBeSentCargoToHub')}}<sub class="badge">{{ orderStatus.WAIT_SEND_TO_HUB }}</sub>
                         </div>
                     </div>
                     </span>
@@ -24,7 +24,7 @@
                     <span slot="label">
                     <div class="tabLabel">
                         <div class="text">
-                        待HUB收货<sub class="badge">{{ orderStatus.WAIT_HUB_TO_PUT }}</sub>
+                        {{$t('tracking.toBeconfirmedReceiptByHub')}}<sub class="badge">{{ orderStatus.WAIT_HUB_TO_PUT }}</sub>
                         </div>
                     </div>
                     </span>
@@ -33,7 +33,7 @@
                     <span slot="label">
                     <div class="tabLabel">
                         <div class="text">
-                        HUB已收货<sub class="badge red">{{ orderStatus.HUB_PUT }}</sub>
+                        {{$t('tracking.cargoArrivedAtHUB')}}<sub class="badge red">{{ orderStatus.HUB_PUT }}</sub>
                         </div>
                     </div>
                     </span>
