@@ -175,6 +175,22 @@
               >
                 {{ $t("tracking.print") }}
               </el-button>
+              <el-button
+                  type="primary"
+                  :disabled="!permissions.DemandOrderManage"
+                  v-if="scope.row.status == 'COMPLETE' && scope.row.rating == null"
+                  @click="rating(scope.row)"
+                  >{{ $t("tracking.rating") }}</el-button
+                >
+                <el-rate v-if="scope.row.status == 'COMPLETE' && scope.row.rating" disabled v-model="scope.row.rating.rating / 2">
+                </el-rate>
+                <el-button
+                  type="primary"
+                  v-if="scope.row.status == 'WILL_RETURN'"
+                  :disabled="!permissions.DemandOrderManage"
+                  @click="rdConfirmShow(scope.row)"
+                  >{{ $t("tracking.confirm") }}</el-button
+                >
             </template>
           </el-table-column>
         </el-table>
@@ -303,7 +319,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 let self;
-import { getLtlOrders, getLtlOrdersCount, postsendtohub, ordersPrint, getOrderLog } from "../../api/tracking.js";
+import { getLtlOrders, getLtlOrdersCount, postsendtohub,ordersPrint,getOrderLog, demandquoteList, getImg } from "../../api/tracking.js";
 import { getGoodsProperty, getTruckType } from "../../api/data.js";
 import { getToken } from "../../utils/auth";
 import bcTime from "@/components/bcTime";
@@ -321,6 +337,10 @@ export default {
       }
     };
     return {
+      ratingForm: {
+        rating: 0,
+        remark: "",
+      },
       logDialog: false,
       logs: [],
       statusCount: [],
@@ -430,6 +450,50 @@ export default {
       });
       sums[4] = self.totalNumber;
       return sums;
+    },
+    // 返回文件确认
+    rdConfirmShow(row) {
+      self.rdRow = row;
+      if (row.photoIds) {
+        getImg(row.photoIds).then(res => {
+          let arr = [];
+          for (let i of res.data) {
+            arr.push(i.path);
+            self.imgList = arr;
+            self.rdDialog = true;
+          }
+        });
+      } else {
+        self.imgList = [];
+        self.rdDialog = true;
+      }
+    },
+    rating(item) {
+      self.thisId = item.id;
+      self.ratingForm.rating = 0;
+      self.ratingForm.remark = "";
+      self.ratingDialog = true;
+    },
+    // 点击确认
+    toShowConfirm(row) {
+      const self = this;
+      self.confirmDialog = true;
+      self.curId = row.id;
+      demandquoteList(row.id).then(res => {
+        self.quotedata = res.data;
+      });
+    },
+    getSummaries(param){
+       const { columns, data } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = 'Total';
+            return;
+          }
+        })
+        sums[4] = self.totalNumber;
+        return sums;
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 2) {
