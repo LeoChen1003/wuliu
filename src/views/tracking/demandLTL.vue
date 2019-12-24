@@ -487,6 +487,7 @@ export default {
       // window.console.log(self.tabActive);
     },
     getData() {
+      // self.getCount();
       const self = this;
       self.tableLoading = true;
       getLtlOrders(self.tabActive, { no: this.trackingNo, page: this.page }).then(res => {
@@ -498,8 +499,8 @@ export default {
         self.data = res.data;
         this.page = self.data.number ? self.data.number : 0;
       });
-
       // self.sendToHub();
+      self.getCount();
     },
     search() {
       self.getData();
@@ -584,7 +585,7 @@ export default {
     print(row,index){
       row.loading1 = 1;
       // window.printJS(ordersPrint(6489).then(res=>{}));
-      window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${row.id}&token=${getToken()}&Locale=${self.$store.state.app.language}`,onLoadingEnd:()=>{row.loading1 = 0}});
+      window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${row.sendToHubId}&token=${getToken()}&Locale=${self.$store.state.app.language}`,onLoadingEnd:()=>{row.loading1 = 0}});
       // setTimeout(()=>{row.loading1 = 0;console.log(row.loading1)},3000)
       
     },
