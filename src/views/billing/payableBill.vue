@@ -65,10 +65,10 @@
             <el-table-column :label="$t('billing.supply')">
               <template slot-scope="scope">
                 {{
-                  scope.row.transport.supply
-                    ? scope.row.transport.supply.type == "COMPANY"
-                      ? scope.row.transport.supply.companyName
-                      : scope.row.transport.supply.humanName
+                  scope.row.supply
+                    ? scope.row.supply.type == "COMPANY"
+                      ? scope.row.supply.companyName
+                      : scope.row.supply.humanName
                     : ""
                 }}
               </template>
