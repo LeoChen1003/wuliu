@@ -285,9 +285,11 @@
     "areYouSure": "คุณได้รับเอกสารของคุณแล้ว ยืนยัน?",
     "returnTruck": "ประกาศเส้นทางขากลับ",
     "truckTypeAll": "ประเภทรถ",
-    "toBeConfirmedReceiptByHUB": "TobeConfirmedreceiptbyhub จำกัด",
+    "toBeConfirmedReceiptByHUB": "รอ HUB เพื่อยืนยันการรับ",
     "toBeSentCargoToHUB": "กำลังรอการส่งมอบให้กับ HUB",
-    "cargoArrivedAtHUB": "สินค้าได้มาถึง HUB แล้ว"
+    "cargoArrivedAtHUB": "สินค้าได้มาถึง HUB แล้ว",
+    "toBeSentCargoToHub": "กำลังรอการส่งมอบให้กับ HUB",
+    "toBeconfirmedReceiptByHub": "รอ HUB เพื่อยืนยันการรับ"
   },
   "resources": {
     "add": "เพิ่ม",
