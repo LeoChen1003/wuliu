@@ -584,13 +584,13 @@ export default {
     print(row,index){
       row.loading1 = 1;
       // window.printJS(ordersPrint(6489).then(res=>{}));
-      window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=6489&token=${getToken()}&Locale=${self.$store.state.app.language}`,onLoadingEnd:()=>{row.loading1 = 0}});
+      window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${row.id}&token=${getToken()}&Locale=${self.$store.state.app.language}`,onLoadingEnd:()=>{row.loading1 = 0}});
       // setTimeout(()=>{row.loading1 = 0;console.log(row.loading1)},3000)
       
     },
     print1(){
       self.loading1 = 1;
-     window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=6489&token=${getToken()}&Locale=${self.$store.state.app.language}`,onLoadingEnd:()=>{self.loading1 = 0}});
+     window.printJS({printable:`${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${self.sendtohubid}&token=${getToken()}&Locale=${self.$store.state.app.language}`,onLoadingEnd:()=>{self.loading1 = 0}});
     }
   },
 };
