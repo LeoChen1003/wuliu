@@ -586,24 +586,18 @@ export default {
     print(row, index) {
       row.loading1 = 1;
       // window.printJS(ordersPrint(6489).then(res=>{}));
-      console.log(window);
-      // window.printJS({
-      //   printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
-      //     row.sendToHubId
-      //   }&token=${getToken()}&Locale=${self.$store.state.app.language}`,
-      //   onLoadingEnd: () => {
-      //     row.loading1 = 0;
-      //   },
-      // });
-      window.printJS(
-        `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
+      window.printJS({
+        printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
           row.sendToHubId
         }&token=${getToken()}&Locale=${self.$store.state.app.language}`,
-      );
-      setTimeout(() => {
-        row.loading1 = 0;
-        console.log(row.loading1);
-      }, 1000);
+        onLoadingEnd: () => {
+          row.loading1 = 0;
+        },
+      });
+      // setTimeout(() => {
+      //   row.loading1 = 0;
+      //   console.log(row.loading1);
+      // }, 1000);
     },
     print1() {
       self.loading1 = 1;
