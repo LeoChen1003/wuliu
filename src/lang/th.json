@@ -213,6 +213,19 @@
     "Weight": "น้ำหนัก(kg)"
   },
   "tracking": {
+    "sendCargoToHUB": "จัดส่งสินค้า  HUB",
+    "deliveryNoteNo": "หมายเลขใบคุม",
+    "orderQuatity": "จำนวนออเดอร",
+    "cargoQuatity": "จำนวนสินค้า",
+    "licensePlate": "ทะเบียนรถ",
+    "Driver": "คนขับ",
+    "estiameteTimeOfArrival": "เวลาที่คาดว่าจะถึงHUB",
+    "referenceNo": "หมายเลขอ้างอิง",
+    "cargoType": "ประเภทสินค้า",
+    "commodity": "สินค้า",
+    "size": "ไซส์",
+    "weight": "น้ำหนักต่อชิ้น",
+    "printPreview": "ตัวอย่างการพิมพ์",
     "status": "สถานะรายการ",
     "Pending": "อยู่ระหว่างดำเนินการ",
     "toBeconfirmedOrderbyDemand": "รอยืนยันรายการจากผู้ใช้บริการ",
@@ -241,7 +254,7 @@
     "driver": "คนขับรถยนต์",
     "origin": "ต้นทาง",
     "plateLicense": "หมายเลขทะเบียนรถ",
-    "qty": "Qty",
+    "qty": "จำนวน",
     "remark": "หมายเหตุ",
     "search": "ค้นหา",
     "successful": "ความสำเร็จ",
@@ -270,7 +283,11 @@
     "courierNumberRequired": "เลขพัสดุขนส่งด่วนไม่ควรเว้นว่าง",
     "confirmReceiptOfDocument": "ยืนยันได้รับเอกสาร",
     "areYouSure": "คุณได้รับเอกสารของคุณแล้ว ยืนยัน?",
-    "returnTruck": "ประกาศเส้นทางขากลับ"
+    "returnTruck": "ประกาศเส้นทางขากลับ",
+    "truckTypeAll": "ประเภทรถ",
+    "toBeConfirmedReceiptByHUB": "TobeConfirmedreceiptbyhub จำกัด",
+    "toBeSentCargoToHUB": "กำลังรอการส่งมอบให้กับ HUB",
+    "cargoArrivedAtHUB": "สินค้าได้มาถึง HUB แล้ว"
   },
   "resources": {
     "add": "เพิ่ม",

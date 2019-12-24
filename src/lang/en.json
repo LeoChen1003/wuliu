@@ -214,6 +214,20 @@
     "Weight": "Weight(kg)"
   },
   "tracking": {
+    "sendCargoToHUB": "sendCargoToHUB",
+    "deliveryNoteNo": "deliveryNoteNo",
+    "orderQuatity": "orderQuatity",
+    "cargoQuatity": "cargoQuatity",
+    "licensePlate": "licensePlate",
+    "Driver": "Driver",
+    "estiameteTimeOfArrival": "estiameteTimeOfArrival",
+    "referenceNo": "referenceNo",
+    "cargoType": "cargoType",
+    "commodity": "commodity",
+    "size": "size",
+    "weight": "weight",
+    "printPreview": "printPreview",
+    "truckTypeAll": "truckTypeAll",
     "status": "Order Status",
     "Pending": "Pending",
     "toBeconfirmedOrderbyDemand": "To be Confirmed by Demand",
@@ -285,7 +299,10 @@
     "truck": "Truck",
     "orderQty": "Order Qty",
     "VAS": "VAS",
-    "TrackingNoAndDemand": "Tracking No. & Demand"
+    "TrackingNoAndDemand": "Tracking No. & Demand",
+    "toBeConfirmedReceiptByHUB": "toBeConfirmedReceiptByHUB",
+    "toBeSentCargoToHUB": "toBeSentCargoToHUB",
+    "cargoArrivedAtHUB": "cargoArrivedAtHUB"
   },
   "resources": {
     "add": "Add",
