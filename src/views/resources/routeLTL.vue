@@ -247,7 +247,7 @@
       <div class="form-box">
         <el-form label-width="120px">
           <el-form-item required :label="$t('resources.origin')">
-            <el-select v-model="form.hubId" @change="hubChange">
+            <el-select filterable v-model="form.hubId" @change="hubChange">
               <el-option v-for="item in hubList" :key="item.id" :label="item.hubName" :value="item.id"> </el-option>
             </el-select>
           </el-form-item>
@@ -263,7 +263,7 @@
         </el-form>
         <el-form label-width="120px">
           <el-form-item required :label="$t('resources.route')">
-            <el-select v-model="form.templateId" @change="templateChange">
+            <el-select filterable v-model="form.templateId" @change="templateChange">
               <el-option v-for="item in templateList" :key="item.id" :label="item.name" :value="item.id"> </el-option>
             </el-select>
           </el-form-item>
@@ -291,7 +291,7 @@
               </el-table-column>
               <el-table-column :label="$t('setting.deliverableDistrict')">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.cityCodes" style="width: 100%" multiple>
+                  <el-select filterable v-model="scope.row.cityCodes" style="width: 100%" multiple @change="deliverableChange">
                     <el-option v-for="item in scope.row.cityList" :key="item.id" :label="item.name" :value="item.code" />
                   </el-select>
                 </template>
@@ -783,8 +783,32 @@ export default {
           } else {
             let lineList = [];
             for (let x in list) {
-              let cap;
-              let com;
+              let cap = {
+                provinceName: list[x].provinceName,
+                provinceCode: list[x].provinceCode,
+                kind: "CAPITAL",
+                minPrice: "",
+                sizeLPrice: "",
+                sizeMPrice: "",
+                sizeSPrice: "",
+                sizeSSPrice: "",
+                sizeXLPrice: "",
+                unitPrice: "",
+                disable: true,
+              };
+              let com = {
+                provinceName: list[x].provinceName,
+                provinceCode: list[x].provinceCode,
+                kind: "COMMON",
+                minPrice: "",
+                sizeLPrice: "",
+                sizeMPrice: "",
+                sizeSPrice: "",
+                sizeSSPrice: "",
+                sizeXLPrice: "",
+                unitPrice: "",
+                disable: true,
+              };
               for (let t of template.ltlLineProvinceList[x].ltlLineCityList) {
                 if (t.kind === "CAPITAL") {
                   cap = {
@@ -906,7 +930,7 @@ export default {
             parse();
           } else {
             self.editLoading = false;
-            self.parseLine();
+            self.parseLine("init");
           }
         });
       }
@@ -941,48 +965,84 @@ export default {
       self.preViewList = [form.mapUrl];
       self.form = form;
     },
+    deliverableChange() {
+      self.parseLine("change");
+    },
     // 格式化站点报价数据
-    parseLine() {
+    parseLine(type) {
       let cityList = JSON.parse(JSON.stringify(self.form.cityList));
-      let lineList = [];
-      for (let i of cityList) {
-        let cap = {
-          provinceName: i.provinceName,
-          provinceCode: i.provinceCode,
-          kind: "CAPITAL",
-          minPrice: "",
-          sizeLPrice: "",
-          sizeMPrice: "",
-          sizeSPrice: "",
-          sizeSSPrice: "",
-          sizeXLPrice: "",
-          unitPrice: "",
-          disable: true,
-        };
-        let com = {
-          provinceName: i.provinceName,
-          provinceCode: i.provinceCode,
-          kind: "COMMON",
-          minPrice: "",
-          sizeLPrice: "",
-          sizeMPrice: "",
-          sizeSPrice: "",
-          sizeSSPrice: "",
-          sizeXLPrice: "",
-          unitPrice: "",
-          disable: true,
-        };
-        for (let t of i.cityCodes) {
-          if (self.cityObj[t].kind === "CAPITAL") {
-            cap.disable = false;
-          } else {
-            com.disable = false;
+      if (type === "init") {
+        let lineList = [];
+        for (let i of cityList) {
+          console.log(i);
+          let cap = {
+            provinceName: i.provinceName,
+            provinceCode: i.provinceCode,
+            kind: "CAPITAL",
+            minPrice: "",
+            sizeLPrice: "",
+            sizeMPrice: "",
+            sizeSPrice: "",
+            sizeSSPrice: "",
+            sizeXLPrice: "",
+            unitPrice: "",
+            disable: true,
+          };
+          let com = {
+            provinceName: i.provinceName,
+            provinceCode: i.provinceCode,
+            kind: "COMMON",
+            minPrice: "",
+            sizeLPrice: "",
+            sizeMPrice: "",
+            sizeSPrice: "",
+            sizeSSPrice: "",
+            sizeXLPrice: "",
+            unitPrice: "",
+            disable: true,
+          };
+          for (let t of i.cityCodes) {
+            if (self.cityObj[t].kind === "CAPITAL") {
+              cap.disable = false;
+            } else {
+              com.disable = false;
+            }
+          }
+          lineList.push(cap, com);
+          // 计算是否禁用
+          self.lineList = lineList;
+        }
+      } else {
+        let lineList = JSON.parse(JSON.stringify(self.lineList));
+        for (let x in lineList) {
+          let count = 0;
+          for (let i of cityList) {
+            if (lineList[x].provinceCode === i.provinceCode) {
+              for (let t of i.cityCodes) {
+                if (self.cityObj[t].kind === lineList[x].kind) {
+                  lineList[x].disable = false;
+                  count++;
+                  break;
+                }
+              }
+            }
+          }
+          if (count === 0) {
+            lineList[x] = {
+              ...lineList[x],
+              minPrice: "",
+              sizeLPrice: "",
+              sizeMPrice: "",
+              sizeSPrice: "",
+              sizeSSPrice: "",
+              sizeXLPrice: "",
+              unitPrice: "",
+              disable: true,
+            };
           }
         }
-        lineList.push(cap, com);
-        // 计算是否禁用
+        self.lineList = lineList;
       }
-      self.lineList = lineList;
     },
     // 最大值更变
     maxNumberChange(val, index) {
@@ -1245,7 +1305,6 @@ export default {
       if (form.id) {
         data.id = form.id;
       }
-
       addLTLRoute(data)
         .then(res => {
           self.loadData(() => {
