@@ -23,6 +23,7 @@ import "xe-utils";
 import VXETable from "vxe-table";
 import "vxe-table/lib/index.css";
 import "./theme/index.css";
+import printJS from "print-js";
 
 /**
  * If you don't want to use mock-server

@@ -186,6 +186,7 @@
                   @click="assignItem(scope.row)"
                   :disabled="!permissions.SupplyOrderManage"
                   type="primary"
+                  style="width:140px;margin-bottom:10px;"
                   >{{ $t("tracking.assignTruckAndDriver") }}</el-button
                 >
                 <el-button
@@ -214,6 +215,7 @@
                   @click="returnShow(scope.row.order)"
                   :disabled="scope.row.order.publishBack == 1 || !permissions.SupplyResourceManage"
                   type="primary"
+                  style="width:140px;margin:0px;"
                   >{{ $t("tracking.returnTruck") }}</el-button
                 >
                 <el-button
