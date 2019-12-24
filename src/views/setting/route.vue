@@ -107,7 +107,7 @@
           </el-form>
           <el-form label-width="120px">
             <el-form-item required :label="$t('setting.origin')">
-              <el-select v-model="form.hubId">
+              <el-select filterable v-model="form.hubId">
                 <el-option v-for="item in hubList" :label="item.hubName" :value="item.id" />
               </el-select>
             </el-form-item>
@@ -144,7 +144,7 @@
           <el-table border :data="list" style="width: 100%">
             <el-table-column prop="date" :label="$t('setting.province')" width="180">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.provinceCode" @change="provinceChange(scope.row, scope.$index)">
+                <el-select filterable v-model="scope.row.provinceCode" @change="provinceChange(scope.row, scope.$index)">
                   <el-option
                     v-for="item in provinceList"
                     :key="item.id"
@@ -157,7 +157,7 @@
             </el-table-column>
             <el-table-column :label="$t('setting.deliverableDistrict')">
               <template slot-scope="scope">
-                <el-select v-model="scope.row.cityCodes" style="width: 100%" multiple>
+                <el-select filterable v-model="scope.row.cityCodes" style="width: 100%" multiple>
                   <el-option v-for="item in scope.row.cityList" :key="item.id" :label="item.name" :value="item.code" />
                 </el-select>
               </template>
