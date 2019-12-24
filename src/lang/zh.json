@@ -210,7 +210,9 @@
     "truckLength": "长",
     "truckHeight": "高",
     "truckVolume": "容量",
-    "truckMax": "最大载重"
+    "truckMax": "最大载重",
+    "Dimension": "尺寸",
+    "Weight": "重量"
   },
   "tracking": {
     "status": "订单状态",
@@ -559,7 +561,6 @@
     "HandedOver": "已交接",
     "GotIt": "知道了",
     "Outboundquantityisnotequaltoorderquantity": "出库数量不等于订单数量，不可以确认！",
-    "Reprint": "Reprint",
     "Supply": "运输公司",
     "TotalQty": "总件数",
     "QtyofHUBScanout": "交接件数",

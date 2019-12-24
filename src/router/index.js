@@ -234,7 +234,7 @@ export const asyncRoutes = [
         meta: {
           title: "Outbound",
           roles: ["HUB"],
-          permission: "HubInBound",
+          permission: "HubOutBound",
         },
       },
     ],

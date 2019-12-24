@@ -135,7 +135,7 @@
     "qty": "Qty",
     "unit": "Unit",
     "size": "Size",
-    "weight": "Weight/PCS (kg)",
+    "weight": "Weight(kg)",
     "cargoShape": "Cargo shape",
     "myQuotaion": "My quotaion(฿)",
     "cargoList": "Cargo List",
@@ -209,7 +209,9 @@
     "truckLength": "Length",
     "truckHeight": "Height",
     "truckVolume": "Volume",
-    "truckMax": "Max"
+    "truckMax": "Max",
+    "Dimension": "Dimension(cm)",
+    "Weight": "Weight(kg)"
   },
   "tracking": {
     "status": "Order Status",
@@ -553,7 +555,6 @@
     "HandedOver": "Handed  Over ",
     "Outboundquantityisnotequaltoorderquantity": "Outbound quantity is not equal to order quantity, cannot be confirmed!",
     "GotIt": "Got it",
-    "Reprint": "Reprint",
     "Supply": "Supply",
     "TotalQty": "Total Qty",
     "QtyofHUBScanout": "Qty of HUB Scan out",

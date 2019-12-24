@@ -443,7 +443,9 @@
     <el-dialog :visible.sync="cargoListDialog" :title="$t('booking.cargoList')" width="1250px" center>
       <!-- size 说明 -->
       <el-table :data="cargoTip" border style="width:730px;margin-bottom:20px;">
-        <el-table-column prop="unit" width="130"></el-table-column>
+        <el-table-column width="130">
+          <template slot-scope="scope">{{$t(`booking.${scope.row.unit}`)}}</template>
+        </el-table-column>
         <el-table-column prop="ss" label="Size-SS" width="100"></el-table-column>
         <el-table-column prop="s" label="Size-S" width="100"></el-table-column>
         <el-table-column prop="m" label="Size-M" width="100"></el-table-column>
@@ -1119,7 +1121,7 @@ export default {
       cargoListDialog: false,
       cargoTip: [
         {
-          unit: "Dimension(cm)",
+          unit: "Dimension",
           ss: "0.01-90",
           s: "90.01-110",
           m: "110.01-130",
@@ -1128,7 +1130,7 @@ export default {
           eSize: ">170.00",
         },
         {
-          unit: "Weight(kg)",
+          unit: "Weight",
           ss: "0.01-10",
           s: "10.01-20",
           m: "20.01-30",
