@@ -252,6 +252,7 @@ export default {
     printIt(row) {
       self.printeDialog = true;
       self.printId = row.orderId;
+      self.printNumber = null;
     },
     // 确认打印
     confirmPrint() {

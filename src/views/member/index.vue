@@ -696,7 +696,6 @@ export default {
       getInfo().then(res => {
         self.infoForm = res.data.site;
         self.setForm.exchange = res.data.site.exchange;
-        console.log(self.setForm);
         if (res.data.site.contactMobile == "" || res.data.site.contactMobile == null) {
           self.infoForm.contactMobile = res.data.user.phone;
         }

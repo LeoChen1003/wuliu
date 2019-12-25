@@ -212,7 +212,8 @@
     "truckVolume": "容量",
     "truckMax": "最大载重",
     "Dimension": "尺寸",
-    "Weight": "重量"
+    "Weight": "重量",
+    "PickUpDoortoDoor": "上门揽件"
   },
   "tracking": {
     "sendCargoToHUB": "发货到HUB",
@@ -531,7 +532,7 @@
     "uploadSuccess": "上传成功",
     "logo": "Logo",
     "address": "详细地址",
-    "setting": "基础设置",
+    "setting": "基础设置（运输公司）",
     "VolumeWeightDivisor": "体积重量换算"
   },
   "confirm": {
