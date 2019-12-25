@@ -195,7 +195,7 @@
                   @click="assignItem(scope.row)"
                   :disabled="!permissions.SupplyOrderManage"
                   type="primary"
-                  style="width:140px;margin-bottom:10px;"
+                  style="margin-bottom:10px;"
                   >{{ $t("tracking.assignTruckAndDriver") }}</el-button
                 >
                 <el-button
