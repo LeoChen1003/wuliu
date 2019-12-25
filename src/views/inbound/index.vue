@@ -125,11 +125,18 @@
         </el-table>
       </div>
     </div>
-    <el-dialog :title="$t('inbound.print')" :visible.sync="printeDialog" width="65%" class="comfirmDialog" center>
-      打印
+    <el-dialog :title="$t('inbound.print')" :visible.sync="printeDialog" width="450px" class="comfirmDialog" center>
+      <div style="display:flex;align-items:center;margin:30px 0;">
+        <span style="margin-left:30px;">{{ $t("inbound.PrintingNumber") }}</span>
+        <el-input
+          :placeholder="$t('placeholder.pleaseInput')"
+          v-model="printNumber"
+          style="width:250px;margin-left:10px;"
+        ></el-input>
+      </div>
       <span slot="footer">
         <div class="footerBtn">
-          <el-button size="small" plain style="width:300px;" @click="printeDialog = false">{{
+          <el-button size="small" type="primary" style="width:150px;" @click="confirmPrint">{{
             $t("tracking.confirm")
           }}</el-button>
         </div>
@@ -141,6 +148,7 @@
 <script>
 import { getInboundList, getInboundProperty, confirmput } from "../../api/inbound";
 import { getGoodsProperty } from "../../api/data";
+import { getToken } from "../../utils/auth";
 
 let self;
 export default {
@@ -158,6 +166,8 @@ export default {
       like: "",
       needPrint: "all",
       selectionRow: [],
+      printNumber: null,
+      printId: null,
     };
   },
   methods: {
@@ -239,11 +249,21 @@ export default {
       }
     },
     // 打印
-    printIt() {
+    printIt(row) {
       self.printeDialog = true;
+      self.printId = row.orderId;
     },
-    reprintIt() {
-      self.printeDialog = true;
+    // 确认打印
+    confirmPrint() {
+      if (!self.printNumber) {
+        self.$message.warning("请输入打印张数");
+        return;
+      }
+      window.printJS(
+        `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadHub?orderId=${self.printId}&number=${
+          self.printNumber
+        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,
+      );
     },
     // 确认收货
     receiptIt(item, index) {
