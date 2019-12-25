@@ -653,7 +653,7 @@ export default {
       window.printJS({
         printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
           row.sendToHubId
-        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,
+        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,type:'pdf',showModal:true,
         onLoadingEnd: () => {
           row.loading1 = 0;
         },
@@ -669,7 +669,7 @@ export default {
       window.printJS({
         printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
           self.sendtohubid
-        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,type:`pdf`,showModal:true,
+        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,type:'pdf',showModal:true,
         onLoadingEnd: () => {
           self.loading1 = 0;
         },
