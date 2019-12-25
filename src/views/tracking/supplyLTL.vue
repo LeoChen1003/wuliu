@@ -28,7 +28,12 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="searchIt">{{ $t("tracking.search") }}</el-button>
-          <el-button type="primary" @click="assignMultiple">{{ $t("tracking.assignTruckAndDriver") }}</el-button>
+          <el-button
+            type="primary"
+            v-if="tabActive == 'WAIT_SEND_TO_HUB' || tabActive == 'WAIT_HUB_TO_PUT' || tabActive == 'HUB_PUT'"
+            @click="assignMultiple"
+            >{{ $t("tracking.assignTruckAndDriver") }}</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -105,7 +110,13 @@
       <!-- 表格 -->
       <div class="container">
         <el-table :data="data.content" v-loading="loading" border @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55" align="center"> </el-table-column>
+          <el-table-column
+            type="selection"
+            width="55"
+            align="center"
+            v-if="tabActive == 'WAIT_SEND_TO_HUB' || tabActive == 'WAIT_HUB_TO_PUT' || tabActive == 'HUB_PUT'"
+          >
+          </el-table-column>
           <el-table-column :label="$t('tracking.TrackingNoAndDemand')">
             <template slot-scope="scope">
               <el-button style="width:100%;text-align:left;" @click="orderLog(scope.row.order.id)">
@@ -190,7 +201,7 @@
                   v-if="
                     scope.row.order.status == 'WAIT_SEND_TO_HUB' ||
                       scope.row.order.status == 'WAIT_HUB_TO_PUT' ||
-                      scope.row.order.status == 'WILL_PICK'
+                      scope.row.order.status == 'HUB_PUT'
                   "
                   @click="assignItem(scope.row)"
                   :disabled="!permissions.SupplyOrderManage"
@@ -732,11 +743,12 @@ export default {
     loadData(cb) {
       self.loading = true;
       let page = self.data.number ? self.data.number : 0;
+      let provincesCon = self.provinces.join(',')
       getSupplyLTLOrder({
         orderStatus: self.tabActive,
         orderNo: self.orderNo,
         pickAt: self.pickAt ? self.pickAt + " 00:00:00" : "",
-        provinces: self.provinces,
+        provinces: provincesCon,
         page: page,
       }).then(res => {
         self.data = res.data;
@@ -748,7 +760,7 @@ export default {
       supplyStatusCount({
         orderNo: self.orderNo,
         pickAt: self.pickAt ? self.pickAt + " 00:00:00" : "",
-        provinces: self.provinces,
+        provinces: provincesCon,
       }).then(res => {
         self.orderStatus = res.data;
       });
@@ -808,12 +820,19 @@ export default {
     },
     pageChange(e) {
       self.loading = true;
+      let provincesCon = self.provinces.join(',');
       getSupplyLTLOrder({
-        status: self.tabActive,
+        orderStatus: self.tabActive,
+        orderNo: self.orderNo,
+        pickAt: self.pickAt ? self.pickAt + " 00:00:00" : "",
+        provinces: provincesCon,
         page: e - 1,
       }).then(res => {
         self.data = res.data;
         self.loading = false;
+        if (cb) {
+          cb();
+        }
       });
     },
     tabChange() {

@@ -60,6 +60,7 @@
               >
               </el-time-picker>
             </div>
+            <div v-if="bookingForm.orderInfo.lineType == 'LTL'" style="font-size:12px;color:#909399;margin-top:5px;">(Note:如果未选择上门揽件服务，需要按此时间把货物送到HUB)</div>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -193,6 +194,22 @@
                 :label="$t('booking.printSticker')"
                 border
               ></el-checkbox>
+              <el-checkbox
+                v-model="liability"
+                disabled
+                class="inputWidth inputBottom"
+                style="margin-left:0px;"
+                :label="$t('booking.liability')"
+                border
+              ></el-checkbox>
+              <el-checkbox
+                v-model="liability"
+                disabled
+                class="inputWidth inputBottom"
+                style="margin-left:0px;"
+                :label="$t('booking.PickUpDoortoDoor')"
+                border
+              ></el-checkbox>
             </div>
           </el-form-item>
           <el-form-item :label="$t('booking.cargoList')" class="el_item" v-if="bookingForm.orderInfo.lineType == 'LTL'">
@@ -220,6 +237,9 @@
             >
               <el-option v-for="item in subCategoryList" :key="item.key" :label="item.value" :value="item.key" />
             </el-select>
+          </el-form-item>
+          <el-form-item v-if="bookingForm.orderInfo.lineType == 'LTL'">
+            <el-input v-model="consultInfo.data.ltlLine.hubName" disabled class="inputWidth"></el-input>
           </el-form-item>
           <el-form-item :label="$t('booking.supply')">
             <el-select v-model="bookingForm.transportInfo.companyName" disabled class="inputWidth">
