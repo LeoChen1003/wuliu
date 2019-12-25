@@ -319,7 +319,8 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 let self;
-import { getLtlOrders, getLtlOrdersCount, postsendtohub,ordersPrint,getOrderLog, demandquoteList, getImg } from "../../api/tracking.js";
+import printJS from 'print-js'
+import { getLtlOrders, getLtlOrdersCount, postsendtohub,getOrderLog, demandquoteList, getImg } from "../../api/tracking.js";
 import { getGoodsProperty, getTruckType } from "../../api/data.js";
 import { getToken } from "../../utils/auth";
 import bcTime from "@/components/bcTime";
@@ -650,7 +651,7 @@ export default {
     print(row, index) {
       row.loading1 = 1;
       // window.printJS(ordersPrint(6489).then(res=>{}));
-      window.printJS({
+      printJS({
         printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
           row.sendToHubId
         }&token=${getToken()}&Locale=${self.$store.state.app.language}`,type:'pdf',showModal:true,
@@ -666,7 +667,7 @@ export default {
     print1() {
       self.loading1 = 1;
       console.log("print...");
-      window.printJS({
+      printJS({
         printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
           self.sendtohubid
         }&token=${getToken()}&Locale=${self.$store.state.app.language}`,type:'pdf',showModal:true,
