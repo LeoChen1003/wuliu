@@ -259,7 +259,7 @@ export default {
         self.$message.warning("请输入打印张数");
         return;
       }
-      window.printJS(
+      window.open(
         `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadHub?orderId=${self.printId}&number=${
           self.printNumber
         }&token=${getToken()}&Locale=${self.$store.state.app.language}`,
