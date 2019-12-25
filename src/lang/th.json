@@ -554,6 +554,7 @@
     "TotalQty": "จำนวนชิ้นทั้งหมด",
     "TrackingNo": "เลขออเดอร์",
     "print": "พิมพ์",
-    "toBePrinted": "รอพิมพ์"
+    "toBePrinted": "รอพิมพ์",
+    "PrintingNumber": "จำนวนที่พิมพ์"
   }
 }

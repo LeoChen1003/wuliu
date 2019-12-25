@@ -576,6 +576,7 @@
     "TotalQty": "Total Qty",
     "QtyofHUBScanout": "Qty of HUB Scan out",
     "Receiptquantityisnotequaltoorderquantity": "Receipt quantity is not equal to order quantity, cannot be confirmed!",
-    "ActualTimeofArrival": "Actual Time of Arrival"
+    "ActualTimeofArrival": "Actual Time of Arrival",
+    "PrintingNumber": "Printing Number"
   }
 }
