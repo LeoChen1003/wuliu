@@ -93,6 +93,9 @@ export default {
       let time = `${e[0]}-${e[1]}-${e[2]}`;
       this.$emit("changeBCtime", time);
     },
+    clearData(){
+      self.dateCascader = [];
+    }
   },
   created() {
     self = this;

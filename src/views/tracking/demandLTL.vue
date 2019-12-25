@@ -2,7 +2,7 @@
   <div class="LTL_manage">
     <el-input :placeholder="$t('tracking.trackingNo')" style="margin-left: 300px; width: 200px;" v-model="trackingNo"></el-input>
     <el-button type="primary" style="margin-left: 20px;" @click="search">{{ $t("tracking.search") }}</el-button>
-    <el-button type="primary" class="ltl_btn" @click="sendToHubAll()">{{ $t("tracking.sendCargoToHUB") }}</el-button>
+    <el-button type="primary" class="ltl_btn" @click="sendToHubAll()" v-if="tabActive=='WAIT_SEND_TO_HUB'">{{ $t("tracking.sendCargoToHUB") }}</el-button>
     <div style="display:flex;box-sizing:border-box;padding:0 20px;">
       <!-- 导航 -->
       <div style="height:100%;">
@@ -76,7 +76,7 @@
       <!-- 表格 -->
       <div class="container" v-loading="tableLoading">
         <el-table
-          style="width:98%;"
+          style="width:100%;"
           border
           :data="data.content"
           ref="multipleTable"
@@ -130,28 +130,25 @@
           </el-table-column>
           <el-table-column :label="$t('tracking.supply')">
             <template slot-scope="scope">
-              <div v-if="!(tabActive == '0' || tabActive == '1') && scope.row.transport">
+              <div v-if="!(tabActive == '0' || tabActive == '1')">
                 <div>
                   {{
-                    scope.row.transport.supply.companyName == ""
-                      ? scope.row.transport.supply.humanName
-                      : scope.row.transport.supply.companyName
+                    scope.row.supply.type == "COMPANY"
+                      ? scope.row.supply.companyName
+                      : scope.row.supply.humanName
                   }}
                 </div>
                 <div>
-                  {{ scope.row.transport.supply.contactMobile }}
+                  {{ scope.row.supply.contactMobile }}
                 </div>
                 <div>
-                  {{ scope.row.transport.transport }}
+                  {{ scope.row.driverAndTruckVo.plate }}
                 </div>
-                <div>
-                  {{ scope.row.transport.plate }}
+                <div v-if="scope.row.driverAndTruckVo">
+                  {{ scope.row.driverAndTruckVo.driverName }}
                 </div>
-                <div v-if="scope.row.transport.driver">
-                  {{ scope.row.transport.driver.name }}
-                </div>
-                <div v-if="scope.row.transport.driver">
-                  {{ scope.row.transport.driver.phone }}
+                <div v-if="scope.row.driverAndTruckVo">
+                  {{ scope.row.driverAndTruckVo.driverPhone }}
                 </div>
               </div>
             </template>
@@ -160,7 +157,7 @@
             <template slot-scope="scope">
               <el-button
                 type="primary"
-                style="width:120px;margin-left:20px"
+                style="width:140px;text-align:center; padding: 10px 5px;margin-left: 8%;"
                 v-if="tabActive === 'WAIT_SEND_TO_HUB'"
                 @click="sendToHub(scope.row)"
               >
@@ -168,7 +165,7 @@
               </el-button>
               <el-button
                 type="primary"
-                style="width:120px;margin-left:20px"
+                style="width:140px;text-align:center; padding: 10px 5px;margin-left: 8%;"
                 v-if="tabActive === 'WAIT_HUB_TO_PUT'"
                 @click="print(scope.row)"
                 :loading="scope.row.loading1 == 1"
@@ -208,7 +205,7 @@
         </div>
       </div>
     </div>
-    <el-dialog :visible.sync="dialogVisible" :title="$t('tracking.sendCargoToHUB')" width="90%" center>
+    <el-dialog :visible.sync="dialogVisible" :title="$t('tracking.sendCargoToHUB')" width="90%" center @close="clear">
       <el-form :model="form" :rules="rules" :show-message="false" ref="ruleForm" :label-width="formLabelWidth">
         <el-form-item :label="$t('tracking.deliveryNoteNo')">
           <span class="span">{{ randomNumber }}</span>
@@ -245,6 +242,7 @@
               :timeType="'all'"
               :dateDefault="isChange ? timeArr : []"
               :isChange="isChange"
+              ref="mychild"
             ></bcTime>
             <el-time-picker
               v-model="time"
@@ -323,6 +321,7 @@ import { getLtlOrders, getLtlOrdersCount, postsendtohub,ordersPrint,getOrderLog,
 import { getGoodsProperty, getTruckType } from "../../api/data.js";
 import { getToken } from "../../utils/auth";
 import bcTime from "@/components/bcTime";
+import { mapGetters } from "vuex";
 export default {
   // import引入的组件需要注入到对象中才能使用
   components: {
@@ -405,7 +404,9 @@ export default {
     };
   },
   // 监听属性 类似于data概念
-  computed: {},
+  computed: {
+    ...mapGetters(["permissions"]),
+  },
   // 监控data中的数据变化
   watch: {},
   created() {
@@ -431,7 +432,6 @@ export default {
       self.propertyObj = propertyObj;
       self.sizeObj = sizeObj;
       self.unitObj = unitObj;
-      // console.log(self.propertyObj)
     });
     getTruckType().then(res => {
       self.truckType = res.data.categories;
@@ -439,17 +439,21 @@ export default {
     });
   },
   methods: {
-    getSummaries(param) {
-      const { columns, data } = param;
-      const sums = [];
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = "Total";
-          return;
+    clear(){
+      if (self.randomNumber != null) {
+          self.randomNumber = "";
+          self.isChange = false;
+          // self.timeArr = null;
+          // self.timeArr = [];
+          self.timeArr.length = 0;
+          self.form.plate = "";
+          self.form.driverName = "";
+          self.form.phone = "";
+          self.time_at = "";
+          self.time = "";
+          self.form.truckCategory = "";
+          self.clearTime();
         }
-      });
-      sums[4] = self.totalNumber;
-      return sums;
     },
     // 返回文件确认
     rdConfirmShow(row) {
@@ -514,17 +518,6 @@ export default {
         self.dialogVisible = false;
         this.$message("请先选择需要发货的订单");
       } else {
-        if (self.randomNumber != null) {
-          self.randomNumber = "";
-          self.isChange = false;
-          self.timeArr = null;
-          self.form.plate = "";
-          self.form.driverName = "";
-          self.form.phone = "";
-          self.time_at = "";
-          self.time = "";
-          self.form.truckCategory = "";
-        }
         self.dialogVisible = true;
         self.totalNumber = 0;
         self.gridData = self.allOrder;
@@ -537,7 +530,6 @@ export default {
       }
     },
     handleSelectionChange(val) {
-      // window.console.log(val);
       self.allOrder = val;
       self.chooseNumber = val.length;
     },
@@ -548,22 +540,20 @@ export default {
     changeTab() {
       self.tableLoading = true;
       self.getData();
-      // window.console.log(self.tabActive);
     },
     getData() {
       // self.getCount();
       const self = this;
       self.tableLoading = true;
       getLtlOrders(self.tabActive, { no: this.trackingNo, page: this.page }).then(res => {
-        // window.console.log(res.data);
         self.tableLoading = false;
         for (let i of res.data.content) {
           i.loading1 = 0;
         }
         self.data = res.data;
         this.page = self.data.number ? self.data.number : 0;
+        self.orderStatus[self.tabActive] = res.data.content.length;;
       });
-      // self.sendToHub();
       self.getCount();
     },
     search() {
@@ -571,7 +561,6 @@ export default {
     },
     getCount() {
       getLtlOrdersCount().then(res => {
-        // window.console.log(res.data);
         this.orderStatus.WAIT_HUB_TO_PUT = res.data.WAIT_HUB_TO_PUT;
         this.orderStatus.WAIT_SEND_TO_HUB = res.data.WAIT_SEND_TO_HUB;
         this.orderStatus.WILL_PICK = res.data.WILL_PICK;
@@ -582,21 +571,9 @@ export default {
       });
     },
     sendToHub(item) {
-      if (self.randomNumber != null) {
-        self.isChange = false;
-        self.randomNumber = "";
-        self.timeArr = null;
-        self.form.plate = "";
-        self.form.driverName = "";
-        self.form.phone = "";
-        self.time_at = "";
-        self.time = "";
-        self.form.truckCategory = "";
-      }
+      self.dialogVisible = true;
       self.totalNumber = 0;
       self.orderId = item.id;
-      // window.console.log(id);
-      this.dialogVisible = true;
       self.gridData = [item];
       self.proList = [item.propertyList];
       self.proList = self.proList[0];
@@ -606,10 +583,8 @@ export default {
         }
       }
       getTruckType().then(res => {
-        console.log(res.data);
         self.truckType = res.data.categories;
         self.truckValue = self.truckType.value;
-        console.log(self.truckType);
       });
     },
     pageChange(e) {
@@ -627,7 +602,6 @@ export default {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           postsendtohub(self.form).then(res => {
-            console.log(res.data);
             this.$message({
               message: "保存成功",
               type: "success",
@@ -640,6 +614,7 @@ export default {
           });
         }
       });
+      // self.timeArr = null;
     },
     orderLog(id) {
       getOrderLog(id).then(res => {
@@ -658,10 +633,6 @@ export default {
           row.loading1 = 0;
         },
       });
-      // setTimeout(() => {
-      //   row.loading1 = 0;
-      //   console.log(row.loading1);
-      // }, 1000);
     },
     print1() {
       self.loading1 = 1;
@@ -674,7 +645,10 @@ export default {
         },
       });
     },
-  },
+    clearTime(){
+      self.$refs.mychild.clearData();
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
