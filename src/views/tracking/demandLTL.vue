@@ -665,10 +665,11 @@ export default {
     },
     print1() {
       self.loading1 = 1;
+      console.log("print...");
       window.printJS({
         printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
           self.sendtohubid
-        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,
+        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,type:`pdf`,showModal:true,
         onLoadingEnd: () => {
           self.loading1 = 0;
         },
