@@ -375,7 +375,7 @@ export const asyncRoutes = [
     path: "/setting",
     redirect: "/setting",
     component: Layout,
-    name: "member",
+    name: "memberSetting",
     meta: {
       title: "setting",
       roles: ["PLATFORM"],
