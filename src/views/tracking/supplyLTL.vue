@@ -231,14 +231,6 @@
                   >{{ $t("tracking.operation") }}</el-button
                 > -->
                 <el-button
-                  v-if="scope.row.order.status == 'SENDING' || scope.row.order.status == 'WILL_PICK'"
-                  @click="returnShow(scope.row.order)"
-                  :disabled="scope.row.order.publishBack == 1 || !permissions.SupplyResourceManage"
-                  type="primary"
-                  style="width:140px;margin:0px;"
-                  >{{ $t("tracking.returnTruck") }}</el-button
-                >
-                <el-button
                   v-if="scope.row.order.status == 'WILL_RETURN'"
                   :disabled="scope.row.order.returnType == 1 || scope.row.order.returnType == 2 || !permissions.SupplyOrderManage"
                   @click="rdShow(scope.row.order)"
