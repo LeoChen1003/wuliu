@@ -310,6 +310,36 @@
         </el-timeline-item>
       </el-timeline>
     </el-dialog>
+    <el-dialog :title="$t('tracking.confirmReceiptOfDocument')" :visible.sync="rdDialog" center width="600px">
+      <div style="text-alitn:center;">
+        <div style="text-align:center;margin-bottom:10px;">
+          {{ $t("tracking.areYouSure") }}
+        </div>
+        <div class="img-box">
+          <el-image
+            v-for="(img, index) in imgList"
+            :src="img + '?x-oss-process=style/th-90'"
+            :key="index"
+            style="width: 100px; height: 100px;margin-right:10px;"
+            :preview-src-list="imgList"
+          ></el-image>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="rdDialog = false">{{ $t("tracking.cancel") }}</el-button>
+        <el-button type="primary" :loading="rdLoading" @click="rdConfirmIt">{{ $t("tracking.confirm") }}</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :title="$t('tracking.rating')" :visible.sync="ratingDialog" width="500px">
+      <div style="text-align:center;">
+        <el-rate style="margin-bottom:20px;" v-model="ratingForm.rating"> </el-rate>
+        <el-input v-model="ratingForm.remark" type="textarea" :placeholder="$t('tracking.remark')" resize="none"></el-input>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="ratingDialog = false">取 消</el-button>
+        <el-button type="primary" @click="ratingConfirm">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -318,7 +348,7 @@
 // 例如：import 《组件名称》 from '《组件路径》';
 let self;
 import printJS from '../../printjs/src'
-import { getLtlOrders, getLtlOrdersCount, postsendtohub,getOrderLog, demandquoteList, getImg } from "../../api/tracking.js";
+import { getLtlOrders, getLtlOrdersCount, postsendtohub,getOrderLog, demandquoteList, getImg, confirmRD, orderRating } from "../../api/tracking.js";
 import { getGoodsProperty, getTruckType } from "../../api/data.js";
 import { getToken } from "../../utils/auth";
 import bcTime from "@/components/bcTime";
@@ -402,6 +432,10 @@ export default {
       btn_show: true,
       sendtohubid: "",
       loading1: false,
+      rdDialog: false,
+      imgList: [],
+      rdLoading: false,
+      ratingDialog: false,
     };
   },
   // 监听属性 类似于data概念
@@ -455,10 +489,27 @@ export default {
           self.form.truckCategory = "";
           self.clearTime();
         }
+        self.getData();
+    },
+    rating(item) {
+      self.thisId = item.id;
+      self.ratingForm.rating = 0;
+      self.ratingForm.remark = "";
+      self.ratingDialog = true;
+    },
+    ratingConfirm() {
+      if (self.ratingForm.rating == 0) {
+        return self.$message.warning(self.$t("tracking.ratingIsRequired"));
+      }
+      orderRating(self.thisId, self.ratingForm.rating * 2, self.ratingForm.remark).then(() => {
+        self.ratingDialog = false;
+        self.getData();
+      });
     },
     // 返回文件确认
     rdConfirmShow(row) {
       self.rdRow = row;
+      console.log(row)
       if (row.photoIds) {
         getImg(row.photoIds).then(res => {
           let arr = [];
@@ -473,11 +524,15 @@ export default {
         self.rdDialog = true;
       }
     },
-    rating(item) {
-      self.thisId = item.id;
-      self.ratingForm.rating = 0;
-      self.ratingForm.remark = "";
-      self.ratingDialog = true;
+    rdConfirmIt() {
+      self.rdLoading = true;
+      confirmRD(self.rdRow.id).then(() => {
+        self.getData(() => {
+          self.$message.success(self.$t("tracking.successful"));
+          self.rdDialog = false;
+          self.rdLoading = false;
+        });
+      });
     },
     // 点击确认
     toShowConfirm(row) {
@@ -542,7 +597,7 @@ export default {
       self.tableLoading = true;
       self.getData();
     },
-    getData() {
+    getData(cb) {
       // self.getCount();
       const self = this;
       self.tableLoading = true;
@@ -553,6 +608,10 @@ export default {
         }
         self.data = res.data;
         this.page = self.data.number ? self.data.number : 0;
+        self.orderStatus[self.tabActive] = res.data.content.length;;
+        if (cb) {
+          cb();
+        }
       });
       self.getCount();
     },
@@ -560,9 +619,7 @@ export default {
       self.getData();
     },
     getCount() {
-      getLtlOrdersCount({
-        no: this.trackingNo
-      }).then(res => {
+      getLtlOrdersCount().then(res => {
         this.orderStatus.WAIT_HUB_TO_PUT = res.data.WAIT_HUB_TO_PUT;
         this.orderStatus.WAIT_SEND_TO_HUB = res.data.WAIT_SEND_TO_HUB;
         this.orderStatus.WILL_PICK = res.data.WILL_PICK;
@@ -638,6 +695,7 @@ export default {
     },
     print1() {
       self.loading1 = 1;
+      console.log("print...");
       printJS({
         printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
           self.sendtohubid
