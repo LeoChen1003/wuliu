@@ -423,7 +423,7 @@
         hide-required-asterisk
         label-position="right"
         label-width="90px"
-        style="width100%;display:flex;flex-direction:column;justify-content:center;align-items:center;"
+        style="width:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;"
       >
         <el-form-item prop="driverId" :label="$t('tracking.driver')">
           <el-select v-model="assignForm.driverId" filterable style="width:250px;margin-left:10px;">
@@ -735,7 +735,7 @@ export default {
     loadData(cb) {
       self.loading = true;
       let page = self.data.number ? self.data.number : 0;
-      let provincesCon = self.provinces.join(',')
+      let provincesCon = self.provinces.join(",");
       getSupplyLTLOrder({
         orderStatus: self.tabActive,
         orderNo: self.orderNo,
@@ -812,7 +812,7 @@ export default {
     },
     pageChange(e) {
       self.loading = true;
-      let provincesCon = self.provinces.join(',');
+      let provincesCon = self.provinces.join(",");
       getSupplyLTLOrder({
         orderStatus: self.tabActive,
         orderNo: self.orderNo,
