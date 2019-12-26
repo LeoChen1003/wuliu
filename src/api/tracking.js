@@ -211,10 +211,11 @@ export function getSupplyLTLOrder(data) {
 }
 
 //ltl路线各个订单状态数量
-export function getLtlOrdersCount() {
+export function getLtlOrdersCount(data) {
   return request({
     url: "/api/ltl/order/demand/count",
     method: "get",
+    params: data,
   });
 }
 
