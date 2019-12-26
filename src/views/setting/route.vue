@@ -131,7 +131,7 @@
                   :headers="headers"
                   :limit="1"
                   :on-exceed="outLimit"
-                  :on-progress="uploadProgress"
+                  :before-upload="beforeUpload"
                   :on-success="uploadSuccess"
                   accept="image/*"
                   list-type="picture-card"
@@ -490,7 +490,7 @@ export default {
         self.thisRow = null;
       }
     },
-    uploadProgress() {
+    beforeUpload() {
       self.uploading = true;
     },
     uploadSuccess() {
