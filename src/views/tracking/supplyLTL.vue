@@ -830,9 +830,6 @@ export default {
       }).then(res => {
         self.data = res.data;
         self.loading = false;
-        if (cb) {
-          cb();
-        }
       });
     },
     tabChange() {
