@@ -146,6 +146,7 @@
 </template>
 
 <script>
+import printJS from "../../printjs/src";
 import { getInboundList, getInboundProperty, confirmput } from "../../api/inbound";
 import { getGoodsProperty } from "../../api/data";
 import { getToken } from "../../utils/auth";
@@ -260,11 +261,13 @@ export default {
         self.$message.warning("请输入打印张数");
         return;
       }
-      window.open(
-        `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadHub?orderId=${self.printId}&number=${
+      printJS({
+        printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadHub?orderId=${self.printId}&number=${
           self.printNumber
         }&token=${getToken()}&Locale=${self.$store.state.app.language}`,
-      );
+        type: "pdf",
+        showModal: true,
+      });
     },
     // 确认收货
     receiptIt(item, index) {
