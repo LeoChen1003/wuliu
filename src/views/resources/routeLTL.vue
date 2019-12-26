@@ -278,8 +278,8 @@
       <div class="edit-tab-box" v-loading="editLoading">
         <el-tabs v-model="editTab">
           <el-tab-pane :label="$t('resources.map')" name="map">
-            <div style="text-align: center;height: 50%;">
-              <el-image fit="cover" v-if="form.mapUrl !== ''" :src="form.mapUrl" :preview-src-list="preViewList"></el-image>
+            <div style="text-align: center;" v-if="form.mapUrl !== ''">
+              <el-image style="height: 400px" fit="cover" :src="form.mapUrl" :preview-src-list="preViewList"></el-image>
             </div>
           </el-tab-pane>
           <el-tab-pane :label="$t('resources.deliverableDistrict')" name="deli">
@@ -1325,6 +1325,7 @@ export default {
         self.thisRow = {};
         return;
       }
+      self.preViewList = [row.mapUrl];
       let dateList = {};
       self.priceList = row.citys;
       for (let i of row.optionalTimeList) {
