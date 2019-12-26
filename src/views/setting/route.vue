@@ -87,8 +87,8 @@
         </el-tabs>
       </el-col>
     </el-row>
-    <el-dialog class="edit-box" title="路线模板（LTL）" :visible.sync="editDialog" width="1000px" :close-on-click-modal="false">
-      <div>
+    <el-dialog class="edit-box" title="路线模板（LTL）" v-loading="uploading"  :visible.sync="editDialog" width="1000px" :close-on-click-modal="false">
+      <div >
         <div class="edit-form-box">
           <el-form label-width="120px">
             <el-form-item required :label="$t('setting.routeName')">
@@ -131,6 +131,8 @@
                   :headers="headers"
                   :limit="1"
                   :on-exceed="outLimit"
+                  :on-progress="uploadProgress"
+                  :on-success="uploadSuccess"
                   accept="image/*"
                   list-type="picture-card"
                 >
@@ -243,6 +245,7 @@ export default {
       editLoading: false,
       thisRow: null,
       editType: "add",
+      uploading: false,
     };
   },
   computed: {
@@ -486,6 +489,12 @@ export default {
       } else {
         self.thisRow = null;
       }
+    },
+    uploadProgress() {
+      self.uploading = true;
+    },
+    uploadSuccess() {
+      self.uploading = false;
     },
   },
 };
