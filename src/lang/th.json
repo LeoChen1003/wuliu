@@ -210,7 +210,8 @@
     "truckVolume": "ความจุ",
     "truckMax": "สูงสุด",
     "Dimension": "ขนาด(cm)",
-    "Weight": "น้ำหนัก(kg)"
+    "Weight": "น้ำหนัก(kg)",
+    "PickUpDoortoDoor": "รับพัสดุถึงหน้าบ้าน"
   },
   "tracking": {
     "sendCargoToHUB": "จัดส่งสินค้า  HUB",
