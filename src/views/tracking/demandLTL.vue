@@ -608,7 +608,6 @@ export default {
         }
         self.data = res.data;
         this.page = self.data.number ? self.data.number : 0;
-        self.orderStatus[self.tabActive] = res.data.content.length;;
         if (cb) {
           cb();
         }
@@ -619,14 +618,8 @@ export default {
       self.getData();
     },
     getCount() {
-      getLtlOrdersCount().then(res => {
-        this.orderStatus.WAIT_HUB_TO_PUT = res.data.WAIT_HUB_TO_PUT;
-        this.orderStatus.WAIT_SEND_TO_HUB = res.data.WAIT_SEND_TO_HUB;
-        this.orderStatus.WILL_PICK = res.data.WILL_PICK;
-        this.orderStatus.HUB_PUT = res.data.HUB_PUT;
-        this.orderStatus.WILL_RETURN = res.data.WILL_RETURN;
-        this.orderStatus.SENDING = res.data.SENDING;
-        this.orderStatus.COMPLETE = res.data.COMPLETE;
+      getLtlOrdersCount({no: this.trackingNo}).then(res => {
+        this.orderStatus = res.data
       });
     },
     sendToHub(item) {
