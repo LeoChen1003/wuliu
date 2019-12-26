@@ -16,7 +16,7 @@
               collapse-tags
               placeholder="province"
             >
-              <el-option v-for="(item, index) in provinceList" :key="index" :label="item.name" :value="item.name"></el-option>
+              <el-option v-for="(item, index) in provinceList" :key="index" :label="item.name" :value="item.code"></el-option>
             </el-select>
           </div>
         </el-form-item>
@@ -406,7 +406,7 @@
       <el-tabs tabPosition="left" v-model="proActive">
         <el-tab-pane v-for="(item, index) in proArea" :key="index" :label="item.sortingNoTrans" :name="item.sortingNo">
           <el-button
-            :type="provinces.indexOf(pro.name) > -1 ? 'info' : 'primary'"
+            :type="provinces.indexOf(pro.code) > -1 ? 'info' : 'primary'"
             class="proItem"
             @click="tapPro(pro)"
             :key="proInd"
@@ -771,10 +771,10 @@ export default {
     },
     // 目的地选择
     tapPro(pro) {
-      if (self.provinces.indexOf(pro.name) < 0) {
-        self.provinces.push(pro.name);
+      if (self.provinces.indexOf(pro.code) < 0) {
+        self.provinces.push(pro.code);
       } else {
-        self.provinces.splice(self.provinces.indexOf(pro.name), 1);
+        self.provinces.splice(self.provinces.indexOf(pro.code), 1);
       }
     },
     // 揽件日期选择
