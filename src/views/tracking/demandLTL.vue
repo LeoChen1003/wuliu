@@ -553,7 +553,6 @@ export default {
         }
         self.data = res.data;
         this.page = self.data.number ? self.data.number : 0;
-        self.orderStatus[self.tabActive] = res.data.content.length;;
       });
       self.getCount();
     },
@@ -561,7 +560,9 @@ export default {
       self.getData();
     },
     getCount() {
-      getLtlOrdersCount().then(res => {
+      getLtlOrdersCount({
+        no: this.trackingNo
+      }).then(res => {
         this.orderStatus.WAIT_HUB_TO_PUT = res.data.WAIT_HUB_TO_PUT;
         this.orderStatus.WAIT_SEND_TO_HUB = res.data.WAIT_SEND_TO_HUB;
         this.orderStatus.WILL_PICK = res.data.WILL_PICK;
@@ -637,7 +638,6 @@ export default {
     },
     print1() {
       self.loading1 = 1;
-      console.log("print...");
       printJS({
         printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
           self.sendtohubid
