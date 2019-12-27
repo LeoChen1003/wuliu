@@ -30,7 +30,7 @@
           <el-button @click="searchIt">{{ $t("tracking.search") }}</el-button>
           <el-button
             type="primary"
-            v-if="tabActive == 'WAIT_SEND_TO_HUB' || tabActive == 'WAIT_HUB_TO_PUT' || tabActive == 'HUB_PUT'"
+            v-if="tabActive == 'WAIT_SEND_TO_HUB' || tabActive == 'WAIT_HUB_TO_PUT' || tabActive == 'HUB_PUT' || tabActive == 'WILL_PICK'"
             @click="assignMultiple"
             >{{ $t("tracking.assignTruckAndDriver") }}</el-button
           >
@@ -114,7 +114,7 @@
             type="selection"
             width="55"
             align="center"
-            v-if="tabActive == 'WAIT_SEND_TO_HUB' || tabActive == 'WAIT_HUB_TO_PUT' || tabActive == 'HUB_PUT'"
+            v-if="tabActive == 'WAIT_SEND_TO_HUB' || tabActive == 'WAIT_HUB_TO_PUT' || tabActive == 'HUB_PUT' || tabActive == 'WILL_PICK'"
           >
           </el-table-column>
           <el-table-column :label="$t('tracking.TrackingNoAndDemand')">
@@ -201,7 +201,7 @@
                   v-if="
                     scope.row.order.status == 'WAIT_SEND_TO_HUB' ||
                       scope.row.order.status == 'WAIT_HUB_TO_PUT' ||
-                      scope.row.order.status == 'HUB_PUT'
+                      scope.row.order.status == 'HUB_PUT' || scope.row.order.status == 'WILL_PICK'
                   "
                   @click="assignItem(scope.row)"
                   :disabled="!permissions.SupplyOrderManage"
