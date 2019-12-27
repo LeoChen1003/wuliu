@@ -103,7 +103,7 @@
               <div>
                 {{ scope.row.senderAddress.district }}
                 {{ scope.row.senderAddress.city }}
-                {{ scope.row.receiverAddress.province }}
+                {{ scope.row.senderAddress.province }}
               </div>
             </template>
           </el-table-column>
@@ -299,7 +299,7 @@
       <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 100px;" :disabled="btn_show" @click="print1">
         {{ $t("tracking.printPreview") }}
       </el-button>
-      <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 200px;" @click="confirm">
+      <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 200px;" @click="confirm" :disabled="show_confirm">
         {{ $t("tracking.confirm") }}
       </el-button>
     </el-dialog>
@@ -436,6 +436,7 @@ export default {
       imgList: [],
       rdLoading: false,
       ratingDialog: false,
+      show_confirm: false,
     };
   },
   // 监听属性 类似于data概念
@@ -607,6 +608,7 @@ export default {
           i.loading1 = 0;
         }
         self.data = res.data;
+        console.log(self.data.content);
         this.page = self.data.number ? self.data.number : 0;
         if (cb) {
           cb();
@@ -666,6 +668,7 @@ export default {
           });
         }
       });
+      self.show_confirm = true;
       // self.timeArr = null;
     },
     orderLog(id) {
