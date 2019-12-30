@@ -183,7 +183,6 @@
         </div>
       </div>
     </div>
-
     <el-dialog :title="$t('tracking.print')" :visible.sync="printeDialog" width="65%" class="comfirmDialog">
       打印
       <span slot="footer">

@@ -25,6 +25,8 @@
     "pleaseInput": "โปรดระบุ"
   },
   "route": {
+    "route": "เส้นทาง",
+    "setting": "ตั้งค่า",
     "booking": "การจอง",
     "priceConsulting": "เช็คราคาค่าขนส่ง",
     "placeOrder": "สถานที่การสั่งซื้อ",
@@ -60,7 +62,9 @@
     "topUpConfirm": "ยืนยันการโอนเงิน",
     "welcome": "Welcome",
     "inbound": "ขาเข้า",
-    "Outbound": "ขาออก"
+    "Outbound": "ขาออก",
+    "cancel": "ยกเลิก",
+    "confirm": "ยืนยัน"
   },
   "layout": {
     "logout": "ออกจากระบบ"
@@ -290,7 +294,18 @@
     "toBeSentCargoToHUB": "กำลังรอการส่งมอบให้กับ HUB",
     "cargoArrivedAtHUB": "สินค้าได้มาถึง HUB แล้ว",
     "toBeSentCargoToHub": "กำลังรอการส่งมอบให้กับ HUB",
-    "toBeconfirmedReceiptByHub": "รอ HUB เพื่อยืนยันการรับ"
+    "toBeconfirmedReceiptByHub": "รอ HUB เพื่อยืนยันการรับ",
+    "assignTruckAndDriver": "กำหนดรถและคนขับ",
+    "destinaiton": "จุดส่ง",
+    "confirmedReceiptByHub": "HUBรับสินค้าแล้ว",
+    "toBeHandedOverToSupply": "รอส่งมอบให้กับผู้ให้บริการ",
+    "TrackingNoAndDemand": "เลขออเดอร์&ผู้ใช้บริการ",
+    "Discription": "รายละเอียด",
+    "VechicleDriver": "รถและคนขับ",
+    "Operation": "ดำเนินการ",
+    "save": "บันทึกสำเร็จ",
+    "dialog": "โปรดเลือกออเดอร์ที่ต้องจัดส่ง",
+    "pickupDate": "เวลาเข้ารับสินค้า"
   },
   "resources": {
     "add": "เพิ่ม",
@@ -507,7 +522,11 @@
     "uploadSuccess": "อัพโหลดสำเร็จ",
     "uploadContract": "อัพโหลดสัญญา",
     "waitUpload": "รออัพโหลด",
-    "address": "บ้านเลขที่-ซอย-ถนน"
+    "address": "บ้านเลขที่-ซอย-ถนน",
+    "setting": "ตั้งค่าพื้นฐาน (ผู้ให้บริการ)",
+    "VolumeWeightDivisor": "แปลงปริมาตรเป็นน้ำหนัก",
+    "example": "สมมติว่าอัตราการแปลงคือ 2500 และปริมาณของยา",
+    "example1": " ฉะนั้น น้ำหนัก=160000/2500=64kg"
   },
   "confirm": {
     "tips": "คำแนะนำ",
@@ -557,5 +576,17 @@
     "print": "พิมพ์",
     "toBePrinted": "รอพิมพ์",
     "PrintingNumber": "จำนวนที่พิมพ์"
+  },
+  "setting": {
+    "origin": "ต้นทาง",
+    "routeName": "ชื่อเส้นทาง",
+    "status": "สถานะ",
+    "map": "แผนที่",
+    "province": "จังหวัด",
+    "deliverableDistrict": "พื้นที่ให้บริการจัดส่ง",
+    "operation": "ดำเนินการ",
+    "edit": "แก้ไข",
+    "routeDetails": "รายละเอียดเส้นทาง",
+    "cutOffTime": "Cut off Time"
   }
 }

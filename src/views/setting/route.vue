@@ -182,8 +182,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="editDialog = false">取 消</el-button>
-        <el-button type="primary" @click="confirmIt">确 定</el-button>
+        <el-button @click="editDialog = false">{{$t('route.cancel')}}</el-button>
+        <el-button type="primary" @click="confirmIt">{{$t('route.confirm')}}</el-button>
       </span>
     </el-dialog>
     <el-dialog :visible.sync="previewDialog">
