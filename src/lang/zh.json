@@ -62,7 +62,9 @@
     "topUpConfirm": "确认充值",
     "inbound": "入库",
     "Outbound": "出库",
-    "setting": "设置"
+    "setting": "设置",
+    "cancel": "取 消",
+    "confirm": "确 认"
   },
   "layout": {
     "logout": "退出"
@@ -304,7 +306,9 @@
     "toBeConfirmedReceiptByHUB": "待HUB收货",
     "toBeSentCargoToHUB": "待发货到HUB",
     "cargoArrivedAtHUB": "HUB已收货",
-    "confirmedReceiptByHub": "HUB已收货"
+    "confirmedReceiptByHub": "HUB已收货",
+    "save": "保存成功",
+    "dialog": "请先选择需要发货的订单"
   },
   "resources": {
     "add": "添加",
@@ -533,7 +537,9 @@
     "logo": "Logo",
     "address": "详细地址",
     "setting": "基础设置（运输公司）",
-    "VolumeWeightDivisor": "体积重量换算"
+    "VolumeWeightDivisor": "体积重量换算",
+    "example": "假设换算比为2500、体积=100*80*20=160000cm³",
+    "example1": "那么，重量=160000/2500=64kg"
   },
   "confirm": {
     "tips": "提示",

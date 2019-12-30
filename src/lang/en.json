@@ -60,7 +60,11 @@
     "transferFreight": "Transfer Freight",
     "topUpConfirm": "Top-Up Confirmation",
     "inbound": "Inbound",
-    "Outbound": "Outbound"
+    "Outbound": "Outbound",
+    "setting": "Setting",
+    "route": "Route",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "layout": {
     "logout": "Logout"
@@ -294,16 +298,19 @@
     "assignTruckAndDriver": "Assign Truck & Driver",
     "destinaiton": "Destinaiton",
     "pickupDate": " Pickup Date",
-    "Discription": "Discription",
-    "Operation": "Operation",
-    "VechicleDriver": "Vechicle & Driver",
+    "Discription": "Details",
+    "Operation": "Manage",
+    "VechicleDriver": "Turck and Drivers",
     "truck": "Truck",
     "orderQty": "Order Qty",
     "VAS": "VAS",
     "TrackingNoAndDemand": "Tracking No. & Demand",
     "toBeConfirmedReceiptByHUB": "toBeConfirmedReceiptByHUB",
     "toBeSentCargoToHUB": "toBeSentCargoToHUB",
-    "cargoArrivedAtHUB": "cargoArrivedAtHUB"
+    "cargoArrivedAtHUB": "cargoArrivedAtHUB",
+    "confirmedReceiptByHub": "HUB Has Received",
+    "save": "Save successfully",
+    "dialog": "Please Select the Order to be Shipped First"
   },
   "resources": {
     "add": "Add",
@@ -525,7 +532,10 @@
     "goToDownload": "Download contract",
     "uploadContract": "Upload Contract",
     "address": "Address",
-    "VolumeWeightDivisor": "Volume Weight Divisor"
+    "VolumeWeightDivisor": "Volume weight conversion",
+    "setting": "Basic settings (Supply)",
+    "example": "Assuming the conversion ratio is 2500, volume = 100 * 80 * 20 = 160000cm³",
+    "example1": "then weight = 160000/2500 = 64kg"
   },
   "confirm": {
     "tips": "Tips",
@@ -579,5 +589,17 @@
     "Receiptquantityisnotequaltoorderquantity": "Receipt quantity is not equal to order quantity, cannot be confirmed!",
     "ActualTimeofArrival": "Actual Time of Arrival",
     "PrintingNumber": "Printing Number"
+  },
+  "setting": {
+    "origin": "Origin",
+    "routeName": "Route name",
+    "cutOffTime": "Cut of Time",
+    "status": "Status",
+    "map": "Map",
+    "province": "Province",
+    "deliverableDistrict": "Service Area",
+    "operation": "Manage",
+    "edit": "Edit",
+    "routeDetails": "Route Details"
   }
 }

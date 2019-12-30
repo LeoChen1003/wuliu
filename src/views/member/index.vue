@@ -535,8 +535,8 @@
               <div style="color:#ccc;">
                 <div>体积换算成重量举例：</div>
                 <div class="inp">
-                  假设换算比为2500、体积=100*80*20=160000cm³,<br />
-                  那么，重量=160000/2500=64kg
+                  {{$t('member.example')}},<br />
+                  {{$t('member.example1')}}
                 </div>
               </div>
             </el-form-item>

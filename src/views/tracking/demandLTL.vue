@@ -573,7 +573,7 @@ export default {
       // self.totalNumber = 0;
       if (self.chooseNumber === 0) {
         self.dialogVisible = false;
-        this.$message("请先选择需要发货的订单");
+        this.$message(self.$t('tracking.dialog'));
       } else {
         self.dialogVisible = true;
         self.totalNumber = 0;
@@ -657,7 +657,7 @@ export default {
         if (valid) {
           postsendtohub(self.form).then(res => {
             this.$message({
-              message: "保存成功",
+              message: self.$t("tracking.save"),
               type: "success",
             });
             self.randomNumber = res.data.deliveryNo;
@@ -665,10 +665,10 @@ export default {
             self.timeArr = self.time_at.split("-");
             self.btn_show = false;
             self.sendtohubid = res.data.id;
+            self.show_confirm = true;
           });
         }
       });
-      self.show_confirm = true;
       // self.timeArr = null;
     },
     orderLog(id) {
