@@ -64,7 +64,8 @@
     "inbound": "ขาเข้า",
     "Outbound": "ขาออก",
     "cancel": "ยกเลิก",
-    "confirm": "ยืนยัน"
+    "confirm": "ยืนยัน",
+    "ltl": "สร้างเส้นทาง(LTL)"
   },
   "layout": {
     "logout": "ออกจากระบบ"
@@ -296,7 +297,7 @@
     "toBeSentCargoToHub": "กำลังรอการส่งมอบให้กับ HUB",
     "toBeconfirmedReceiptByHub": "รอ HUB เพื่อยืนยันการรับ",
     "assignTruckAndDriver": "กำหนดรถและคนขับ",
-    "destinaiton": "จุดส่ง",
+    "destinaiton": "ปลายทาง",
     "confirmedReceiptByHub": "HUBรับสินค้าแล้ว",
     "toBeHandedOverToSupply": "รอส่งมอบให้กับผู้ให้บริการ",
     "TrackingNoAndDemand": "เลขออเดอร์&ผู้ใช้บริการ",
@@ -308,7 +309,7 @@
     "pickupDate": "เวลาเข้ารับสินค้า"
   },
   "resources": {
-    "add": "เพิ่ม",
+    "add": "เพิ่มเส้นทาง",
     "driver_name": "พนักงานขับรถ",
     "phoneNo": "เบอร์มือถือ",
     "status": "สถานะ",
@@ -525,8 +526,8 @@
     "address": "บ้านเลขที่-ซอย-ถนน",
     "setting": "ตั้งค่าพื้นฐาน (ผู้ให้บริการ)",
     "VolumeWeightDivisor": "แปลงปริมาตรเป็นน้ำหนัก",
-    "example": "สมมติว่าอัตราการแปลงคือ 2500 และปริมาณของยา",
-    "example1": " ฉะนั้น น้ำหนัก=160000/2500=64kg"
+    "example": "หากตัวแปลงปริมาตรคือ2500 ปริมาตร=100*80*20=16000cm³ ฉะนั",
+    "example1": "น้ำหนัก=160000/2500=64kg"
   },
   "confirm": {
     "tips": "คำแนะนำ",

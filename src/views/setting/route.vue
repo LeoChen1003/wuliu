@@ -87,7 +87,7 @@
         </el-tabs>
       </el-col>
     </el-row>
-    <el-dialog class="edit-box" title="路线模板（LTL）" v-loading="uploading"  :visible.sync="editDialog" width="1000px" :close-on-click-modal="false">
+    <el-dialog class="edit-box" :title="$t('route.ltl')" v-loading="uploading"  :visible.sync="editDialog" width="1000px" :close-on-click-modal="false">
       <div >
         <div class="edit-form-box">
           <el-form label-width="120px">
@@ -183,7 +183,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialog = false">{{$t('route.cancel')}}</el-button>
-        <el-button type="primary" @click="confirmIt">{{$t('route.confirm')}}</el-button>
+        <el-button type="primary" @click="confirmIt">{{$t("route.confirm")}}</el-button>
       </span>
     </el-dialog>
     <el-dialog :visible.sync="previewDialog">

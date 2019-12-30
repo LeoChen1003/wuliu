@@ -64,7 +64,8 @@
     "setting": "Setting",
     "route": "Route",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "ltl": "Route Template (LTL)"
   },
   "layout": {
     "logout": "Logout"
@@ -293,7 +294,7 @@
     "confirmReceiptOfDocument": "Confirm Receipt of Document",
     "areYouSure": "You have received the document, are you sure?",
     "toBeSentCargoToHub": "To be Sent Cargo to HUB",
-    "toBeconfirmedReceiptByHub": "To be Sent Cargo to HUB",
+    "toBeconfirmedReceiptByHub": "To be Confirmed Receipt by HUB",
     "toBeHandedOverToSupply": "To be Handed Over to Supply",
     "assignTruckAndDriver": "Assign Truck & Driver",
     "destinaiton": "Destinaiton",
@@ -593,7 +594,7 @@
   "setting": {
     "origin": "Origin",
     "routeName": "Route name",
-    "cutOffTime": "Cut of Time",
+    "cutOffTime": "Cut off Time",
     "status": "Status",
     "map": "Map",
     "province": "Province",

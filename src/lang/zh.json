@@ -64,7 +64,8 @@
     "Outbound": "出库",
     "setting": "设置",
     "cancel": "取 消",
-    "confirm": "确 认"
+    "confirm": "确 认",
+    "ltl": "路线模板（LTL）"
   },
   "layout": {
     "logout": "退出"
