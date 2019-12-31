@@ -533,7 +533,7 @@
                 <el-option :label="3500" :value="3500"> </el-option>
               </el-select>
               <div style="color:#ccc;">
-                <div>体积换算成重量举例：</div>
+                <div>{{$t('member.volumeWeightConversion')}}</div>
                 <div class="inp">
                   {{$t('member.example')}},<br />
                   {{$t('member.example1')}}

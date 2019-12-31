@@ -536,7 +536,8 @@
     "VolumeWeightDivisor": "Volume weight conversion",
     "setting": "Basic settings (Supply)",
     "example": "Assuming the conversion ratio is 2500, volume = 100 * 80 * 20 = 160000cm³",
-    "example1": "then weight = 160000/2500 = 64kg"
+    "example1": "then weight = 160000/2500 = 64kg",
+    "volumeWeightConversion": "Volume weight conversion"
   },
   "confirm": {
     "tips": "Tips",
