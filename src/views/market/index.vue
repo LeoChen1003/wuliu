@@ -59,8 +59,10 @@
           </template>
         </el-table-column>
         <el-table-column :label="$t('tracking.route')">
-          <template slot-scope="scope">
-            <div>{{ scope.row.senderAddress.province }}-->{{ scope.row.receiverAddress.province }}</div>
+          <template slot-scope="scope" v-if="scope.row.senderAddress && scope.row.receiverAddressList">
+            <div v-for="(receiverAddress, index) in scope.row.receiverAddressList" :key="index">
+              <div>{{ scope.row.senderAddress.province }}-->{{ receiverAddress.province }}</div>
+            </div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('tracking.truckType')">
@@ -131,12 +133,14 @@
               <el-date-picker v-model="quotePriceCon.senderAddress.pickAt" class="inp" disabled type="datetime"> </el-date-picker>
             </el-form-item>
             <el-form-item :label="$t('booking.deliveryPoint')">
-              <el-input v-model="quotePriceCon.receiverAddress.name" class="inp" disabled></el-input>
-              <!-- <el-input v-model="quotePriceCon.receiverAddress.mobile"
+              <div v-for="(receiverAddress, index) in quotePriceCon.receiverAddressList" style="margin-bottom:10px;" :key="index">
+                <el-input v-model="receiverAddress.name" class="inp" disabled></el-input>
+                <!-- <el-input v-model="receiverAddress.mobile"
                         class="inp"
                         disabled></el-input> -->
-              <el-input v-model="quotePriceCon.receiverAddress.addressDetail" class="inp" disabled></el-input>
-              <el-input v-model="quotePriceCon.receiverAddress.fullName" class="inp" disabled></el-input>
+                <el-input v-model="receiverAddress.addressDetail" class="inp" disabled></el-input>
+                <el-input v-model="receiverAddress.fullName" class="inp" disabled></el-input>
+              </div>
             </el-form-item>
             <el-form-item :label="$t('booking.truckType')">
               <el-select

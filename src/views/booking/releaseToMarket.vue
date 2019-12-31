@@ -1,21 +1,11 @@
 <template>
   <div class="manage booking">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-      <div class="go_back" @click="$router.go(-1)">
-        <el-button
-          icon="el-icon-arrow-left
-"
-          @click="$router.go(-1)"
-          >{{ $t("booking.back") }}</el-button
-        >
-      </div>
+    <div style="display:flex;align-items:center;margin-bottom:15px;">
       <el-button
-        style="width:200px;"
-        @click="todoIt"
-        :loading="todoLoading"
-        :disabled="!permissions.DemandNewOrderOrRelease"
-        type="primary"
-        >{{ $t("booking.releaseToMarket") }}</el-button
+        icon="el-icon-arrow-left
+"
+        @click="$router.go(-1)"
+        >{{ $t("booking.back") }}</el-button
       >
     </div>
     <el-form ref="releaseform" :model="releaseForm" :rules="releaseRules" :show-message="false" label-position="top" size="small">
@@ -31,16 +21,16 @@
               <el-option v-for="item in logisticType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
-          <el-form-item prop="transport" :label="$t('booking.truckType')">
+          <el-form-item prop="transportInfo" :label="$t('booking.truckType')">
             <div class="inputWidth" style="display:flex;">
               <el-select
-                v-model="releaseForm.transport.carType"
+                v-model="releaseForm.transportInfo.carType"
                 :placeholder="$t('placeholder.pleaseChoose')"
                 style="margin-right:5px;"
               >
                 <el-option v-for="item in categoryList" :key="item.key" :label="item.value" :value="item.key" />
               </el-select>
-              <el-select v-model="releaseForm.transport.carriage" :placeholder="$t('placeholder.pleaseChoose')">
+              <el-select v-model="releaseForm.transportInfo.carriage" :placeholder="$t('placeholder.pleaseChoose')">
                 <el-option v-for="item in subCategoryList" :key="item.key" :label="item.value" :value="item.key" />
               </el-select>
             </div>
@@ -302,6 +292,16 @@
         </el-form-item>
       </el-row>
     </el-form>
+    <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:15px;margin-top:30px;">
+      <el-button
+        style="width:200px;"
+        @click="todoIt"
+        :loading="todoLoading"
+        :disabled="!permissions.DemandNewOrderOrRelease"
+        type="primary"
+        >{{ $t("booking.releaseToMarket") }}</el-button
+      >
+    </div>
     <!-- 货物清单 dialog -->
     <el-dialog :visible.sync="cargoListDialog" :title="$t('booking.cargoList')" width="1250px" center>
       <!-- size 说明 -->
@@ -532,7 +532,7 @@ export default {
             propertyListContent: "",
           },
         ],
-        transport: {
+        transportInfo: {
           carType: "",
           carriage: "",
         },
@@ -566,7 +566,7 @@ export default {
             validator: validatorPropertyList,
           },
         ],
-        transport: [
+        transportInfo: [
           {
             required: true,
             trigger: "change",

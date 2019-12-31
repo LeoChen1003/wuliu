@@ -149,21 +149,28 @@
           </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
             <template slot-scope="scope">
-              <div v-if="scope.row.order.receiverAddress">
-                <div>
-                  {{ scope.row.order.receiverAddress.name }}
-                  {{
-                    tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
-                      ? ""
-                      : scope.row.order.receiverAddress.mobile
-                  }}
-                </div>
-                <div>{{ scope.row.order.receiverAddress.addressDetail }}</div>
-                <div>
-                  {{ scope.row.order.receiverAddress.district }}
-                  {{ scope.row.order.receiverAddress.city }}
-                  {{ scope.row.order.receiverAddress.province }}
-                </div>
+              <div v-if="scope.row.order.receiverAddressList">
+                <el-card
+                  shadow="never"
+                  style="margin-bottom:5px;"
+                  v-for="(receiverAddress, index) in scope.row.order.receiverAddressList"
+                  :key="index"
+                >
+                  <div>
+                    {{ receiverAddress.name }}
+                    {{
+                      tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
+                        ? ""
+                        : receiverAddress.mobile
+                    }}
+                  </div>
+                  <div>{{ receiverAddress.addressDetail }}</div>
+                  <div>
+                    {{ receiverAddress.district }}
+                    {{ receiverAddress.city }}
+                    {{ receiverAddress.province }}
+                  </div>
+                </el-card>
               </div>
             </template>
           </el-table-column>
@@ -265,51 +272,6 @@
           }}</el-button>
         </div>
       </span>
-    </el-dialog>
-    <el-dialog :title="$t('tracking.returnTruck')" width="600px" :visible.sync="returnDialog">
-      <el-form ref="form" :model="form" label-width="120px">
-        <el-form-item :label="$t('tracking.origin')">
-          {{ returnForm_show.sender }}
-        </el-form-item>
-        <el-form-item :label="$t('tracking.destination')">
-          {{ returnForm_show.receiver }}
-        </el-form-item>
-        <el-form-item :label="$t('tracking.truckType')">
-          {{ truckObj[returnForm_show.truck] }}
-        </el-form-item>
-        <el-form-item :label="$t('tracking.backTime')" required>
-          <el-cascader
-            v-model="dateCascader"
-            class="innerInp"
-            :options="options"
-            :props="props"
-            separator="-"
-            style="margin-right:5px;"
-            @change="dateChange"
-          ></el-cascader>
-          <el-time-picker
-            v-model="returnTime"
-            format="HH:mm:ss"
-            class="innerInp"
-            :clearable="false"
-            style="width:50%;"
-            value-format="HH:mm:ss"
-          >
-          </el-time-picker>
-        </el-form-item>
-        <el-form-item :label="$t('tracking.quotation')" required>
-          <el-input v-model="returnCharge" @mousewheel.native.prevent type="number"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary"
-            :loading="returnLoading"
-            :disabled="returnCharge == '' || returnDate == '' || returnTime == ''"
-            @click="returnIt"
-            >{{ $t("tracking.confirm") }}</el-button
-          >
-        </el-form-item>
-      </el-form>
     </el-dialog>
     <el-dialog :title="$t('tracking.confirmOrder')" width="600px" v-if="orderInfo" :visible.sync="confirmDialog">
       <el-form label-width="130px">
@@ -447,21 +409,28 @@
         </el-table-column>
         <el-table-column :label="$t('tracking.deliveryPoint')">
           <template slot-scope="scope">
-            <div v-if="scope.row.order.receiverAddress">
-              <div>
-                {{ scope.row.order.receiverAddress.name }}
-                {{
-                  tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
-                    ? ""
-                    : scope.row.order.receiverAddress.mobile
-                }}
-              </div>
-              <div>{{ scope.row.order.receiverAddress.addressDetail }}</div>
-              <div>
-                {{ scope.row.order.receiverAddress.district }}
-                {{ scope.row.order.receiverAddress.city }}
-                {{ scope.row.order.receiverAddress.province }}
-              </div>
+            <div v-if="scope.row.order.receiverAddressList">
+              <el-card
+                shadow="never"
+                style="margin-bottom:5px;"
+                v-for="(receiverAddress, index) in scope.row.order.receiverAddressList"
+                :key="index"
+              >
+                <div>
+                  {{ receiverAddress.name }}
+                  {{
+                    tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
+                      ? ""
+                      : receiverAddress.mobile
+                  }}
+                </div>
+                <div>{{ receiverAddress.addressDetail }}</div>
+                <div>
+                  {{ receiverAddress.district }}
+                  {{ receiverAddress.city }}
+                  {{ receiverAddress.province }}
+                </div>
+              </el-card>
             </div>
           </template>
         </el-table-column>
@@ -536,7 +505,6 @@ export default {
       data: {},
       tabActive: "WAIT_SEND_TO_HUB",
       printeDialog: false,
-      returnDialog: false,
       confirmDialog: false,
       logDialog: false,
       form: {
@@ -879,33 +847,6 @@ export default {
       getOrderLog(id).then(res => {
         self.logs = res.data;
         self.logDialog = true;
-      });
-    },
-    returnShow(item) {
-      self.returnForm_show = {
-        sender: item.receiverAddress.province,
-        receiver: item.senderAddress.city,
-        truck: item.transport.carType,
-        subType: item.transport.carriage,
-      };
-      self.returnCharge = "";
-      self.returnDate = "";
-      self.returnTime = "";
-      self.dateCascader = [];
-      self.returnId = item.id;
-      self.returnDialog = true;
-    },
-    dateChange(e) {
-      self.returnDate = `${e[0]}-${e[1]}-${e[2]}`;
-    },
-    returnIt() {
-      self.returnLoading = true;
-      let returnDate = `${self.returnDate} ${self.returnTime}`;
-      returnTruck(self.returnId, self.returnCharge, returnDate).then(() => {
-        self.loadData(() => {
-          self.returnLoading = false;
-          self.returnDialog = false;
-        });
       });
     },
     rdShow(row) {

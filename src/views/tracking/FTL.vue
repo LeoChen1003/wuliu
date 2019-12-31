@@ -119,20 +119,27 @@
           </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
             <template slot-scope="scope">
-              <div>
-                {{ scope.row.receiverAddress.name }}
-                {{
-                  tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
-                    ? ""
-                    : scope.row.receiverAddress.mobile
-                }}
-              </div>
-              <div>{{ scope.row.receiverAddress.addressDetail }}</div>
-              <div>
-                {{ scope.row.receiverAddress.district }}
-                {{ scope.row.receiverAddress.city }}
-                {{ scope.row.receiverAddress.province }}
-              </div>
+              <el-card
+                shadow="never"
+                style="margin-bottom:5px;"
+                v-for="(receiverAddress, index) in scope.row.receiverAddressList"
+                :key="index"
+              >
+                <div>
+                  {{ receiverAddress.name }}
+                  {{
+                    tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
+                      ? ""
+                      : receiverAddress.mobile
+                  }}
+                </div>
+                <div>{{ receiverAddress.addressDetail }}</div>
+                <div>
+                  {{ receiverAddress.district }}
+                  {{ receiverAddress.city }}
+                  {{ receiverAddress.province }}
+                </div>
+              </el-card>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.price')">
@@ -179,10 +186,11 @@
                   >{{ $t("tracking.reject") }}</el-button
                 >
                 <el-button
-                  v-if="scope.row.status == 'WILL_PICK' && scope.row.transport.driverName == null"
+                  v-if="scope.row.status == 'WILL_PICK' && scope.row.transport && scope.row.transport.driverName == null"
                   @click="confirmB(scope.row)"
                   :disabled="!permissions.SupplyOrderManage"
                   type="primary"
+                  style="margin-bottom:5px;"
                   >{{ $t("tracking.operation") }}</el-button
                 >
                 <el-button
@@ -231,7 +239,10 @@
     <el-dialog :title="$t('tracking.returnTruck')" width="600px" :visible.sync="returnDialog">
       <el-form ref="form" :model="form" label-width="120px">
         <el-form-item :label="$t('tracking.origin')">
-          {{ returnForm_show.sender }}
+          <el-select v-model="returnSenderAddressIndex" placeholder="请选择" @change="returnSenderAddressChange">
+            <el-option v-for="(item, index) in returnForm_show.sender" :key="item.id" :label="item.province" :value="index">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item :label="$t('tracking.destination')">
           {{ returnForm_show.receiver }}
@@ -282,9 +293,9 @@
           <div>{{ orderInfo.lineType }}</div>
         </el-form-item>
         <el-form-item :label="$t('tracking.destination')">
-          <div>
-            {{ orderInfo.receiverAddress.city }}
-            {{ orderInfo.receiverAddress.district }}
+          <div v-for="(receiverAddress, index) in orderInfo.receiverAddressList" :key="index">
+            {{ receiverAddress.city }}
+            {{ receiverAddress.district }}
           </div>
         </el-form-item>
         <el-form-item :label="$t('tracking.qty')">
@@ -519,6 +530,9 @@ export default {
       previewDialog: false,
       previewImg: "",
       rdRow: {},
+      returnSenderAddress: {},
+      returnReceiverAddress: {},
+      returnSenderAddressIndex: null,
     };
   },
   // 监听属性 类似于data概念
@@ -664,11 +678,14 @@ export default {
     },
     returnShow(item) {
       self.returnForm_show = {
-        sender: item.receiverAddress.province,
+        sender: item.receiverAddressList,
         receiver: item.senderAddress.city,
         truck: item.transport.carType,
         subType: item.transport.carriage,
       };
+      self.returnSenderAddressIndex = item.receiverAddressList.length - 1;
+      self.returnSenderAddress = item.receiverAddressList[item.receiverAddressList.length - 1];
+      self.returnReceiverAddress = item.senderAddress;
       self.returnCharge = "";
       self.returnDate = "";
       self.returnTime = "";
@@ -679,10 +696,13 @@ export default {
     dateChange(e) {
       self.returnDate = `${e[0]}-${e[1]}-${e[2]}`;
     },
+    returnSenderAddressChange(val){
+      self.returnSenderAddress = self.returnForm_show.sender[val];
+    },
     returnIt() {
       self.returnLoading = true;
       let returnDate = `${self.returnDate} ${self.returnTime}`;
-      returnTruck(self.returnId, self.returnCharge, returnDate).then(() => {
+      returnTruck(self.returnId, self.returnCharge, returnDate, self.returnReceiverAddress, self.returnSenderAddress).then(() => {
         self.loadData(() => {
           self.returnLoading = false;
           self.returnDialog = false;
