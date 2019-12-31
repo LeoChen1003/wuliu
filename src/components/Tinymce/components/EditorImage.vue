@@ -43,27 +43,25 @@ export default {
   props: {
     color: {
       type: String,
-      default: "#1890ff"
-    }
+      default: "#1890ff",
+    },
   },
   data() {
     return {
       dialogVisible: false,
       listObj: {},
-      fileList: []
+      fileList: [],
     };
   },
   methods: {
     checkAllSuccess() {
-      return Object.keys(this.listObj).every(
-        item => this.listObj[item].hasSuccess
-      );
+      return Object.keys(this.listObj).every(item => this.listObj[item].hasSuccess);
     },
     handleSubmit() {
       const arr = Object.keys(this.listObj).map(v => this.listObj[v]);
       if (!this.checkAllSuccess()) {
         this.$message(
-          "Please wait for all images to be uploaded successfully. If there is a network problem, please refresh the page and upload again!"
+          "Please wait for all images to be uploaded successfully. If there is a network problem, please refresh the page and upload again!",
         );
         return;
       }
@@ -106,13 +104,13 @@ export default {
             hasSuccess: false,
             uid: file.uid,
             width: this.width,
-            height: this.height
+            height: this.height,
           };
         };
         resolve(true);
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -2,33 +2,12 @@
   <div class="wrapper">
     <div class="container">
       <div class="searchBox">
-        <el-form
-          ref="searchForm"
-          inline
-          :show-message="false"
-          :model="searchForm"
-        >
+        <el-form ref="searchForm" inline :show-message="false" :model="searchForm">
           <el-form-item :label="$t('market.origin')">
             <div class="form-item">
-              <el-button
-                size="mini"
-                @click="showProDialog('origin')"
-                style="margin-right:5px;"
-                icon="el-icon-more"
-              ></el-button>
-              <el-select
-                v-model="searchForm.pickUpRegion"
-                class="formSelect"
-                clearable
-                filterable
-                placeholder="province"
-              >
-                <el-option
-                  v-for="(item, index) in provinceList"
-                  :key="index"
-                  :label="item.name"
-                  :value="item.name"
-                ></el-option>
+              <el-button size="mini" @click="showProDialog('origin')" style="margin-right:5px;" icon="el-icon-more"></el-button>
+              <el-select v-model="searchForm.pickUpRegion" class="formSelect" clearable filterable placeholder="province">
+                <el-option v-for="(item, index) in provinceList" :key="index" :label="item.name" :value="item.name"></el-option>
               </el-select>
             </div>
           </el-form-item>
@@ -40,19 +19,8 @@
                 style="margin-right:5px;"
                 icon="el-icon-more"
               ></el-button>
-              <el-select
-                v-model="searchForm.deliveryRegion"
-                clearable
-                class="formSelect"
-                filterable
-                placeholder="province"
-              >
-                <el-option
-                  v-for="(item, index) in provinceList"
-                  :key="index"
-                  :label="item.name"
-                  :value="item.name"
-                ></el-option>
+              <el-select v-model="searchForm.deliveryRegion" clearable class="formSelect" filterable placeholder="province">
+                <el-option v-for="(item, index) in provinceList" :key="index" :label="item.name" :value="item.name"></el-option>
               </el-select>
             </div>
           </el-form-item>
@@ -68,12 +36,7 @@
             ></el-cascader>
           </el-form-item>
           <el-form-item :label="$t('market.truckType')">
-            <el-select
-              v-model="searchForm.truckCategory"
-              filterable
-              class="formSelect"
-              placeholder="Truck type"
-            >
+            <el-select v-model="searchForm.truckCategory" filterable class="formSelect" placeholder="Truck type">
               <el-option
                 v-for="(item, index) in truckTypes.categories"
                 :key="index"
@@ -97,11 +60,7 @@
         </el-table-column>
         <el-table-column :label="$t('tracking.route')">
           <template slot-scope="scope">
-            <div>
-              {{ scope.row.senderAddress.province }}-->{{
-                scope.row.receiverAddress.province
-              }}
-            </div>
+            <div>{{ scope.row.senderAddress.province }}-->{{ scope.row.receiverAddress.province }}</div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('tracking.truckType')">
@@ -126,21 +85,16 @@
         <el-table-column :label="$t('tracking.price')">
           <template slot-scope="scope">
             <div>
-              {{
-                scope.row.settlementAmount > 0 ? scope.row.settlementAmount : ""
-              }}
+              {{ scope.row.settlementAmount > 0 ? scope.row.settlementAmount : "" }}
             </div>
           </template>
         </el-table-column>
         <el-table-column>
           <template slot-scope="scope">
             <div style="text-align:center;">
-              <el-button
-                type="primary"
-                :disabled="!permissions.SupplyQuoteOrder"
-                @click="toquotePrice(scope.row)"
-                >{{ $t("market.quoteAPrice") }}</el-button
-              >
+              <el-button type="primary" :disabled="!permissions.SupplyQuoteOrder" @click="toquotePrice(scope.row)">{{
+                $t("market.quoteAPrice")
+              }}</el-button>
             </div>
           </template>
         </el-table-column>
@@ -158,76 +112,31 @@
         </el-pagination>
       </div>
     </div>
-    <el-dialog
-      :title="$t('market.quoteAPrice')"
-      :visible.sync="quotePriceDialog"
-      top="1vh"
-      center
-      width="60%"
-    >
-      <el-form
-        :model="quotePriceCon"
-        size="small"
-        label-position="top"
-        :show-message="false"
-      >
+    <el-dialog :title="$t('market.quoteAPrice')" :visible.sync="quotePriceDialog" top="1vh" center width="60%">
+      <el-form :model="quotePriceCon" size="small" label-position="top" :show-message="false">
         <div style="display:flex;">
           <div style="width:50%;">
             <el-form-item :label="$t('booking.sender')">
-              <el-input
-                v-model="quotePriceCon.senderAddress.name"
-                class="inp"
-                disabled
-              ></el-input>
+              <el-input v-model="quotePriceCon.senderAddress.name" class="inp" disabled></el-input>
             </el-form-item>
             <el-form-item :label="$t('booking.pickupPoint')">
-              <el-input
-                v-model="quotePriceCon.senderAddress.name"
-                class="inp"
-                disabled
-              ></el-input>
+              <el-input v-model="quotePriceCon.senderAddress.name" class="inp" disabled></el-input>
               <!-- <el-input v-model="quotePriceCon.senderAddress.mobile"
                         class="inp"
                         disabled></el-input> -->
-              <el-input
-                v-model="quotePriceCon.senderAddress.addressDetail"
-                class="inp"
-                disabled
-              ></el-input>
-              <el-input
-                v-model="quotePriceCon.senderAddress.fullName"
-                class="inp"
-                disabled
-              ></el-input>
+              <el-input v-model="quotePriceCon.senderAddress.addressDetail" class="inp" disabled></el-input>
+              <el-input v-model="quotePriceCon.senderAddress.fullName" class="inp" disabled></el-input>
             </el-form-item>
             <el-form-item :label="$t('booking.pickupTime')">
-              <el-date-picker
-                v-model="quotePriceCon.senderAddress.pickAt"
-                class="inp"
-                disabled
-                type="datetime"
-              >
-              </el-date-picker>
+              <el-date-picker v-model="quotePriceCon.senderAddress.pickAt" class="inp" disabled type="datetime"> </el-date-picker>
             </el-form-item>
             <el-form-item :label="$t('booking.deliveryPoint')">
-              <el-input
-                v-model="quotePriceCon.receiverAddress.name"
-                class="inp"
-                disabled
-              ></el-input>
+              <el-input v-model="quotePriceCon.receiverAddress.name" class="inp" disabled></el-input>
               <!-- <el-input v-model="quotePriceCon.receiverAddress.mobile"
                         class="inp"
                         disabled></el-input> -->
-              <el-input
-                v-model="quotePriceCon.receiverAddress.addressDetail"
-                class="inp"
-                disabled
-              ></el-input>
-              <el-input
-                v-model="quotePriceCon.receiverAddress.fullName"
-                class="inp"
-                disabled
-              ></el-input>
+              <el-input v-model="quotePriceCon.receiverAddress.addressDetail" class="inp" disabled></el-input>
+              <el-input v-model="quotePriceCon.receiverAddress.fullName" class="inp" disabled></el-input>
             </el-form-item>
             <el-form-item :label="$t('booking.truckType')">
               <el-select
@@ -236,12 +145,7 @@
                 disabled
                 :placeholder="$t('placeholder.pleaseChoose')"
               >
-                <el-option
-                  v-for="item in truckTypes.categories"
-                  :key="item.key"
-                  :label="item.value"
-                  :value="item.key"
-                />
+                <el-option v-for="item in truckTypes.categories" :key="item.key" :label="item.value" :value="item.key" />
               </el-select>
             </el-form-item>
             <!-- <el-form-item :label="$t('booking.shareTruck')">
@@ -270,20 +174,10 @@
                         class="inp" />
             </el-form-item> -->
             <el-form-item :label="$t('booking.remarks')">
-              <el-input
-                v-model="quotePriceCon.remark"
-                disabled
-                type="textarea"
-                resize="none"
-                class="inp"
-              />
+              <el-input v-model="quotePriceCon.remark" disabled type="textarea" resize="none" class="inp" />
             </el-form-item>
             <el-form-item :label="$t('market.demandPrice')">
-              <el-input
-                v-model="quotePriceCon.settlementAmount"
-                disabled
-                class="inp"
-              />
+              <el-input v-model="quotePriceCon.settlementAmount" disabled class="inp" />
             </el-form-item>
             <el-form-item :label="$t('booking.myQuotaion')">
               <el-input
@@ -295,47 +189,18 @@
               />
             </el-form-item>
             <el-form-item :label="$t('market.licencePlate')">
-              <el-select
-                v-model="quotePriceForm.truck_id"
-                @change="truckSelect"
-                class="inp"
-              >
-                <el-option
-                  v-for="item in truckData"
-                  :key="item.id"
-                  :label="item.plate"
-                  :value="item.id"
-                />
+              <el-select v-model="quotePriceForm.truck_id" @change="truckSelect" class="inp">
+                <el-option v-for="item in truckData" :key="item.id" :label="item.plate" :value="item.id" />
               </el-select>
             </el-form-item>
             <el-form-item :label="$t('market.truckType')">
-              <el-select
-                v-model="quotePriceForm.category"
-                class="inp"
-                disabled
-                :placeholder="$t('placeholder.pleaseChoose')"
-              >
-                <el-option
-                  v-for="item in truckTypes.categories"
-                  :key="item.key"
-                  :label="item.value"
-                  :value="item.key"
-                />
+              <el-select v-model="quotePriceForm.category" class="inp" disabled :placeholder="$t('placeholder.pleaseChoose')">
+                <el-option v-for="item in truckTypes.categories" :key="item.key" :label="item.value" :value="item.key" />
               </el-select>
             </el-form-item>
             <el-form-item :label="$t('market.loaderType')">
-              <el-select
-                v-model="quotePriceForm.subCategory"
-                class="inp"
-                disabled
-                :placeholder="$t('placeholder.pleaseChoose')"
-              >
-                <el-option
-                  v-for="item in truckTypes.subCategories"
-                  :key="item.key"
-                  :label="item.value"
-                  :value="item.key"
-                />
+              <el-select v-model="quotePriceForm.subCategory" class="inp" disabled :placeholder="$t('placeholder.pleaseChoose')">
+                <el-option v-for="item in truckTypes.subCategories" :key="item.key" :label="item.value" :value="item.key" />
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -352,18 +217,9 @@
         </div>
       </el-form>
     </el-dialog>
-    <el-dialog
-      :visible.sync="proDialog"
-      :close-on-click-modal="false"
-      width="600px"
-    >
+    <el-dialog :visible.sync="proDialog" :close-on-click-modal="false" width="600px">
       <el-tabs tabPosition="left" v-model="proActive">
-        <el-tab-pane
-          v-for="(item, index) in proArea"
-          :key="index"
-          :label="item.sortingNoTrans"
-          :name="item.sortingNo"
-        >
+        <el-tab-pane v-for="(item, index) in proArea" :key="index" :label="item.sortingNoTrans" :name="item.sortingNo">
           <el-button
             type="primary"
             class="proItem"
@@ -395,7 +251,7 @@ import {
   getProvinceArea,
   getSupplyTD,
   getBcYear,
-  getBcDay
+  getBcDay,
 } from "../../api/data";
 import { orderShop, quoteOrder } from "../../api/market.js";
 
@@ -412,7 +268,7 @@ export default {
       cityList: [],
       truckTypes: {
         categories: [],
-        subCategories: []
+        subCategories: [],
       },
       serveObj: {},
       propertyObj: {},
@@ -424,7 +280,7 @@ export default {
         deliveryRegion: "",
         pickUpDate: "",
         truckCategory: "",
-        page: 0
+        page: 0,
       },
       quotePriceDialog: false,
       quotePriceCon: {
@@ -436,29 +292,29 @@ export default {
           name: "",
           mobile: "",
           addressDetail: "",
-          code: ""
+          code: "",
         },
         receiverAddress: {
           name: "",
           mobile: "",
           addressDetail: "",
-          code: ""
+          code: "",
         },
         transport: {
           companyName: "",
           ftlLineId: "",
           carType: "",
           carriage: "",
-          supplyId: null
+          supplyId: null,
         },
         chargeList: [],
-        propertyList: []
+        propertyList: [],
       },
       quotePriceForm: {
         money: null,
         truck_id: null,
         category: "",
-        subCategory: ""
+        subCategory: "",
       },
       shareTruck: false,
       truckData: [],
@@ -479,12 +335,12 @@ export default {
               let years = [
                 {
                   label: self.bcYear,
-                  value: self.bcYear
+                  value: self.bcYear,
                 },
                 {
                   label: self.bcYear + 1,
-                  value: self.bcYear + 1
-                }
+                  value: self.bcYear + 1,
+                },
               ];
               resolve(years);
             });
@@ -493,7 +349,7 @@ export default {
             for (let y = month; y <= 12; y++) {
               months.push({
                 label: y,
-                value: y
+                value: y,
               });
             }
             resolve(months);
@@ -501,37 +357,33 @@ export default {
             getBcDay(node.parent.value, node.value).then(res => {
               let days = res.data;
               let dateList = [];
-              let d =
-                node.parent.value == self.bcYear &&
-                node.value == date.getMonth() + 1
-                  ? day
-                  : 1;
+              let d = node.parent.value == self.bcYear && node.value == date.getMonth() + 1 ? day : 1;
               for (let x = d; x <= days; x++) {
                 dateList.push({
                   label: x,
                   value: x,
-                  leaf: true
+                  leaf: true,
                 });
               }
               resolve(dateList);
             });
           }
-        }
+        },
       },
       proType: "origin",
       proArea: [],
-      tableLoading: false
+      tableLoading: false,
     };
   },
   // 监听属性 类似于data概念
   computed: {
-    ...mapGetters(["permissions"])
+    ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {
     "$store.getters.language"() {
       self.init();
-    }
+    },
   },
   created() {
     self = this;
@@ -586,9 +438,7 @@ export default {
     },
     loadData(cb) {
       self.tableLoading = true;
-      self.searchForm.pickUpDate = self.searchForm.pickUpDate
-        ? self.searchForm.pickUpDate
-        : "";
+      self.searchForm.pickUpDate = self.searchForm.pickUpDate ? self.searchForm.pickUpDate : "";
       orderShop(self.searchForm).then(res => {
         self.data = res.data;
         self.tableLoading = false;
@@ -635,14 +485,8 @@ export default {
         });
     },
     searchIt() {
-      if (
-        self.searchForm.pickUpRegion == "" ||
-        self.searchForm.deliveryRegion == "" ||
-        self.searchForm.pickUpDate == ""
-      ) {
-        return self.$message.warning(
-          self.$t("market.theSearchTermCannotBeEmpty")
-        );
+      if (self.searchForm.pickUpRegion == "" || self.searchForm.deliveryRegion == "" || self.searchForm.pickUpDate == "") {
+        return self.$message.warning(self.$t("market.theSearchTermCannotBeEmpty"));
       }
       self.data = {};
       self.loadData();
@@ -668,8 +512,8 @@ export default {
       } else if (e > 1000000) {
         self.quotePriceForm.money = 1000000;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

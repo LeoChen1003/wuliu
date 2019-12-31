@@ -12,6 +12,7 @@
             hide-required-asterisk
             label-width="50px"
           >
+            <!-- 物流类型 -->
             <el-form-item prop="logisticType">
               <!-- <el-select v-model="logisticType" class="inputWidth">
                 <el-option
@@ -25,23 +26,21 @@
                 <div
                   class="logistic_type_item"
                   :class="logisticType == 'FTL' ? 'logistic_type_active' : ''"
-                  @click="logisticType = 'FTL'"
+                  @click="changeLogisticType('FTL')"
                 >
                   {{ $t("booking.FTL") }}
                 </div>
                 <div
                   class="logistic_type_item"
-                  :class="
-                    logisticType == 'LTL'
-                      ? 'logistic_type_active'
-                      : 'logistic_type_jy'
-                  "
+                  :class="logisticType == 'LTL' ? 'logistic_type_active' : ''"
+                  @click="changeLogisticType('LTL')"
                 >
                   {{ $t("booking.LTL") }}
                 </div>
               </div>
             </el-form-item>
-            <el-form-item prop="truckgroup" v-if="logisticType == 'FTL'">
+            <!-- FTL 车型选择 -->
+            <el-form-item prop="truckgroup" v-show="logisticType == 'FTL'">
               <!-- <el-select
                 v-model="searchForm.truckCategory"
                 class="innerInp"
@@ -66,141 +65,103 @@
                   :key="i"
                   @click="searchForm.truckgroup = item.key"
                   class="truck_type_item"
-                  :class="
-                    searchForm.truckgroup == item.key
-                      ? 'truck_type_item_active'
-                      : ''
-                  "
+                  :class="searchForm.truckgroup == item.key ? 'truck_type_item_active' : ''"
                 >
                   <span>{{ $t(`${item.value}`) }}</span>
-                  <el-popover
-                    placement="right-start"
-                    width="404"
-                    trigger="click"
-                    popper-class="truck_type_popover"
-                  >
+                  <el-popover placement="right-start" width="404" trigger="click" popper-class="truck_type_popover">
                     <div>
                       <div style="" class="truck_type_detail_title">
                         {{ $t(`${item.value}`) }}
                       </div>
                       <div class="truck_type_detail">
-                        <div class="truck_type_dec" v-if="!searchForm.truckSubCategory || searchForm.truckSubCategory=='Corral'">
+                        <div
+                          class="truck_type_dec"
+                          v-if="!searchForm.truckSubCategory || searchForm.truckSubCategory == 'Corral'"
+                        >
                           <div class="truck_type_img">
                             <img
-                              :src="
-                                item.image_Corral
-                                  ? require(`../../assets/image/${item.image_Corral}`)
-                                  : ''
-                              "
+                              :src="item.image_Corral ? require(`../../assets/image/${item.image_Corral}`) : ''"
                               alt="image_Corral"
                             />
                           </div>
-                          <div
-                            class="truck_type_dec_item"
-                            v-for="(truckItem, x) in item.typeList"
-                            :key="x"
-                            v-if="truckItem.type == 'type_Corral'"
-                          >
-                            <div class="truck_type_dec_item_right">
-                              <div class="name">
-                                {{ $t(`booking.${truckItem.truck}`) }}
+                          <div v-for="(truckItem, x) in item.typeList" :key="x">
+                            <div v-if="truckItem.type == 'type_Corral'" class="truck_type_dec_item">
+                              <div class="truck_type_dec_item_right">
+                                <div class="name">
+                                  {{ $t(`booking.${truckItem.truck}`) }}
+                                </div>
+                                <div>
+                                  <span class="unit">{{$t('booking.truckWidth')}}</span>
+                                  <span class="number">{{ truckItem.width }} m</span>
+                                </div>
+                                <div>
+                                  <span class="unit">{{$t('booking.truckLength')}}</span>
+                                  <span class="number">{{ truckItem.length }} m</span>
+                                </div>
+                                <div>
+                                  <span class="unit">{{$t('booking.truckHeight')}}</span>
+                                  <span class="number">{{ truckItem.height }} m</span>
+                                </div>
+                                <div>
+                                  <span class="unit">{{$t('booking.truckVolume')}}</span>
+                                  <span class="number">{{ truckItem.volume }} m³</span>
+                                </div>
                               </div>
-                              <div>
-                                <span class="unit">Width</span>
-                                <span class="number">{{
-                                  truckItem.width
-                                }}</span>
+                              <div class="truck_type_dec_item_left">
+                                <div class="number">
+                                  <span v-if="truckItem.isOver">{{ $t("booking.noMoreThan") }}</span>
+                                  {{ truckItem.weight }} kg
+                                </div>
+                                <div>{{$t('booking.truckMax')}}</div>
                               </div>
-                              <div>
-                                <span class="unit">Length</span>
-                                <span class="number">{{
-                                  truckItem.length
-                                }}</span>
-                              </div>
-                              <div>
-                                <span class="unit">Height</span>
-                                <span class="number">{{
-                                  truckItem.height
-                                }}</span>
-                              </div>
-                              <div>
-                                <span class="unit">Volume</span>
-                                <span class="number">{{
-                                  truckItem.volume
-                                }}</span>
-                              </div>
-                            </div>
-                            <div class="truck_type_dec_item_left">
-                              <div class="number">
-                                <span v-if="truckItem.isOver">{{
-                                  $t("booking.noMoreThan")
-                                }}</span>
-                                {{ truckItem.weight }}
-                              </div>
-                              <div>MAX</div>
                             </div>
                           </div>
                         </div>
-                        <div class="truck_type_dec" v-if="!searchForm.truckSubCategory || searchForm.truckSubCategory=='SolidCabinet'">
+                        <div
+                          class="truck_type_dec"
+                          v-if="!searchForm.truckSubCategory || searchForm.truckSubCategory == 'SolidCabinet'"
+                        >
                           <div class="truck_type_img">
                             <img
-                              :src="
-                                item.image_Solid
-                                  ? require(`../../assets/image/${item.image_Solid}`)
-                                  : ''
-                              "
+                              :src="item.image_Solid ? require(`../../assets/image/${item.image_Solid}`) : ''"
                               alt="image_Solid"
                             />
                           </div>
-                          <div
-                            class="truck_type_dec_item"
-                            v-for="(truckItem, x) in item.typeList"
-                            :key="x"
-                            v-if="truckItem.type == 'type_Solid'"
-                          >
-                            <div class="truck_type_dec_item_right">
-                              <div class="name">
-                                {{ $t(`booking.${truckItem.truck}`) }}
+                          <div v-for="(truckItem, x) in item.typeList" :key="x">
+                            <div v-if="truckItem.type == 'type_Solid'" class="truck_type_dec_item">
+                              <div class="truck_type_dec_item_right">
+                                <div class="name">
+                                  {{ $t(`booking.${truckItem.truck}`) }}
+                                </div>
+                                <div>
+                                  <span class="unit">{{$t('booking.truckWidth')}}</span>
+                                  <span class="number">{{ truckItem.width }} m</span>
+                                </div>
+                                <div>
+                                  <span class="unit">{{$t('booking.truckLength')}}</span>
+                                  <span class="number">{{ truckItem.length }} m</span>
+                                </div>
+                                <div>
+                                  <span class="unit">{{$t('booking.truckHeight')}}</span>
+                                  <span class="number">{{ truckItem.height }} m</span>
+                                </div>
+                                <div>
+                                  <span class="unit">{{$t('booking.truckVolume')}}</span>
+                                  <span class="number">{{ truckItem.volume }} m³</span>
+                                </div>
                               </div>
-                              <div>
-                                <span class="unit">Width</span>
-                                <span class="number">{{
-                                  truckItem.width
-                                }}</span>
+                              <div class="truck_type_dec_item_left">
+                                <div class="number">
+                                  <span v-if="truckItem.isOver">{{ $t("booking.noMoreThan") }}</span>
+                                  {{ truckItem.weight }} kg
+                                </div>
+                                <div>{{$t('booking.truckMax')}}</div>
                               </div>
-                              <div>
-                                <span class="unit">Length</span>
-                                <span class="number">{{
-                                  truckItem.length
-                                }}</span>
-                              </div>
-                              <div>
-                                <span class="unit">Height</span>
-                                <span class="number">{{
-                                  truckItem.height
-                                }}</span>
-                              </div>
-                              <div>
-                                <span class="unit">Volume</span>
-                                <span class="number">{{
-                                  truckItem.volume
-                                }}</span>
-                              </div>
-                            </div>
-                            <div class="truck_type_dec_item_left">
-                              <div class="number">
-                                <span v-if="truckItem.isOver">{{
-                                  $t("booking.noMoreThan")
-                                }}</span>
-                                {{ truckItem.weight }}
-                              </div>
-                              <div>MAX</div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-
                     <svg-icon
                       icon-class="booking_eye"
                       class-name="truck_type_item_svg"
@@ -211,27 +172,15 @@
                 </div>
               </div>
             </el-form-item>
-            <el-form-item v-if="logisticType == 'FTL'">
-              <el-select
-                v-model="searchForm.truckSubCategory"
-                class="inputWidth"
-                :placeholder="$t('placeholder.pleaseChoose')"
-              >
-                <el-option
-                  v-for="item in subCategoryList"
-                  :key="item.key"
-                  :label="item.value"
-                  :value="item.key"
-                />
+            <!-- FTL 车厢选择 -->
+            <el-form-item v-show="logisticType == 'FTL'">
+              <el-select v-model="searchForm.truckSubCategory" class="inputWidth" :placeholder="$t('placeholder.pleaseChoose')">
+                <el-option v-for="item in subCategoryList" :key="item.key" :label="item.value" :value="item.key" />
               </el-select>
             </el-form-item>
+            <!-- 始发地 -->
             <el-form-item prop="pickUpRegion" style="position:relative;">
-              <svg-icon
-                icon-class="booking_pickup"
-                class-name="pick_up_label"
-                style="font-size:22px;"
-                slot="label"
-              ></svg-icon>
+              <svg-icon icon-class="booking_pickup" class-name="pick_up_label" style="font-size:22px;" slot="label"></svg-icon>
               <div class="el_item">
                 <el-select
                   v-model="searchForm.pickUpRegion"
@@ -246,12 +195,7 @@
                   @focus="clearSelect('pk')"
                   :loading="loading"
                 >
-                  <el-option
-                    v-for="item in pickUpRegionList"
-                    :key="item.code"
-                    :label="item.fullname"
-                    :value="item.code"
-                  >
+                  <el-option v-for="item in pickUpRegionList" :key="item.code" :label="item.fullname" :value="item.code">
                   </el-option>
                 </el-select>
                 <div
@@ -274,13 +218,9 @@
                 <div class="jt"></div>
               </div>
             </el-form-item>
+            <!-- 目的地 -->
             <el-form-item prop="deliveryRegion">
-              <svg-icon
-                icon-class="booking_delivery"
-                class-name="pick_up_label"
-                style="font-size:22px;"
-                slot="label"
-              ></svg-icon>
+              <svg-icon icon-class="booking_delivery" class-name="pick_up_label" style="font-size:22px;" slot="label"></svg-icon>
               <el-select
                 v-model="searchForm.deliveryRegion"
                 filterable
@@ -294,32 +234,23 @@
                 :remote-method="pickUpMethod"
                 :loading="loading"
               >
-                <el-option
-                  v-for="item in delRegionList"
-                  :key="item.code"
-                  :label="item.fullname"
-                  :value="item.code"
-                >
-                </el-option>
+                <el-option v-for="item in delRegionList" :key="item.code" :label="item.fullname" :value="item.code"> </el-option>
               </el-select>
             </el-form-item>
             <el-form-item prop="pickUpDate">
-              <i
-                class="el-icon-time"
-                slot="label"
-                style="font-size:22px;color:#8a8a8a;"
-              ></i>
+              <i class="el-icon-time" slot="label" style="font-size:22px;color:#8a8a8a;"></i>
               <div style="display:flex;" class="inputWidth">
-                <el-cascader
+                <!-- <el-cascader
                   v-model="dateCascader"
                   class="innerInp"
-                  :options="options"
+                  :options="DateDeFault"
                   :props="props"
                   separator="-"
                   style="margin-right:5px;"
                   :placeholder="$t('booking.pickupTime')"
                   @change="dateChange"
-                ></el-cascader>
+                ></el-cascader> -->
+                <bcTime @changeBCtime="dateChange" :dateDefault="DateDeFault" style="margin-right:5px;" :timeType="''"></bcTime>
                 <el-time-picker
                   v-model="time"
                   format="HH:mm:ss"
@@ -330,16 +261,12 @@
                 </el-time-picker>
               </div>
             </el-form-item>
-            <el-form-item v-if="logisticType == 'LTL'">
-              <svg-icon
-                icon-class="booking_cargo"
-                class-name="cargo_label"
-                style="font-size:27px;"
-                slot="label"
-              ></svg-icon>
-              <div class="el_item">
+            <el-form-item v-show="logisticType == 'LTL'" prop="propertyList">
+              <svg-icon icon-class="booking_cargo" class-name="cargo_label" style="font-size:27px;" slot="label"></svg-icon>
+              <div class="el_item edit_input">
                 <el-input
                   type="text"
+                  :value="searchForm.propertyListContent"
                   :placeholder="$t('booking.cargoList')"
                   class="inputWidth"
                 />
@@ -350,32 +277,20 @@
             </el-form-item>
             <el-form-item>
               <div class="btn_item">
-                <el-button
-                  type="primary"
-                  style="width:160px;"
-                  @click="searchSupply"
-                  :loading="searchloading"
-                  >{{ $t("booking.searchSupply") }}</el-button
-                >
+                <el-button type="primary" style="width:160px;" @click="searchSupply" :loading="searchloading">{{
+                  $t("booking.searchSupply")
+                }}</el-button>
               </div>
               <div v-if="logisticType == 'FTL'">
                 <div class="btn_item" v-if="showDisInfo">
                   <div class="search_res">
                     <div class="search_res_item">
-                      <span class="item_name">{{
-                        $t("resources.distance")
-                      }}</span>
-                      <span class="item_con">{{
-                        disInfo.distance + $t("booking.distance")
-                      }}</span>
+                      <span class="item_name">{{ $t("resources.distance") }}</span>
+                      <span class="item_con">{{ disInfo.distance + $t("booking.distance") }}</span>
                     </div>
                     <div class="search_res_item">
-                      <span class="item_name">{{
-                        $t("resources.transitTime")
-                      }}</span>
-                      <span class="item_con">{{
-                        disInfo.days + $t("booking.days")
-                      }}</span>
+                      <span class="item_name">{{ $t("resources.transitTime") }}</span>
+                      <span class="item_con">{{ disInfo.days + $t("booking.days") }}</span>
                     </div>
                     <div class="search_res_item">
                       <span class="item_name">{{ $t("booking.supply") }}</span>
@@ -384,20 +299,12 @@
                   </div>
                 </div>
                 <div class="btn_item" v-if="showDisInfo">
-                  <el-button
-                    type="primary"
-                    style="width:160px;"
-                    @click="hideMap"
-                    >{{ $t("booking.bookingNow") }}</el-button
-                  >
+                  <el-button type="primary" style="width:160px;" @click="hideMap">{{ $t("booking.bookingNow") }}</el-button>
                 </div>
                 <div class="btn_item">
-                  <el-button
-                    type="primary"
-                    style="width:160px;"
-                    @click="$router.push('/booking/releaseToMarket')"
-                    >{{ $t("booking.releaseToMarket") }}</el-button
-                  >
+                  <el-button type="primary" style="width:160px;" @click="toMarket">{{
+                    $t("booking.releaseToMarket")
+                  }}</el-button>
                 </div>
               </div>
             </el-form-item>
@@ -418,16 +325,11 @@
         <div v-if="!mapMode">
           <el-table :data="tableList" border style="width: 97%;">
             <el-table-column :label="$t('booking.supply')" align="center">
-              <template slot-scope="scope">
+              <template slot-scope="scope" v-if="scope.row.supply">
                 <div>
                   <div>{{ scope.row.supply ? scope.row.supply.name : "" }}</div>
                   <div>
-                    <el-rate
-                      v-model="scope.row.supply.avgRating / 2"
-                      disabled
-                      text-color="#ff9900"
-                      score-template="{value}"
-                    >
+                    <el-rate v-model="scope.row.supply.avgRating / 2" disabled text-color="#ff9900" score-template="{value}">
                     </el-rate>
                   </div>
                 </div>
@@ -435,46 +337,61 @@
             </el-table-column>
             <el-table-column align="center" :label="$t('booking.route')">
               <template slot-scope="scope">
-                <div>
-                  {{ scope.row.fromProvince }} -->
-                  {{ scope.row.toProvinceName }}
+                <div v-if="logisticType == 'FTL'">
+                  <div>
+                    {{ scope.row.fromProvince }} -->
+                    {{ scope.row.toProvinceName }}
+                  </div>
+                  <div>
+                    <!-- {{$t('booking.transitTime')}} :  -->
+                    {{ scope.row.transitTime }} days
+                  </div>
                 </div>
-                <div>
-                  <!-- {{$t('booking.transitTime')}} :  -->
-                  {{ scope.row.transitTime }} days
+                <div v-else>
+                  <div>LTL</div>
+                  <div>
+                    <span>{{ scope.row.ltlLine.hubName }} --></span>
+                    <span v-for="(lineItem, z) in scope.row.ltlLine.ltlLineProvinceList" :key="z">
+                      {{ lineItem.provinceName }} -->
+                    </span>
+                    <span>{{ scope.row.ltlLine.hubName }}</span>
+                  </div>
                 </div>
               </template>
             </el-table-column>
             <el-table-column
-              header-align="center"
-              :label="$t('booking.truckType')"
-            >
-              <template slot-scope="scope">
-                <div class="cantouch" @click="previewImg(scope.row)">
-                  <div>{{ truckObj[scope.row.category] }}</div>
-                  <div>{{ subObj[scope.row.subCategory] }}</div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              header-align="center"
               align="center"
-              :label="$t('booking.valueAddedService')"
+              :label="logisticType == 'FTL' ? $t('booking.truckType') : $t('booking.cutOffTime')"
             >
               <template slot-scope="scope">
-                <div>
+                <div v-if="logisticType == 'FTL'">
+                  <div class="cantouch" @click="previewImg(scope.row)">
+                    <div>{{ truckObj[scope.row.category] }}</div>
+                    <div>{{ subObj[scope.row.subCategory] }}</div>
+                  </div>
+                </div>
+                <div v-else style="color:#169BD5;">{{ scope.row.ltlLine.cutOffTime }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column header-align="center" align="center" :label="$t('booking.valueAddedService')">
+              <template slot-scope="scope">
+                <div v-if="logisticType == 'FTL'">
                   <div>
                     {{ $t("booking.loading") }}/{{ $t("booking.unloading") }} :
-                    <i
-                      :class="
-                        scope.row.supportLoading == 1
-                          ? 'el-icon-check'
-                          : 'el-icon-close'
-                      "
-                    ></i>
+                    <i :class="scope.row.supportLoading == 1 ? 'el-icon-check' : 'el-icon-close'"></i>
                   </div>
                   <div>
                     {{ $t("booking.documentReturn") }} :
+                    <i class="el-icon-check"></i>
+                  </div>
+                </div>
+                <div v-else>
+                  <div>
+                    {{ $t("booking.documentReturn") }} :
+                    <i class="el-icon-check"></i>
+                  </div>
+                  <div>
+                    {{ $t("booking.printSticker") }} :
                     <i class="el-icon-check"></i>
                   </div>
                 </div>
@@ -482,7 +399,7 @@
             </el-table-column>
             <el-table-column align="center" :label="$t('booking.price')">
               <template slot-scope="scope">
-                {{ scope.row.charge }}
+                {{ logisticType == "FTL" ? scope.row.charge : scope.row.money }}
                 <!-- <div>{{$t('booking.feight')}} : {{scope.row.charge}}</div>
               <div v-if="scope.row.supportLoading == 1">{{$t('booking.loading')}}/{{$t('booking.unloading')}} : {{scope.row.loadingOrUnloadingHumanWorkDay * scope.row.moneyPerDay}}</div>
               <div>{{$t('booking.documentReturn')}} :{{documentReturn}}</div>
@@ -492,12 +409,9 @@
             <el-table-column>
               <template slot-scope="scope">
                 <div style="text-align:center;">
-                  <el-button
-                    type="primary"
-                    :disabled="!permissions.DemandNewOrderOrRelease"
-                    @click="toBooking(scope.row)"
-                    >{{ $t("booking.placeOrder") }}</el-button
-                  >
+                  <el-button type="primary" :disabled="!permissions.DemandNewOrderOrRelease || (scope.row.check && scope.row.check=='false')" @click="toBooking(scope.row)">{{
+                    $t("booking.placeOrder")
+                  }}</el-button>
                 </div>
               </template>
             </el-table-column>
@@ -519,39 +433,127 @@
     <el-dialog :visible.sync="previewDialog">
       <div>
         <el-carousel arrow="always" height="600px" :autoplay="false">
-          <el-carousel-item
-            v-for="item in previewImgList"
-            style="text-align:center;"
-            :key="item"
-          >
-            <el-image
-              :src="item"
-              style="height:600px;"
-              fit="contain"
-            ></el-image>
+          <el-carousel-item v-for="item in previewImgList" style="text-align:center;" :key="item">
+            <el-image :src="item" style="height:600px;" fit="contain"></el-image>
           </el-carousel-item>
         </el-carousel>
       </div>
     </el-dialog>
-    <el-dialog
-      :visible.sync="cargoListDialog"
-      :title="$t('booking.cargoList')"
-      width="70%"
-      center
-    >
-      <el-table :data="cargoTip" border>
-        <el-table-column prop="unit" width="130"></el-table-column>
-        <el-table-column prop="ss" label="Size-SS"></el-table-column>
-        <el-table-column prop="s" label="Size-S"></el-table-column>
-        <el-table-column prop="m" label="Size-M"></el-table-column>
-        <el-table-column prop="l" label="Size-L"></el-table-column>
-        <el-table-column prop="xl" label="Size-XL"></el-table-column>
-        <el-table-column prop="eSize" label="Extra size"></el-table-column>
+    <!-- 货物清单 -->
+    <el-dialog :visible.sync="cargoListDialog" :title="$t('booking.cargoList')" width="1250px" center>
+      <!-- size 说明 -->
+      <el-table :data="cargoTip" border style="width:730px;margin-bottom:20px;">
+        <el-table-column width="130">
+          <template slot-scope="scope">{{$t(`booking.${scope.row.unit}`)}}</template>
+        </el-table-column>
+        <el-table-column prop="ss" label="Size-SS" width="100"></el-table-column>
+        <el-table-column prop="s" label="Size-S" width="100"></el-table-column>
+        <el-table-column prop="m" label="Size-M" width="100"></el-table-column>
+        <el-table-column prop="l" label="Size-L" width="100"></el-table-column>
+        <el-table-column prop="xl" label="Size-XL" width="100"></el-table-column>
+        <el-table-column prop="eSize" label="Extra size" width="100"></el-table-column>
       </el-table>
+      <!-- 清单列表 -->
+      <div style="display:flex;align-items: flex-end;">
+        <el-form ref="cargoform" :model="searchForm" :rules="cargoRules" :show-message="false" style="width:95%;">
+          <el-form-item prop="propertyList">
+            <el-table border :data="searchForm.propertyList">
+              <el-table-column prop="propertyType" :label="$t('booking.cargoType')">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.propertyType" :placeholder="$t('placeholder.pleaseChoose')">
+                    <el-option v-for="item in propertyTypeList" :key="item.key" :label="item.trans" :value="item.key"></el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column prop="name" :label="$t('booking.commodity')">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.name"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column prop="number" :label="$t('booking.qty')">
+                <template slot-scope="scope">
+                  <el-input type="number" v-model="scope.row.number"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column prop="unit" :label="$t('booking.unit')">
+                <template slot-scope="scope">
+                  <el-select :placeholder="$t('placeholder.pleaseChoose')" v-model="scope.row.unit">
+                    <el-option v-for="item in unitList" :key="item.key" :label="item.trans" :value="item.key"></el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column prop="sizeType" :label="$t('booking.size')">
+                <template slot-scope="scope">
+                  <el-select
+                    v-model="scope.row.sizeType"
+                    :placeholder="$t('placeholder.pleaseChoose')"
+                    @change="val => sizeSelect(val, scope.$index)"
+                  >
+                    <el-option v-for="item in sizeTypeList" :key="item.key" :label="item.trans" :value="item.key"></el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column prop="wide" :label="$t('booking.width')">
+                <template slot-scope="scope">
+                  <el-input
+                    type="number"
+                    v-model="scope.row.wide"
+                    :disabled="scope.row.sizeType != 'EXTRA_SIZE'"
+                    @keyup.native="checkNumInt(scope.row.wide, scope.$index, 'wide')"
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column prop="length" :label="$t('booking.Length')">
+                <template slot-scope="scope">
+                  <el-input
+                    type="number"
+                    v-model="scope.row.length"
+                    :disabled="scope.row.sizeType != 'EXTRA_SIZE'"
+                    @keyup.native="checkNumInt(scope.row.length, scope.$index, 'length')"
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column prop="high" :label="$t('booking.height')">
+                <template slot-scope="scope">
+                  <el-input
+                    type="number"
+                    v-model="scope.row.high"
+                    :disabled="scope.row.sizeType != 'EXTRA_SIZE'"
+                    @keyup.native="checkNumInt(scope.row.high, scope.$index, 'high')"
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column prop="weightOfEach" :label="$t('booking.weight')">
+                <template slot-scope="scope">
+                  <el-input
+                    type="number"
+                    v-model="scope.row.weightOfEach"
+                    :disabled="scope.row.sizeType != 'EXTRA_SIZE'"
+                    @keyup.native="checkNumfloat(scope.row.weightOfEach, scope.$index, 'weightOfEach')"
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column width="50" align="center">
+                <template slot-scope="scope">
+                  <div class="table-op">
+                    <div @click="delIt(scope.row, scope.$index)">
+                      <i
+                        class="el-icon-delete"
+                        :style="searchForm.propertyList.length > 1 ? 'color:#F25C5C;' : 'color: #ccc;cursor: no-drop;'"
+                      ></i>
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-form-item>
+        </el-form>
+        <div style="margin-bottom: 30px;margin-left: 10px;">
+          <el-button type="primary" icon="el-icon-plus" circle @click="pushIt" />
+        </div>
+      </div>
       <div slot="footer">
-        <el-button type="primary" style="width:250px;">{{
-          $t("booking.confirm")
-        }}</el-button>
+        <el-button type="primary" style="width:250px;" @click="propertyListConfirm">{{ $t("booking.confirm") }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -561,13 +563,15 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { mapGetters } from "vuex";
-import { ftlLine, ftlLines } from "../../api/booking";
+import { ftlLine, ftlLines, ltlLine } from "../../api/booking";
 import {
   getTruckType,
   findDistrictFullList,
-  getBcYear,
-  getBcDay
+  findDistrictOfHubFullList,
+  getGoodsProperty,
 } from "../../api/data";
+import { getTime, parseTime } from "../../utils/index";
+import bcTime from "@/components/bcTime";
 import Search from "@/components/HeaderSearch";
 
 let self;
@@ -575,14 +579,12 @@ let map, infoWindow, directionsService, directionsRenderer;
 
 export default {
   // import引入的组件需要注入到对象中才能使用
-  components: {},
+  components: { bcTime},
   directives: {
     "el-select-loadmore": {
       bind(el, binding) {
         // 获取element-ui定义好的scroll盒子
-        const SELECTWRAP_DOM = el.querySelector(
-          ".el-select-dropdown .el-select-dropdown__wrap"
-        );
+        const SELECTWRAP_DOM = el.querySelector(".el-select-dropdown .el-select-dropdown__wrap");
         SELECTWRAP_DOM.addEventListener("scroll", function() {
           /**
            * scrollHeight 获取元素内容高度(只读)
@@ -591,19 +593,18 @@ export default {
            * 如果元素滚动到底, 下面等式返回true, 没有则返回false:
            * ele.scrollHeight - ele.scrollTop === ele.clientHeight;
            */
-          const condition =
-            this.scrollHeight - this.scrollTop <= this.clientHeight;
+          const condition = this.scrollHeight - this.scrollTop <= this.clientHeight;
           if (condition) {
             binding.value();
           }
         });
-      }
-    }
+      },
+    },
   },
   data() {
     const self = this;
     const validatorTruck = (rule, value, callback) => {
-      if (!self.searchForm.truckgroup) {
+      if (!self.searchForm.truckgroup && self.logisticType == "FTL") {
         callback(new Error(self.$t("booking.truckTypechoose")));
       } else {
         callback();
@@ -630,31 +631,68 @@ export default {
         callback();
       }
     };
+    const validatorPropertyList = (rule, value, callback) => {
+      for (let x in value) {
+        if (
+          !value[x].propertyType ||
+          !value[x].name ||
+          !value[x].number ||
+          !value[x].unit ||
+          !value[x].sizeType ||
+          (value[x].sizeType &&
+            value[x].sizeType == "EXTRA_SIZE" &&
+            (!value[x].weightOfEach || !value[x].high || !value[x].length || !value[x].wide))
+        ) {
+          callback(new Error(" "));
+        } else if (x == value.length - 1) {
+          callback();
+        }
+      }
+    };
+    const validatorPropertySearch = (rule, value, callback) => {
+      if (self.searchForm.propertyListContent.length > 0 || self.logisticType == "FTL") {
+        callback();
+      } else {
+        callback(new Error(" "));
+      }
+    };
 
     return {
       searchForm: {
         truckCategory: "",
         truckSubCategory: "",
-        pickUpDate: "",
+        pickUpDate: parseTime(new Date().getTime(), "{y}-{m}-{d}"),
         deliveryRegion: "",
         pickUpRegion: "",
-        truckgroup: ""
+        truckgroup: "",
+        propertyList: [{}],
+        propertyListContent: "",
       },
+      today: parseTime(new Date().getTime(), "{y}-{m}-{d}"),
       searchRules: {
-        deliveryRegion: [{ required: true, message: " " }],
-        pickUpRegion: [{ required: true, message: " " }],
-        pickUpDate: [{ required: true, message: " " }],
+        deliveryRegion: [{ required: true, message: " ", trigger: "change" }],
+        pickUpRegion: [{ required: true, message: " ", trigger: "change" }],
+        pickUpDate: [{ required: true, message: " ", trigger: "change" }],
         // truckCategory: [{ required: true, validator: validatorTruck }]
-        truckgroup: [{ required: true, validator: validatorTruck }]
+        truckgroup: [{ required: true, validator: validatorTruck }],
+        propertyList: [{ required: true, trigger: "change", validator: validatorPropertySearch }],
+      },
+      cargoRules: {
+        propertyList: [
+          {
+            required: true,
+            trigger: "change",
+            validator: validatorPropertyList,
+          },
+        ],
       },
       time: "",
-      options: [],
       logisticType: "FTL",
       logisticTypeOption: [
         {
           value: "FTL",
-          label: "FTL"
-        }
+          label: "FTL",
+        },
         // {
         //   value: 'LTL',
         //   label: 'LTL'
@@ -678,7 +716,7 @@ export default {
               height: "1.8",
               volume: "5.00-6.00",
               weight: "2,000",
-              isOver: true
+              isOver: true,
             },
             {
               truck: "Normal_4",
@@ -688,7 +726,7 @@ export default {
               height: "1.8",
               volume: "5.00-6.00",
               weight: "2,000",
-              isOver: true
+              isOver: true,
             },
             {
               truck: "Big_4",
@@ -698,7 +736,7 @@ export default {
               height: "2.2",
               volume: "10.00-12.00",
               weight: "2,500",
-              isOver: true
+              isOver: true,
             },
             {
               truck: "Big_4",
@@ -708,9 +746,9 @@ export default {
               height: "2.2",
               volume: "10.00-12.00",
               weight: "2,500",
-              isOver: true
-            }
-          ]
+              isOver: true,
+            },
+          ],
         },
         {
           key: "6",
@@ -726,7 +764,7 @@ export default {
               height: "2",
               volume: "20.00-25.00",
               weight: "8,000-9,500",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Short_6",
@@ -736,7 +774,7 @@ export default {
               height: "2.3",
               volume: "20.00-25.00",
               weight: "8,000-9,500",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Normal_6",
@@ -746,7 +784,7 @@ export default {
               height: "2",
               volume: "25.00-30.00",
               weight: "8,000-9,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Normal_6",
@@ -756,7 +794,7 @@ export default {
               height: "2.3",
               volume: "25.00-30.00",
               weight: "8,000-9,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Long_6",
@@ -766,7 +804,7 @@ export default {
               height: "2",
               volume: "30.00-35.00",
               weight: "8,000-9,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Long_6",
@@ -776,9 +814,9 @@ export default {
               height: "2.4",
               volume: "30.00-35.00",
               weight: "8,000-9,000",
-              isOver: false
-            }
-          ]
+              isOver: false,
+            },
+          ],
         },
         {
           key: "10",
@@ -794,7 +832,7 @@ export default {
               height: "2",
               volume: "30.00-35.00",
               weight: "15,000-16,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Normal_10",
@@ -804,7 +842,7 @@ export default {
               height: "2.4",
               volume: "30.00-35.00",
               weight: "15,000-16,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Long_10",
@@ -814,7 +852,7 @@ export default {
               height: "2",
               volume: "30.00-40.00",
               weight: "13,000-14,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Long_10",
@@ -824,7 +862,7 @@ export default {
               height: "2.4",
               volume: "30.00-40.00",
               weight: "13,000-14,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Ultra_long_10",
@@ -834,7 +872,7 @@ export default {
               height: "2",
               volume: "45.00 - 50.00",
               weight: "12,000-13,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Ultra_long_10",
@@ -844,9 +882,9 @@ export default {
               height: "2.4",
               volume: "45.00 - 50.00",
               weight: "12,000-13,000",
-              isOver: false
-            }
-          ]
+              isOver: false,
+            },
+          ],
         },
         {
           key: "12",
@@ -862,7 +900,7 @@ export default {
               height: "2",
               volume: "30.00-40.00",
               weight: "19,000-20,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Short_12",
@@ -872,7 +910,7 @@ export default {
               height: "2.5",
               volume: "30.00-40.00",
               weight: "19,000-20,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Long_12",
@@ -882,7 +920,7 @@ export default {
               height: "2",
               volume: "35.00-40.00",
               weight: "18,000-19,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Long_12",
@@ -892,7 +930,7 @@ export default {
               height: "2.4",
               volume: "35.00-40.00",
               weight: "18,000-19,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Extra_long_12",
@@ -902,7 +940,7 @@ export default {
               height: "2",
               volume: "40.00-45.00",
               weight: "17,000-18,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Extra_long_12",
@@ -912,9 +950,9 @@ export default {
               height: "2.4",
               volume: "40.00-45.00",
               weight: "17,000-18,000",
-              isOver: false
-            }
-          ]
+              isOver: false,
+            },
+          ],
         },
         {
           key: "18",
@@ -930,7 +968,7 @@ export default {
               height: "2",
               volume: "60.00-70.00",
               weight: "31,000-32,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Short_18",
@@ -940,7 +978,7 @@ export default {
               height: "2.4",
               volume: "60.00-70.00",
               weight: "31,000-32,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Long_18",
@@ -950,7 +988,7 @@ export default {
               height: "2",
               volume: "70.00-80.00",
               weight: "30,000-31,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Long_18",
@@ -960,7 +998,7 @@ export default {
               height: "2.4",
               volume: "70.00-80.00",
               weight: "30,000-31,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Normal_18",
@@ -970,7 +1008,7 @@ export default {
               height: "2",
               volume: "50.00-60.00",
               weight: "25,000-27,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Normal_18",
@@ -980,9 +1018,9 @@ export default {
               height: "2.4",
               volume: "50.00-60.00",
               weight: "25,000-27,000",
-              isOver: false
-            }
-          ]
+              isOver: false,
+            },
+          ],
         },
         {
           key: "22",
@@ -998,7 +1036,7 @@ export default {
               height: "2",
               volume: "60.00-70.00",
               weight: "31,000-32,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Short_22",
@@ -1008,7 +1046,7 @@ export default {
               height: "2.4",
               volume: "60.00-70.00",
               weight: "30,000-31,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Long_22",
@@ -1018,7 +1056,7 @@ export default {
               height: "2",
               volume: "70.00-80.00",
               weight: "31,000-32,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Long_22",
@@ -1028,7 +1066,7 @@ export default {
               height: "2.4",
               volume: "70.00-80.00",
               weight: "30,000-31,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Normal_22",
@@ -1038,7 +1076,7 @@ export default {
               height: "2",
               volume: "60.00-65.00",
               weight: "31,000-32,000",
-              isOver: false
+              isOver: false,
             },
             {
               truck: "Normal_22",
@@ -1048,10 +1086,10 @@ export default {
               height: "2.4",
               volume: "60.00-65.00",
               weight: "30,000-31,000",
-              isOver: false
-            }
-          ]
-        }
+              isOver: false,
+            },
+          ],
+        },
       ],
       subCategoryList: [],
       pickUpQuery: "",
@@ -1063,72 +1101,17 @@ export default {
       curSelect: "",
       page: {
         total: 0,
-        currentPage: 1
+        currentPage: 1,
       },
       pagesize: 20,
       documentReturn: 10,
-      bcYear: "",
-      dateCascader: "",
-      props: {
-        lazy: true,
-        lazyLoad(node, resolve) {
-          let year = self.bcYear;
-          let date = new Date();
-          let month = node.label == year ? date.getMonth() + 1 : 1;
-          let day = date.getDate();
-          let options = [];
-          if (node.level == 0) {
-            getBcYear().then(res => {
-              self.bcYear = res.data;
-              let years = [
-                {
-                  label: self.bcYear,
-                  value: self.bcYear
-                },
-                {
-                  label: self.bcYear + 1,
-                  value: self.bcYear + 1
-                }
-              ];
-              resolve(years);
-            });
-          } else if (node.level == 1) {
-            let months = [];
-            for (let y = month; y <= 12; y++) {
-              months.push({
-                label: y,
-                value: y
-              });
-            }
-            resolve(months);
-          } else if (node.level == 2) {
-            getBcDay(node.parent.value, node.value).then(res => {
-              let days = res.data;
-              let dateList = [];
-              let d =
-                node.parent.value == self.bcYear &&
-                node.value == date.getMonth() + 1
-                  ? day
-                  : 1;
-              for (let x = d; x <= days; x++) {
-                dateList.push({
-                  label: x,
-                  value: x,
-                  leaf: true
-                });
-              }
-              resolve(dateList);
-            });
-          }
-        }
-      },
       truckObj: {},
       subObj: {},
       previewImgList: [],
       previewDialog: false,
       disInfo: {
         distance: "0",
-        days: "0"
+        days: "0",
       },
       mapMode: false,
       showDisInfo: false,
@@ -1138,35 +1121,44 @@ export default {
       cargoListDialog: false,
       cargoTip: [
         {
-          unit: "Dimension(cm)",
+          unit: "Dimension",
           ss: "0.01-90",
           s: "90.01-110",
           m: "110.01-130",
           l: "130.01-150",
           xl: "150.01-170",
-          eSize: ">170.00"
+          eSize: ">170.00",
         },
         {
-          unit: "Weight(kg)",
+          unit: "Weight",
           ss: "0.01-10",
           s: "10.01-20",
           m: "20.01-30",
           l: "30.01-40",
           xl: "40.01-50",
-          eSize: ">50"
-        }
-      ]
+          eSize: ">50",
+        },
+      ],
+      propertyTypeList: [],
+      sizeTypeList: [],
+      unitList: [],
+      propertyTypeListObj: {},
+      sizeTypeListObj: {},
+      unitListObj: {},
     };
   },
   // 监听属性 类似于data概念
   computed: {
-    ...mapGetters(["permissions"])
+    DateDeFault() {
+      return self.today.split("-");
+    },
+    ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {
     "$store.getters.language"() {
       self.init();
-    }
+    },
   },
   created() {
     self = this;
@@ -1184,6 +1176,27 @@ export default {
     //     currentPage: res.data.number + 1
     //   };
     // })
+    // 货物属性
+    getGoodsProperty().then(res => {
+      self.propertyTypeList = res.data.propertyType;
+      self.sizeTypeList = res.data.sizeType;
+      self.unitList = res.data.unit;
+      let propertyTypeListObj = new Object();
+      for (let i of self.propertyTypeList) {
+        propertyTypeListObj[i.key] = i.trans;
+      }
+      self.propertyTypeListObj = propertyTypeListObj;
+      let sizeTypeListObj = new Object();
+      for (let i of self.sizeTypeList) {
+        sizeTypeListObj[i.key] = i.trans;
+      }
+      self.sizeTypeListObj = sizeTypeListObj;
+      let unitListObj = new Object();
+      for (let i of self.unitList) {
+        unitListObj[i.key] = i.trans;
+      }
+      self.unitListObj = unitListObj;
+    });
   },
   methods: {
     initMaps(cb) {
@@ -1192,10 +1205,9 @@ export default {
       } catch (e) {
         return this.$notify({
           title: "Warning",
-          message:
-            "Google map load failed,Please check your network and try to refresh the page.",
+          message: "Google map load failed,Please check your network and try to refresh the page.",
           type: "warning",
-          duration: 7000
+          duration: 7000,
         });
       }
       let chicago = new google.maps.LatLng(41.850033, -87.6500523);
@@ -1207,7 +1219,7 @@ export default {
         //为了关闭默认控件集,设置地图的disableDefaultUI的属性为true
         disableDefaultUI: true,
         // 启用缩放和平移
-        gestureHandling: "greedy"
+        gestureHandling: "greedy",
       });
       infoWindow = new google.maps.InfoWindow();
 
@@ -1230,17 +1242,12 @@ export default {
         origin: start,
         destination: end,
         travelMode: "DRIVING",
-        unitSystem: google.maps.DirectionsUnitSystem.METRIC
+        unitSystem: google.maps.DirectionsUnitSystem.METRIC,
       };
       directionsService.route(request, function(result, status) {
         if (status == "OK") {
-          let distance = parseInt(
-            result.routes[0].legs[0].distance.value / 1000
-          );
-          let middleStep =
-            result.routes[0].overview_path[
-              parseInt(result.routes[0].overview_path.length / 2)
-            ];
+          let distance = parseInt(result.routes[0].legs[0].distance.value / 1000);
+          let middleStep = result.routes[0].overview_path[parseInt(result.routes[0].overview_path.length / 2)];
 
           directionsRenderer.setDirections(result);
 
@@ -1269,7 +1276,7 @@ export default {
 
           self.disInfo = {
             distance: distance,
-            days: day
+            days: day,
           };
 
           // infoWindow样式悬浮框
@@ -1291,7 +1298,7 @@ export default {
             title: "Network Error",
             message: "Network Error,Please try again later.",
             type: "warning",
-            duration: 5000
+            duration: 5000,
           });
         }
       });
@@ -1307,30 +1314,28 @@ export default {
             function(position) {
               var pos = {
                 lat: position.coords.latitude,
-                lng: position.coords.longitude
+                lng: position.coords.longitude,
               };
               resolve(self.geocodeLatLng(pos));
             },
             function() {
               self.$notify({
                 title: "Warning",
-                message:
-                  "Can't get Browser Location,Please check your browser setting.",
+                message: "Can't get Browser Location,Please check your browser setting.",
                 type: "warning",
-                duration: 5000
+                duration: 5000,
               });
               self.locationLoading = false;
               // self.handleLocationError(true, infoWindow, map.getCenter())
               resolve();
-            }
+            },
           );
         } else {
           self.$notify({
             title: "Warning",
-            message:
-              "Can't get Browser Location,Please check your browser setting.",
+            message: "Can't get Browser Location,Please check your browser setting.",
             type: "warning",
-            duration: 5000
+            duration: 5000,
           });
           self.locationLoading = false;
           // self.handleLocationError(true, infoWindow, map.getCenter())
@@ -1352,13 +1357,9 @@ export default {
               for (let i of arr) {
                 if (i.types.indexOf("country") > -1) {
                   addressInfo["country"] = i.long_name;
-                } else if (
-                  i.types.indexOf("administrative_area_level_1") > -1
-                ) {
+                } else if (i.types.indexOf("administrative_area_level_1") > -1) {
                   addressInfo["administrative_area_level_1"] = i.long_name;
-                } else if (
-                  i.types.indexOf("administrative_area_level_2") > -1
-                ) {
+                } else if (i.types.indexOf("administrative_area_level_2") > -1) {
                   addressInfo["administrative_area_level_2"] = i.long_name;
                 } else if (i.types.indexOf("sublocality_level_1") > -1) {
                   addressInfo["sublocality_level_1"] = i.long_name;
@@ -1372,10 +1373,9 @@ export default {
             } else {
               this.$notify({
                 title: "Warning",
-                message:
-                  "Failed to locate. Check to see if browser permissions are granted.",
+                message: "Failed to locate. Check to see if browser permissions are granted.",
                 type: "warning",
-                duration: 5000
+                duration: 5000,
               });
               resolve();
             }
@@ -1384,7 +1384,7 @@ export default {
               title: "Warning",
               message: "Geocoder failed due to: " + status,
               type: "warning",
-              duration: 5000
+              duration: 5000,
             });
             resolve();
           }
@@ -1395,9 +1395,7 @@ export default {
     handleLocationError(browserHasGeolocation, infoWindow, pos) {
       infoWindow.setPosition(pos);
       infoWindow.setContent(
-        browserHasGeolocation
-          ? "Error: The Geolocation service failed."
-          : "Error: Your browser doesn't support geolocation."
+        browserHasGeolocation ? "Error: The Geolocation service failed." : "Error: Your browser doesn't support geolocation.",
       );
       infoWindow.open(self.map);
     },
@@ -1426,9 +1424,7 @@ export default {
         this.containerDiv.appendChild(bubbleAnchor);
 
         // Optionally stop clicks, etc., from bubbling up to the map.
-        google.maps.OverlayView.preventMapHitsAndGesturesFrom(
-          this.containerDiv
-        );
+        google.maps.OverlayView.preventMapHitsAndGesturesFrom(this.containerDiv);
       }
       // ES5 magic to extend google.maps.OverlayView.
       Popup.prototype = Object.create(google.maps.OverlayView.prototype);
@@ -1447,15 +1443,10 @@ export default {
 
       /** Called each frame when the popup needs to draw itself. */
       Popup.prototype.draw = function() {
-        var divPosition = this.getProjection().fromLatLngToDivPixel(
-          this.position
-        );
+        var divPosition = this.getProjection().fromLatLngToDivPixel(this.position);
 
         // Hide the popup when it is far out of view.
-        var display =
-          Math.abs(divPosition.x) < 4000 && Math.abs(divPosition.y) < 4000
-            ? "block"
-            : "none";
+        var display = Math.abs(divPosition.x) < 4000 && Math.abs(divPosition.y) < 4000 ? "block" : "none";
 
         if (display === "block") {
           this.containerDiv.style.left = divPosition.x + "px";
@@ -1487,9 +1478,7 @@ export default {
         let consultInfo = JSON.parse(localStorage.getItem("consultInfo"));
         self.searchForm = consultInfo.searchForm;
         self.logisticType = consultInfo.logisticType;
-        self.dateCascader = consultInfo.searchForm.pickUpDate
-          .split("-")
-          .map(Number);
+        self.today = consultInfo.searchForm.pickUpDate;
         self.time = consultInfo.time;
         self.pickUpRegionList = consultInfo.pickUpRegionList;
         self.delRegionList = consultInfo.delRegionList;
@@ -1519,7 +1508,17 @@ export default {
       consultInfo.searchForm.truckSubCategory = row.subCategory;
       consultInfo.searchForm.truckCategory = row.category;
       localStorage.setItem("consultInfo", JSON.stringify(consultInfo));
-      this.$router.replace("/booking/placeOrder");
+      self.$router.replace("/booking/placeOrder");
+    },
+    toMarket(){
+      let releaseInfo = {}
+      releaseInfo.pickUpRegionList = self.pickUpRegionList;
+      releaseInfo.delRegionList = self.delRegionList;
+      releaseInfo.searchForm = self.searchForm;
+      releaseInfo.logisticType = self.logisticType;
+      releaseInfo.time = self.time ? self.time : "00:00:00";
+      localStorage.setItem("releaseInfo", JSON.stringify(releaseInfo));
+      self.$router.push('/booking/releaseToMarket')
     },
     pickUpMethod(query) {
       if (query !== "") {
@@ -1548,27 +1547,39 @@ export default {
       }
     },
     getdistrictFullList(query, page) {
-      findDistrictFullList({
-        name: query,
-        page: page
-      }).then(res => {
-        self.isLast = res.data.last;
-        if (!res.data.first) {
-          if (self.curSelect == "pk") {
-            self.pickUpRegionList = self.pickUpRegionList.concat(
-              res.data.content
-            );
+      if (self.logisticType == "LTL" && self.curSelect == "pk") {
+        findDistrictOfHubFullList({
+          name: query,
+          page: page,
+        }).then(res => {
+          self.isLast = res.data.last;
+          if (!res.data.first) {
+            self.pickUpRegionList = self.pickUpRegionList.concat(res.data.content);
           } else {
-            self.delRegionList = self.delRegionList.concat(res.data.content);
-          }
-        } else {
-          if (self.curSelect == "pk") {
             self.pickUpRegionList = res.data.content;
-          } else {
-            self.delRegionList = res.data.content;
           }
-        }
-      });
+        });
+      } else {
+        findDistrictFullList({
+          name: query,
+          page: page,
+        }).then(res => {
+          self.isLast = res.data.last;
+          if (!res.data.first) {
+            if (self.curSelect == "pk") {
+              self.pickUpRegionList = self.pickUpRegionList.concat(res.data.content);
+            } else {
+              self.delRegionList = self.delRegionList.concat(res.data.content);
+            }
+          } else {
+            if (self.curSelect == "pk") {
+              self.pickUpRegionList = res.data.content;
+            } else {
+              self.delRegionList = res.data.content;
+            }
+          }
+        });
+      }
     },
     // 聚焦初始化
     clearSelect(type) {
@@ -1589,12 +1600,11 @@ export default {
         if (valid) {
           self.searchloading = true;
           let time = self.time ? self.time : "00:00:00";
-          searchForm.pickUpDate =
-            searchForm.pickUpDate.split(" ")[0] + ` ${time}`;
+          searchForm.pickUpDate = searchForm.pickUpDate.split(" ")[0] + ` ${time}`;
           if (self.logisticType == "FTL") {
             ftlLine(searchForm, {
               page: self.page.currentPage - 1,
-              pagesize: self.pagesize
+              pagesize: self.pagesize,
             })
               .then(res => {
                 self.searchloading = false;
@@ -1608,16 +1618,34 @@ export default {
                 self.tableList = tableList;
                 self.page = {
                   total: res.data.totalElements,
-                  currentPage: res.data.number + 1
+                  currentPage: res.data.number + 1,
+                };
+              })
+              .catch(el => {
+                self.searchloading = false;
+              });
+            self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
+            self.showDisInfo = true;
+          } else {
+            searchForm.fromCityCode = searchForm.pickUpRegion;
+            searchForm.toCityCode = searchForm.deliveryRegion;
+            ltlLine(searchForm, {
+              page: self.page.currentPage - 1,
+              pagesize: self.pagesize,
+            })
+              .then(res => {
+                self.searchloading = false;
+                let tableList = res.data.content;
+                self.tableList = tableList;
+                self.page = {
+                  total: res.data.totalElements,
+                  currentPage: res.data.number + 1,
                 };
               })
               .catch(el => {
                 self.searchloading = false;
               });
           }
-
-          self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
-          self.showDisInfo = true;
         }
       });
     },
@@ -1642,8 +1670,82 @@ export default {
       self.pagesize = val;
       self.searchSupply();
     },
-    dateChange(e) {
-      self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
+    // 揽件时间改变时
+    // dateChange(e) {
+    //   self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
+    // },
+    // 揽件时间改变时
+    dateChange(time) {
+      self.searchForm.pickUpDate = time;
+      console.log(time)
+    },
+    // 改变物流类型
+    changeLogisticType(type) {
+      self.logisticType = type;
+      if (type == "LTL") {
+        self.searchForm.pickUpRegion = "";
+        self.hideMap();
+      }
+      self.tableList = []
+      self.$refs.searchform.clearValidate();
+    },
+    checkNumInt(val, index, type) {
+      val = val.split(".")[0];
+      self.searchForm.propertyList[index][type] = val;
+    },
+    checkNumfloat(obj, index, type) {
+      obj = Number(obj.toString().match(/^\d+(?:\.\d{0,2})?/));
+      self.searchForm.propertyList[index][type] = obj == 0 ? "" : obj;
+    },
+    // 新增一行货物清单
+    pushIt() {
+      self.searchForm.propertyList.push({
+        propertyType: "",
+        name: "",
+        number: null,
+        unit: "",
+        sizeType: "",
+        weightOfEach: null,
+      });
+    },
+    // 删除一行货物清单
+    delIt(row, index) {
+      if (self.searchForm.propertyList.length > 1) {
+        self
+          .$confirm(this.$t("booking.aysDel"), this.$t("confirm.tips"), {
+            confirmButtonText: this.$t("booking.delete"),
+            cancelButtonText: this.$t("member.cancel"),
+          })
+          .then(() => {
+            self.searchForm.propertyList.splice(index, 1);
+          })
+          .catch(() => {});
+      }
+    },
+    // 选择非额外尺寸时 删除长宽高属性
+    sizeSelect(val, index) {
+      if (val != "EXTRA_SIZE") {
+        delete self.searchForm.propertyList[index].high;
+        delete self.searchForm.propertyList[index].wide;
+        delete self.searchForm.propertyList[index].length;
+      }
+    },
+    // 货物清单确认
+    propertyListConfirm() {
+      this.$refs.cargoform.validate(valid => {
+        if (valid) {
+          self.cargoListDialog = false;
+          self.searchForm.propertyListContent = "";
+          let list = self.searchForm.propertyList;
+          let content = "";
+          for (let x in list) {
+            content += `${parseInt(x) + 1}.${self.propertyTypeListObj[list[x].propertyType]} ${list[x].name} ${
+              self.sizeTypeListObj[list[x].sizeType]
+            } ${list[x].number}${self.unitListObj[list[x].unit]} `;
+          }
+          self.searchForm.propertyListContent = content;
+        }
+      });
     },
     previewImg(row) {
       let arr = [];
@@ -1679,7 +1781,7 @@ export default {
           self.isLast = false;
           findDistrictFullList({
             name: query,
-            page: self.regionPage
+            page: self.regionPage,
           }).then(res => {
             if (res.data.content.length > 0) {
               self.pickUpRegionList = res.data.content;
@@ -1693,8 +1795,8 @@ export default {
       } else {
         self.locationLoading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -2072,8 +2174,8 @@ export default {
       }
 
       .truck_type_dec_item_left {
-        width: 100px;
-        height: 100px;
+        width: 110px;
+        height: 110px;
         border-radius: 50%;
         border: 1px solid #e7e7e7;
         display: flex;
@@ -2087,12 +2189,16 @@ export default {
           font-weight: 600;
           font-size: 13px;
           color: #333;
-          margin-top: 10px;
+          margin-top: 20px;
           margin-bottom: 10px;
           text-align: center;
         }
       }
     }
   }
+}
+
+.edit_input .el-input__inner {
+  padding: 0 30px 0 15px;
 }
 </style>

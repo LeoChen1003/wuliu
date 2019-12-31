@@ -4,21 +4,21 @@ export function fillInfo(data) {
   return request({
     url: "/api/member/fill/info",
     method: "post",
-    data
+    data,
   });
 }
 
 export function getInfo(data) {
   return request({
     url: "/api/member/info",
-    method: "get"
+    method: "get",
   });
 }
 
 export function getApplying(data) {
   return request({
     url: "/api/member/info/applying",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -27,8 +27,8 @@ export function getCredentials(apply_type) {
     url: "/api/member/credentials/list",
     method: "get",
     params: {
-      apply_type: apply_type
-    }
+      apply_type: apply_type,
+    },
   });
 }
 
@@ -37,7 +37,7 @@ export function platformList(auditStatus, data) {
   return request({
     url: "/api/platform/audit/list/" + auditStatus,
     method: "get",
-    params: data
+    params: data,
   });
 }
 
@@ -46,7 +46,7 @@ export function platformAccept(data) {
   return request({
     url: "/api/platform/audit/accept",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -55,7 +55,7 @@ export function platformRefuse(data) {
   return request({
     url: "/api/platform/audit/refuse",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -64,7 +64,7 @@ export function platformActive(data) {
   return request({
     url: "/api/platform/audit/activate",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -72,7 +72,7 @@ export function platformActive(data) {
 export function besuper() {
   return request({
     url: "/api/platform/super",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -83,8 +83,8 @@ export function submitApply(apply_type, data) {
     method: "post",
     data: {
       ...data,
-      apply_type: apply_type
-    }
+      apply_type: apply_type,
+    },
   });
 }
 
@@ -92,7 +92,7 @@ export function submitApply(apply_type, data) {
 export function getDc(data) {
   return request({
     url: "/api/member/info/dc",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -100,7 +100,7 @@ export function getDc(data) {
 export function dcInfo(site_id) {
   return request({
     url: "api/member/info/dc/" + site_id,
-    method: "get"
+    method: "get",
   });
 }
 
@@ -108,7 +108,7 @@ export function dcInfo(site_id) {
 export function appliedInfo(site_id) {
   return request({
     url: "api/platform/audit/applied/" + site_id,
-    method: "get"
+    method: "get",
   });
 }
 
@@ -116,7 +116,7 @@ export function appliedInfo(site_id) {
 export function getContract() {
   return request({
     url: "/api/member/contract/list",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -126,7 +126,16 @@ export function downContract(applyType) {
     url: "/misc/pdf/download",
     method: "get",
     params: {
-      applyType: applyType
-    }
+      applyType: applyType,
+    },
+  });
+}
+
+// 体积重量换算
+export function setExchange(data) {
+  return request({
+    url: "/api/member/fill/additionalInfo",
+    method: "post",
+    data,
   });
 }

@@ -1,43 +1,18 @@
 <template>
   <div class="manage tabfix">
     <div>
-      <el-button
-        type="primary"
-        style="width:150px;margin-bottom:20px;"
-        @click="toAdd"
-        >{{ $t("resources.add") }}</el-button
-      >
+      <el-button type="primary" style="width:150px;margin-bottom:20px;" @click="toAdd">{{ $t("resources.add") }}</el-button>
     </div>
     <el-row :gutter="40">
       <el-col :span="12">
-        <el-table
-          :data="dataList"
-          border
-          highlight-current-row
-          @current-change="handleCurrentChange"
-          :cell-style="cell"
-        >
-          <el-table-column
-            prop="name"
-            :highlight-current-row="true"
-            :label="$t('resources.driver_name')"
-          ></el-table-column>
-          <el-table-column
-            prop="phone"
-            :label="$t('resources.phoneNo')"
-          ></el-table-column>
-          <el-table-column
-            prop="activeStatus"
-            :label="$t('resources.status')"
-          ></el-table-column>
+        <el-table :data="dataList" border highlight-current-row @current-change="handleCurrentChange" :cell-style="cell">
+          <el-table-column prop="name" :highlight-current-row="true" :label="$t('resources.driver_name')"></el-table-column>
+          <el-table-column prop="phone" :label="$t('resources.phoneNo')"></el-table-column>
+          <el-table-column prop="activeStatus" :label="$t('resources.status')"></el-table-column>
           <el-table-column width="200px;">
             <template slot-scope="scope">
               <div style="box-sizing:border-box;padding:0 5px;">
-                <el-button
-                  type="primary"
-                  style="margin-bottom:5px;width:100%;"
-                  @click="toEdit(scope.row)"
-                >
+                <el-button type="primary" style="margin-bottom:5px;width:100%;" @click="toEdit(scope.row)">
                   {{ $t("resources.edit") }}
                 </el-button>
               </div>
@@ -49,43 +24,18 @@
         <el-tabs v-model="activeTab" type="border-card">
           <el-tab-pane :label="$t('resources.task')" name="first">
             <el-table :data="[]" border :cell-style="cell">
-              <el-table-column
-                prop=""
-                :label="$t('resources.TaskNo')"
-              ></el-table-column>
-              <el-table-column
-                prop=""
-                :label="$t('resources.description')"
-              ></el-table-column>
-              <el-table-column
-                prop=""
-                :label="$t('resources.implementation')"
-              ></el-table-column>
+              <el-table-column prop="" :label="$t('resources.TaskNo')"></el-table-column>
+              <el-table-column prop="" :label="$t('resources.description')"></el-table-column>
+              <el-table-column prop="" :label="$t('resources.implementation')"></el-table-column>
             </el-table>
           </el-tab-pane>
-          <el-tab-pane
-            :label="$t('resources.detailedInformation')"
-            name="second"
-          >
-            <el-form
-              class="form"
-              v-if="thisRow"
-              label-position="left"
-              label-width="160px"
-            >
+          <el-tab-pane :label="$t('resources.detailedInformation')" name="second">
+            <el-form class="form" v-if="thisRow" label-position="left" label-width="160px">
               <el-form-item prop="name" :label="$t('resources.name')">
-                <el-input
-                  v-model="thisRow.name"
-                  disabled
-                  class="inputWidth"
-                ></el-input>
+                <el-input v-model="thisRow.name" disabled class="inputWidth"></el-input>
               </el-form-item>
               <el-form-item prop="phone" :label="$t('resources.phone')">
-                <el-input
-                  v-model="thisRow.phone"
-                  disabled
-                  class="inputWidth"
-                ></el-input>
+                <el-input v-model="thisRow.phone" disabled class="inputWidth"></el-input>
               </el-form-item>
               <el-form-item prop="status" :label="$t('resources.status')">
                 <el-select
@@ -94,19 +44,10 @@
                   :placeholder="$t('placeholder.pleaseChoose')"
                   class="inputWidth"
                 >
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
+                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item
-                :label="$t('resources.license')"
-                v-if="licPreList.length != 0"
-              >
+              <el-form-item :label="$t('resources.license')" v-if="licPreList.length != 0">
                 <div class="inputWidth">
                   <el-image
                     v-for="(img, index) in licPreList"
@@ -118,10 +59,7 @@
                   </el-image>
                 </div>
               </el-form-item>
-              <el-form-item
-                :label="$t('resources.identityCard')"
-                v-if="idePreList.length != 0"
-              >
+              <el-form-item :label="$t('resources.identityCard')" v-if="idePreList.length != 0">
                 <div class="inputWidth">
                   <el-image
                     v-for="(img, index) in idePreList"
@@ -135,29 +73,13 @@
               </el-form-item>
             </el-form>
           </el-tab-pane>
-          <el-tab-pane
-            :label="$t('resources.locationTracking')"
-            name="third"
-          ></el-tab-pane>
+          <el-tab-pane :label="$t('resources.locationTracking')" name="third"></el-tab-pane>
         </el-tabs>
       </el-col>
     </el-row>
-    <el-dialog
-      :title="$t('resources.driver')"
-      :visible.sync="dialogVisible"
-      @close="dialogClose"
-      width="60%"
-      center
-    >
+    <el-dialog :title="$t('resources.driver')" :visible.sync="dialogVisible" @close="dialogClose" width="60%" center>
       <div>
-        <el-form
-          ref="detailform"
-          :model="detailform"
-          :rules="detailRules"
-          class="form"
-          label-position="left"
-          label-width="160px"
-        >
+        <el-form ref="detailform" :model="detailform" :rules="detailRules" class="form" label-position="left" label-width="160px">
           <el-form-item prop="name" :label="$t('resources.name')">
             <el-input v-model="detailform.name" class="inputWidth"></el-input>
           </el-form-item>
@@ -165,18 +87,8 @@
             <el-input v-model="detailform.phone" class="inputWidth"></el-input>
           </el-form-item>
           <el-form-item prop="status" :label="$t('resources.status')">
-            <el-select
-              v-model="detailform.status"
-              :placeholder="$t('placeholder.pleaseChoose')"
-              class="inputWidth"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
+            <el-select v-model="detailform.status" :placeholder="$t('placeholder.pleaseChoose')" class="inputWidth">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('resources.license')" required>
@@ -219,14 +131,9 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button
-              type="primary"
-              style="margin-bottom:20px;"
-              :loading="loading"
-              class="inputWidth"
-              @click="toConfirm"
-              >{{ $t("resources.confirm") }}</el-button
-            >
+            <el-button type="primary" style="margin-bottom:20px;" :loading="loading" class="inputWidth" @click="toConfirm">{{
+              $t("resources.confirm")
+            }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -253,30 +160,30 @@ export default {
     return {
       env: process.env.VUE_APP_BASE_API,
       headers: {
-        Authorization: getToken()
+        Authorization: getToken(),
       },
       dataList: [],
       dialogVisible: false,
       detailform: {
         name: "",
         phone: "",
-        status: ""
+        status: "",
       },
       options: [
         {
           value: "ACTIVE",
-          label: "Actived"
+          label: "Actived",
         },
         {
           value: "CLOSED",
-          label: "Closed"
-        }
+          label: "Closed",
+        },
       ],
       editType: "",
       detailRules: {
         name: [{ required: true, trigger: "blur" }],
         phone: [{ required: true, trigger: "blur" }],
-        status: [{ required: true }]
+        status: [{ required: true }],
       },
       loading: false,
       activeTab: "first",
@@ -287,7 +194,7 @@ export default {
       previewImg: "",
       licPreList: [],
       idePreList: [],
-      thisRow: null
+      thisRow: null,
     };
   },
   //监听属性 类似于data概念
@@ -298,7 +205,7 @@ export default {
     },
     ideFileList: function() {
       return self.$refs.identityIds.uploadFiles;
-    }
+    },
   },
   //监控data中的数据变化
   watch: {},
@@ -319,7 +226,7 @@ export default {
       self.detailform = {
         name: "",
         phone: "",
-        status: ""
+        status: "",
       };
     },
     toEdit(row) {
@@ -327,7 +234,7 @@ export default {
       self.detailform = {
         name: row.name,
         phone: row.phone,
-        status: row.activeStatus
+        status: row.activeStatus,
       };
       self.curEditId = row.id;
       let licPreList = [];
@@ -335,13 +242,13 @@ export default {
       for (let i of row.licenseResource) {
         licPreList.push({
           url: i.path,
-          id: i.id
+          id: i.id,
         });
       }
       for (let i of row.identityResource) {
         idePreList.push({
           url: i.path,
-          id: i.id
+          id: i.id,
         });
       }
       self.fileList1 = licPreList;
@@ -428,14 +335,14 @@ export default {
     },
     outLimit() {
       self.$message.warning(self.$t("resources.outLimit"));
-    }
+    },
   },
   created() {
     self = this;
   },
   mounted() {
     this.getDriverList();
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>

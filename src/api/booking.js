@@ -7,7 +7,17 @@ export function ftlLine(data, data2) {
     url: "/api/demand/order/search/ftlLine",
     method: "post",
     data,
-    params: data2
+    params: data2,
+  });
+}
+
+// ltlLine
+export function ltlLine(data, data2) {
+  return requestJSON({
+    url: "/api/ltl/line/lineSearch",
+    method: "post",
+    data,
+    params: data2,
   });
 }
 
@@ -16,7 +26,7 @@ export function ftlLines(data) {
   return request({
     url: "/api/demand/order/search/ftlLines",
     method: "get",
-    params: data
+    params: data,
   });
 }
 
@@ -25,7 +35,7 @@ export function ftlCharge(data) {
   return request({
     url: "/api/demand/order/ftl/charge",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -34,7 +44,25 @@ export function placeOrder(data) {
   return requestJSON({
     url: "/api/demand/order/list",
     method: "post",
-    data
+    data,
+  });
+}
+
+// LTL下单
+export function placeOrderLTL(data) {
+  return requestJSON({
+    url: "/api/ltl/line/placeOrder",
+    method: "post",
+    data,
+  });
+}
+
+// LTL下单 前计算运费
+export function calculationOrder(data) {
+  return requestJSON({
+    url: "/api/ltl/line/calculationOrder",
+    method: "post",
+    data,
   });
 }
 
@@ -43,6 +71,6 @@ export function releaseOrder(data) {
   return requestJSON({
     url: "/api/demand/order/demand",
     method: "post",
-    data
+    data,
   });
 }

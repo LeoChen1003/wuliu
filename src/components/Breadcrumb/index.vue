@@ -2,10 +2,7 @@
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item, index) in levelList" :key="item.path">
-        <span
-          v-if="item.redirect === 'noRedirect' || index == levelList.length - 1"
-          class="no-redirect"
-        >
+        <span v-if="item.redirect === 'noRedirect' || index == levelList.length - 1" class="no-redirect">
           {{ generateTitle(item.meta.title) }}
         </span>
         <a class="no-redirect" v-else>{{ generateTitle(item.meta.title) }}</a>
@@ -21,7 +18,7 @@ import pathToRegexp from "path-to-regexp";
 export default {
   data() {
     return {
-      levelList: null
+      levelList: null,
     };
   },
   watch: {
@@ -31,7 +28,7 @@ export default {
         return;
       }
       this.getBreadcrumb();
-    }
+    },
   },
   created() {
     this.getBreadcrumb();
@@ -40,27 +37,21 @@ export default {
     generateTitle,
     getBreadcrumb() {
       // only show routes with meta.title
-      const matched = this.$route.matched.filter(
-        item => item.meta && item.meta.title
-      );
+      const matched = this.$route.matched.filter(item => item.meta && item.meta.title);
       const first = matched[0];
 
       // if (!this.isDashboard(first)) {
       //   matched = [{ path: '/dashboard', meta: { title: 'dashboard' }}].concat(matched)
       // }
 
-      this.levelList = matched.filter(
-        item => item.meta && item.meta.title && item.meta.breadcrumb !== false
-      );
+      this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false);
     },
     isDashboard(route) {
       const name = route && route.name;
       if (!name) {
         return false;
       }
-      return (
-        name.trim().toLocaleLowerCase() === "Dashboard".toLocaleLowerCase()
-      );
+      return name.trim().toLocaleLowerCase() === "Dashboard".toLocaleLowerCase();
     },
     pathCompile(path) {
       // To solve this problem https://github.com/PanJiaChen/vue-element-admin/issues/561
@@ -75,8 +66,8 @@ export default {
         return;
       }
       this.$router.push(this.pathCompile(path));
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -5,37 +5,16 @@
       <div class="supply-box">
         <span style="margin:0 20px;">{{ $t("billing.supply") }}</span>
         <el-select v-model="supply" clearable placeholder="请选择">
-          <el-option
-            v-for="item in supplyList"
-            :key="item.supply_id"
-            :label="item.company_name"
-            :value="item.supply_id"
-          >
+          <el-option v-for="item in supplyList" :key="item.supply_id" :label="item.company_name" :value="item.supply_id">
           </el-option>
         </el-select>
       </div>
-      <span style="margin:0 10px 0 20px;">{{
-        $t("billing.deliveredDate")
-      }}</span>
+      <span style="margin:0 10px 0 20px;">{{ $t("billing.deliveredDate") }}</span>
       <div class="timePicker">
-        <bcTime
-          @changeBCtime="changeBCtimeFrom"
-          :timeType="'all'"
-          :dateDefault="[0, 0, 0]"
-        ></bcTime>
+        <bcTime @changeBCtime="changeBCtimeFrom" :timeType="'all'" :dateDefault="[0, 0, 0]" />
         <span style="margin:0 5px;">-</span>
-        <bcTime
-          @changeBCtime="changeBCtimeTo"
-          :dateDefault="[0, 0, 0]"
-          style="margin-left:5px;"
-          :timeType="'all'"
-        ></bcTime>
-        <el-button
-          size="small"
-          @click="searchIt"
-          style="width:100px;margin-left:20px;"
-          >{{ $t("billing.search") }}</el-button
-        >
+        <bcTime @changeBCtime="changeBCtimeTo" :dateDefault="[0, 0, 0]" style="margin-left:5px;" :timeType="'all'" />
+        <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
         <el-button
           size="small"
           @click="confirmShow"
@@ -49,18 +28,12 @@
     </div>
     <div class="content">
       <div>
-        <el-tabs
-          v-model="tabActive"
-          tab-position="left"
-          @tab-click="handleClick"
-          style="height:calc(100% - 50px);"
-        >
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:calc(100% - 50px);">
           <el-tab-pane name="UNPAID">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.unpaid_TF")
-                  }}<sub class="badge red">{{ statusCount.UNPAID }}</sub>
+                  {{ $t("billing.unpaid_TF") }}<sub class="badge red">{{ statusCount.UNPAID }}</sub>
                 </div>
               </div>
             </span>
@@ -69,8 +42,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.paid_TF")
-                  }}<sub class="badge">{{ statusCount.PAID }}</sub>
+                  {{ $t("billing.paid_TF") }}<sub class="badge">{{ statusCount.PAID }}</sub>
                 </div>
               </div>
             </span>
@@ -79,13 +51,7 @@
       </div>
       <div class="container">
         <div class="center">
-          <el-table
-            :data="tableData"
-            highlight-current-row
-            v-loading="loading"
-            @current-change="handleCurrentChange"
-            border
-          >
+          <el-table :data="tableData" highlight-current-row v-loading="loading" @current-change="handleCurrentChange" border>
             <el-table-column prop="orderNo" :label="$t('billing.trackingNo')" />
             <el-table-column :label="$t('billing.supply')">
               <template slot-scope="scope">
@@ -94,26 +60,14 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="settlementAmount"
-              :label="$t('billing.totalAmount')"
-            />
-            <el-table-column
-              align="right"
-              header-align="center"
-              v-if="tabActive == 'UNPAID'"
-              width="50px"
-            >
+            <el-table-column prop="settlementAmount" :label="$t('billing.totalAmount')" />
+            <el-table-column align="right" header-align="center" v-if="tabActive == 'UNPAID'" width="50px">
               <template slot="header" slot-scope="scope">
                 <el-checkbox v-model="allChecked" @change="allCheckChange" />
               </template>
               <template slot-scope="scope">
                 <div class="check-box">
-                  <el-checkbox
-                    @change="checkChange(scope.row)"
-                    :disabled="!scope.row.canCheck"
-                    v-model="scope.row.checked"
-                  />
+                  <el-checkbox @change="checkChange(scope.row)" :disabled="!scope.row.canCheck" v-model="scope.row.checked" />
                 </div>
               </template>
             </el-table-column>
@@ -156,28 +110,16 @@
             <el-form-item :label="$t('billing.amountPayable')">
               {{ thisRow.actualAmount }}
             </el-form-item>
-            <el-form-item
-              :label="$t('billing.operator')"
-              v-if="thisRow.orderRefunds"
-            >
+            <el-form-item :label="$t('billing.operator')" v-if="thisRow.orderRefunds">
               {{ thisRow.orderRefunds.handleName }}
             </el-form-item>
-            <el-form-item
-              :label="$t('billing.transferNo')"
-              v-if="thisRow.orderRefunds"
-            >
+            <el-form-item :label="$t('billing.transferNo')" v-if="thisRow.orderRefunds">
               {{ thisRow.orderRefunds.sn }}
             </el-form-item>
-            <el-form-item
-              :label="$t('billing.transferedDate')"
-              v-if="thisRow.orderRefunds"
-            >
+            <el-form-item :label="$t('billing.transferedDate')" v-if="thisRow.orderRefunds">
               {{ thisRow.orderRefunds.refundDateTime }}
             </el-form-item>
-            <el-form-item
-              :label="$t('billing.transferVoucher')"
-              v-if="thisRow.orderRefunds"
-            >
+            <el-form-item :label="$t('billing.transferVoucher')" v-if="thisRow.orderRefunds">
               <el-image
                 v-for="(img, index) in thisRow.imgList"
                 :key="index"
@@ -191,13 +133,7 @@
         </div>
       </div>
     </div>
-    <el-dialog
-      :title="$t('billing.transferFreight')"
-      :visible.sync="confirmDialog"
-      center
-      @close="dialogClose"
-      width="600px"
-    >
+    <el-dialog :title="$t('billing.transferFreight')" :visible.sync="confirmDialog" center @close="dialogClose" width="600px">
       <div>
         <el-form label-width="120px" v-if="form.orders.length != 0">
           <el-form-item :label="$t('billing.member')">
@@ -234,15 +170,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="confirmDialog = false">{{
-          $t("billing.cancel")
-        }}</el-button>
-        <el-button
-          type="primary"
-          :loading="confirmLoading"
-          @click="confirmIt"
-          >{{ $t("billing.confirm") }}</el-button
-        >
+        <el-button @click="confirmDialog = false">{{ $t("billing.cancel") }}</el-button>
+        <el-button type="primary" :loading="confirmLoading" @click="confirmIt">{{ $t("billing.confirm") }}</el-button>
       </span>
     </el-dialog>
     <el-dialog :visible.sync="previewDialog">
@@ -252,14 +181,7 @@
 </template>
 
 <script>
-import {
-  supplyFinance,
-  billsupplyCount,
-  getSupplyList,
-  getRefundList,
-  getRefundCount,
-  confirmRefund
-} from "../../api/billing";
+import { supplyFinance, billsupplyCount, getSupplyList, getRefundList, getRefundCount, confirmRefund } from "../../api/billing";
 import { getTime, parseTime, getLastMonthTime } from "../../utils/index";
 import bcTime from "@/components/bcTime";
 import { getToken } from "@/utils/auth";
@@ -273,13 +195,13 @@ export default {
     return {
       env: process.env.VUE_APP_BASE_API,
       headers: {
-        Authorization: getToken()
+        Authorization: getToken(),
       },
       tabActive: "UNPAID",
       tableData: [],
       page: {
         total: 0,
-        currentPage: 1
+        currentPage: 1,
       },
       pagesize: 20,
       loading: false,
@@ -295,12 +217,12 @@ export default {
       form: {
         member: "",
         countdAmount: "",
-        orders: ""
+        orders: "",
       },
       fileList1: [],
       previewDialog: false,
       previewImg: "",
-      confirmLoading: false
+      confirmLoading: false,
     };
   },
   // 监听属性 类似于data概念
@@ -314,7 +236,7 @@ export default {
     fileList: function() {
       return self.$refs.upload1.uploadFiles;
     },
-    ...mapGetters(["permissions"])
+    ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {},
@@ -346,15 +268,12 @@ export default {
         end: self.toDate,
         supplyId: self.supply,
         page: self.page.currentPage - 1,
-        pagesize: self.pagesize
+        pagesize: self.pagesize,
       })
         .then(res => {
           let data = res.data.content;
           for (let i of data) {
-            i.supplyName =
-              i.supply.type == "COMPANY"
-                ? i.supply.companyName
-                : i.supply.humanName;
+            i.supplyName = i.supply.type == "COMPANY" ? i.supply.companyName : i.supply.humanName;
             if (self.tabActive == "PAID") {
               let imgList = [];
               for (let t of i.orderRefunds.resourceList) {
@@ -371,7 +290,7 @@ export default {
           self.tableData = data;
           self.page = {
             total: res.data.totalElements,
-            currentPage: res.data.number + 1
+            currentPage: res.data.number + 1,
           };
           self.loading = false;
           self.allChecked = false;
@@ -383,7 +302,7 @@ export default {
       getRefundCount({
         start: self.fromDate,
         end: self.toDate,
-        supplyId: self.supply
+        supplyId: self.supply,
       }).then(res => {
         self.statusCount = res.data;
       });
@@ -511,7 +430,7 @@ export default {
       self.form = {
         member: member,
         countAmount: countAmount,
-        orders: orders
+        orders: orders,
       };
       self.confirmDialog = true;
     },
@@ -528,7 +447,7 @@ export default {
       }
       confirmRefund({
         resourceIds: resourceIds.toString(),
-        orderIds: self.form.orders.toString()
+        orderIds: self.form.orders.toString(),
       })
         .then(res => {
           self.loadData();
@@ -538,8 +457,8 @@ export default {
         .catch(() => {
           self.confirmLoading = true;
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

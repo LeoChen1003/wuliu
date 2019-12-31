@@ -5,7 +5,7 @@ export function orderShop(data) {
   return request({
     url: "/api/supply/order/shop/list",
     method: "get",
-    params: data
+    params: data,
   });
 }
 
@@ -14,7 +14,7 @@ export function quoteOrder(order_id, data) {
   return request({
     url: "/api/supply/order/quote/" + order_id,
     method: "post",
-    data
+    data,
   });
 }
 
@@ -22,6 +22,6 @@ export function quoteOrder(order_id, data) {
 export function getOrderLog(id) {
   return request({
     url: `/api/supply/order/${id}/log`,
-    method: "get"
+    method: "get",
   });
 }
