@@ -191,7 +191,7 @@
             <el-input v-model="releaseForm.orderInfo.outNumber" class="inputWidth" />
           </el-form-item>
           <el-form-item :label="$t('booking.remarks')">
-            <el-input v-model="releaseForm.orderInfo.remark" type="textarea" class="inputWidth" />
+            <el-input v-model="releaseForm.orderInfo.remark" type="textarea" resize="none" class="inputWidth" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -293,6 +293,9 @@
       </el-row>
     </el-form>
     <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:15px;margin-top:30px;">
+      <el-button style="width:200px;" @click="$router.replace('/billing/topUp')" type="primary">{{
+        $t("booking.topUp")
+      }}</el-button>
       <el-button
         style="width:200px;"
         @click="todoIt"
@@ -477,12 +480,7 @@ export default {
     };
     const validatorReceiverAddress = (rule, value, callback) => {
       for (let x in value) {
-        if (
-          !value[x].name ||
-          !value[x].mobile ||
-          !value[x].addressDetail ||
-          !value[x].code
-        ) {
+        if (!value[x].name || !value[x].mobile || !value[x].addressDetail || !value[x].code) {
           callback(new Error(" "));
         } else if (x == value.length - 1) {
           callback();
