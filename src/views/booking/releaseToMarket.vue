@@ -481,8 +481,7 @@ export default {
           !value[x].name ||
           !value[x].mobile ||
           !value[x].addressDetail ||
-          !value[x].code ||
-          !value[x].propertyListContent
+          !value[x].code
         ) {
           callback(new Error(" "));
         } else if (x == value.length - 1) {

@@ -142,6 +142,10 @@
                 <el-input v-model="receiverAddress.fullName" class="inp" disabled></el-input>
               </div>
             </el-form-item>
+            <el-form-item prop="receiveAt" :label="$t('booking.expectedDeliveryTime')" v-if="quotePriceCon.receiverAddressList">
+              <el-date-picker v-model="quotePriceCon.receiverAddressList[0].receiveAt" class="inp" disabled type="datetime">
+              </el-date-picker>
+            </el-form-item>
             <el-form-item :label="$t('booking.truckType')">
               <el-select
                 v-model="quotePriceCon.transport.carType"
