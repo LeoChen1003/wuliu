@@ -587,7 +587,7 @@ export default {
             : this.language == "th_TH"
             ? "th"
             : "en";
-        return `http://t-rex.flashlogistics.co.th/html/term-${type}.html`;
+        return `https://t-rex.flashlogistics.co.th/html/term-${type}.html`;
       }
     },
     privacyPolicyUrl: {
@@ -598,7 +598,7 @@ export default {
             : this.language == "th_TH"
             ? "th"
             : "en";
-        return `http://t-rex.flashlogistics.co.th/html/privacy-${type}.html`;
+        return `https://t-rex.flashlogistics.co.th/html/privacy-${type}.html`;
       }
     }
   },
