@@ -468,11 +468,26 @@ export default {
         callback();
       }
     };
-    const validatorReceiverAddress = (rule, value, callback) => {
-      if (!value.name || !value.mobile || !value.addressDetail || !value.code) {
+    const validatorReceiveAt = (rule, value, callback) => {
+      if (!self.receive_time_at) {
         callback(new Error(""));
       } else {
         callback();
+      }
+    };
+    const validatorReceiverAddress = (rule, value, callback) => {
+      for (let x in value) {
+        if (
+          !value[x].name ||
+          !value[x].mobile ||
+          !value[x].addressDetail ||
+          !value[x].code ||
+          !value[x].propertyListContent
+        ) {
+          callback(new Error(" "));
+        } else if (x == value.length - 1) {
+          callback();
+        }
       }
     };
     const validatorPropertyList = (rule, value, callback) => {
@@ -552,7 +567,7 @@ export default {
             validator: validatorSenderAddress,
           },
         ],
-        receiverAddress: [
+        receiverAddressList: [
           {
             required: true,
             trigger: "change",
@@ -574,7 +589,7 @@ export default {
           },
         ],
         pickAt: [{ required: true, trigger: "change", validator: validatorpickAt }],
-        receiveAt: [{ required: true, trigger: "change", validator: validatorpickAt }],
+        receiveAt: [{ required: true, trigger: "change", validator: validatorReceiveAt }],
       },
       documentReturn: false,
       liability: false,
@@ -934,6 +949,14 @@ export default {
       self.cargoListDialog = true;
       self.curCargoIndex = index;
       self.itemForm = item;
+    },
+    checkNumInt(val, index, type) {
+      val = val.split(".")[0];
+      self.itemForm.propertyList[index][type] = val;
+    },
+    checkNumfloat(obj, index, type) {
+      obj = Number(obj.toString().match(/^\d+(?:\.\d{0,2})?/));
+      self.itemForm.propertyList[index][type] = obj == 0 ? "" : obj;
     },
     // 增加货物
     pushIt() {
