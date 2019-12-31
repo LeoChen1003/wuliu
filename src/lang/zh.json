@@ -382,7 +382,12 @@
     "resetThePassword": "重置密码， 你确认吗？",
     "deliverableDistrict": "可派送地区",
     "priceCoefficient": "价格系数",
-    "map": "地图"
+    "map": "地图",
+    "cargoType": "货物类型",
+    "volumeWeight": "价格系数",
+    "Quantity": "总件数",
+    "discountRate": "折扣率",
+    "search": "搜索"
   },
   "billing": {
     "billingStatus": "状态",
@@ -604,7 +609,7 @@
     "routeDetails": "路线详情",
     "map": "地图",
     "province": "省份",
-    "deliverableDistrict": "可派送的地区",
+    "deliverableDistrict": "可派送地区",
     "undeliverableDistrict": "不可派送的地区",
     "origin": "始发地",
     "edit": "编辑"

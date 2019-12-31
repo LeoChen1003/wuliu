@@ -6,7 +6,7 @@
         <el-option label="Activated" value="ACTIVE" />
         <el-option label="Closed" value="CLOSED" />
       </el-select>
-      <el-button type="primary" style="margin-left: 20px;" @click="loadData()">Search</el-button>
+      <el-button type="primary" style="margin-left: 20px;" @click="loadData()">{{$t('resources.search')}}</el-button>
     </div>
     <div class="container">
       <div class="table-box">
@@ -63,7 +63,7 @@
                   <div>{{ scope.row.provinceName }}</div>
                 </template>
               </el-table-column>
-              <el-table-column :label="$t('setting.deliverableDistrict')">
+              <el-table-column :label="$t('resources.deliverableDistrict')">
                 <template slot-scope="scope">
                   <el-tag
                     :type="item.kind === 'CAPITAL' ? 'success' : 'primary'"
@@ -117,11 +117,12 @@
                 </el-table>
                 <div style="width: 20%;margin-left: 20px;">
                   <div style="display: flex;align-items: center;" v-if="userInfo">
-                    <div style="margin-right: 15px;width: 100px;">体积重量换算</div>
+                    <div style="margin-right: 15px;width: 100px;">{{ $t("member.volumeWeightConversion") }}</div>
                     {{ userInfo.site.exchange }}
                   </div>
                   <div>
-                    <p>假设换算比为2500、体积=100*80*20=160000cm³,那么，重量=160000/2500=64kg</p>
+                    {{ $t("member.example") }},<br />
+                    {{ $t("member.example1") }}
                   </div>
                 </div>
               </div>
@@ -171,19 +172,19 @@
             <div style="display: flex;justify-content: space-around;width: 100%;" v-if="thisRow">
               <div style="width: 49%;">
                 <el-table border :data="thisRow.propertyDiscountList">
-                  <el-table-column label="货物类型" align="center" header-align="center">
+                  <el-table-column :label="$t('resources.cargoType')" align="center" header-align="center">
                     <template slot-scope="scope">
                       {{ scope.row.propertyType }}
                     </template>
                   </el-table-column>
-                  <el-table-column label="价格系数" align="center" header-align="center">
+                  <el-table-column :label="$t('resources.volumeWeight')" align="center" header-align="center">
                     <template slot-scope="scope"> {{ scope.row.discount }} % </template>
                   </el-table-column>
                 </el-table>
               </div>
               <div style="width: 49%;">
                 <el-table border :data="thisRow.numberDiscountList">
-                  <el-table-column label="总件数" align="center" header-align="center">
+                  <el-table-column :label="$t('resources.Quantity')" align="center" header-align="center">
                     <template slot-scope="scope">
                       {{ scope.row.minNumber }}
                     </template>
@@ -193,7 +194,7 @@
                       {{ scope.row.maxNumber }}
                     </template>
                   </el-table-column>
-                  <el-table-column label="折扣率" align="center" header-align="center">
+                  <el-table-column :label="$t('resources.discountRate')" align="center" header-align="center">
                     <template slot-scope="scope"> {{ scope.row.discount }} % </template>
                   </el-table-column>
                 </el-table>
@@ -231,9 +232,7 @@
                           (item > 9 ? item : `0${item}`)
                       ]
                         ? 'dark'
-                        : 'plain'
-                    "
-                  >
+                        : 'plain'">
                     {{ item }}
                   </el-tag>
                 </div>
@@ -340,11 +339,12 @@
                 </el-table>
                 <div style="width: 30%;margin-left: 20px;">
                   <div style="display: flex;align-items: center;" v-if="userInfo">
-                    <div style="margin-right: 15px;width: 100px;">体积重量换算</div>
+                    <div style="margin-right: 15px;width: 100px;">{{ $t("member.volumeWeightConversion") }}</div>
                     {{ userInfo.site.exchange }}
                   </div>
                   <div>
-                    <p>假设换算比为2500、体积=100*80*20=160000cm³,那么，重量=160000/2500=64kg</p>
+                    {{ $t("member.example") }},<br />
+                    {{ $t("member.example1") }}
                   </div>
                 </div>
               </div>
@@ -429,12 +429,12 @@
             <div style="display: flex;justify-content: space-around;width: 100%;">
               <div style="width: 49%;">
                 <el-table border :data="form.propertyDiscountList">
-                  <el-table-column label="货物类型">
+                  <el-table-column :label="$t('resources.cargoType')">
                     <template slot-scope="scope">
                       {{ scope.row.propertyType }}
                     </template>
                   </el-table-column>
-                  <el-table-column label="价格系数">
+                  <el-table-column :label="$t('resources.volumeWeight')">
                     <template slot-scope="scope">
                       <el-input type="number" @mousewheel.native.prevent v-model.number="scope.row.discount">
                         <template slot="append">%</template>
@@ -445,7 +445,7 @@
               </div>
               <div style="width: 49%;">
                 <el-table border :data="form.numberDiscountList">
-                  <el-table-column label="总件数">
+                  <el-table-column :label="$t('resources.Quantity')">
                     <template slot-scope="scope">
                       {{ scope.row.minNumber }}
                     </template>
@@ -464,7 +464,7 @@
                       />
                     </template>
                   </el-table-column>
-                  <el-table-column label="折扣率">
+                  <el-table-column :label="$t('resources.discountRate')">
                     <template slot-scope="scope">
                       <el-input type="number" @mousewheel.native.prevent v-model.number="scope.row.discount">
                         <template slot="append">%</template>
@@ -524,9 +524,9 @@
         </el-tabs>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="editDialog = false">取 消</el-button>
+        <el-button @click="editDialog = false">{{$t('resources.cancel')}}</el-button>
         <el-button :loading="confirmLoading" type="primary" @click="confirmIt">
-          确 定
+          {{$t('resources.confirm')}}
         </el-button>
       </span>
     </el-dialog>

@@ -378,7 +378,14 @@
     "identityCard": "Identity Card",
     "resetThePassword": "Reset the password ,are you sure?",
     "ftlType1": "Lump sum",
-    "ftlType2": "Baht per Kilometer"
+    "ftlType2": "Baht per Kilometer",
+    "map": "Map",
+    "deliverableDistrict": "Delivery Area",
+    "cargoType": "Cargo Type",
+    "volumeWeight": "Volume Weight",
+    "Quantity": "Quantity",
+    "discountRate": "Discount Rate",
+    "search": "Search"
   },
   "billing": {
     "billingStatus": "Status",
