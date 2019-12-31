@@ -540,7 +540,8 @@
     "setting": "基础设置（运输公司）",
     "VolumeWeightDivisor": "体积重量换算",
     "example": "假设换算比为2500、体积=100*80*20=160000cm³",
-    "example1": "那么，重量=160000/2500=64kg"
+    "example1": "那么，重量=160000/2500=64kg",
+    "volumeWeightConversion": "体积重量换算"
   },
   "confirm": {
     "tips": "提示",
