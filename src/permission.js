@@ -26,8 +26,7 @@ router.beforeEach(async (to, from, next) => {
       NProgress.done();
     } else {
       // determine whether the user has obtained his permission roles through getInfo
-      const hasRoles =
-        store.getters.curRole && store.getters.curRole.length > 0;
+      const hasRoles = store.getters.curRole && store.getters.curRole.length > 0;
       if (hasRoles) {
         if (from.path === "/login") {
           await store.dispatch("user/getInfo").then(res => {
@@ -38,10 +37,7 @@ router.beforeEach(async (to, from, next) => {
               localStorage.curRole = arr[0];
             }
           });
-          const accessRoutes = await store.dispatch(
-            "permission/generateRoutes",
-            [localStorage.curRole]
-          );
+          const accessRoutes = await store.dispatch("permission/generateRoutes", [localStorage.curRole]);
           resetRouter();
           router.addRoutes(accessRoutes);
           router.options.routes = store.getters.permission_routes;
@@ -55,10 +51,7 @@ router.beforeEach(async (to, from, next) => {
         try {
           if (store.getters.permission_routes.length === 0) {
             await store.dispatch("user/getInfo");
-            const accessRoutes = await store.dispatch(
-              "permission/generateRoutes",
-              [localStorage.curRole]
-            );
+            const accessRoutes = await store.dispatch("permission/generateRoutes", [localStorage.curRole]);
             resetRouter();
             router.addRoutes(accessRoutes);
             router.options.routes = store.getters.permission_routes;

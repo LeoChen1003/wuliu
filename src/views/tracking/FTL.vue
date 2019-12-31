@@ -7,20 +7,12 @@
       <!-- 导航 -->
       <div style="height:100%;padding-right:18px;">
         <div class="statusText">{{ $t("billing.billingStatus") }}</div>
-        <el-tabs
-          v-model="tabActive"
-          tab-position="left"
-          @tab-click="tabChange"
-          style="height:calc(100% - 50px);"
-        >
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="tabChange" style="height:calc(100% - 50px);">
           <el-tab-pane name="WAIT_DEMAND_TO_ACCEPT">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.toBeconfirmedOrderbyDemand")
-                  }}<sub class="badge">{{
-                    orderStatus.WAIT_DEMAND_TO_ACCEPT
-                  }}</sub>
+                  {{ $t("tracking.toBeconfirmedOrderbyDemand") }}<sub class="badge">{{ orderStatus.WAIT_DEMAND_TO_ACCEPT }}</sub>
                 </div>
               </div>
             </span>
@@ -30,9 +22,7 @@
               <div class="tabLabel">
                 <div class="text">
                   {{ $t("tracking.toBeconfirmedOrderbySupply")
-                  }}<sub class="badge red">{{
-                    orderStatus.WAIT_SUPPLY_TO_ACCEPT
-                  }}</sub>
+                  }}<sub class="badge red">{{ orderStatus.WAIT_SUPPLY_TO_ACCEPT }}</sub>
                 </div>
               </div>
             </span>
@@ -41,8 +31,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.tobePickedUp")
-                  }}<sub class="badge red">{{ orderStatus.WILL_PICK }}</sub>
+                  {{ $t("tracking.tobePickedUp") }}<sub class="badge red">{{ orderStatus.WILL_PICK }}</sub>
                 </div>
               </div>
             </span>
@@ -51,8 +40,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.intransit")
-                  }}<sub class="badge">{{ orderStatus.SENDING }}</sub>
+                  {{ $t("tracking.intransit") }}<sub class="badge">{{ orderStatus.SENDING }}</sub>
                 </div>
               </div>
             </span>
@@ -61,8 +49,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.documentTobereturned")
-                  }}<sub class="badge">{{ orderStatus.WILL_RETURN }}</sub>
+                  {{ $t("tracking.documentTobereturned") }}<sub class="badge">{{ orderStatus.WILL_RETURN }}</sub>
                 </div>
               </div>
             </span>
@@ -71,8 +58,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("tracking.completed")
-                  }}<sub class="badge">{{ orderStatus.COMPLETE }}</sub>
+                  {{ $t("tracking.completed") }}<sub class="badge">{{ orderStatus.COMPLETE }}</sub>
                 </div>
               </div>
             </span>
@@ -102,10 +88,7 @@
         <el-table :data="data.content" v-loading="loading" border>
           <el-table-column :label="$t('tracking.tracking')">
             <template slot-scope="scope">
-              <el-button
-                style="width:100%;text-align:left;"
-                @click="orderLog(scope.row.id)"
-              >
+              <el-button style="width:100%;text-align:left;" @click="orderLog(scope.row.id)">
                 <div>{{ scope.row.orderNo }}</div>
                 <div>{{ scope.row.outNumber }}</div>
                 <div>{{ scope.row.createdAt }}</div>
@@ -114,10 +97,7 @@
           </el-table-column>
           <el-table-column :label="$t('tracking.cargo_VAS')">
             <template slot-scope="scope">
-              <el-card
-                v-for="(item, index) in scope.row.propertyList"
-                :key="index"
-              >
+              <el-card v-for="(item, index) in scope.row.propertyList" :key="index">
                 <div>{{ propertyObj[item.propertyType] }}</div>
                 <div>
                   {{ item.number }} {{ unitObj[item.unit] }} {{ item.name }}
@@ -142,8 +122,7 @@
               <div>
                 {{ scope.row.receiverAddress.name }}
                 {{
-                  tabActive == "toBeconfirmedOrderbyDemand" ||
-                  tabActive == "toBeconfirmedOrderbySupply"
+                  tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
                     ? ""
                     : scope.row.receiverAddress.mobile
                 }}
@@ -168,8 +147,7 @@
               <div>
                 {{ scope.row.senderAddress.name }}
                 {{
-                  tabActive == "toBeconfirmedOrderbyDemand" ||
-                  tabActive == "toBeconfirmedOrderbySupply"
+                  tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
                     ? ""
                     : scope.row.senderAddress.mobile
                 }}
@@ -201,35 +179,22 @@
                   >{{ $t("tracking.reject") }}</el-button
                 >
                 <el-button
-                  v-if="
-                    scope.row.status == 'WILL_PICK' &&
-                      scope.row.transport.driverName == null
-                  "
+                  v-if="scope.row.status == 'WILL_PICK' && scope.row.transport.driverName == null"
                   @click="confirmB(scope.row)"
                   :disabled="!permissions.SupplyOrderManage"
                   type="primary"
                   >{{ $t("tracking.operation") }}</el-button
                 >
                 <el-button
-                  v-if="
-                    scope.row.status == 'SENDING' ||
-                      scope.row.status == 'WILL_PICK'
-                  "
+                  v-if="scope.row.status == 'SENDING' || scope.row.status == 'WILL_PICK'"
                   @click="returnShow(scope.row)"
-                  :disabled="
-                    scope.row.publishBack == 1 ||
-                      !permissions.SupplyResourceManage
-                  "
+                  :disabled="scope.row.publishBack == 1 || !permissions.SupplyResourceManage"
                   type="primary"
                   >{{ $t("tracking.returnTruck") }}</el-button
                 >
                 <el-button
                   v-if="scope.row.status == 'WILL_RETURN'"
-                  :disabled="
-                    scope.row.returnType == 1 ||
-                      scope.row.returnType == 2 ||
-                      !permissions.SupplyOrderManage
-                  "
+                  :disabled="scope.row.returnType == 1 || scope.row.returnType == 2 || !permissions.SupplyOrderManage"
                   @click="rdShow(scope.row)"
                   type="primary"
                   >{{ $t("tracking.returnDocument") }}</el-button
@@ -253,30 +218,17 @@
       </div>
     </div>
 
-    <el-dialog
-      :title="$t('tracking.print')"
-      :visible.sync="printeDialog"
-      width="65%"
-      class="comfirmDialog"
-    >
+    <el-dialog :title="$t('tracking.print')" :visible.sync="printeDialog" width="65%" class="comfirmDialog">
       打印
       <span slot="footer">
         <div class="footerBtn">
-          <el-button
-            size="small"
-            plain
-            style="width:300px;"
-            @click="printeDialog = false"
-            >{{ $t("tracking.confirm") }}</el-button
-          >
+          <el-button size="small" plain style="width:300px;" @click="printeDialog = false">{{
+            $t("tracking.confirm")
+          }}</el-button>
         </div>
       </span>
     </el-dialog>
-    <el-dialog
-      :title="$t('tracking.returnTruck')"
-      width="600px"
-      :visible.sync="returnDialog"
-    >
+    <el-dialog :title="$t('tracking.returnTruck')" width="600px" :visible.sync="returnDialog">
       <el-form ref="form" :model="form" label-width="120px">
         <el-form-item :label="$t('tracking.origin')">
           {{ returnForm_show.sender }}
@@ -308,31 +260,20 @@
           </el-time-picker>
         </el-form-item>
         <el-form-item :label="$t('tracking.quotation')" required>
-          <el-input
-            v-model="returnCharge"
-            @mousewheel.native.prevent
-            type="number"
-          ></el-input>
+          <el-input v-model="returnCharge" @mousewheel.native.prevent type="number"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
             :loading="returnLoading"
-            :disabled="
-              returnCharge == '' || returnDate == '' || returnTime == ''
-            "
+            :disabled="returnCharge == '' || returnDate == '' || returnTime == ''"
             @click="returnIt"
             >{{ $t("tracking.confirm") }}</el-button
           >
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog
-      :title="$t('tracking.confirmOrder')"
-      width="600px"
-      v-if="orderInfo"
-      :visible.sync="confirmDialog"
-    >
+    <el-dialog :title="$t('tracking.confirmOrder')" width="600px" v-if="orderInfo" :visible.sync="confirmDialog">
       <el-form label-width="130px">
         <el-form-item :label="$t('tracking.trackingNo')">
           <div>{{ orderInfo.orderNo }}</div>
@@ -351,24 +292,12 @@
         </el-form-item>
         <el-form-item :label="$t('tracking.driver')">
           <el-select v-model="confirmForm.driverId" filterable>
-            <el-option
-              v-for="item in td.drivers"
-              :key="item.value"
-              :label="item.name"
-              :value="item.id"
-            >
-            </el-option>
+            <el-option v-for="item in td.drivers" :key="item.value" :label="item.name" :value="item.id"> </el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('tracking.plateLicense')">
           <el-select v-model="confirmForm.truckId" filterable>
-            <el-option
-              v-for="item in td.trucks"
-              :key="item.value"
-              :label="item.plate"
-              :value="item.id"
-            >
-            </el-option>
+            <el-option v-for="item in td.trucks" :key="item.value" :label="item.plate" :value="item.id"> </el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -384,47 +313,26 @@
     </el-dialog>
     <el-dialog :title="$t('tracking.orderLog')" :visible.sync="logDialog">
       <el-timeline :reverse="true">
-        <el-timeline-item
-          v-for="(item, index) in logs"
-          :key="index"
-          :timestamp="item.createdAt"
-        >
+        <el-timeline-item v-for="(item, index) in logs" :key="index" :timestamp="item.createdAt">
           {{ item.introduce }}
         </el-timeline-item>
       </el-timeline>
     </el-dialog>
-    <el-dialog
-      :title="$t('tracking.returnDocument')"
-      width="600px"
-      @close="dialogClose"
-      :visible.sync="rdDialog"
-    >
+    <el-dialog :title="$t('tracking.returnDocument')" width="600px" @close="dialogClose" :visible.sync="rdDialog">
       <el-form :model="rdForm" size="mini" label-width="150px">
         <el-form-item :label="$t('tracking.trackingNo')">
           {{ rdRow.orderNo }}
         </el-form-item>
         <el-form-item :label="$t('tracking.deliveryChannel')" required>
           <el-select v-model="rdForm.returnType" class="rdFormWidth">
-            <el-option :label="$t('tracking.expressDelivery')" :value="1">
-            </el-option>
-            <el-option :label="$t('tracking.faceToFace')" :value="2">
-            </el-option>
+            <el-option :label="$t('tracking.expressDelivery')" :value="1"> </el-option>
+            <el-option :label="$t('tracking.faceToFace')" :value="2"> </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          :label="$t('tracking.expressWaybillNo')"
-          v-if="rdForm.returnType == 1"
-          required
-        >
-          <el-input
-            class="rdFormWidth"
-            v-model="rdForm.courierNumber"
-          ></el-input>
+        <el-form-item :label="$t('tracking.expressWaybillNo')" v-if="rdForm.returnType == 1" required>
+          <el-input class="rdFormWidth" v-model="rdForm.courierNumber"></el-input>
         </el-form-item>
-        <el-form-item
-          :label="$t('tracking.photo')"
-          v-if="rdForm.returnType == 1"
-        >
+        <el-form-item :label="$t('tracking.photo')" v-if="rdForm.returnType == 1">
           <div class="upload-box">
             <el-upload
               class="upload-box"
@@ -444,9 +352,7 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button class="rdFormWidth" @click="rdIt" type="primary">{{
-            $t("tracking.confirm")
-          }}</el-button>
+          <el-button class="rdFormWidth" @click="rdIt" type="primary">{{ $t("tracking.confirm") }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -467,7 +373,7 @@ import {
   getGoodsProperty,
   getSupplyTD,
   getBcYear,
-  getBcDay
+  getBcDay,
 } from "../../api/data";
 import {
   confirmOrder,
@@ -477,7 +383,7 @@ import {
   getOrderLog,
   getOrderStatus,
   returnTruck,
-  returnDocument
+  returnDocument,
 } from "../../api/tracking.js";
 import { getToken } from "@/utils/auth";
 import { mapGetters } from "vuex";
@@ -490,7 +396,7 @@ export default {
     return {
       env: process.env.VUE_APP_BASE_API,
       headers: {
-        Authorization: getToken()
+        Authorization: getToken(),
       },
       orderList: [],
       data: {},
@@ -510,18 +416,18 @@ export default {
         supportLoading: "",
         humanWorkDay: "",
         moneyPerDay: "",
-        status: ""
+        status: "",
       },
       provinceList: [],
       cityList: [],
       truckTypes: {
         categories: [],
-        subCategories: []
+        subCategories: [],
       },
       timeOptions: {
         start: "00:00",
         step: "00:15",
-        end: "23:45"
+        end: "23:45",
       },
       serveObj: {},
       propertyObj: {},
@@ -534,20 +440,20 @@ export default {
         WAIT_SUPPLY_TO_ACCEPT: 0,
         WAITTING: 0,
         WILL_PICK: 0,
-        WILL_RETURN: 0
+        WILL_RETURN: 0,
       },
       orderInfo: null,
       td: {},
       confirmForm: {
         dirverId: "",
-        truckId: ""
+        truckId: "",
       },
       loading: false,
       confirmLoading: false,
       orderDialog: false,
       returnLoading: false,
       searchForm: {
-        province: ""
+        province: "",
       },
       logs: [],
       returnForm_show: {},
@@ -570,12 +476,12 @@ export default {
               let years = [
                 {
                   label: self.bcYear,
-                  value: self.bcYear
+                  value: self.bcYear,
                 },
                 {
                   label: self.bcYear + 1,
-                  value: self.bcYear + 1
-                }
+                  value: self.bcYear + 1,
+                },
               ];
               resolve(years);
             });
@@ -584,7 +490,7 @@ export default {
             for (let y = month; y <= 12; y++) {
               months.push({
                 label: y,
-                value: y
+                value: y,
               });
             }
             resolve(months);
@@ -592,31 +498,27 @@ export default {
             getBcDay(node.parent.value, node.value).then(res => {
               let days = res.data;
               let dateList = [];
-              let d =
-                node.parent.value == self.bcYear &&
-                node.value == date.getMonth() + 1
-                  ? day
-                  : 1;
+              let d = node.parent.value == self.bcYear && node.value == date.getMonth() + 1 ? day : 1;
               for (let x = d; x <= days; x++) {
                 dateList.push({
                   label: x,
                   value: x,
-                  leaf: true
+                  leaf: true,
                 });
               }
               resolve(dateList);
             });
           }
-        }
+        },
       },
       rdDialog: false,
       rdForm: {
-        returnType: 1
+        returnType: 1,
       },
       fileList: [],
       previewDialog: false,
       previewImg: "",
-      rdRow: {}
+      rdRow: {},
     };
   },
   // 监听属性 类似于data概念
@@ -624,7 +526,7 @@ export default {
     ...mapGetters(["permissions"]),
     phoFileList: function() {
       return self.$refs.photoIds.uploadFiles;
-    }
+    },
   },
   // 监控data中的数据变化
   watch: {},
@@ -681,7 +583,7 @@ export default {
       let page = self.data.number ? self.data.number : 0;
       getOrder({
         status: self.tabActive,
-        page: page
+        page: page,
       }).then(res => {
         self.data = res.data;
         self.loading = false;
@@ -697,7 +599,7 @@ export default {
       self.loading = true;
       getOrder({
         status: self.tabActive,
-        page: e - 1
+        page: e - 1,
       }).then(res => {
         self.data = res.data;
         self.loading = false;
@@ -717,7 +619,7 @@ export default {
           confirmButtonText: self.$t("tracking.confirm"),
           cancelButtonText: self.$t("tracking.cancel"),
           inputPattern: /\S/,
-          inputErrorMessage: self.$t("tracking.pleaseEnterTheRejectionReason")
+          inputErrorMessage: self.$t("tracking.pleaseEnterTheRejectionReason"),
         })
         .then(({ value }) => {
           rejectOrder(item.id, value).then(() => {
@@ -729,32 +631,24 @@ export default {
     confirmIt() {
       self.confirmLoading = true;
       if (self.orderInfo.status == "WAIT_SUPPLY_TO_ACCEPT") {
-        confirmOrder(
-          self.orderInfo.id,
-          self.confirmForm.truckId,
-          self.confirmForm.driverId
-        ).then(() => {
+        confirmOrder(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(() => {
           self.loadData(() => {
             self.confirmDialog = false;
             self.confirmForm = {
               dirverId: "",
-              truckId: ""
+              truckId: "",
             };
             self.$message.success(self.$t("tracking.successful"));
             self.confirmLoading = false;
           });
         });
       } else if (self.orderInfo.status == "WILL_PICK") {
-        updateOrderInfo(
-          self.orderInfo.id,
-          self.confirmForm.truckId,
-          self.confirmForm.driverId
-        ).then(() => {
+        updateOrderInfo(self.orderInfo.id, self.confirmForm.truckId, self.confirmForm.driverId).then(() => {
           self.loadData(() => {
             self.confirmDialog = false;
             self.confirmForm = {
               dirverId: "",
-              truckId: ""
+              truckId: "",
             };
             self.$message.success(self.$t("tracking.successful"));
             self.confirmLoading = false;
@@ -773,7 +667,7 @@ export default {
         sender: item.receiverAddress.province,
         receiver: item.senderAddress.city,
         truck: item.transport.carType,
-        subType: item.transport.carriage
+        subType: item.transport.carriage,
       };
       self.returnCharge = "";
       self.returnDate = "";
@@ -806,7 +700,7 @@ export default {
     dialogClose() {
       self.fileList = [];
       self.rdForm = {
-        returnType: 1
+        returnType: 1,
       };
     },
     outLimit() {
@@ -835,8 +729,8 @@ export default {
           self.rdDialog = false;
         });
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

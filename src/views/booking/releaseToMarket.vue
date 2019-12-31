@@ -1,12 +1,11 @@
 <template>
   <div class="manage booking">
-    <div
-      style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;"
-    >
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
       <div class="go_back" @click="$router.go(-1)">
         <el-button
           icon="el-icon-arrow-left
 "
+          @click="$router.go(-1)"
           >{{ $t("booking.back") }}</el-button
         >
       </div>
@@ -19,14 +18,7 @@
         >{{ $t("booking.releaseToMarket") }}</el-button
       >
     </div>
-    <el-form
-      ref="releaseform"
-      :model="releaseForm"
-      :rules="releaseRules"
-      :show-message="false"
-      label-position="top"
-      size="small"
-    >
+    <el-form ref="releaseform" :model="releaseForm" :rules="releaseRules" :show-message="false" label-position="top" size="small">
       <el-row class="itemRow">
         <el-col :span="8">
           <el-form-item :label="$t('booking.logisiticsType')">
@@ -36,12 +28,7 @@
               :placeholder="$t('placeholder.pleaseChoose')"
               class="inputWidth"
             >
-              <el-option
-                v-for="item in logisticType"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
+              <el-option v-for="item in logisticType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('booking.sender')">
@@ -51,12 +38,7 @@
               :placeholder="$t('placeholder.pleaseChoose')"
               class="inputWidth"
             >
-              <el-option
-                v-for="(item, index) in senderList"
-                :key="item.id"
-                :label="item.name"
-                :value="index"
-              />
+              <el-option v-for="(item, index) in senderList" :key="item.id" :label="item.name" :value="index" />
             </el-select>
           </el-form-item>
           <el-form-item prop="pickAt" :label="$t('booking.pickupTime')">
@@ -67,11 +49,7 @@
                               style="margin-right:5px;"
                               :placeholder="$t('placeholder.chooseDate')">
               </el-date-picker> -->
-              <bcTime
-                @changeBCtime="changeBCtime"
-                :dateDefault="[]"
-                style="margin-right:5px;"
-              ></bcTime>
+              <bcTime @changeBCtime="changeBCtime" :dateDefault="pickDateDefault" style="margin-right:5px;"></bcTime>
               <el-time-picker
                 v-model="time"
                 format="HH:mm:ss"
@@ -111,21 +89,12 @@
               @focus="clearSelect('pk')"
               :loading="searchloading"
             >
-              <el-option
-                v-for="item in pickUpRegionList"
-                :key="item.code"
-                :label="item.fullname"
-                :value="item.code"
-              >
-              </el-option>
+              <el-option v-for="item in pickUpRegionList" :key="item.code" :label="item.fullname" :value="item.code"> </el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item
-            prop="receiverAddress"
-            :label="$t('booking.destination')"
-          >
+          <el-form-item prop="receiverAddress" :label="$t('booking.destination')">
             <el-input
               :placeholder="$t('placeholder.pleaseEnterRecipieName')"
               v-model="releaseForm.receiverAddress.name"
@@ -153,13 +122,7 @@
               :remote-method="pickUpMethod"
               :loading="searchloading"
             >
-              <el-option
-                v-for="item in delRegionList"
-                :key="item.code"
-                :label="item.fullname"
-                :value="item.code"
-              >
-              </el-option>
+              <el-option v-for="item in delRegionList" :key="item.code" :label="item.fullname" :value="item.code"> </el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -174,12 +137,7 @@
               :label="$t('booking.unloading')"
               border
             ></el-checkbox>
-            <el-checkbox
-              v-model="loading"
-              class="inputWidth inputBottom"
-              :label="$t('booking.loading')"
-              border
-            ></el-checkbox>
+            <el-checkbox v-model="loading" class="inputWidth inputBottom" :label="$t('booking.loading')" border></el-checkbox>
             <el-checkbox
               v-model="documentReturn"
               class="inputWidth inputBottom"
@@ -201,11 +159,7 @@
               v-model="liabilityCon"
               class="inputWidth"
             >
-              <el-select
-                v-model="liabilitySelect"
-                slot="append"
-                :placeholder="$t('placeholder.pleaseChoose')"
-              >
+              <el-select v-model="liabilitySelect" slot="append" :placeholder="$t('placeholder.pleaseChoose')">
                 <el-option label="PCS" value="PCS"></el-option>
                 <el-option label="Shipment" value="Shipment"></el-option>
               </el-select>
@@ -219,24 +173,14 @@
               :placeholder="$t('placeholder.pleaseChoose')"
               style="width:45%;"
             >
-              <el-option
-                v-for="item in categoryList"
-                :key="item.key"
-                :label="item.value"
-                :value="item.key"
-              />
+              <el-option v-for="item in categoryList" :key="item.key" :label="item.value" :value="item.key" />
             </el-select>
             <el-select
               v-model="releaseForm.transportInfo.carriage"
               :placeholder="$t('placeholder.pleaseChoose')"
               style="width:45%;"
             >
-              <el-option
-                v-for="item in subCategoryList"
-                :key="item.key"
-                :label="item.value"
-                :value="item.key"
-              />
+              <el-option v-for="item in subCategoryList" :key="item.key" :label="item.value" :value="item.key" />
             </el-select>
           </el-form-item>
           <el-form-item prop="orderInfo" :label="$t('booking.price')">
@@ -248,17 +192,10 @@
             />
           </el-form-item>
           <el-form-item :label="$t('booking.referenceNo')">
-            <el-input
-              v-model="releaseForm.orderInfo.outNumber"
-              class="inputWidth"
-            />
+            <el-input v-model="releaseForm.orderInfo.outNumber" class="inputWidth" />
           </el-form-item>
           <el-form-item :label="$t('booking.remarks')">
-            <el-input
-              v-model="releaseForm.orderInfo.remark"
-              type="textarea"
-              class="inputWidth"
-            />
+            <el-input v-model="releaseForm.orderInfo.remark" type="textarea" class="inputWidth" />
           </el-form-item>
         </el-col>
         <!-- <el-col :span="8">
@@ -282,16 +219,9 @@
           </el-form-item>
         </el-col> -->
         <el-col :span="8">
-          <el-form-item
-            prop="receiveAt"
-            :label="$t('booking.expectedDeliveryTime')"
-          >
+          <el-form-item prop="receiveAt" :label="$t('booking.expectedDeliveryTime')">
             <div class="inputWidth" style="display:flex;">
-              <bcTime
-                @changeBCtime="changeBCtimeReceive"
-                :dateDefault="[]"
-                style="margin-right:5px;"
-              ></bcTime>
+              <bcTime @changeBCtime="changeBCtimeReceive" :dateDefault="[]" style="margin-right:5px;"></bcTime>
               <el-time-picker
                 v-model="receive_time"
                 format="HH:mm:ss"
@@ -423,9 +353,7 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="sizeConfirm" style="width:150px;">{{
-          $t("booking.confirm")
-        }}</el-button>
+        <el-button type="primary" @click="sizeConfirm" style="width:150px;">{{ $t("booking.confirm") }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -436,13 +364,7 @@
 // 例如：import 《组件名称》 from '《组件路径》';
 import { mapGetters } from "vuex";
 import { releaseOrder } from "../../api/booking";
-import {
-  getTruckType,
-  findDistrictFullList,
-  getGoodsProperty,
-  getSenderList,
-  getTransportList
-} from "../../api/data";
+import { getTruckType, findDistrictFullList, getGoodsProperty, getSenderList, getTransportList } from "../../api/data";
 import bcTime from "@/components/bcTime";
 
 let self;
@@ -451,18 +373,15 @@ export default {
     "el-select-loadmore": {
       bind(el, binding) {
         // 获取element-ui定义好的scroll盒子
-        const SELECTWRAP_DOM = el.querySelector(
-          ".el-select-dropdown .el-select-dropdown__wrap"
-        );
+        const SELECTWRAP_DOM = el.querySelector(".el-select-dropdown .el-select-dropdown__wrap");
         SELECTWRAP_DOM.addEventListener("scroll", function() {
-          const condition =
-            this.scrollHeight - this.scrollTop <= this.clientHeight;
+          const condition = this.scrollHeight - this.scrollTop <= this.clientHeight;
           if (condition) {
             binding.value();
           }
         });
-      }
-    }
+      },
+    },
   },
   // import引入的组件需要注入到对象中才能使用
   components: { bcTime },
@@ -524,32 +443,32 @@ export default {
           lineType: "FTL",
           outNumber: "",
           remark: "",
-          settlementAmount: null
+          settlementAmount: null,
         },
         senderAddress: {
           pickAt: "",
           name: "",
           mobile: "",
           addressDetail: "",
-          code: ""
+          code: "",
         },
         receiverAddress: {
           receiveAt: "",
           name: "",
           mobile: "",
           addressDetail: "",
-          code: ""
+          code: "",
         },
         transportInfo: {
           carType: "",
-          carriage: ""
+          carriage: "",
         },
         chargeList: [
           {
             chargeType: "CARPOOL",
             chargeIntro: "false",
-            money: 0
-          }
+            money: 0,
+          },
         ],
         propertyList: [
           //   {
@@ -560,43 +479,39 @@ export default {
           //   sizeType: '',
           //   weightOfEach: null
           // }
-        ]
+        ],
       },
       releaseRules: {
         senderAddress: [
           {
             required: true,
             trigger: "change",
-            validator: validatorSenderAddress
-          }
+            validator: validatorSenderAddress,
+          },
         ],
         receiverAddress: [
           {
             required: true,
             trigger: "change",
-            validator: validatorReceiverAddress
-          }
+            validator: validatorReceiverAddress,
+          },
         ],
         propertyList: [
           {
             required: true,
             trigger: "change",
-            validator: validatorPropertyList
-          }
+            validator: validatorPropertyList,
+          },
         ],
         transportInfo: [
           {
             required: true,
             trigger: "change",
-            validator: validatorTransportInfo
-          }
+            validator: validatorTransportInfo,
+          },
         ],
-        pickAt: [
-          { required: true, trigger: "change", validator: validatorpickAt }
-        ],
-        receiveAt: [
-          { required: true, trigger: "change", validator: validatorpickAt }
-        ]
+        pickAt: [{ required: true, trigger: "change", validator: validatorpickAt }],
+        receiveAt: [{ required: true, trigger: "change", validator: validatorpickAt }],
       },
       documentReturn: false,
       liability: false,
@@ -630,24 +545,26 @@ export default {
       logisticType: [
         {
           value: "FTL",
-          label: "FTL"
+          label: "FTL",
         },
         {
           value: "LTL",
-          label: "LTL"
-        }
+          label: "LTL",
+        },
       ],
       senderList: [],
       senderIndex: null,
       todoLoading: false,
       time_at: "",
       receive_time_at: "",
-      receive_time: ""
+      receive_time: "",
+      releaseInfo: {},
+      pickDateDefault: [],
     };
   },
   // 监听属性 类似于data概念
   computed: {
-    ...mapGetters(["permissions"])
+    ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {
@@ -668,7 +585,7 @@ export default {
         self.amountList.push({
           key: "RETURN_DOCUMENT",
           amount: 10,
-          label: self.$t("booking.documentReturn")
+          label: self.$t("booking.documentReturn"),
         });
       } else {
         self.amountWatch("RETURN_DOCUMENT");
@@ -679,7 +596,7 @@ export default {
         self.amountList.push({
           key: "LOADING",
           amount: 0,
-          label: self.$t("booking.loading")
+          label: self.$t("booking.loading"),
         });
       } else {
         self.amountWatch("LOADING");
@@ -690,7 +607,7 @@ export default {
         self.amountList.push({
           key: "UNLOADING",
           amount: 0,
-          label: self.$t("booking.unloading")
+          label: self.$t("booking.unloading"),
         });
       } else {
         self.amountWatch("UNLOADING");
@@ -701,13 +618,14 @@ export default {
         self.amountList.push({
           key: "INSURANCE",
           amount: 0,
-          label: self.$t("booking.liability")
+          label: self.$t("booking.liability"),
         });
       } else {
         self.amountWatch("INSURANCE");
       }
     },
     time_at(val) {
+      console.log(val);
       let t = self.time ? self.time : "23:59:59";
       self.releaseForm.senderAddress.pickAt = val + ` ${t}`;
     },
@@ -721,14 +639,31 @@ export default {
     },
     receive_time(val) {
       let t = val ? val : "23:59:59";
-      self.releaseForm.receiverAddress.receiveAt =
-        self.receive_time_at + ` ${val}`;
-    }
+      self.releaseForm.receiverAddress.receiveAt = self.receive_time_at + ` ${val}`;
+    },
   },
   created() {
     self = this;
+    let releaseInfo = JSON.parse(localStorage.getItem("releaseInfo"));
+    self.releaseInfo = releaseInfo;
+    self.pickDateDefault = releaseInfo.searchForm.pickUpDate.split("-").map(Number);
   },
   mounted() {
+    let releaseInfo = self.releaseInfo;
+    console.log(releaseInfo);
+    if (releaseInfo) {
+      let release = self.releaseForm;
+      let type = releaseInfo.logisticType;
+      self.pickUpRegionList = releaseInfo.pickUpRegionList;
+      self.delRegionList = releaseInfo.delRegionList;
+      release.orderInfo.lineType = type;
+      release.senderAddress.code = releaseInfo.searchForm.pickUpRegion;
+      self.time_at = releaseInfo.searchForm.pickUpDate;
+      self.time = releaseInfo.time;
+      release.receiverAddress.code = releaseInfo.searchForm.deliveryRegion;
+      console;
+      console.log(self.releaseForm);
+    }
     // 卡车类型
     getTruckType().then(res => {
       self.categoryList = res.data.categories;
@@ -788,14 +723,12 @@ export default {
     getdistrictFullList(query, page) {
       findDistrictFullList({
         name: query,
-        page: page
+        page: page,
       }).then(res => {
         self.isLast = res.data.last;
         if (!res.data.first) {
           if (self.curSelect == "pk") {
-            self.pickUpRegionList = self.pickUpRegionList.concat(
-              res.data.content
-            );
+            self.pickUpRegionList = self.pickUpRegionList.concat(res.data.content);
           } else {
             self.delRegionList = self.delRegionList.concat(res.data.content);
           }
@@ -824,15 +757,14 @@ export default {
     senderSelect(val) {
       self.releaseForm.senderAddress.name = self.senderList[val].name;
       self.releaseForm.senderAddress.mobile = self.senderList[val].mobile;
-      self.releaseForm.senderAddress.addressDetail =
-        self.senderList[val].addressDetail;
+      self.releaseForm.senderAddress.addressDetail = self.senderList[val].addressDetail;
       self.releaseForm.senderAddress.code = self.senderList[val].code;
       self.curSelect = "pk";
       self.pickUpRegionList = [
         {
           code: self.senderList[val].code,
-          fullname: self.senderList[val].fullName
-        }
+          fullname: self.senderList[val].fullName,
+        },
       ];
     },
     // 下单
@@ -845,18 +777,11 @@ export default {
           for (let x in self.amountList) {
             self.releaseForm.chargeList.push({
               chargeType: self.amountList[x].key,
-              chargeIntro:
-                self.amountList[x].key == "INSURANCE"
-                  ? self.liabilitySelect
-                  : "true",
-              money:
-                self.amountList[x].key == "INSURANCE" ? self.liabilityCon : 0
+              chargeIntro: self.amountList[x].key == "INSURANCE" ? self.liabilitySelect : "true",
+              money: self.amountList[x].key == "INSURANCE" ? self.liabilityCon : 0,
             });
           }
-          if (
-            self.releaseForm.orderInfo.settlementAmount == "" ||
-            self.releaseForm.orderInfo.settlementAmount == null
-          ) {
+          if (self.releaseForm.orderInfo.settlementAmount == "" || self.releaseForm.orderInfo.settlementAmount == null) {
             self.releaseForm.orderInfo.settlementAmount = 0;
           }
           releaseOrder(self.releaseForm)
@@ -878,14 +803,14 @@ export default {
         number: null,
         unit: "",
         sizeType: "",
-        weightOfEach: null
+        weightOfEach: null,
       });
     },
     delIt(row, index) {
       self
         .$confirm(this.$t("booking.aysDel"), this.$t("confirm.tips"), {
           confirmButtonText: this.$t("booking.delete"),
-          cancelButtonText: this.$t("member.cancel")
+          cancelButtonText: this.$t("member.cancel"),
         })
         .then(() => {
           self.releaseForm.propertyList.splice(index, 1);
@@ -900,11 +825,10 @@ export default {
     },
     sizeConfirm() {
       self.sizeDialog = false;
-      let size =
-        self.size_length + "*" + self.size_width + "*" + self.size_height;
+      let size = self.size_length + "*" + self.size_width + "*" + self.size_height;
       self.sizeTypeList.push({
         key: size,
-        value: size
+        value: size,
       });
       self.releaseForm.propertyList[self.sizeCurIndex].sizeType = size;
     },
@@ -914,8 +838,8 @@ export default {
       } else if (e > 1000000) {
         self.releaseForm.orderInfo.settlementAmount = 1000000;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

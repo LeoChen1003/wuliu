@@ -2,12 +2,7 @@
   <section class="todoapp">
     <!-- header -->
     <header class="header">
-      <input
-        class="new-todo"
-        autocomplete="off"
-        placeholder="Todo List"
-        @keyup.enter="addTodo"
-      />
+      <input class="new-todo" autocomplete="off" placeholder="Todo List" @keyup.enter="addTodo" />
     </header>
     <!-- main section -->
     <section v-show="todos.length" class="main">
@@ -38,11 +33,7 @@
       </span>
       <ul class="filters">
         <li v-for="(val, key) in filters" :key="key">
-          <a
-            :class="{ selected: visibility === key }"
-            @click.prevent="visibility = key"
-            >{{ key | capitalize }}</a
-          >
+          <a :class="{ selected: visibility === key }" @click.prevent="visibility = key">{{ key | capitalize }}</a>
         </li>
       </ul>
       <!-- <button class="clear-completed" v-show="todos.length > remaining" @click="clearCompleted">
@@ -59,7 +50,7 @@ const STORAGE_KEY = "todos";
 const filters = {
   all: todos => todos,
   active: todos => todos.filter(todo => !todo.done),
-  completed: todos => todos.filter(todo => todo.done)
+  completed: todos => todos.filter(todo => todo.done),
 };
 const defalutList = [
   { text: "star this repository", done: false },
@@ -69,20 +60,20 @@ const defalutList = [
   { text: "vue", done: true },
   { text: "element-ui", done: true },
   { text: "axios", done: true },
-  { text: "webpack", done: true }
+  { text: "webpack", done: true },
 ];
 export default {
   components: { Todo },
   filters: {
     pluralize: (n, w) => (n === 1 ? w : w + "s"),
-    capitalize: s => s.charAt(0).toUpperCase() + s.slice(1)
+    capitalize: s => s.charAt(0).toUpperCase() + s.slice(1),
   },
   data() {
     return {
       visibility: "all",
       filters,
       // todos: JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || defalutList
-      todos: defalutList
+      todos: defalutList,
     };
   },
   computed: {
@@ -94,7 +85,7 @@ export default {
     },
     remaining() {
       return this.todos.filter(todo => !todo.done).length;
-    }
+    },
   },
   methods: {
     setLocalStorage() {
@@ -105,7 +96,7 @@ export default {
       if (text.trim()) {
         this.todos.push({
           text,
-          done: false
+          done: false,
         });
         this.setLocalStorage();
       }
@@ -132,8 +123,8 @@ export default {
         todo.done = done;
         this.setLocalStorage();
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

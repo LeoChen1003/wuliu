@@ -1,11 +1,12 @@
 import request from "@/utils/request";
+import requestJSON from "@/utils/requestJSON";
 
 // 订单列表
 export function getOrder(params) {
   return request({
     url: "/api/supply/order/my/list",
     method: "get",
-    params
+    params,
   });
 }
 
@@ -13,7 +14,7 @@ export function getOrder(params) {
 export function getOrderLog(id) {
   return request({
     url: `/api/supply/order/${id}/log`,
-    method: "get"
+    method: "get",
   });
 }
 
@@ -21,7 +22,7 @@ export function getOrderLog(id) {
 export function getOrderStatus() {
   return request({
     url: "/api/supply/order/my/order/status/count",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -30,7 +31,16 @@ export function getOrderPF(params) {
   return request({
     url: "/api/platform/order/list",
     method: "get",
-    params
+    params,
+  });
+}
+
+// 平台订单列表
+export function getOrderLTLPF(params) {
+  return request({
+    url: "/api/ltl/platform/statusOrder",
+    method: "get",
+    params,
   });
 }
 
@@ -38,7 +48,7 @@ export function getOrderPF(params) {
 export function getOrderLogPF(id) {
   return request({
     url: `/api/platform/order/${id}/log`,
-    method: "get"
+    method: "get",
   });
 }
 
@@ -46,7 +56,16 @@ export function getOrderLogPF(id) {
 export function getOrderStatusPF() {
   return request({
     url: "/api/platform/order/status/count",
-    method: "get"
+    method: "get",
+  });
+}
+
+// 平台获取订单数量
+export function getOrderLTLStatusPF(params) {
+  return request({
+    url: "/api/ltl/platform/show",
+    method: "get",
+    params,
   });
 }
 
@@ -57,8 +76,8 @@ export function confirmOrder(id, truck_id, driver_id) {
     method: "post",
     data: {
       truck_id: truck_id,
-      driver_id: driver_id
-    }
+      driver_id: driver_id,
+    },
   });
 }
 
@@ -68,8 +87,8 @@ export function rejectOrder(id, reason) {
     url: "/api/supply/order/refuse/" + id,
     method: "post",
     data: {
-      reason: reason
-    }
+      reason: reason,
+    },
   });
 }
 
@@ -78,7 +97,7 @@ export function demandOrderList(data) {
   return request({
     url: "/api/demand/order/list",
     method: "get",
-    params: data
+    params: data,
   });
 }
 
@@ -86,7 +105,7 @@ export function demandOrderList(data) {
 export function demandStatusCount() {
   return request({
     url: "/api/demand/order/status/count",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -94,7 +113,7 @@ export function demandStatusCount() {
 export function demandquoteList(order_id) {
   return request({
     url: "/api/demand/order/quote/list/" + order_id,
-    method: "get"
+    method: "get",
   });
 }
 
@@ -104,8 +123,8 @@ export function demandquoteConfirm(id, quoteId) {
     url: "/api/demand/order/quote/confirm/" + id,
     method: "post",
     data: {
-      quote_id: quoteId
-    }
+      quote_id: quoteId,
+    },
   });
 }
 
@@ -116,8 +135,8 @@ export function orderRating(id, rating, remark) {
     method: "post",
     data: {
       rating: rating,
-      remark: remark
-    }
+      remark: remark,
+    },
   });
 }
 
@@ -128,8 +147,8 @@ export function updateOrderInfo(id, truck_id, driver_id) {
     method: "post",
     data: {
       truck_id: truck_id,
-      driver_id: driver_id
-    }
+      driver_id: driver_id,
+    },
   });
 }
 
@@ -140,8 +159,8 @@ export function returnTruck(id, charge, backTime) {
     method: "post",
     data: {
       charge: charge,
-      backTime: backTime
-    }
+      backTime: backTime,
+    },
   });
 }
 
@@ -150,7 +169,7 @@ export function returnDocument(id, data) {
   return request({
     url: `/api/supply/order/confirm/returnfile/${id}`,
     method: "post",
-    data: data
+    data: data,
   });
 }
 
@@ -158,7 +177,7 @@ export function returnDocument(id, data) {
 export function confirmRD(id) {
   return request({
     url: `/api/demand/order/complete/${id}`,
-    method: "post"
+    method: "post",
   });
 }
 
@@ -168,7 +187,61 @@ export function getImg(ids) {
     url: `/api/resource/part`,
     method: "get",
     params: {
-      ids: ids
-    }
+      ids: ids,
+    },
+  });
+}
+
+//ltl获取跟单列表
+export function getLtlOrders(orderStatus, data) {
+  return request({
+    url: `/api/ltl/order/demand/${orderStatus}`,
+    method: "get",
+    params: data,
+  });
+}
+
+// supplyLTL 订单列表
+export function getSupplyLTLOrder(data) {
+  return request({
+    url: `/api/ltl/supply/statusOrder`,
+    method: "get",
+    params: data,
+  });
+}
+
+//ltl路线各个订单状态数量
+export function getLtlOrdersCount(data) {
+  return request({
+    url: "/api/ltl/order/demand/count",
+    method: "get",
+    params: data,
+  });
+}
+
+//DEMAND发货到HUB
+export function postsendtohub(data) {
+  return requestJSON({
+    url: `/api/ltl/sendtohub/send`,
+    method: "post",
+    data,
+  });
+}
+
+// (supply）查看订单各个状态对应的订单数量
+export function supplyStatusCount(data) {
+  return request({
+    url: "/api/ltl/supply/show",
+    method: "get",
+    params: data,
+  });
+}
+
+// (supply）查看订单各个状态对应的订单数量
+export function chooseDriverAndTruck(data) {
+  return requestJSON({
+    url: "/api/ltl/supply/chooseDriverAndTruck",
+    method: "post",
+    data,
   });
 }

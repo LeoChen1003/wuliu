@@ -18,15 +18,15 @@ export default {
         },
         action() {
           return binding.arg === "cut" ? "cut" : "copy";
-        }
+        },
       });
       clipboard.on("success", e => {
         const callback = el._v_clipboard_success;
-        callback && callback(e) // eslint-disable-line
+        callback && callback(e); // eslint-disable-line
       });
       clipboard.on("error", e => {
         const callback = el._v_clipboard_error;
-        callback && callback(e) // eslint-disable-line
+        callback && callback(e); // eslint-disable-line
       });
       el._v_clipboard = clipboard;
     }
@@ -54,5 +54,5 @@ export default {
       el._v_clipboard.destroy();
       delete el._v_clipboard;
     }
-  }
+  },
 };

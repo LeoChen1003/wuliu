@@ -1,11 +1,6 @@
 <template>
   <transition :name="transitionName">
-    <div
-      v-show="visible"
-      :style="customStyle"
-      class="back-to-ceiling"
-      @click="backToTop"
-    >
+    <div v-show="visible" :style="customStyle" class="back-to-ceiling" @click="backToTop">
       <svg
         width="16"
         height="16"
@@ -29,11 +24,11 @@ export default {
   props: {
     visibilityHeight: {
       type: Number,
-      default: 400
+      default: 400,
     },
     backPosition: {
       type: Number,
-      default: 0
+      default: 0,
     },
     customStyle: {
       type: Object,
@@ -45,20 +40,20 @@ export default {
           height: "40px",
           "border-radius": "4px",
           "line-height": "45px",
-          background: "#e7eaf1"
+          background: "#e7eaf1",
         };
-      }
+      },
     },
     transitionName: {
       type: String,
-      default: "fade"
-    }
+      default: "fade",
+    },
   },
   data() {
     return {
       visible: false,
       interval: null,
-      isMoving: false
+      isMoving: false,
     };
   },
   mounted() {
@@ -95,8 +90,8 @@ export default {
       // eslint-disable-next-line no-cond-assign
       if ((t /= d / 2) < 1) return (c / 2) * t * t + b;
       return (-c / 2) * (--t * (t - 2) - 1) + b;
-    }
-  }
+    },
+  },
 };
 </script>
 

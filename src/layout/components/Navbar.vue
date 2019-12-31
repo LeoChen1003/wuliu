@@ -9,12 +9,7 @@
     <div class="right">
       <img src="../../assets/image/logo.png" alt="logo" class="logo" />
       <div class="role">
-        <el-popover
-          placement="top"
-          width="160"
-          trigger="hover"
-          v-model="visible"
-        >
+        <el-popover placement="top" width="160" trigger="hover" v-model="visible">
           <div class="btnWrapper">
             <el-button
               type="primary"
@@ -61,15 +56,13 @@ import Sidebar from "@/components/Sidebar";
 export default {
   components: {
     LangSelect,
-    Sidebar
+    Sidebar,
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device", "userInfo"]),
     roles() {
-      return this.$store.getters.userInfo.chosenRoles
-        ? this.$store.getters.userInfo.chosenRoles.split(",")
-        : [];
-    }
+      return this.$store.getters.userInfo.chosenRoles ? this.$store.getters.userInfo.chosenRoles.split(",") : [];
+    },
   },
   methods: {
     toggleSideBar() {
@@ -84,21 +77,21 @@ export default {
       self.$store.dispatch("user/chooseRole", ver);
       localStorage.curRole = ver;
       self.$router.push("/home");
-    }
+    },
   },
   data() {
     return {
       visible: false,
-      nowRole: localStorage.getItem("curRole")
+      nowRole: localStorage.getItem("curRole"),
     };
   },
   watch: {
     $route: {
       handler: function(val, oldVal) {
         this.nowRole = localStorage.getItem("curRole");
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 

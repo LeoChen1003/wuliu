@@ -3,40 +3,20 @@
     <div class="statusHeader">
       <div class="status-txt">{{ $t("billing.billingStatus") }}</div>
       <div class="timePicker">
-        <bcTime
-          @changeBCtime="changeBCtimeFrom"
-          :timeType="'all'"
-          :dateDefault="fromDateDeFault"
-        ></bcTime>
+        <bcTime @changeBCtime="changeBCtimeFrom" :timeType="'all'" :dateDefault="fromDateDeFault"></bcTime>
         <span style="margin:0 5px;">至</span>
-        <bcTime
-          @changeBCtime="changeBCtimeTo"
-          :dateDefault="toDateDeFault"
-          style="margin-left:5px;"
-          :timeType="'all'"
-        ></bcTime>
-        <el-button
-          size="small"
-          @click="searchIt"
-          style="width:100px;margin-left:20px;"
-          >{{ $t("billing.search") }}</el-button
-        >
+        <bcTime @changeBCtime="changeBCtimeTo" :dateDefault="toDateDeFault" style="margin-left:5px;" :timeType="'all'"></bcTime>
+        <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
       </div>
     </div>
     <div class="content">
       <div>
-        <el-tabs
-          v-model="tabActive"
-          tab-position="left"
-          @tab-click="handleClick"
-          style="height:calc(100% - 50px);"
-        >
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:calc(100% - 50px);">
           <el-tab-pane name="WAIT_SETTLE">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.orderPending")
-                  }}<sub class="badge red">{{ statusCount.WAIT_SETTLE }}</sub>
+                  {{ $t("billing.orderPending") }}<sub class="badge red">{{ statusCount.WAIT_SETTLE }}</sub>
                 </div>
               </div>
             </span>
@@ -45,8 +25,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.orderCompleted")
-                  }}<sub class="badge">{{ statusCount.SETTLED }}</sub>
+                  {{ $t("billing.orderCompleted") }}<sub class="badge">{{ statusCount.SETTLED }}</sub>
                 </div>
               </div>
             </span>
@@ -55,8 +34,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.paid2")
-                  }}<sub class="badge">{{ statusCount.PAID }}</sub>
+                  {{ $t("billing.paid2") }}<sub class="badge">{{ statusCount.PAID }}</sub>
                 </div>
               </div>
             </span>
@@ -65,8 +43,7 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.orderRejected")
-                  }}<sub class="badge">{{ statusCount.REJECTED }}</sub>
+                  {{ $t("billing.orderRejected") }}<sub class="badge">{{ statusCount.REJECTED }}</sub>
                 </div>
               </div>
             </span>
@@ -75,22 +52,10 @@
       </div>
       <div class="container">
         <div class="center">
-          <el-table
-            :data="tableData"
-            highlight-current-row
-            v-loading="loading"
-            @current-change="handleCurrentChange"
-            border
-          >
-            <el-table-column
-              prop="createdAt"
-              :label="$t('billing.bookingTime')"
-            />
+          <el-table :data="tableData" highlight-current-row v-loading="loading" @current-change="handleCurrentChange" border>
+            <el-table-column prop="createdAt" :label="$t('billing.bookingTime')" />
             <el-table-column prop="orderNo" :label="$t('billing.trackingNo')" />
-            <el-table-column
-              prop="settlementAmount"
-              :label="$t('billing.totalAmount')"
-            />
+            <el-table-column prop="settlementAmount" :label="$t('billing.totalAmount')" />
           </el-table>
           <el-pagination
             style="margin-top:10px;text-align: center;margin-bottom:50px;"
@@ -109,16 +74,16 @@
             <el-table-column :label="$t('billing.supply')">
               <template slot-scope="scope">
                 {{
-                  scope.row.transport.supply
-                    ? scope.row.transport.supply.companyName
+                  scope.row.supply
+                    ? scope.row.supply.type == "COMPANY"
+                      ? scope.row.supply.companyName
+                      : scope.row.supply.humanName
                     : ""
                 }}
               </template>
             </el-table-column>
             <el-table-column :label="$t('billing.amount')">
-              <template slot-scope="scope">
-                {{ $t("billing.freight") }}: {{ scope.row.settlementAmount }}
-              </template>
+              <template slot-scope="scope"> {{ $t("billing.freight") }}: {{ scope.row.settlementAmount }} </template>
             </el-table-column>
           </el-table>
         </div>
@@ -147,12 +112,12 @@ export default {
       tableData: [],
       page: {
         total: 0,
-        currentPage: 1
+        currentPage: 1,
       },
       pagesize: 20,
       loading: false,
       detailData: [],
-      statusCount: {}
+      statusCount: {},
     };
   },
   // 监听属性 类似于data概念
@@ -163,7 +128,7 @@ export default {
     toDateDeFault() {
       return self.toDate.split("-");
     },
-    ...mapGetters(["permissions"])
+    ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {},
@@ -196,13 +161,13 @@ export default {
         start: self.fromDate + " 00:00:00",
         end: self.toDate + " 23:59:59",
         page: self.page.currentPage - 1,
-        pagesize: self.pagesize
+        pagesize: self.pagesize,
       })
         .then(res => {
           self.tableData = res.data.content;
           self.page = {
             total: res.data.totalElements,
-            currentPage: res.data.number + 1
+            currentPage: res.data.number + 1,
           };
           self.loading = false;
         })
@@ -211,7 +176,7 @@ export default {
         });
       billsupplyCount({
         start: self.fromDate + " 00:00:00",
-        end: self.toDate + " 23:59:59"
+        end: self.toDate + " 23:59:59",
       }).then(res => {
         self.statusCount = res.data;
       });
@@ -226,8 +191,8 @@ export default {
       const self = this;
       self.detailData = [];
       self.detailData.push(val);
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

@@ -1,116 +1,36 @@
 <!-- member index -->
 <template>
   <div class="wrapper">
-    <el-tabs
-      v-model="tabActive"
-      tab-position="left"
-      @tab-click="tabChange"
-      style="height:100%"
-    >
+    <el-tabs v-model="tabActive" tab-position="left" @tab-click="tabChange" style="height:100%">
       <!-- 会员申请流程 -->
-      <el-tab-pane
-        name="process"
-        :label="$t('member.membershipApplicationProcess')"
-      >
+      <el-tab-pane name="process" :label="$t('member.membershipApplicationProcess')">
         <div class="container">
           <el-steps simple>
-            <el-step
-              :title="$t('member.register')"
-              icon="none"
-              status="process"
-            >
-              <svg-icon
-                slot="icon"
-                style="font-size:20px;"
-                class-name="international-icon"
-                icon-class="A1"
-              />
+            <el-step :title="$t('member.register')" icon="none" status="process">
+              <svg-icon slot="icon" style="font-size:20px;" class-name="international-icon" icon-class="A1" />
             </el-step>
-            <el-step
-              :title="$t('member.enterData')"
-              icon="none"
-              status="process"
-            >
-              <svg-icon
-                slot="icon"
-                style="font-size:20px;"
-                class-name="international-icon"
-                icon-class="A2"
-              />
+            <el-step :title="$t('member.enterData')" icon="none" status="process">
+              <svg-icon slot="icon" style="font-size:20px;" class-name="international-icon" icon-class="A2" />
             </el-step>
-            <el-step
-              :title="$t('member.submitApplication')"
-              icon="none"
-              status="process"
-            >
-              <svg-icon
-                slot="icon"
-                style="font-size:20px;"
-                class-name="international-icon"
-                icon-class="A3"
-              />
+            <el-step :title="$t('member.submitApplication')" icon="none" status="process">
+              <svg-icon slot="icon" style="font-size:20px;" class-name="international-icon" icon-class="A3" />
             </el-step>
-            <el-step
-              :title="$t('member.downloadContract')"
-              icon="none"
-              status="process"
-            >
-              <svg-icon
-                slot="icon"
-                style="font-size:20px;"
-                class-name="international-icon"
-                icon-class="A4"
-              />
+            <el-step :title="$t('member.downloadContract')" icon="none" status="process">
+              <svg-icon slot="icon" style="font-size:20px;" class-name="international-icon" icon-class="A4" />
             </el-step>
           </el-steps>
           <el-steps class="secStep" simple>
-            <el-step
-              :title="$t('member.payGuaranteeMoney')"
-              icon="none"
-              status="process"
-            >
-              <svg-icon
-                slot="icon"
-                style="font-size:20px;"
-                class-name="international-icon"
-                icon-class="A5"
-              />
+            <el-step :title="$t('member.payGuaranteeMoney')" icon="none" status="process">
+              <svg-icon slot="icon" style="font-size:20px;" class-name="international-icon" icon-class="A5" />
             </el-step>
-            <el-step
-              :title="$t('member.sendContractBackToPlatform')"
-              icon="none"
-              status="process"
-            >
-              <svg-icon
-                slot="icon"
-                style="font-size:20px;"
-                class-name="international-icon"
-                icon-class="A6"
-              />
+            <el-step :title="$t('member.sendContractBackToPlatform')" icon="none" status="process">
+              <svg-icon slot="icon" style="font-size:20px;" class-name="international-icon" icon-class="A6" />
             </el-step>
-            <el-step
-              :title="$t('member.onlieTraining')"
-              icon="none"
-              status="process"
-            >
-              <svg-icon
-                slot="icon"
-                style="font-size:20px;"
-                class-name="international-icon"
-                icon-class="A7"
-              />
+            <el-step :title="$t('member.onlieTraining')" icon="none" status="process">
+              <svg-icon slot="icon" style="font-size:20px;" class-name="international-icon" icon-class="A7" />
             </el-step>
-            <el-step
-              :title="$t('member.activateAccount')"
-              icon="none"
-              status="process"
-            >
-              <svg-icon
-                slot="icon"
-                style="font-size:20px;"
-                class-name="international-icon"
-                icon-class="A8"
-              />
+            <el-step :title="$t('member.activateAccount')" icon="none" status="process">
+              <svg-icon slot="icon" style="font-size:20px;" class-name="international-icon" icon-class="A8" />
             </el-step>
           </el-steps>
         </div>
@@ -124,61 +44,41 @@
               <el-checkbox-group v-model="typeList" @change="typeListChange">
                 <el-checkbox
                   label="DEMAND"
-                  :disabled="
-                    applyStatus.demand.status === 'ACCEPTED' ||
-                      applyStatus.demand.status === 'ACTIVATED'
-                  "
+                  :disabled="applyStatus.demand.status === 'ACCEPTED' || applyStatus.demand.status === 'ACTIVATED'"
                 >
-                  {{ $t("member.demand") }} ผู้ใช้บริการว่าจ้างขนส่งสินค้า
-                  ผ่านการให้บริการของ แพลตฟอร์ม
+                  {{ $t("member.demand") }} ผู้ใช้บริการว่าจ้างขนส่งสินค้า ผ่านการให้บริการของ แพลตฟอร์ม
                 </el-checkbox>
                 <el-checkbox
                   label="SUPPLY"
-                  :disabled="
-                    applyStatus.supply.status === 'ACCEPTED' ||
-                      applyStatus.supply.status === 'ACTIVATED'
-                  "
+                  :disabled="applyStatus.supply.status === 'ACCEPTED' || applyStatus.supply.status === 'ACTIVATED'"
                 >
-                  {{ $t("member.supply") }} ผู้ให้บริการขนส่ง
-                  ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่งผู้รับปลายทาง
+                  {{ $t("member.supply") }} ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่งผู้รับปลายทาง
                   โดยผ่านการบริการของแพลตฟอร์ม
                 </el-checkbox>
                 <el-checkbox label="HUB" disabled>
-                  {{ $t("member.hub") }} ศูนย์รวบรวมและแลกเปลี่ยนสินค้า
-                  ระหว่างผู้ส่งสินค้าและผู้ขนส่ง โดยผ่านการบริการของแพลตฟอร์ม
+                  {{ $t("member.hub") }} ศูนย์รวบรวมและแลกเปลี่ยนสินค้า ระหว่างผู้ส่งสินค้าและผู้ขนส่ง
+                  โดยผ่านการบริการของแพลตฟอร์ม
                 </el-checkbox>
               </el-checkbox-group>
             </el-form-item>
             <!-- 注册类型 -->
             <el-form-item :label="$t('member.typeOfRegistration')">
-              <el-radio-group
-                v-model="infoForm.type"
-                :disabled="activated"
-                @change="typeChange"
-              >
-                <el-radio label="PERSONAL">{{
-                  $t("member.personal")
-                }}</el-radio>
-                <el-radio label="COMPANY">{{
-                  $t("member.juristicPerson")
-                }}</el-radio>
+              <el-radio-group v-model="infoForm.type" :disabled="activated" @change="typeChange">
+                <el-radio label="PERSONAL">{{ $t("member.personal") }}</el-radio>
+                <el-radio label="COMPANY">{{ $t("member.juristicPerson") }}</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item :label="$t('member.companyName')">
               <el-input
                 class="inp"
-                :disabled="
-                  !infoForm.type || infoForm.type === 'PERSONAL' || activated
-                "
+                :disabled="!infoForm.type || infoForm.type === 'PERSONAL' || activated"
                 v-model="infoForm.companyName"
               />
             </el-form-item>
             <el-form-item :label="$t('member.name')">
               <el-input
                 class="inp"
-                :disabled="
-                  !infoForm.type || infoForm.type === 'COMPANY' || activated
-                "
+                :disabled="!infoForm.type || infoForm.type === 'COMPANY' || activated"
                 v-model="infoForm.humanName"
               />
             </el-form-item>
@@ -192,16 +92,8 @@
               <el-input class="inp" v-model="infoForm.email" />
             </el-form-item>
             <el-form-item :label="$t('member.fullAddress')">
-              <el-input
-                class="inp"
-                :placeholder="$t('member.address')"
-                v-model="infoForm.address"
-              />
-              <el-input
-                class="inp"
-                :placeholder="$t('member.region')"
-                v-model="infoForm.region"
-              />
+              <el-input class="inp" :placeholder="$t('member.address')" v-model="infoForm.address" />
+              <el-input class="inp" :placeholder="$t('member.region')" v-model="infoForm.region" />
             </el-form-item>
             <el-form-item />
             <el-form-item :label="$t('member.bankname')">
@@ -214,30 +106,15 @@
               <el-input class="inp" v-model="infoForm.bankNumber" />
             </el-form-item>
             <el-form-item :label="$t('member.billingAddress')">
-              <el-input
-                class="inp"
-                :placeholder="$t('member.address')"
-                v-model="infoForm.bankBillAddress"
-              />
-              <el-input
-                class="inp"
-                :placeholder="$t('member.region')"
-                v-model="infoForm.bankBillRegion"
-              />
+              <el-input class="inp" :placeholder="$t('member.address')" v-model="infoForm.bankBillAddress" />
+              <el-input class="inp" :placeholder="$t('member.region')" v-model="infoForm.bankBillRegion" />
             </el-form-item>
             <el-form-item />
             <el-form-item :label="$t('member.profileDiscription')">
-              <el-input
-                class="inp"
-                v-model="infoForm.description"
-                type="textarea"
-                resize="none"
-              />
+              <el-input class="inp" v-model="infoForm.description" type="textarea" resize="none" />
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="saveInfo" class="submitBtn"
-                >{{ $t("member.save") }}
-              </el-button>
+              <el-button type="primary" @click="saveInfo" class="submitBtn">{{ $t("member.save") }} </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -291,36 +168,27 @@
             <el-form-item :label="$t('member.affidavit')">
               <el-upload
                 class="upload"
-                :action="
-                  baseUrl + '?credentials_type=affidavit&apply_type=DEMAND'
-                "
+                :action="baseUrl + '?credentials_type=affidavit&apply_type=DEMAND'"
                 :headers="headers"
                 :file-list="fileList.demand.affidavit"
                 :on-success="uploadSuccess"
                 accept="image/*"
                 :on-change="handleChange"
               >
-                <el-button size="small" icon="el-icon-upload2" type="primary"
-                  >{{ $t("member.upload") }}
-                </el-button>
+                <el-button size="small" icon="el-icon-upload2" type="primary">{{ $t("member.upload") }} </el-button>
               </el-upload>
             </el-form-item>
             <el-form-item :label="$t('member.transportationLicense')">
               <el-upload
                 class="upload"
-                :action="
-                  baseUrl +
-                    '?credentials_type=transportation_license&apply_type=DEMAND'
-                "
+                :action="baseUrl + '?credentials_type=transportation_license&apply_type=DEMAND'"
                 :headers="headers"
                 :file-list="fileList.demand.transportation_license"
                 :on-success="uploadSuccess"
                 accept="image/*"
                 :on-change="handleChange"
               >
-                <el-button size="small" icon="el-icon-upload2" type="primary"
-                  >{{ $t("member.upload") }}
-                </el-button>
+                <el-button size="small" icon="el-icon-upload2" type="primary">{{ $t("member.upload") }} </el-button>
               </el-upload>
             </el-form-item>
             <el-form-item :label="$t('member.IDcard')">
@@ -333,45 +201,33 @@
                 accept="image/*"
                 :on-change="handleChange"
               >
-                <el-button size="small" icon="el-icon-upload2" type="primary"
-                  >{{ $t("member.upload") }}
-                </el-button>
+                <el-button size="small" icon="el-icon-upload2" type="primary">{{ $t("member.upload") }} </el-button>
               </el-upload>
             </el-form-item>
             <el-form-item :label="$t('member.houseParticulars')">
               <el-upload
                 class="upload"
-                :action="
-                  baseUrl +
-                    '?credentials_type=house_particulars&apply_type=DEMAND'
-                "
+                :action="baseUrl + '?credentials_type=house_particulars&apply_type=DEMAND'"
                 :headers="headers"
                 :file-list="fileList.demand.house_particulars"
                 :on-success="uploadSuccess"
                 accept="image/*"
                 :on-change="handleChange"
               >
-                <el-button size="small" icon="el-icon-upload2" type="primary"
-                  >{{ $t("member.upload") }}
-                </el-button>
+                <el-button size="small" icon="el-icon-upload2" type="primary">{{ $t("member.upload") }} </el-button>
               </el-upload>
             </el-form-item>
             <el-form-item :label="$t('member.bangAccount')">
               <el-upload
                 class="upload"
-                :action="
-                  baseUrl +
-                    '?credentials_type=bank_account_copy&apply_type=DEMAND'
-                "
+                :action="baseUrl + '?credentials_type=bank_account_copy&apply_type=DEMAND'"
                 :headers="headers"
                 :file-list="fileList.demand.bank_account_copy"
                 :on-success="uploadSuccess"
                 accept="image/*"
                 :on-change="handleChange"
               >
-                <el-button size="small" icon="el-icon-upload2" type="primary"
-                  >{{ $t("member.upload") }}
-                </el-button>
+                <el-button size="small" icon="el-icon-upload2" type="primary">{{ $t("member.upload") }} </el-button>
               </el-upload>
             </el-form-item>
             <el-form-item>
@@ -446,47 +302,34 @@
                 accept="image/*"
                 :on-change="handleChange"
               >
-                <img
-                  v-if="fileList.supply.logo[0]"
-                  :src="fileList.supply.logo[0].url"
-                  class="avatar"
-                />
+                <img v-if="fileList.supply.logo[0]" :src="fileList.supply.logo[0].url" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon" />
               </el-upload>
             </el-form-item>
             <el-form-item :label="$t('member.affidavit')">
               <el-upload
                 class="upload"
-                :action="
-                  baseUrl + '?credentials_type=affidavit&apply_type=SUPPLY'
-                "
+                :action="baseUrl + '?credentials_type=affidavit&apply_type=SUPPLY'"
                 :headers="headers"
                 :file-list="fileList.supply.affidavit"
                 :on-success="uploadSuccess"
                 accept="image/*"
                 :on-change="handleChange"
               >
-                <el-button size="small" icon="el-icon-upload2" type="primary"
-                  >{{ $t("member.upload") }}
-                </el-button>
+                <el-button size="small" icon="el-icon-upload2" type="primary">{{ $t("member.upload") }} </el-button>
               </el-upload>
             </el-form-item>
             <el-form-item :label="$t('member.transportationLicense')">
               <el-upload
                 class="upload"
-                :action="
-                  baseUrl +
-                    '?credentials_type=transportation_license&apply_type=SUPPLY'
-                "
+                :action="baseUrl + '?credentials_type=transportation_license&apply_type=SUPPLY'"
                 :headers="headers"
                 :file-list="fileList.supply.transportation_license"
                 :on-success="uploadSuccess"
                 accept="image/*"
                 :on-change="handleChange"
               >
-                <el-button size="small" icon="el-icon-upload2" type="primary"
-                  >{{ $t("member.upload") }}
-                </el-button>
+                <el-button size="small" icon="el-icon-upload2" type="primary">{{ $t("member.upload") }} </el-button>
               </el-upload>
             </el-form-item>
             <el-form-item :label="$t('member.IDcard')">
@@ -499,45 +342,33 @@
                 accept="image/*"
                 :on-change="handleChange"
               >
-                <el-button size="small" icon="el-icon-upload2" type="primary"
-                  >{{ $t("member.upload") }}
-                </el-button>
+                <el-button size="small" icon="el-icon-upload2" type="primary">{{ $t("member.upload") }} </el-button>
               </el-upload>
             </el-form-item>
             <el-form-item :label="$t('member.houseParticulars')">
               <el-upload
                 class="upload"
-                :action="
-                  baseUrl +
-                    '?credentials_type=house_particulars&apply_type=SUPPLY'
-                "
+                :action="baseUrl + '?credentials_type=house_particulars&apply_type=SUPPLY'"
                 :headers="headers"
                 :file-list="fileList.supply.house_particulars"
                 :on-success="uploadSuccess"
                 accept="image/*"
                 :on-change="handleChange"
               >
-                <el-button size="small" icon="el-icon-upload2" type="primary"
-                  >{{ $t("member.upload") }}
-                </el-button>
+                <el-button size="small" icon="el-icon-upload2" type="primary">{{ $t("member.upload") }} </el-button>
               </el-upload>
             </el-form-item>
             <el-form-item :label="$t('member.bangAccount')">
               <el-upload
                 class="upload"
-                :action="
-                  baseUrl +
-                    '?credentials_type=bank_account_copy&apply_type=SUPPLY'
-                "
+                :action="baseUrl + '?credentials_type=bank_account_copy&apply_type=SUPPLY'"
                 :headers="headers"
                 :file-list="fileList.supply.bank_account_copy"
                 :on-success="uploadSuccess"
                 accept="image/*"
                 :on-change="handleChange"
               >
-                <el-button size="small" icon="el-icon-upload2" type="primary"
-                  >{{ $t("member.upload") }}
-                </el-button>
+                <el-button size="small" icon="el-icon-upload2" type="primary">{{ $t("member.upload") }} </el-button>
               </el-upload>
             </el-form-item>
             <!-- <el-form-item :label="$t('member.mapForDistributionCenters')">
@@ -609,28 +440,14 @@
                 <div v-if="dc_status" class="z-cell dc-wrapper">
                   <div>
                     <el-table border :data="dc" style="width:700px;">
-                      <el-table-column
-                        align="center"
-                        :label="$t('member.dcAddress')"
-                      >
+                      <el-table-column align="center" :label="$t('member.dcAddress')">
                         <template slot-scope="scope">
-                          <el-input
-                            v-model="scope.row.address"
-                            type="textarea"
-                            resize="none"
-                          />
+                          <el-input v-model="scope.row.address" type="textarea" resize="none" />
                         </template>
                       </el-table-column>
-                      <el-table-column
-                        align="center"
-                        :label="$t('member.transportationExperience')"
-                      >
+                      <el-table-column align="center" :label="$t('member.transportationExperience')">
                         <template slot-scope="scope">
-                          <el-input
-                            v-model="scope.row.years"
-                            type="textarea"
-                            resize="none"
-                          />
+                          <el-input v-model="scope.row.years" type="textarea" resize="none" />
                         </template>
                       </el-table-column>
                       <el-table-column center width="100px">
@@ -649,39 +466,19 @@
                     </el-table>
                   </div>
                   <div class="dc-add-button">
-                    <el-button
-                      type="primary"
-                      icon="el-icon-plus"
-                      circle
-                      @click="addDc"
-                    />
+                    <el-button type="primary" icon="el-icon-plus" circle @click="addDc" />
                   </div>
                 </div>
               </transition>
             </el-form-item>
             <el-form-item>
-              <el-button
-                type="primary"
-                v-if="applyStatus.supply.status === 'DEFAULT'"
-                disabled
-                class="submitBtn"
-              >
+              <el-button type="primary" v-if="applyStatus.supply.status === 'DEFAULT'" disabled class="submitBtn">
                 {{ $t("member.applyStatusDefault") }}
               </el-button>
-              <el-button
-                type="primary"
-                v-else-if="applyStatus.supply.status === 'ACCEPTED'"
-                disabled
-                class="submitBtn"
-              >
+              <el-button type="primary" v-else-if="applyStatus.supply.status === 'ACCEPTED'" disabled class="submitBtn">
                 {{ $t("member.applyStatusAccepted") }}
               </el-button>
-              <el-button
-                v-else
-                class="submitBtn"
-                @click="submitSupply"
-                type="primary"
-              >
+              <el-button v-else class="submitBtn" @click="submitSupply" type="primary">
                 {{ $t("member.submitSupply") }}
               </el-button>
             </el-form-item>
@@ -701,14 +498,8 @@
         <div class="container">
           <el-form label-width="200px">
             <el-form-item :label="$t('member.affidavit')">
-              <el-upload
-                class="upload"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                multiple
-              >
-                <el-button size="small" icon="el-icon-upload2" type="primary"
-                  >{{ $t("member.upload") }}
-                </el-button>
+              <el-upload class="upload" action="https://jsonplaceholder.typicode.com/posts/" multiple>
+                <el-button size="small" icon="el-icon-upload2" type="primary">{{ $t("member.upload") }} </el-button>
                 <div slot="tip" class="el-upload__tip">
                   只能上传jpg/png文件，且不超过500kb
                 </div>
@@ -726,9 +517,31 @@
               </el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" class="submitBtn"
-                >{{ $t("member.submitHUB") }}
-              </el-button>
+              <el-button type="primary" class="submitBtn">{{ $t("member.submitHUB") }} </el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-tab-pane>
+      <!-- 基础设置 -->
+      <el-tab-pane name="setting" :label="$t('member.setting')">
+        <div class="container">
+          <el-form hide-required-asterisk label-width="200px" ref="setForm" :model="setForm" :rules="setRules">
+            <el-form-item prop="exchange" :label="$t('member.VolumeWeightDivisor')">
+              <el-select v-model="setForm.exchange" :placeholder="$t('placeholder.pleaseChoose')" class="inp">
+                <el-option :label="2500" :value="2500"> </el-option>
+                <el-option :label="3000" :value="3000"> </el-option>
+                <el-option :label="3500" :value="3500"> </el-option>
+              </el-select>
+              <div style="color:#ccc;">
+                <div>{{$t('member.volumeWeightConversion')}}</div>
+                <div class="inp">
+                  {{$t('member.example')}},<br />
+                  {{$t('member.example1')}}
+                </div>
+              </div>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="saveSet" class="submitBtn">{{ $t("member.save") }} </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -737,39 +550,19 @@
       <el-tab-pane name="contract" :label="$t('member.myContract')">
         <div class="container">
           <el-table border :data="contractList">
-            <el-table-column
-              header-align="center"
-              align="center"
-              :label="$t('member.type')"
-            >
+            <el-table-column header-align="center" align="center" :label="$t('member.type')">
               <template slot-scope="scope">
                 <div>
-                  {{
-                    scope.row.type === "DEMAND"
-                      ? $t("member.demand")
-                      : scope.row.type === "SUPPLY"
-                      ? $t("member.supply")
-                      : ""
-                  }}
+                  {{ scope.row.type === "DEMAND" ? $t("member.demand") : scope.row.type === "SUPPLY" ? $t("member.supply") : "" }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              header-align="center"
-              align="center"
-              :label="$t('member.downloadContract')"
-            >
+            <el-table-column header-align="center" align="center" :label="$t('member.downloadContract')">
               <template slot-scope="scope">
-                <el-button type="primary" @click="downloadContract(scope.row)"
-                  >{{ $t("member.download") }}
-                </el-button>
+                <el-button type="primary" @click="downloadContract(scope.row)">{{ $t("member.download") }} </el-button>
               </template>
             </el-table-column>
-            <el-table-column
-              header-align="center"
-              align="center"
-              :label="$t('member.uploadContract')"
-            >
+            <el-table-column header-align="center" align="center" :label="$t('member.uploadContract')">
               <template slot-scope="scope">
                 <el-upload
                   :action="cBaseUrl + '?apply_type=' + scope.row.type"
@@ -781,40 +574,20 @@
                   accept=".pdf,image/*"
                   :on-change="handleChange"
                 >
-                  <el-button
-                    size="small"
-                    icon="el-icon-upload2"
-                    :disabled="scope.row.status === 'ACTIVATED'"
-                    type="primary"
+                  <el-button size="small" icon="el-icon-upload2" :disabled="scope.row.status === 'ACTIVATED'" type="primary"
                     >{{ $t("member.upload") }}
                   </el-button>
                 </el-upload>
               </template>
             </el-table-column>
-            <el-table-column
-              header-align="center"
-              align="center"
-              prop="prop"
-              :label="$t('member.status')"
-            >
+            <el-table-column header-align="center" align="center" prop="prop" :label="$t('member.status')">
               <template slot-scope="scope">
                 <div>
-                  <el-tag
-                    type="info"
-                    v-if="
-                      contractStatus[scope.row.type] === '' ||
-                        contractStatus[scope.row.type] == null
-                    "
+                  <el-tag type="info" v-if="contractStatus[scope.row.type] === '' || contractStatus[scope.row.type] == null"
                     >{{ $t("member.waitUpload") }}
                   </el-tag>
-                  <el-tag
-                    type="success"
-                    v-else-if="scope.row.status === 'ACTIVATED'"
-                    >{{ $t("member.passed") }}
-                  </el-tag>
-                  <el-tag type="primary" v-else
-                    >{{ $t("member.underReview") }}
-                  </el-tag>
+                  <el-tag type="success" v-else-if="scope.row.status === 'ACTIVATED'">{{ $t("member.passed") }} </el-tag>
+                  <el-tag type="primary" v-else>{{ $t("member.underReview") }} </el-tag>
                 </div>
               </template>
             </el-table-column>
@@ -826,15 +599,7 @@
 </template>
 
 <script>
-import {
-  fillInfo,
-  getInfo,
-  getCredentials,
-  submitApply,
-  getApplying,
-  getDc,
-  getContract
-} from "@/api/member";
+import { fillInfo, getInfo, getCredentials, submitApply, getApplying, getDc, getContract, setExchange } from "@/api/member";
 import { getToken } from "@/utils/auth";
 
 let self;
@@ -854,7 +619,7 @@ export default {
       cBaseUrl: `${process.env.VUE_APP_BASE_API}/api/member/contract/upload`,
       headers: {
         authorization: getToken(),
-        locale: this.$store.getters.language
+        locale: this.$store.getters.language,
       },
       fileList: {
         demand: {
@@ -862,7 +627,7 @@ export default {
           transportation_license: [],
           idcard: [],
           house_particulars: [],
-          bank_account_copy: []
+          bank_account_copy: [],
         },
         supply: {
           affidavit: [],
@@ -872,31 +637,37 @@ export default {
           bank_account_copy: [],
           // center_map: [],
           // truck_register_copy: [],
-          logo: []
+          logo: [],
         },
         contract: {
           DEMAND: [],
-          SUPPLY: []
-        }
+          SUPPLY: [],
+        },
       },
       applyList: {
         demand: null,
-        supply: null
+        supply: null,
       },
       applyStatus: {
         demand: {
-          status: null
+          status: null,
         },
         supply: {
-          status: null
-        }
+          status: null,
+        },
       },
       contractList: [],
       contractStatus: {
         DEMAND: "",
-        SUPPLY: ""
+        SUPPLY: "",
       },
-      activated: false
+      activated: false,
+      setForm: {
+        exchange: null,
+      },
+      setRules: {
+        exchange: [{ required: true, message: " ", trigger: "change" }],
+      },
     };
   },
   watch: {
@@ -907,7 +678,7 @@ export default {
       }
       type = type.substr(0, type.length - 1);
       self.infoForm.chosenTypes = type;
-    }
+    },
   },
   mounted() {
     self = this;
@@ -924,10 +695,8 @@ export default {
     loadData_info() {
       getInfo().then(res => {
         self.infoForm = res.data.site;
-        if (
-          res.data.site.contactMobile == "" ||
-          res.data.site.contactMobile == null
-        ) {
+        self.setForm.exchange = res.data.site.exchange;
+        if (res.data.site.contactMobile == "" || res.data.site.contactMobile == null) {
           self.infoForm.contactMobile = res.data.user.phone;
         }
         self.typeList = self.$store.getters.userInfo.chosenRoles.split(",");
@@ -937,7 +706,7 @@ export default {
         for (const i of res.data) {
           self.applyStatus[i.applyType.toLowerCase()] = {
             status: i.auditStatus,
-            rejectReason: i.rejectReason
+            rejectReason: i.rejectReason,
           };
           self.contractStatus[i.applyType] = i.contract;
           if (i.auditStatus == "ACTIVATED") {
@@ -955,8 +724,8 @@ export default {
           self.fileList[i.applyType.toLowerCase()][i.credentialsType] = [
             {
               name: i.resource.name,
-              url: i.resource.path
-            }
+              url: i.resource.path,
+            },
           ];
         }
       });
@@ -1025,13 +794,11 @@ export default {
     // 文件上传成功的处理
     uploadSuccess(res) {
       if (res.status === 200) {
-        self.fileList[self.tabActive.toLowerCase()][
-          res.data.credentialsType
-        ] = [
+        self.fileList[self.tabActive.toLowerCase()][res.data.credentialsType] = [
           {
             name: res.data.resource.name,
-            url: res.data.resource.path
-          }
+            url: res.data.resource.path,
+          },
         ];
         // self.loadData_list(self.tabActive);
       }
@@ -1048,9 +815,7 @@ export default {
       // 简单验证
       for (const x in self.fileList.demand) {
         if (self.fileList.demand[x].length == 0) {
-          return self.$message.warning(
-            self.$t("member.pleaseCompleteTheInformation")
-          );
+          return self.$message.warning(self.$t("member.pleaseCompleteTheInformation"));
         }
       }
       submitApply("DEMAND").then(() => {
@@ -1065,23 +830,19 @@ export default {
       // 简单验证
       for (const x in self.fileList.supply) {
         if (self.fileList.supply[x].length == 0) {
-          return self.$message.warning(
-            self.$t("member.pleaseCompleteTheInformation")
-          );
+          return self.$message.warning(self.$t("member.pleaseCompleteTheInformation"));
         }
       }
       if (self.dc_status == 1) {
         for (const i of self.dc) {
           if (i.address == "" || i.years == "") {
-            return self.$message.warning(
-              self.$t("member.pleaseCompleteTheInformation")
-            );
+            return self.$message.warning(self.$t("member.pleaseCompleteTheInformation"));
           }
         }
       }
       submitApply("SUPPLY", {
         dc_status: self.dc_status,
-        dc: JSON.stringify(self.dc)
+        dc: JSON.stringify(self.dc),
       }).then(() => {
         self.loadData();
       });
@@ -1091,15 +852,21 @@ export default {
       self.tabActive = "contract";
     },
     downloadContract(path) {
-      window.open(
-        `${process.env.VUE_APP_BASE_API}/api/token/pdf/download?applyType=${
-          path.type
-        }&token=${getToken()}`
-      );
+      window.open(`${process.env.VUE_APP_BASE_API}/api/token/pdf/download?applyType=${path.type}&token=${getToken()}`);
       // console.log(path.type)
       // window.open()
-    }
-  }
+    },
+    // 保存基础设置
+    saveSet() {
+      self.$refs.setForm.validate(valid => {
+        if (valid) {
+          setExchange(self.setForm).then(res => {
+            self.$message.success(self.$t("member.saveSuccess"));
+          });
+        }
+      });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

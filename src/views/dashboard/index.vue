@@ -15,16 +15,16 @@ export default {
   components: {},
   data() {
     return {
-      currentRole: "adminDashboard"
+      currentRole: "adminDashboard",
     };
   },
   computed: {
-    ...mapGetters(["roles"])
+    ...mapGetters(["roles"]),
   },
   created() {
     if (!this.roles.includes("admin")) {
       this.currentRole = "editorDashboard";
     }
-  }
+  },
 };
 </script>

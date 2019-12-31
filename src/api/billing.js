@@ -4,7 +4,7 @@ export function topUpList(applyType, applyStatus, data) {
   return request({
     url: "/api/member/finance/apply/my/" + applyType + "/" + applyStatus,
     method: "get",
-    params: data
+    params: data,
   });
 }
 
@@ -12,7 +12,7 @@ export function topUp(data) {
   return request({
     url: "/api/member/finance/apply/new_top_up",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -20,7 +20,7 @@ export function journalList(data) {
   return request({
     url: "/api/member/finance/records/mine",
     method: "get",
-    params: data
+    params: data,
   });
 }
 
@@ -28,7 +28,7 @@ export function supplyFinance(status, data) {
   return request({
     url: "/api/supply/finance/list/" + status,
     method: "get",
-    params: data
+    params: data,
   });
 }
 
@@ -36,7 +36,7 @@ export function demandFinance(status, data) {
   return request({
     url: "/api/demand/finance/list/" + status,
     method: "get",
-    params: data
+    params: data,
   });
 }
 
@@ -46,7 +46,7 @@ export function billingList(data, data2) {
     url: "/api/platform/finance/apply/list",
     method: "post",
     data,
-    params: data2
+    params: data2,
   });
 }
 
@@ -55,7 +55,7 @@ export function billingAccept(data) {
   return request({
     url: "/api/platform/finance/apply/accept",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -64,7 +64,7 @@ export function billingReject(data) {
   return request({
     url: "/api/platform/finance/apply/reject",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -72,7 +72,7 @@ export function billingReject(data) {
 export function billTopUpCount(applyType) {
   return request({
     url: "api/member/finance/status/count/" + applyType,
-    method: "get"
+    method: "get",
   });
 }
 
@@ -81,7 +81,7 @@ export function billplatformCount(params) {
   return request({
     url: "api/platform/finance/apply/status/count",
     method: "get",
-    params: params
+    params: params,
   });
 }
 
@@ -90,7 +90,7 @@ export function billdemandCount(data) {
   return request({
     url: "api/demand/finance/status/count",
     method: "get",
-    params: data
+    params: data,
   });
 }
 
@@ -99,7 +99,7 @@ export function billsupplyCount(data) {
   return request({
     url: "api/supply/finance/status/count",
     method: "get",
-    params: data
+    params: data,
   });
 }
 
@@ -108,7 +108,7 @@ export function billsupplyCount(data) {
 export function getSupplyList(status) {
   return request({
     url: `api/platfrom/orderrefund/supplys/${status}`,
-    method: "get"
+    method: "get",
   });
 }
 
@@ -117,7 +117,7 @@ export function getRefundList(status, params) {
   return request({
     url: `api/platfrom/orderrefund/list/${status}`,
     method: "get",
-    params: params
+    params: params,
   });
 }
 
@@ -126,7 +126,7 @@ export function getRefundCount(params) {
   return request({
     url: `api/platfrom/orderrefund/counts`,
     method: "get",
-    params: params
+    params: params,
   });
 }
 
@@ -135,6 +135,6 @@ export function confirmRefund(data) {
   return request({
     url: `api/platfrom/orderrefund/refund`,
     method: "post",
-    data: data
+    data: data,
   });
 }

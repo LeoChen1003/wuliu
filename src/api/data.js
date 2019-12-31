@@ -5,7 +5,7 @@ import requestJSON from "@/utils/requestJSON";
 export function getTruckType() {
   return request({
     url: "/misc/types/truck",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -13,7 +13,7 @@ export function getTruckType() {
 export function getGoodsProperty() {
   return request({
     url: "/misc/property/list",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -21,7 +21,7 @@ export function getGoodsProperty() {
 export function getSenderList() {
   return request({
     url: "/api/demand/order/search/sender/list",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -29,7 +29,7 @@ export function getSenderList() {
 export function myAccount(applyType) {
   return request({
     url: "api/member/finance/account/my/" + applyType,
-    method: "get"
+    method: "get",
   });
 }
 
@@ -37,7 +37,7 @@ export function myAccount(applyType) {
 export function getTransportList() {
   return request({
     url: "/api/demand/order/search/transport/list",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -45,7 +45,7 @@ export function getTransportList() {
 export function getProvinceList() {
   return request({
     url: "/misc/geo/province/list",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -53,7 +53,7 @@ export function getProvinceList() {
 export function getCityList(params) {
   return request({
     url: "/misc/geo/city/list?" + params,
-    method: "get"
+    method: "get",
   });
 }
 
@@ -62,7 +62,7 @@ export function getCityListGroup(data) {
   return requestJSON({
     url: "/misc/geo/city/grouplist",
     method: "post",
-    data: data
+    data: data,
   });
 }
 
@@ -70,7 +70,7 @@ export function getCityListGroup(data) {
 export function getProvinceArea() {
   return request({
     url: "/misc/geo/area/province",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -79,7 +79,7 @@ export function findDistrictList(data) {
   return request({
     url: "/misc/geo/district/search",
     method: "post",
-    data
+    data,
   });
 }
 
@@ -88,7 +88,16 @@ export function findDistrictFullList(data) {
   return request({
     url: "/misc/geo/district/search/fullname",
     method: "get",
-    params: data
+    params: data,
+  });
+}
+
+// 所有包含HUB的区（全名搜索）
+export function findDistrictOfHubFullList(data) {
+  return request({
+    url: "/misc/geo/district/searchOfHub/fullname",
+    method: "get",
+    params: data,
   });
 }
 
@@ -96,7 +105,7 @@ export function findDistrictFullList(data) {
 export function getExtraServer() {
   return request({
     url: "/misc/types/extra/service",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -104,7 +113,7 @@ export function getExtraServer() {
 export function getSupplyTD() {
   return request({
     url: "/api/supply/list/my/td",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -112,7 +121,7 @@ export function getSupplyTD() {
 export function getBcYear() {
   return request({
     url: "/misc/date/bc/year",
-    method: "get"
+    method: "get",
   });
 }
 
@@ -120,7 +129,7 @@ export function getBcYear() {
 export function getBcDay(year, month) {
   return request({
     url: `/misc/date/bc/days?bcYear=${year}&month=${month}`,
-    method: "get"
+    method: "get",
   });
 }
 
@@ -129,6 +138,14 @@ export function upload(file) {
   return request({
     url: "/api/file/upload",
     method: "post",
-    data: file
+    data: file,
+  });
+}
+
+// 获取hub列表
+export function getHub() {
+  return request({
+    url: "/api/ltl/hub/search/allStartHub",
+    method: "post",
   });
 }

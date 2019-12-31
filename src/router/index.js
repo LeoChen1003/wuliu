@@ -10,15 +10,15 @@ export const constantRoutes = [
   {
     path: "/login",
     component: () => import("@/views/login/index"),
-    hidden: true
+    hidden: true,
   },
   {
     path: "/",
     name: "home",
     component: () => import("@/views/home/index"),
-    hidden: true
+    hidden: true,
   },
-  { path: "*", redirect: "/", hidden: true }
+  { path: "*", redirect: "/", hidden: true },
 ];
 
 /**
@@ -33,7 +33,7 @@ export const asyncRoutes = [
     name: "booking",
     meta: {
       title: "booking",
-      roles: ["DEMAND"]
+      roles: ["DEMAND"],
     },
     children: [
       {
@@ -44,8 +44,8 @@ export const asyncRoutes = [
         meta: {
           title: "priceConsulting",
           roles: ["DEMAND"],
-          permission: "DemandSearchSupply"
-        }
+          permission: "DemandSearchSupply",
+        },
       },
       {
         path: "placeOrder",
@@ -55,8 +55,8 @@ export const asyncRoutes = [
         meta: {
           title: "placeOrder",
           roles: ["DEMAND"],
-          permission: "DemandSearchSupply"
-        }
+          permission: "DemandSearchSupply",
+        },
       },
       {
         path: "releaseToMarket",
@@ -66,10 +66,10 @@ export const asyncRoutes = [
         meta: {
           title: "releaseToMarket",
           roles: ["DEMAND"],
-          permission: "DemandSearchSupply"
-        }
-      }
-    ]
+          permission: "DemandSearchSupply",
+        },
+      },
+    ],
   },
   {
     path: "/market",
@@ -78,7 +78,7 @@ export const asyncRoutes = [
     name: "market",
     meta: {
       // title: 'market',
-      roles: ["SUPPLY"]
+      roles: ["SUPPLY"],
     },
     children: [
       {
@@ -87,10 +87,10 @@ export const asyncRoutes = [
         meta: {
           title: "market",
           roles: ["SUPPLY"],
-          permission: "SupplySearchMarket"
-        }
-      }
-    ]
+          permission: "SupplySearchMarket",
+        },
+      },
+    ],
   },
   {
     path: "/tracking",
@@ -99,18 +99,23 @@ export const asyncRoutes = [
     name: "tracking",
     meta: {
       title: "tracking",
-      roles: ["DEMAND", "SUPPLY", "PLATFORM"]
+      roles: ["DEMAND", "SUPPLY", "PLATFORM"],
     },
     children: [
       {
         path: "demandFTL",
         component: () => import("@/views/tracking/demandFTL"),
-        meta: { title: "FTLNotHUB", roles: ["DEMAND"], permission: "MyOrders" }
+        meta: { title: "FTLNotHUB", roles: ["DEMAND"], permission: "MyOrders" },
       },
       {
         path: "FTL",
         component: () => import("@/views/tracking/FTL"),
-        meta: { title: "FTLNotHUB", roles: ["SUPPLY"], permission: "MyOrders" }
+        meta: { title: "FTLNotHUB", roles: ["SUPPLY"], permission: "MyOrders" },
+      },
+      {
+        path: "demandLTL",
+        component: () => import("@/views/tracking/demandLTL"),
+        meta: { title: "LTLHUB", roles: ["DEMAND"], permission: "MyOrders" },
       },
       {
         path: "platformFTL",
@@ -118,15 +123,24 @@ export const asyncRoutes = [
         meta: {
           title: "FTLNotHUB",
           roles: ["PLATFORM"],
-          permission: "PlatformOrderManage"
-        }
+          permission: "PlatformOrderManage",
+        },
       },
       {
-        path: "LTL",
-        component: () => import("@/views/tracking/LTL"),
-        meta: { title: "LTLHUB", roles: ["DEMAND", "SUPPLY"] }
-      }
-    ]
+        path: "platformLTL",
+        component: () => import("@/views/tracking/platformLTL"),
+        meta: {
+          title: "LTLHUB",
+          roles: ["PLATFORM"],
+          permission: "PlatformOrderManage",
+        },
+      },
+      {
+        path: "supplyLTL",
+        component: () => import("@/views/tracking/supplyLTL"),
+        meta: { title: "LTLHUB", roles: ["SUPPLY"], permission: "MyOrders" },
+      },
+    ],
   },
   {
     path: "/resources",
@@ -135,7 +149,7 @@ export const asyncRoutes = [
     name: "resources",
     meta: {
       title: "resources",
-      roles: ["SUPPLY"]
+      roles: ["SUPPLY"],
     },
     children: [
       {
@@ -144,8 +158,8 @@ export const asyncRoutes = [
         meta: {
           title: "truck",
           roles: ["SUPPLY"],
-          permission: "SupplyResourceManage"
-        }
+          permission: "SupplyResourceManage",
+        },
       },
       {
         path: "driver",
@@ -153,8 +167,8 @@ export const asyncRoutes = [
         meta: {
           title: "driver",
           roles: ["SUPPLY"],
-          permission: "SupplyResourceManage"
-        }
+          permission: "SupplyResourceManage",
+        },
       },
       {
         path: "routeFTL",
@@ -162,8 +176,8 @@ export const asyncRoutes = [
         meta: {
           title: "routeFTL",
           roles: ["SUPPLY"],
-          permission: "SupplyResourceManage"
-        }
+          permission: "SupplyResourceManage",
+        },
       },
       {
         path: "routeLTL",
@@ -171,9 +185,9 @@ export const asyncRoutes = [
         meta: {
           title: "routeLTL",
           roles: ["SUPPLY"],
-          permission: "SupplyResourceManage"
-        }
-      }
+          permission: "SupplyResourceManage",
+        },
+      },
       // {
       //   path: "planningLTL",
       //   component: () => import("@/views/resources/planningLTL"),
@@ -183,7 +197,47 @@ export const asyncRoutes = [
       //     permission: "SupplyResourceManage"
       //   }
       // }
-    ]
+    ],
+  },
+  {
+    path: "/inbound",
+    component: Layout,
+    redirect: "/inbound",
+    name: "inbound",
+    meta: {
+      roles: ["HUB"],
+    },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/inbound/index"),
+        meta: {
+          title: "inbound",
+          roles: ["HUB"],
+          permission: "HubInBound",
+        },
+      },
+    ],
+  },
+  {
+    path: "/outbound",
+    component: Layout,
+    redirect: "/outbound",
+    name: "outbound",
+    meta: {
+      roles: ["HUB"],
+    },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/outbound/index"),
+        meta: {
+          title: "Outbound",
+          roles: ["HUB"],
+          permission: "HubOutBound",
+        },
+      },
+    ],
   },
   {
     path: "/billing",
@@ -192,7 +246,7 @@ export const asyncRoutes = [
     name: "billing",
     meta: {
       title: "billing",
-      roles: ["DEMAND", "SUPPLY", "HUB", "PLATFORM"]
+      roles: ["DEMAND", "SUPPLY", "HUB", "PLATFORM"],
     },
     children: [
       {
@@ -201,8 +255,8 @@ export const asyncRoutes = [
         meta: {
           title: "payableBill",
           roles: ["DEMAND"],
-          permission: "MemberTopUp"
-        }
+          permission: "MemberTopUp",
+        },
       },
       {
         path: "receivable",
@@ -210,8 +264,8 @@ export const asyncRoutes = [
         meta: {
           title: "receivable",
           roles: ["SUPPLY"],
-          permission: "MemberTopUp"
-        }
+          permission: "MemberTopUp",
+        },
       },
       {
         path: "topUp",
@@ -219,8 +273,8 @@ export const asyncRoutes = [
         meta: {
           title: "topUp",
           roles: ["DEMAND", "SUPPLY", "HUB"],
-          permission: "MemberTopUp"
-        }
+          permission: "MemberTopUp",
+        },
       },
       {
         path: "journal",
@@ -228,8 +282,8 @@ export const asyncRoutes = [
         meta: {
           title: "journal",
           roles: ["DEMAND", "SUPPLY", "HUB"],
-          permission: "MemberTopUp"
-        }
+          permission: "MemberTopUp",
+        },
       },
       {
         path: "topUpConfirm",
@@ -237,8 +291,8 @@ export const asyncRoutes = [
         meta: {
           title: "topUpConfirm",
           roles: ["PLATFORM"],
-          permission: "PlatformFinanceQuery"
-        }
+          permission: "PlatformFinanceQuery",
+        },
       },
       {
         path: "transferFreight",
@@ -246,10 +300,10 @@ export const asyncRoutes = [
         meta: {
           title: "transferFreight",
           roles: ["PLATFORM"],
-          permission: "PlatformFinanceQuery"
-        }
-      }
-    ]
+          permission: "PlatformFinanceQuery",
+        },
+      },
+    ],
   },
   {
     path: "/member",
@@ -258,7 +312,7 @@ export const asyncRoutes = [
     name: "member",
     meta: {
       title: "member",
-      roles: ["DEMAND", "SUPPLY", "HUB", "PLATFORM"]
+      roles: ["DEMAND", "SUPPLY", "HUB", "PLATFORM"],
     },
     children: [
       {
@@ -267,8 +321,8 @@ export const asyncRoutes = [
         meta: {
           title: "member",
           roles: ["DEMAND", "SUPPLY", "HUB"],
-          permission: "MemberInfo"
-        }
+          permission: "MemberInfo",
+        },
       },
       {
         path: "toBeVerified",
@@ -276,8 +330,8 @@ export const asyncRoutes = [
         meta: {
           title: "toBeVerified",
           roles: ["PLATFORM"],
-          permission: "PlatformMemberView"
-        }
+          permission: "PlatformMemberView",
+        },
       },
       {
         path: "rejected",
@@ -285,8 +339,8 @@ export const asyncRoutes = [
         meta: {
           title: "rejected",
           roles: ["PLATFORM"],
-          permission: "PlatformMemberView"
-        }
+          permission: "PlatformMemberView",
+        },
       },
       {
         path: "toBeSignedContract",
@@ -294,8 +348,8 @@ export const asyncRoutes = [
         meta: {
           title: "toBeSignedContract",
           roles: ["PLATFORM"],
-          permission: "PlatformMemberView"
-        }
+          permission: "PlatformMemberView",
+        },
       },
       {
         path: "activated",
@@ -303,8 +357,8 @@ export const asyncRoutes = [
         meta: {
           title: "activated",
           roles: ["PLATFORM"],
-          permission: "PlatformMemberView"
-        }
+          permission: "PlatformMemberView",
+        },
       },
       {
         path: "closed",
@@ -312,18 +366,48 @@ export const asyncRoutes = [
         meta: {
           title: "closed",
           roles: ["PLATFORM"],
-          permission: "PlatformMemberView"
-        }
-      }
-    ]
-  }
+          permission: "PlatformMemberView",
+        },
+      },
+    ],
+  },
+  {
+    path: "/setting",
+    redirect: "/setting",
+    component: Layout,
+    name: "memberSetting",
+    meta: {
+      title: "setting",
+      roles: ["PLATFORM"],
+    },
+    children: [
+      {
+        path: "route",
+        component: () => import("@views/setting/route"),
+        meta: {
+          title: "route",
+          roles: ["PLATFORM"],
+          permission: "PlatformOrderManage",
+        },
+      },
+      {
+        path: "user",
+        component: () => import("@views/setting/user"),
+        meta: {
+          title: "user",
+          roles: ["PLATFORM"],
+          permission: "PlatformOrderManage",
+        },
+      },
+    ],
+  },
 ];
 
 const createRouter = () =>
   new Router({
     // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
+    routes: constantRoutes,
   });
 
 const router = createRouter();
