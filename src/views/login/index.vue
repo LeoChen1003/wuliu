@@ -426,13 +426,13 @@ export default {
     conditionsUrl: {
       get() {
         let type = this.language == "en_US" ? "en" : this.language == "th_TH" ? "th" : "en";
-        return `http://t-rex.flashlogistics.co.th/html/term-${type}.html`;
+        return `https://t-rex.flashlogistics.co.th/html/term-${type}.html`;
       },
     },
     privacyPolicyUrl: {
       get() {
         let type = this.language == "en_US" ? "en" : this.language == "th_TH" ? "th" : "en";
-        return `http://t-rex.flashlogistics.co.th/html/privacy-${type}.html`;
+        return `https://t-rex.flashlogistics.co.th/html/privacy-${type}.html`;
       },
     },
   },
