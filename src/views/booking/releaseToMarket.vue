@@ -762,6 +762,7 @@ export default {
       self.delRegionList = releaseInfo.delRegionList;
       release.orderInfo.lineType = type;
       release.senderAddress.code = releaseInfo.searchForm.pickUpRegion;
+      release.receiverAddressList[0].code = releaseInfo.searchForm.deliveryRegion;
       self.time_at = releaseInfo.searchForm.pickUpDate;
       self.time = releaseInfo.time;
       // release.receiverAddress.code = releaseInfo.searchForm.deliveryRegion;
