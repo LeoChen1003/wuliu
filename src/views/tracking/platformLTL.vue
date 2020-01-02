@@ -129,17 +129,24 @@
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
-            <template slot-scope="scope" v-if="scope.row.order.receiverAddress!=null">
-              <div>
-                {{ scope.row.order.receiverAddress.name }}
-                {{ scope.row.order.receiverAddress.mobile }}
-              </div>
-              <div>{{ scope.row.order.receiverAddress.addressDetail }}</div>
-              <div>
-                {{ scope.row.order.receiverAddress.district }}
-                {{ scope.row.order.receiverAddress.city }}
-                {{ scope.row.order.receiverAddress.province }}
-              </div>
+            <template slot-scope="scope" v-if="scope.row.order.receiverAddressList">
+              <el-card
+                shadow="never"
+                style="margin-bottom:5px;"
+                v-for="(receiverAddress, index) in scope.row.order.receiverAddressList"
+                :key="index"
+              >
+                <div>
+                  {{ receiverAddress.name }}
+                  {{ receiverAddress.mobile }}
+                </div>
+                <div>{{ receiverAddress.addressDetail }}</div>
+                <div>
+                  {{ receiverAddress.district }}
+                  {{ receiverAddress.city }}
+                  {{ receiverAddress.province }}
+                </div>
+              </el-card>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.price')">
@@ -422,7 +429,6 @@ export default {
         orderNo: self.orderNo,
         page: page,
       }).then(res => {
-          console.log(res)
         self.data = res.data;
         self.loading = false;
         if (cb) {

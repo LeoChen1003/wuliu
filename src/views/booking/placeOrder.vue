@@ -60,7 +60,9 @@
               >
               </el-time-picker>
             </div>
-            <div v-if="bookingForm.orderInfo.lineType == 'LTL'" style="font-size:12px;color:#909399;margin-top:5px;">(Note:如果未选择上门揽件服务，需要按此时间把货物送到HUB)</div>
+            <div v-if="bookingForm.orderInfo.lineType == 'LTL'" style="font-size:12px;color:#909399;margin-top:5px;">
+              (Note:如果未选择上门揽件服务，需要按此时间把货物送到HUB)
+            </div>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -867,6 +869,9 @@ export default {
               });
             }
           }
+          self.bookingForm.receiverAddress.propertyList = self.bookingForm.propertyList;
+          self.bookingForm.receiverAddressList = [];
+          self.bookingForm.receiverAddressList.push(self.bookingForm.receiverAddress);
           if (self.bookingForm.orderInfo.lineType == "FTL") {
             placeOrder(self.bookingForm)
               .then(res => {
@@ -884,7 +889,7 @@ export default {
             placeOrderLTL(self.bookingForm).then(res => {
               self.todoLoading = false;
               self.$message.success(res.message);
-              self.$router.replace("/tracking/demandLTL")
+              self.$router.replace("/tracking/demandLTL");
             });
           }
         }

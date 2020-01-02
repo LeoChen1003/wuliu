@@ -29,7 +29,7 @@ export default {
     },
     isChange: {
       type: Boolean,
-      default:false,
+      default: false,
     },
   },
   data() {
@@ -93,9 +93,9 @@ export default {
       let time = `${e[0]}-${e[1]}-${e[2]}`;
       this.$emit("changeBCtime", time);
     },
-    clearData(){
+    clearData() {
       self.dateCascader = [];
-    }
+    },
   },
   created() {
     self = this;

@@ -103,22 +103,29 @@
               <div>
                 {{ scope.row.senderAddress.district }}
                 {{ scope.row.senderAddress.city }}
-                {{ scope.row.receiverAddress.province }}
+                {{ scope.row.senderAddress.province }}
               </div>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
-            <template slot-scope="scope" v-if="scope.row.receiverAddress">
-              <div>
-                {{ scope.row.receiverAddress.name }}
-                {{ scope.row.receiverAddress.mobile }}
-              </div>
-              <div>{{ scope.row.receiverAddress.addressDetail }}</div>
-              <div>
-                {{ scope.row.receiverAddress.district }}
-                {{ scope.row.receiverAddress.city }}
-                {{ scope.row.receiverAddress.province }}
-              </div>
+            <template slot-scope="scope" v-if="scope.row.receiverAddressList">
+              <el-card
+                shadow="never"
+                style="margin-bottom:5px;"
+                v-for="(receiverAddress, index) in scope.row.receiverAddressList"
+                :key="index"
+              >
+                <div>
+                  {{ receiverAddress.name }}
+                  {{ receiverAddress.mobile }}
+                </div>
+                <div>{{ receiverAddress.addressDetail }}</div>
+                <div>
+                  {{ receiverAddress.district }}
+                  {{ receiverAddress.city }}
+                  {{ receiverAddress.province }}
+                </div>
+              </el-card>
             </template>
           </el-table-column>
           <el-table-column :label="$t('billing.description')">
