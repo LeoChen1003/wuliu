@@ -269,30 +269,30 @@
         <el-table-column prop="outNumber" :label="$t('tracking.referenceNo')" width="140"> </el-table-column>
         <el-table-column :label="$t('tracking.cargoType')">
           <template slot-scope="scope">
-            <el-table :data="scope.row.propertyList" border :show-header="false" style="width:100%;">
+            <el-table :data="scope.row.receiverAddressList" border :show-header="false" style="width:100%;">
               <el-table-column>
                 <template slot-scope="prop">
-                  <div>{{ propertyObj[prop.row.propertyType] }}</div>
+                  <div>{{ propertyObj[prop.row.propertyList[0].propertyType] }}</div>
                 </template>
               </el-table-column>
               <el-table-column>
                 <template slot-scope="prop">
-                  <div>{{ prop.row.name }}</div>
+                  <div>{{ prop.row.propertyList[0].name }}</div>
                 </template>
               </el-table-column>
               <el-table-column>
                 <template slot-scope="prop">
-                  <div>{{ prop.row.number }}</div>
+                  <div>{{ prop.row.propertyList[0].number }}</div>
                 </template>
               </el-table-column>
               <el-table-column>
                 <template slot-scope="prop">
-                  <div>{{ sizeObj[prop.row.sizeType] }}</div>
+                  <div>{{ sizeObj[prop.row.propertyList[0].sizeType] }}</div>
                 </template>
               </el-table-column>
               <el-table-column>
                 <template slot-scope="prop">
-                  <div>{{ prop.row.weightOfEach }}</div>
+                  <div>{{ prop.row.propertyList[0].weightOfEach }}</div>
                 </template>
               </el-table-column>
             </el-table>
