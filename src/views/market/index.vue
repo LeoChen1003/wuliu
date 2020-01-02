@@ -52,7 +52,7 @@
       </div>
       <el-table :data="data.content" v-loading="tableLoading" border>
         <el-table-column :label="$t('market.pickupTime')">
-          <template slot-scope="scope">
+          <template slot-scope="scope" v-if="scope.row.senderAddress">
             <div>
               {{ scope.row.senderAddress.pickAt }}
             </div>

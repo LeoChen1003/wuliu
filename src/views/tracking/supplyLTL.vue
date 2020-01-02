@@ -130,7 +130,7 @@
           <el-table-column :label="$t('tracking.Discription')">
             <template slot-scope="scope">
               <!-- <el-card shadow="never"> -->
-              <span v-for="(item, index) in scope.row.order.propertyList" :key="index">
+              <span v-for="(item, index) in scope.row.order.receiverAddressList[0].propertyList" :key="index">
                 {{
                   `${parseInt(index) + 1}.${propertyObj[item.propertyType]} ${item.name} ${sizeObj[item.sizeType]} ${
                     item.number
@@ -436,7 +436,7 @@
         </el-table-column>
         <el-table-column :label="$t('tracking.cargo')">
           <template slot-scope="scope">
-            <span v-for="(item, index) in scope.row.order.propertyList" :key="index">
+            <span v-for="(item, index) in scope.row.order.receiverAddressList[0].propertyList" :key="index">
               {{
                 `${parseInt(index) + 1}.${propertyObj[item.propertyType]} ${item.name} ${sizeObj[item.sizeType]} ${item.number}${
                   unitObj[item.unit]
