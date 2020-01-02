@@ -127,7 +127,13 @@
                         class="inp"
                         disabled></el-input> -->
               <el-input v-model="quotePriceCon.senderAddress.addressDetail" class="inp" disabled></el-input>
-              <el-input v-model="quotePriceCon.senderAddress.fullName" class="inp" disabled></el-input>
+              <el-input
+                type="textarea"
+                resize="none"
+                v-model="quotePriceCon.senderAddress.fullName"
+                class="inp"
+                disabled
+              ></el-input>
             </el-form-item>
             <el-form-item :label="$t('booking.pickupTime')">
               <el-date-picker v-model="quotePriceCon.senderAddress.pickAt" class="inp" disabled type="datetime"> </el-date-picker>
@@ -139,7 +145,7 @@
                         class="inp"
                         disabled></el-input> -->
                 <el-input v-model="receiverAddress.addressDetail" class="inp" disabled></el-input>
-                <el-input v-model="receiverAddress.fullName" class="inp" disabled></el-input>
+                <el-input type="textarea" resize="none" v-model="receiverAddress.fullName" class="inp" disabled></el-input>
               </div>
             </el-form-item>
             <el-form-item prop="receiveAt" :label="$t('booking.expectedDeliveryTime')" v-if="quotePriceCon.receiverAddressList">
