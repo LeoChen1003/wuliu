@@ -150,7 +150,7 @@
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.pickupPoint')">
-            <template slot-scope="scope">
+            <template slot-scope="scope" v-if="scope.row.senderAddress">
               <div>
                 {{ scope.row.senderAddress.name }}
                 {{
