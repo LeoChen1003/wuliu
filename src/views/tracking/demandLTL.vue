@@ -576,7 +576,6 @@ export default {
       }
     },
     sendToHubAll() {
-      // self.totalNumber = 0;
       if (self.chooseNumber === 0) {
         self.dialogVisible = false;
         this.$message("请先选择需要发货的订单");
@@ -585,9 +584,9 @@ export default {
         self.totalNumber = 0;
         self.gridData = self.allOrder;
         for (let i in self.gridData) {
-          self.proList1 = self.gridData[i].propertyList;
-          for (let j in self.proList1) {
-            self.totalNumber += self.proList1[j].number;
+          self.proList1 = self.gridData[i].receiverAddressList;
+          for(let j in self.proList1){
+            self.totalNumber += self.proList1[j].propertyList[0].number;
           }
         }
       }
@@ -634,12 +633,15 @@ export default {
       self.totalNumber = 0;
       self.orderId = item.id;
       self.gridData = [item];
-      self.proList = [item.propertyList];
+      self.proList = [item.receiverAddressList];
       self.proList = self.proList[0];
+      // for (let i in self.gridData) {
+      //   for (let j in self.proList) {
+      //     self.totalNumber += self.proList[j].propertyList[0].number;
+      //   }
+      // }
       for (let i in self.gridData) {
-        for (let j in self.proList) {
-          self.totalNumber += self.proList[j].number;
-        }
+        self.totalNumber += self.proList[0].propertyList[0].number;
       }
       getTruckType().then(res => {
         self.truckType = res.data.categories;
