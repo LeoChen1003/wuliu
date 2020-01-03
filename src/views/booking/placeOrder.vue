@@ -965,10 +965,11 @@ export default {
             } ${list[x].number}${self.unitListObj[list[x].unit]} `;
           }
           self.propertyListContent = content;
-          self.bookingForm.ltlLineId = self.bookingForm.transportInfo.ftlLineId;
-          self.bookingForm.outNumber = self.bookingForm.orderInfo.outNumber;
-          self.bookingForm.remark = self.bookingForm.orderInfo.remark;
+          self.bookingForm.orderInfo.ltlLineId = self.bookingForm.transportInfo.ftlLineId;
           self.bookingForm.senderAddress.pickAt = self.bookingForm.senderAddress.pickAt.split(" ")[0] + ` ${self.time}`;
+          self.bookingForm.receiverAddress.propertyList = self.bookingForm.propertyList;
+          self.bookingForm.receiverAddressList = [];
+          self.bookingForm.receiverAddressList.push(self.bookingForm.receiverAddress);
           calculationOrder(self.bookingForm).then(res => {
             for (let i of self.amountList) {
               if (i.key == "FREIGHT") {
