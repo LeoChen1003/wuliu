@@ -1029,10 +1029,10 @@ export default {
       //   }
       // }
 
-      for (let i of template.ltlLineProvinceList) {
+      for (let i of template.lineTemplateProvinces) {
         params += `provinceCodes=${i.provinceCode}&`;
       }
-      console.log(template.ltlLineProvinceList);
+      console.log(template.lineTemplateProvinces);
       getCityLists(params).then(res => {
         console.log(res);
         let resData = res.data;
@@ -1044,9 +1044,9 @@ export default {
             cityCodes: [],
           });
         }
-        for (let z in template.ltlLineProvinceList) {
-          for (let x in template.ltlLineProvinceList[z].ltlLineCityList) {
-            list[z].cityCodes.push(template.ltlLineProvinceList[z].ltlLineCityList[x].cityCode);
+        for (let z in template.lineTemplateProvinces) {
+          for (let x in template.lineTemplateProvinces[z].lineTemplateCitys) {
+            list[z].cityCodes.push(template.lineTemplateProvinces[z].lineTemplateCitys[x].cityCode);
           }
         }
         self.editLoading = false;
