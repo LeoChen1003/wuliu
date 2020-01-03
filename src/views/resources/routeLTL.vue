@@ -768,9 +768,7 @@ export default {
       for (let i of template.ltlLineProvinceList) {
         params += `provinceCodes=${i.provinceCode}&`;
       }
-      console.log(template.ltlLineProvinceList);
       getCityLists(params).then(res => {
-        console.log(res);
         let resData = res.data;
         for (let z of resData) {
           list.push({
@@ -1029,12 +1027,10 @@ export default {
       //   }
       // }
 
-      for (let i of template.ltlLineProvinceList) {
+      for (let i of template.lineTemplateProvinces) {
         params += `provinceCodes=${i.provinceCode}&`;
       }
-      console.log(template.ltlLineProvinceList);
       getCityLists(params).then(res => {
-        console.log(res);
         let resData = res.data;
         for (let z of resData) {
           list.push({
@@ -1044,9 +1040,9 @@ export default {
             cityCodes: [],
           });
         }
-        for (let z in template.ltlLineProvinceList) {
-          for (let x in template.ltlLineProvinceList[z].ltlLineCityList) {
-            list[z].cityCodes.push(template.ltlLineProvinceList[z].ltlLineCityList[x].cityCode);
+        for (let z in template.lineTemplateProvinces) {
+          for (let x in template.lineTemplateProvinces[z].lineTemplateCitys) {
+            list[z].cityCodes.push(template.lineTemplateProvinces[z].lineTemplateCitys[x].cityCode);
           }
         }
         self.editLoading = false;
@@ -1115,7 +1111,6 @@ export default {
       if (type === "init") {
         let lineList = [];
         for (let i of cityList) {
-          console.log(i);
           let cap = {
             provinceName: i.provinceName,
             provinceCode: i.provinceCode,
@@ -1481,9 +1476,7 @@ export default {
       for (let i of template.ltlLineProvinceList) {
         params += `provinceCodes=${i.provinceCode}&`;
       }
-      console.log(template.ltlLineProvinceList);
       getCityLists(params).then(res => {
-        console.log(res);
         let resData = res.data;
         for (let z of resData) {
           list.push({
