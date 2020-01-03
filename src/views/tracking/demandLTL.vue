@@ -269,30 +269,30 @@
         <el-table-column prop="outNumber" :label="$t('tracking.referenceNo')" width="140"> </el-table-column>
         <el-table-column :label="$t('tracking.cargoType')">
           <template slot-scope="scope">
-            <el-table :data="scope.row.receiverAddressList" border :show-header="false" style="width:100%;">
+            <el-table :data="scope.row.receiverAddressList[0].propertyList" border :show-header="false" style="width:100%;">
               <el-table-column>
                 <template slot-scope="prop">
-                  <div>{{ propertyObj[prop.row.propertyList[0].propertyType] }}</div>
+                  <div>{{ propertyObj[prop.row.propertyType] }}</div>
                 </template>
               </el-table-column>
               <el-table-column>
                 <template slot-scope="prop">
-                  <div>{{ prop.row.propertyList[0].name }}</div>
+                  <div>{{ prop.row.name }}</div>
                 </template>
               </el-table-column>
               <el-table-column>
                 <template slot-scope="prop">
-                  <div>{{ prop.row.propertyList[0].number }}</div>
+                  <div>{{ prop.row.number }}</div>
                 </template>
               </el-table-column>
               <el-table-column>
                 <template slot-scope="prop">
-                  <div>{{ sizeObj[prop.row.propertyList[0].sizeType] }}</div>
+                  <div>{{ sizeObj[prop.row.sizeType] }}</div>
                 </template>
               </el-table-column>
               <el-table-column>
                 <template slot-scope="prop">
-                  <div>{{ prop.row.propertyList[0].weightOfEach }}</div>
+                  <div>{{ prop.row.weightOfEach }}</div>
                 </template>
               </el-table-column>
             </el-table>
@@ -576,7 +576,6 @@ export default {
       }
     },
     sendToHubAll() {
-      // self.totalNumber = 0;
       if (self.chooseNumber === 0) {
         self.dialogVisible = false;
         this.$message("请先选择需要发货的订单");
@@ -585,9 +584,10 @@ export default {
         self.totalNumber = 0;
         self.gridData = self.allOrder;
         for (let i in self.gridData) {
-          self.proList1 = self.gridData[i].propertyList;
-          for (let j in self.proList1) {
-            self.totalNumber += self.proList1[j].number;
+          self.proList1 = self.gridData[i].receiverAddressList[0];
+          console.log(self.proList1)
+          for(let j in self.proList1.propertyList){
+            self.totalNumber += self.proList1.propertyList[j].number;
           }
         }
       }
@@ -634,11 +634,11 @@ export default {
       self.totalNumber = 0;
       self.orderId = item.id;
       self.gridData = [item];
-      self.proList = [item.propertyList];
+      self.proList = [item.receiverAddressList];
       self.proList = self.proList[0];
       for (let i in self.gridData) {
-        for (let j in self.proList) {
-          self.totalNumber += self.proList[j].number;
+        for (let j in self.proList[0].propertyList) {
+          self.totalNumber += self.proList[0].propertyList[j].number;
         }
       }
       getTruckType().then(res => {

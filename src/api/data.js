@@ -57,6 +57,15 @@ export function getCityList(params) {
   });
 }
 
+// 所有市 分组
+export function getCityLists(data) {
+  return request({
+    url: "/misc/geo/city/lists?" + data,
+    method: "get",
+    // params: data,
+  });
+}
+
 // 分组获取所有市
 export function getCityListGroup(data) {
   return requestJSON({
