@@ -768,9 +768,7 @@ export default {
       for (let i of template.ltlLineProvinceList) {
         params += `provinceCodes=${i.provinceCode}&`;
       }
-      console.log(template.ltlLineProvinceList);
       getCityLists(params).then(res => {
-        console.log(res);
         let resData = res.data;
         for (let z of resData) {
           list.push({
@@ -1032,9 +1030,7 @@ export default {
       for (let i of template.lineTemplateProvinces) {
         params += `provinceCodes=${i.provinceCode}&`;
       }
-      console.log(template.lineTemplateProvinces);
       getCityLists(params).then(res => {
-        console.log(res);
         let resData = res.data;
         for (let z of resData) {
           list.push({
@@ -1115,7 +1111,6 @@ export default {
       if (type === "init") {
         let lineList = [];
         for (let i of cityList) {
-          console.log(i);
           let cap = {
             provinceName: i.provinceName,
             provinceCode: i.provinceCode,
@@ -1481,9 +1476,7 @@ export default {
       for (let i of template.ltlLineProvinceList) {
         params += `provinceCodes=${i.provinceCode}&`;
       }
-      console.log(template.ltlLineProvinceList);
       getCityLists(params).then(res => {
-        console.log(res);
         let resData = res.data;
         for (let z of resData) {
           list.push({
