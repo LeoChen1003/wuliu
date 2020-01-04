@@ -758,7 +758,7 @@ export default {
       let params = "";
       for (let i of row.optionalTimeList) {
         let arr = i.optTime.split("-");
-        dateList["show_" + arr[0] + "_" + arr[1] + "_" + parseInt(arr[2])] = {
+        dateList["show_" + arr[0] + "_" + parseInt(arr[1]) + "_" + parseInt(arr[2])] = {
           bcYear: arr[0],
           month: arr[1],
           day: arr[2],
