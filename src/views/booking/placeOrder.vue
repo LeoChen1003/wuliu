@@ -883,9 +883,7 @@ export default {
                 self.todoLoading = false;
               });
           } else {
-            self.bookingForm.ltlLineId = self.bookingForm.transportInfo.ftlLineId;
-            self.bookingForm.outNumber = self.bookingForm.orderInfo.outNumber;
-            self.bookingForm.remark = self.bookingForm.orderInfo.remark;
+            self.bookingForm.orderInfo.ltlLineId = self.bookingForm.transportInfo.ftlLineId;
             placeOrderLTL(self.bookingForm).then(res => {
               self.todoLoading = false;
               self.$message.success(res.message);
