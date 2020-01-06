@@ -245,14 +245,19 @@
                     filterable
                     remote
                     reserve-keyword
-                    @focus="clearSelect('del')"
+                    @focus="clearSelect('del', scope.$index)"
                     class="inputWidth"
                     v-el-select-loadmore="loadmore"
                     :placeholder="$t('member.region')"
                     :remote-method="pickUpMethod"
                     :loading="searchloading"
                   >
-                    <el-option v-for="item in delRegionList" :key="item.code" :label="item.fullname" :value="item.code">
+                    <el-option
+                      v-for="item in releaseForm.receiverAddressList[scope.$index].delRegionList"
+                      :key="item.code"
+                      :label="item.fullname"
+                      :value="item.code"
+                    >
                     </el-option>
                   </el-select>
                 </template>
@@ -665,6 +670,7 @@ export default {
           },
         ],
       },
+      curDelRegionIndex: 0,
     };
   },
   // 监听属性 类似于data概念
@@ -763,6 +769,7 @@ export default {
       release.orderInfo.lineType = type;
       release.senderAddress.code = releaseInfo.searchForm.pickUpRegion;
       release.receiverAddressList[0].code = releaseInfo.searchForm.deliveryRegion;
+      release.receiverAddressList[0].delRegionList = releaseInfo.delRegionList;
       self.time_at = releaseInfo.searchForm.pickUpDate;
       self.time = releaseInfo.time;
       // release.receiverAddress.code = releaseInfo.searchForm.deliveryRegion;
@@ -844,6 +851,7 @@ export default {
       }
     },
     getdistrictFullList(query, page) {
+      let list = JSON.parse(JSON.stringify(self.releaseForm));
       findDistrictFullList({
         name: query,
         page: page,
@@ -853,23 +861,28 @@ export default {
           if (self.curSelect == "pk") {
             self.pickUpRegionList = self.pickUpRegionList.concat(res.data.content);
           } else {
-            self.delRegionList = self.delRegionList.concat(res.data.content);
+            list.receiverAddressList[self.curDelRegionIndex].delRegionList = list.receiverAddressList[
+              self.curDelRegionIndex
+            ].delRegionList.concat(res.data.content);
           }
         } else {
           if (self.curSelect == "pk") {
             self.pickUpRegionList = res.data.content;
           } else {
-            self.delRegionList = res.data.content;
+            list.receiverAddressList[self.curDelRegionIndex].delRegionList = res.data.content;
           }
         }
+        self.releaseForm = list;
+        this.$forceUpdate();
       });
     },
     // 聚焦初始化
-    clearSelect(type) {
+    clearSelect(type, index) {
       if (type == "pk") {
         self.pickUpQuery = "";
         self.curSelect = "pk";
       } else {
+        self.curDelRegionIndex = index;
         self.delQuery = "";
         self.curSelect = "del";
       }

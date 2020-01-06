@@ -255,7 +255,9 @@
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="confirmDialog = false">取 消</el-button>
-        <el-button :disabled="radio === ''" type="primary" @click="confirmIt">{{ $t("tracking.confirm") }}</el-button>
+        <el-button :disabled="radio === ''" type="primary" :loading="confirmLoading" @click="confirmIt">{{
+          $t("tracking.confirm")
+        }}</el-button>
       </span>
     </el-dialog>
     <el-dialog :title="$t('tracking.orderLog')" :visible.sync="logDialog">
@@ -372,6 +374,7 @@ export default {
       imgList: [],
       rdRow: {},
       rdLoading: false,
+      confirmLoading: false,
     };
   },
   // 监听属性 类似于data概念
@@ -479,11 +482,13 @@ export default {
     },
     confirmIt() {
       const self = this;
+      self.confirmLoading = true;
       demandquoteConfirm(self.curId, self.selected.id).then(res => {
         self.$message.success(res.message);
         self.loadData();
         self.radio = "";
         self.confirmDialog = false;
+        self.confirmLoading = false;
       });
     },
     orderLog(id) {
