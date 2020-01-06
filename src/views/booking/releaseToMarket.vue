@@ -549,11 +549,11 @@ export default {
           carriage: "",
         },
         chargeList: [
-          {
-            chargeType: "CARPOOL",
-            chargeIntro: "false",
-            money: 0,
-          },
+          // {
+          //   chargeType: "CARPOOL",
+          //   chargeIntro: "false",
+          //   money: 0,
+          // },
         ],
       },
       releaseRules: {
