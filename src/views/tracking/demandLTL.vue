@@ -584,6 +584,7 @@ export default {
         self.dialogVisible = true;
         self.totalNumber = 0;
         self.gridData = self.allOrder;
+        self.show_confirm = false;
         for (let i in self.gridData) {
           self.proList1 = self.gridData[i].receiverAddressList[0];
           console.log(self.proList1)
@@ -637,6 +638,7 @@ export default {
       self.gridData = [item];
       self.proList = [item.receiverAddressList];
       self.proList = self.proList[0];
+      self.show_confirm = false;
       for (let i in self.gridData) {
         for (let j in self.proList[0].propertyList) {
           self.totalNumber += self.proList[0].propertyList[j].number;
