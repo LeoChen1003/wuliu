@@ -91,19 +91,19 @@
                                   {{ $t(`booking.${truckItem.truck}`) }}
                                 </div>
                                 <div>
-                                  <span class="unit">{{$t('booking.truckWidth')}}</span>
+                                  <span class="unit">{{ $t("booking.truckWidth") }}</span>
                                   <span class="number">{{ truckItem.width }} m</span>
                                 </div>
                                 <div>
-                                  <span class="unit">{{$t('booking.truckLength')}}</span>
+                                  <span class="unit">{{ $t("booking.truckLength") }}</span>
                                   <span class="number">{{ truckItem.length }} m</span>
                                 </div>
                                 <div>
-                                  <span class="unit">{{$t('booking.truckHeight')}}</span>
+                                  <span class="unit">{{ $t("booking.truckHeight") }}</span>
                                   <span class="number">{{ truckItem.height }} m</span>
                                 </div>
                                 <div>
-                                  <span class="unit">{{$t('booking.truckVolume')}}</span>
+                                  <span class="unit">{{ $t("booking.truckVolume") }}</span>
                                   <span class="number">{{ truckItem.volume }} m³</span>
                                 </div>
                               </div>
@@ -112,7 +112,7 @@
                                   <span v-if="truckItem.isOver">{{ $t("booking.noMoreThan") }}</span>
                                   {{ truckItem.weight }} kg
                                 </div>
-                                <div>{{$t('booking.truckMax')}}</div>
+                                <div>{{ $t("booking.truckMax") }}</div>
                               </div>
                             </div>
                           </div>
@@ -134,19 +134,19 @@
                                   {{ $t(`booking.${truckItem.truck}`) }}
                                 </div>
                                 <div>
-                                  <span class="unit">{{$t('booking.truckWidth')}}</span>
+                                  <span class="unit">{{ $t("booking.truckWidth") }}</span>
                                   <span class="number">{{ truckItem.width }} m</span>
                                 </div>
                                 <div>
-                                  <span class="unit">{{$t('booking.truckLength')}}</span>
+                                  <span class="unit">{{ $t("booking.truckLength") }}</span>
                                   <span class="number">{{ truckItem.length }} m</span>
                                 </div>
                                 <div>
-                                  <span class="unit">{{$t('booking.truckHeight')}}</span>
+                                  <span class="unit">{{ $t("booking.truckHeight") }}</span>
                                   <span class="number">{{ truckItem.height }} m</span>
                                 </div>
                                 <div>
-                                  <span class="unit">{{$t('booking.truckVolume')}}</span>
+                                  <span class="unit">{{ $t("booking.truckVolume") }}</span>
                                   <span class="number">{{ truckItem.volume }} m³</span>
                                 </div>
                               </div>
@@ -155,7 +155,7 @@
                                   <span v-if="truckItem.isOver">{{ $t("booking.noMoreThan") }}</span>
                                   {{ truckItem.weight }} kg
                                 </div>
-                                <div>{{$t('booking.truckMax')}}</div>
+                                <div>{{ $t("booking.truckMax") }}</div>
                               </div>
                             </div>
                           </div>
@@ -302,9 +302,7 @@
                   <el-button type="primary" style="width:160px;" @click="hideMap">{{ $t("booking.bookingNow") }}</el-button>
                 </div>
                 <div class="btn_item">
-                  <el-button type="primary" style="width:160px;" @click="toMarket">{{
-                    $t("booking.releaseToMarket")
-                  }}</el-button>
+                  <el-button type="primary" style="width:160px;" @click="toMarket">{{ $t("booking.releaseToMarket") }}</el-button>
                 </div>
               </div>
             </el-form-item>
@@ -314,7 +312,7 @@
       <el-col :span="18" style="height:100%;overflow:scroll;">
         <div style="height:100%;" :class="!mapMode ? 'hideMap' : ''">
           <div id="map"></div>
-          <div id="content" v-if="mapMode">
+          <div id="content">
             <img src="../../assets/image/truckIcon.png" class="truck-icon" />
             <div>
               <div>{{ disInfo.days + $t("booking.days") }}</div>
@@ -359,10 +357,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              align="center"
-              :label="logisticType == 'FTL' ? $t('booking.truckType') : $t('booking.cutOffTime')"
-            >
+            <el-table-column align="center" :label="logisticType == 'FTL' ? $t('booking.truckType') : $t('booking.cutOffTime')">
               <template slot-scope="scope">
                 <div v-if="logisticType == 'FTL'">
                   <div class="cantouch" @click="previewImg(scope.row)">
@@ -409,9 +404,12 @@
             <el-table-column>
               <template slot-scope="scope">
                 <div style="text-align:center;">
-                  <el-button type="primary" :disabled="!permissions.DemandNewOrderOrRelease || (scope.row.check && scope.row.check=='false')" @click="toBooking(scope.row)">{{
-                    $t("booking.placeOrder")
-                  }}</el-button>
+                  <el-button
+                    type="primary"
+                    :disabled="!permissions.DemandNewOrderOrRelease || (scope.row.check && scope.row.check == 'false')"
+                    @click="toBooking(scope.row)"
+                    >{{ $t("booking.placeOrder") }}</el-button
+                  >
                 </div>
               </template>
             </el-table-column>
@@ -444,7 +442,7 @@
       <!-- size 说明 -->
       <el-table :data="cargoTip" border style="width:730px;margin-bottom:20px;">
         <el-table-column width="130">
-          <template slot-scope="scope">{{$t(`booking.${scope.row.unit}`)}}</template>
+          <template slot-scope="scope">{{ $t(`booking.${scope.row.unit}`) }}</template>
         </el-table-column>
         <el-table-column prop="ss" label="Size-SS" width="100"></el-table-column>
         <el-table-column prop="s" label="Size-S" width="100"></el-table-column>
@@ -564,12 +562,7 @@
 // 例如：import 《组件名称》 from '《组件路径》';
 import { mapGetters } from "vuex";
 import { ftlLine, ftlLines, ltlLine } from "../../api/booking";
-import {
-  getTruckType,
-  findDistrictFullList,
-  findDistrictOfHubFullList,
-  getGoodsProperty,
-} from "../../api/data";
+import { getTruckType, findDistrictFullList, findDistrictOfHubFullList, getGoodsProperty } from "../../api/data";
 import { getTime, parseTime } from "../../utils/index";
 import bcTime from "@/components/bcTime";
 import Search from "@/components/HeaderSearch";
@@ -579,7 +572,7 @@ let map, infoWindow, directionsService, directionsRenderer;
 
 export default {
   // import引入的组件需要注入到对象中才能使用
-  components: { bcTime},
+  components: { bcTime },
   directives: {
     "el-select-loadmore": {
       bind(el, binding) {
@@ -1113,7 +1106,7 @@ export default {
         distance: "0",
         days: "0",
       },
-      mapMode: false,
+      mapMode: true,
       showDisInfo: false,
       mapStart: "", //地图起始点
       mapEnd: "", //地图终点
@@ -1210,18 +1203,19 @@ export default {
           duration: 7000,
         });
       }
-      let chicago = new google.maps.LatLng(41.850033, -87.6500523);
+      let Bangkok = new google.maps.LatLng(13.7248936, 100.4930261);
 
       map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 8,
+        zoom: 10,
         //设置地图中心点
-        center: chicago,
+        center: Bangkok,
         //为了关闭默认控件集,设置地图的disableDefaultUI的属性为true
         disableDefaultUI: true,
         // 启用缩放和平移
         gestureHandling: "greedy",
       });
       infoWindow = new google.maps.InfoWindow();
+      self.setCenter();
 
       if (cb) {
         cb();
@@ -1253,46 +1247,48 @@ export default {
 
           // 卡车速度
           let speed;
-          if (truckType == 4) {
-            speed = 70;
-          } else if (truckType == 6 || truckType == 10 || truckType == 12) {
-            speed = 60;
-          } else if (truckType == 18 || truckType == 22) {
-            speed = 50;
-          } else {
-            return self.$message.error("Truck type ERROR!");
+          if (truckType !== "") {
+            if (truckType == 4) {
+              speed = 70;
+            } else if (truckType == 6 || truckType == 10 || truckType == 12) {
+              speed = 60;
+            } else if (truckType == 18 || truckType == 22) {
+              speed = 50;
+            } else {
+              return self.$message.error("Truck type ERROR!");
+            }
+
+            // 休息次数
+            let count = parseInt(distance / 400);
+            if (count != 0 && count % 400 == 0) {
+              count--;
+            }
+            // 运输天数
+            let day = parseInt((distance / speed + count * 0.5) / 12);
+            if (day < 1) {
+              day = 1;
+            }
+
+            self.disInfo = {
+              distance: distance,
+              days: day,
+            };
+
+            // infoWindow样式悬浮框
+            // let contentString = '<div class="info-box">' +
+            //   '<div>123' +
+            //   '</div>' +
+            //   '</div>'
+            // let infoWindow = new google.maps.InfoWindow({
+            //   content: contentString,
+            //   position: middleStep
+            // })
+            // infoWindow.open(map)
+
+            let Popup = self.createPopupClass();
+            let popup = new Popup(middleStep, document.getElementById("content"));
+            popup.setMap(map);
           }
-
-          // 休息次数
-          let count = parseInt(distance / 400);
-          if (count != 0 && count % 400 == 0) {
-            count--;
-          }
-          // 运输天数
-          let day = parseInt((distance / speed + count * 0.5) / 12);
-          if (day < 1) {
-            day = 1;
-          }
-
-          self.disInfo = {
-            distance: distance,
-            days: day,
-          };
-
-          // infoWindow样式悬浮框
-          // let contentString = '<div class="info-box">' +
-          //   '<div>123' +
-          //   '</div>' +
-          //   '</div>'
-          // let infoWindow = new google.maps.InfoWindow({
-          //   content: contentString,
-          //   position: middleStep
-          // })
-          // infoWindow.open(map)
-
-          let Popup = self.createPopupClass();
-          let popup = new Popup(middleStep, document.getElementById("content"));
-          popup.setMap(map);
         } else {
           self.$notify({
             title: "Network Error",
@@ -1306,13 +1302,22 @@ export default {
     hideMap() {
       self.mapMode = false;
     },
+    // 获取位置
+    setCenter(address) {
+      let geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ address: address }, function(results, status) {
+        if (status == "OK") {
+          map.setCenter(results[0].geometry.location);
+        }
+      });
+    },
     // 获取当前位置
     getLocation() {
       return new Promise(resolve => {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             function(position) {
-              var pos = {
+              let pos = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
               };
@@ -1510,15 +1515,15 @@ export default {
       localStorage.setItem("consultInfo", JSON.stringify(consultInfo));
       self.$router.replace("/booking/placeOrder");
     },
-    toMarket(){
-      let releaseInfo = {}
+    toMarket() {
+      let releaseInfo = {};
       releaseInfo.pickUpRegionList = self.pickUpRegionList;
       releaseInfo.delRegionList = self.delRegionList;
       releaseInfo.searchForm = self.searchForm;
       releaseInfo.logisticType = self.logisticType;
       releaseInfo.time = self.time ? self.time : "00:00:00";
       localStorage.setItem("releaseInfo", JSON.stringify(releaseInfo));
-      self.$router.push('/booking/releaseToMarket')
+      self.$router.push("/booking/releaseToMarket");
     },
     pickUpMethod(query) {
       if (query !== "") {
@@ -1677,7 +1682,6 @@ export default {
     // 揽件时间改变时
     dateChange(time) {
       self.searchForm.pickUpDate = time;
-      console.log(time)
     },
     // 改变物流类型
     changeLogisticType(type) {
@@ -1685,8 +1689,10 @@ export default {
       if (type == "LTL") {
         self.searchForm.pickUpRegion = "";
         self.hideMap();
+      } else {
+        self.mapMode = true;
       }
-      self.tableList = []
+      self.tableList = [];
       self.$refs.searchform.clearValidate();
     },
     checkNumInt(val, index, type) {
@@ -1762,6 +1768,11 @@ export default {
       });
       let arr = obj.fullname.split("-");
       self.mapStart = arr[1] + arr[0];
+      if (self.mapEnd === "") {
+        self.setCenter(self.mapStart);
+      } else {
+        self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
+      }
     },
     deliveryChange(val) {
       let obj = {};
@@ -1770,6 +1781,9 @@ export default {
       });
       let arr = obj.fullname.split("-");
       self.mapEnd = arr[1] + arr[0];
+      if (self.mapStart !== "") {
+        self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
+      }
     },
     getCurLocation() {
       if (!self.locationLoading) {
