@@ -484,14 +484,14 @@ export default {
       self.loadData();
     },
     toquotePrice(row) {
+      getSupplyTD().then(res => {
+        self.truckData = res.data.trucks;
+      });
       self.quotePriceDialog = true;
       self.quotePriceCon = row;
       self.quotePriceForm.money = null;
       self.quotePriceForm.truck_id = null;
       self.shareTruck = row.chargeList[0].chargeIntro == "false" ? false : true;
-      getSupplyTD().then(res => {
-        self.truckData = res.data.trucks;
-      });
     },
     truckSelect(val) {
       self.truckData.forEach(item => {
