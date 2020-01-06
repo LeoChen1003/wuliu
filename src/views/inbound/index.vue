@@ -169,6 +169,7 @@ export default {
       selectionRow: [],
       printNumber: null,
       printId: null,
+      isChange: false,
     };
   },
   methods: {
@@ -191,7 +192,7 @@ export default {
     loadData(cb) {
       self.loading = true;
       self.rightData = [];
-      let page = self.data.number ? self.data.number : 0;
+      let page = self.isChange ? 0 : self.data.number ? self.data.number : 0;
       getInboundList(self.status, {
         searchType: self.searchType,
         like: self.like,
@@ -231,6 +232,7 @@ export default {
     // 切换status
     changeStatus(type) {
       self.status = type;
+      self.isChange = true;
       self.clearSearch();
       self.loadData();
     },
@@ -273,7 +275,6 @@ export default {
     receiptIt(item, index) {
       if (item.number && item.number > 0) {
         if (item.number == item.sum) {
-          console.log(self.rightData);
           confirmput({
             count: item.number,
             orderId: item.orderId,
