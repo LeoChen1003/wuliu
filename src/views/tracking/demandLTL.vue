@@ -306,7 +306,7 @@
       <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 100px;" :disabled="btn_show" @click="print1">
         {{ $t("tracking.printPreview") }}
       </el-button>
-      <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 200px;" @click="confirm">
+      <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 200px;" @click="confirm" :disabled="show_confirm">
         {{ $t("tracking.confirm") }}
       </el-button>
     </el-dialog>
@@ -437,6 +437,7 @@ export default {
       truckType: [],
       truckValue: "",
       btn_show: true,
+      show_confirm: false,
       sendtohubid: "",
       loading1: false,
       rdDialog: false,
@@ -670,6 +671,7 @@ export default {
             self.timeArr = self.time_at.split("-");
             self.btn_show = false;
             self.sendtohubid = res.data.id;
+            self.show_confirm = true;
           });
         }
       });
