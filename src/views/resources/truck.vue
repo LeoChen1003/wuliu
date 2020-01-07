@@ -282,7 +282,7 @@
       </div>
     </el-dialog>
     <el-dialog :visible.sync="previewDialog">
-      <img width="100%" :src="previewImg" />
+      <img width="100%" :src="previewImg" alt="image" />
     </el-dialog>
   </div>
 </template>

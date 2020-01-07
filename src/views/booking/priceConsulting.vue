@@ -313,7 +313,7 @@
         <div style="height:100%;" :class="!mapMode ? 'hideMap' : ''">
           <div id="map"></div>
           <div id="content">
-            <img src="../../assets/image/truckIcon.png" class="truck-icon" />
+            <img src="../../assets/image/truckIcon.png" alt="image" class="truck-icon" />
             <div>
               <div>{{ disInfo.days + $t("booking.days") }}</div>
               <div>{{ disInfo.distance + $t("booking.distance") }}</div>
@@ -1193,9 +1193,7 @@ export default {
   },
   methods: {
     initMaps(cb) {
-      try {
-        google;
-      } catch (e) {
+      if (google) {
         return this.$notify({
           title: "Warning",
           message: "Google map load failed,Please check your network and try to refresh the page.",

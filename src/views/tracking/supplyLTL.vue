@@ -375,7 +375,7 @@
       </span>
     </el-dialog>
     <el-dialog :visible.sync="previewDialog">
-      <img width="100%" :src="previewImg" />
+      <img width="100%" :src="previewImg" alt="image" />
     </el-dialog>
     <el-dialog :visible.sync="assignDialog" width="950px" :title="$t('tracking.assignTruckAndDriver')" center>
       <el-form

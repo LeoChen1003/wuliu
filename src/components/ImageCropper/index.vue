@@ -34,6 +34,7 @@
           <div v-show="true" class="vicp-crop-left">
             <div class="vicp-img-container">
               <img
+                alt="fail"
                 ref="img"
                 :src="sourceImgUrl"
                 :style="sourceImgStyle"
@@ -73,11 +74,11 @@
           <div v-show="true" class="vicp-crop-right">
             <div class="vicp-preview">
               <div v-if="!noSquare" class="vicp-preview-item">
-                <img :src="createImgUrl" :style="previewStyle" />
+                <img :src="createImgUrl" :style="previewStyle" alt="previewImg" />
                 <span>{{ lang.preview }}</span>
               </div>
               <div v-if="!noCircle" class="vicp-preview-item vicp-preview-item-circle">
-                <img :src="createImgUrl" :style="previewStyle" />
+                <img :src="createImgUrl" :style="previewStyle" alt="previewImg" />
                 <span>{{ lang.preview }}</span>
               </div>
             </div>
