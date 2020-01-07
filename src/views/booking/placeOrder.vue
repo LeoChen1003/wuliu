@@ -725,11 +725,11 @@ export default {
       booking.chargeList =
         type == "FTL"
           ? [
-              {
-                chargeType: "CARPOOL",
-                chargeIntro: "false",
-                money: 0,
-              },
+              // {
+              //   chargeType: "CARPOOL",
+              //   chargeIntro: "false",
+              //   money: 0,
+              // },
             ]
           : [];
       booking.propertyList = type == "FTL" ? [] : consultInfo.searchForm.propertyList;
