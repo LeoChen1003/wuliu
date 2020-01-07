@@ -239,13 +239,46 @@
     <el-dialog :title="$t('tracking.returnTruck')" width="600px" :visible.sync="returnDialog">
       <el-form ref="form" :model="form" label-width="120px">
         <el-form-item :label="$t('tracking.origin')">
-          <el-select v-model="returnSenderAddressIndex" placeholder="请选择" @change="returnSenderAddressChange">
+          <el-select
+            style="width:240px;margin-bottom:5px;"
+            v-model="returnSenderAddressIndex"
+            placeholder="请选择"
+            @change="returnSenderAddressChange"
+          >
             <el-option v-for="(item, index) in returnForm_show.sender" :key="item.id" :label="item.province" :value="index">
             </el-option>
           </el-select>
+          <div>
+            <el-select
+              v-model="fromCityCode"
+              style="width:240px;"
+              class="formSelect"
+              clearable
+              filterable
+              multiple
+              collapse-tags
+              placeholder="city"
+            >
+              <el-option v-for="(item, index) in fromCityCodeList" :key="index" :label="item.name" :value="item.code"></el-option>
+            </el-select>
+          </div>
         </el-form-item>
         <el-form-item :label="$t('tracking.destination')">
-          {{ returnForm_show.receiver }}
+          <div>
+            {{ returnForm_show.receiver }}
+          </div>
+          <el-select
+            v-model="toCityCode"
+            style="width:240px;"
+            class="formSelect"
+            clearable
+            filterable
+            multiple
+            collapse-tags
+            placeholder="city"
+          >
+            <el-option v-for="(item, index) in toCityCodeList" :key="index" :label="item.name" :value="item.code"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item :label="$t('tracking.truckType')">
           {{ truckObj[returnForm_show.truck] }}
@@ -533,6 +566,10 @@ export default {
       returnSenderAddress: {},
       returnReceiverAddress: {},
       returnSenderAddressIndex: null,
+      fromCityCode: [],
+      fromCityCodeList: [],
+      toCityCode: [],
+      toCityCodeList: [],
     };
   },
   // 监听属性 类似于data概念
@@ -677,15 +714,29 @@ export default {
       });
     },
     returnShow(item) {
+      let list = JSON.parse(JSON.stringify(item.receiverAddressList));
+      let obj = {};
+      list = list.reduce(function(item, next) {
+        obj[next.province] ? "" : (obj[next.province] = true && item.push(next));
+        return item;
+      }, []);
+      console.log(list);
+      console.log(item.senderAddress);
       self.returnForm_show = {
-        sender: item.receiverAddressList,
-        receiver: item.senderAddress.city,
+        sender: list,
+        receiver: item.senderAddress.province,
         truck: item.transport.carType,
         subType: item.transport.carriage,
       };
-      self.returnSenderAddressIndex = item.receiverAddressList.length - 1;
-      self.returnSenderAddress = item.receiverAddressList[item.receiverAddressList.length - 1];
+      self.returnSenderAddressIndex = list.length - 1;
+      self.returnSenderAddress = list[list.length - 1];
       self.returnReceiverAddress = item.senderAddress;
+      getCityList(`provinceCodes=${self.returnSenderAddress.code.slice(0, 4)}`).then(res => {
+        self.fromCityCodeList = res.data;
+      });
+      getCityList(`provinceCodes=${self.returnReceiverAddress.code.slice(0, 4)}`).then(res => {
+        self.toCityCodeList = res.data;
+      });
       self.returnCharge = "";
       self.returnDate = "";
       self.returnTime = "";
@@ -696,13 +747,24 @@ export default {
     dateChange(e) {
       self.returnDate = `${e[0]}-${e[1]}-${e[2]}`;
     },
-    returnSenderAddressChange(val){
+    returnSenderAddressChange(val) {
       self.returnSenderAddress = self.returnForm_show.sender[val];
+      getCityList(`provinceCodes=${self.returnSenderAddress.code.slice(0, 4)}`).then(res => {
+        self.fromCityCodeList = res.data;
+      });
     },
     returnIt() {
       self.returnLoading = true;
       let returnDate = `${self.returnDate} ${self.returnTime}`;
-      returnTruck(self.returnId, self.returnCharge, returnDate, self.returnReceiverAddress, self.returnSenderAddress).then(() => {
+      returnTruck(
+        self.returnId,
+        self.returnCharge,
+        returnDate,
+        self.returnReceiverAddress.province,
+        self.returnSenderAddress.province,
+        self.fromCityCode,
+        self.toCityCode,
+      ).then(() => {
         self.loadData(() => {
           self.returnLoading = false;
           self.returnDialog = false;
