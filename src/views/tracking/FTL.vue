@@ -119,20 +119,27 @@
           </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
             <template slot-scope="scope">
-              <div>
-                {{ scope.row.receiverAddress.name }}
-                {{
-                  tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
-                    ? ""
-                    : scope.row.receiverAddress.mobile
-                }}
-              </div>
-              <div>{{ scope.row.receiverAddress.addressDetail }}</div>
-              <div>
-                {{ scope.row.receiverAddress.district }}
-                {{ scope.row.receiverAddress.city }}
-                {{ scope.row.receiverAddress.province }}
-              </div>
+              <el-card
+                shadow="never"
+                style="margin-bottom:5px;"
+                v-for="(receiverAddress, index) in scope.row.receiverAddressList"
+                :key="index"
+              >
+                <div>
+                  {{ receiverAddress.name }}
+                  {{
+                    tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
+                      ? ""
+                      : receiverAddress.mobile
+                  }}
+                </div>
+                <div>{{ receiverAddress.addressDetail }}</div>
+                <div>
+                  {{ receiverAddress.district }}
+                  {{ receiverAddress.city }}
+                  {{ receiverAddress.province }}
+                </div>
+              </el-card>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.price')">
@@ -143,7 +150,7 @@
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.pickupPoint')">
-            <template slot-scope="scope">
+            <template slot-scope="scope" v-if="scope.row.senderAddress">
               <div>
                 {{ scope.row.senderAddress.name }}
                 {{
@@ -179,10 +186,11 @@
                   >{{ $t("tracking.reject") }}</el-button
                 >
                 <el-button
-                  v-if="scope.row.status == 'WILL_PICK' && scope.row.transport.driverName == null"
+                  v-if="scope.row.status == 'WILL_PICK' && scope.row.transport && scope.row.transport.driverName == null"
                   @click="confirmB(scope.row)"
                   :disabled="!permissions.SupplyOrderManage"
                   type="primary"
+                  style="margin-bottom:5px;"
                   >{{ $t("tracking.operation") }}</el-button
                 >
                 <el-button
@@ -231,10 +239,46 @@
     <el-dialog :title="$t('tracking.returnTruck')" width="600px" :visible.sync="returnDialog">
       <el-form ref="form" :model="form" label-width="120px">
         <el-form-item :label="$t('tracking.origin')">
-          {{ returnForm_show.sender }}
+          <el-select
+            style="width:240px;margin-bottom:5px;"
+            v-model="returnSenderAddressIndex"
+            placeholder="请选择"
+            @change="returnSenderAddressChange"
+          >
+            <el-option v-for="(item, index) in returnForm_show.sender" :key="item.id" :label="item.province" :value="index">
+            </el-option>
+          </el-select>
+          <div>
+            <el-select
+              v-model="fromCityCode"
+              style="width:240px;"
+              class="formSelect"
+              clearable
+              filterable
+              multiple
+              collapse-tags
+              placeholder="city"
+            >
+              <el-option v-for="(item, index) in fromCityCodeList" :key="index" :label="item.name" :value="item.code"></el-option>
+            </el-select>
+          </div>
         </el-form-item>
         <el-form-item :label="$t('tracking.destination')">
-          {{ returnForm_show.receiver }}
+          <div>
+            {{ returnForm_show.receiver }}
+          </div>
+          <el-select
+            v-model="toCityCode"
+            style="width:240px;"
+            class="formSelect"
+            clearable
+            filterable
+            multiple
+            collapse-tags
+            placeholder="city"
+          >
+            <el-option v-for="(item, index) in toCityCodeList" :key="index" :label="item.name" :value="item.code"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item :label="$t('tracking.truckType')">
           {{ truckObj[returnForm_show.truck] }}
@@ -282,9 +326,9 @@
           <div>{{ orderInfo.lineType }}</div>
         </el-form-item>
         <el-form-item :label="$t('tracking.destination')">
-          <div>
-            {{ orderInfo.receiverAddress.city }}
-            {{ orderInfo.receiverAddress.district }}
+          <div v-for="(receiverAddress, index) in orderInfo.receiverAddressList" :key="index">
+            {{ receiverAddress.city }}
+            {{ receiverAddress.district }}
           </div>
         </el-form-item>
         <el-form-item :label="$t('tracking.qty')">
@@ -357,7 +401,7 @@
       </el-form>
     </el-dialog>
     <el-dialog :visible.sync="previewDialog">
-      <img width="100%" :src="previewImg" />
+      <img width="100%" :src="previewImg" alt="image" />
     </el-dialog>
   </div>
 </template>
@@ -519,6 +563,13 @@ export default {
       previewDialog: false,
       previewImg: "",
       rdRow: {},
+      returnSenderAddress: {},
+      returnReceiverAddress: {},
+      returnSenderAddressIndex: null,
+      fromCityCode: [],
+      fromCityCodeList: [],
+      toCityCode: [],
+      toCityCodeList: [],
     };
   },
   // 监听属性 类似于data概念
@@ -663,12 +714,29 @@ export default {
       });
     },
     returnShow(item) {
+      let list = JSON.parse(JSON.stringify(item.receiverAddressList));
+      let obj = {};
+      list = list.reduce(function(item, next) {
+        obj[next.province] ? "" : (obj[next.province] = true && item.push(next));
+        return item;
+      }, []);
+      console.log(list);
+      console.log(item.senderAddress);
       self.returnForm_show = {
-        sender: item.receiverAddress.province,
-        receiver: item.senderAddress.city,
+        sender: list,
+        receiver: item.senderAddress.province,
         truck: item.transport.carType,
         subType: item.transport.carriage,
       };
+      self.returnSenderAddressIndex = list.length - 1;
+      self.returnSenderAddress = list[list.length - 1];
+      self.returnReceiverAddress = item.senderAddress;
+      getCityList(`provinceCodes=${self.returnSenderAddress.code.slice(0, 4)}`).then(res => {
+        self.fromCityCodeList = res.data;
+      });
+      getCityList(`provinceCodes=${self.returnReceiverAddress.code.slice(0, 4)}`).then(res => {
+        self.toCityCodeList = res.data;
+      });
       self.returnCharge = "";
       self.returnDate = "";
       self.returnTime = "";
@@ -679,10 +747,25 @@ export default {
     dateChange(e) {
       self.returnDate = `${e[0]}-${e[1]}-${e[2]}`;
     },
+    returnSenderAddressChange(val) {
+      self.returnSenderAddress = self.returnForm_show.sender[val];
+      self.fromCityCode = [];
+      getCityList(`provinceCodes=${self.returnSenderAddress.code.slice(0, 4)}`).then(res => {
+        self.fromCityCodeList = res.data;
+      });
+    },
     returnIt() {
       self.returnLoading = true;
       let returnDate = `${self.returnDate} ${self.returnTime}`;
-      returnTruck(self.returnId, self.returnCharge, returnDate).then(() => {
+      returnTruck(
+        self.returnId,
+        self.returnCharge,
+        returnDate,
+        self.returnReceiverAddress.province,
+        self.returnSenderAddress.province,
+        self.fromCityCode,
+        self.toCityCode,
+      ).then(() => {
         self.loadData(() => {
           self.returnLoading = false;
           self.returnDialog = false;

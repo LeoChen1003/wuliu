@@ -108,17 +108,24 @@
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
-            <template slot-scope="scope" v-if="scope.row.receiverAddress">
-              <div>
-                {{ scope.row.receiverAddress.name }}
-                {{ scope.row.receiverAddress.mobile }}
-              </div>
-              <div>{{ scope.row.receiverAddress.addressDetail }}</div>
-              <div>
-                {{ scope.row.receiverAddress.district }}
-                {{ scope.row.receiverAddress.city }}
-                {{ scope.row.receiverAddress.province }}
-              </div>
+            <template slot-scope="scope" v-if="scope.row.receiverAddressList">
+              <el-card
+                shadow="never"
+                style="margin-bottom:5px;"
+                v-for="(receiverAddress, index) in scope.row.receiverAddressList"
+                :key="index"
+              >
+                <div>
+                  {{ receiverAddress.name }}
+                  {{ receiverAddress.mobile }}
+                </div>
+                <div>{{ receiverAddress.addressDetail }}</div>
+                <div>
+                  {{ receiverAddress.district }}
+                  {{ receiverAddress.city }}
+                  {{ receiverAddress.province }}
+                </div>
+              </el-card>
             </template>
           </el-table-column>
           <el-table-column :label="$t('billing.description')">
@@ -262,7 +269,7 @@
         <el-table-column prop="outNumber" :label="$t('tracking.referenceNo')" width="140"> </el-table-column>
         <el-table-column :label="$t('tracking.cargoType')">
           <template slot-scope="scope">
-            <el-table :data="scope.row.propertyList" border :show-header="false" style="width:100%;">
+            <el-table :data="scope.row.receiverAddressList[0].propertyList" border :show-header="false" style="width:100%;">
               <el-table-column>
                 <template slot-scope="prop">
                   <div>{{ propertyObj[prop.row.propertyType] }}</div>
@@ -430,6 +437,7 @@ export default {
       truckType: [],
       truckValue: "",
       btn_show: true,
+      show_confirm: false,
       sendtohubid: "",
       loading1: false,
       rdDialog: false,
@@ -570,7 +578,6 @@ export default {
       }
     },
     sendToHubAll() {
-      // self.totalNumber = 0;
       if (self.chooseNumber === 0) {
         self.dialogVisible = false;
         this.$message(self.$t('tracking.dialog'));
@@ -578,10 +585,12 @@ export default {
         self.dialogVisible = true;
         self.totalNumber = 0;
         self.gridData = self.allOrder;
+        self.show_confirm = false;
         for (let i in self.gridData) {
-          self.proList1 = self.gridData[i].propertyList;
-          for (let j in self.proList1) {
-            self.totalNumber += self.proList1[j].number;
+          self.proList1 = self.gridData[i].receiverAddressList[0];
+          console.log(self.proList1)
+          for(let j in self.proList1.propertyList){
+            self.totalNumber += self.proList1.propertyList[j].number;
           }
         }
       }
@@ -629,11 +638,12 @@ export default {
       self.totalNumber = 0;
       self.orderId = item.id;
       self.gridData = [item];
-      self.proList = [item.propertyList];
+      self.proList = [item.receiverAddressList];
       self.proList = self.proList[0];
+      self.show_confirm = false;
       for (let i in self.gridData) {
-        for (let j in self.proList) {
-          self.totalNumber += self.proList[j].number;
+        for (let j in self.proList[0].propertyList) {
+          self.totalNumber += self.proList[0].propertyList[j].number;
         }
       }
       getTruckType().then(res => {
