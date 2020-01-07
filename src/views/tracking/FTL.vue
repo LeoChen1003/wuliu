@@ -749,6 +749,7 @@ export default {
     },
     returnSenderAddressChange(val) {
       self.returnSenderAddress = self.returnForm_show.sender[val];
+      self.fromCityCode = [];
       getCityList(`provinceCodes=${self.returnSenderAddress.code.slice(0, 4)}`).then(res => {
         self.fromCityCodeList = res.data;
       });
