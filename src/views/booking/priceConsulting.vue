@@ -1193,7 +1193,9 @@ export default {
   },
   methods: {
     initMaps(cb) {
-      if (google) {
+      try {
+        google;
+      } catch (e) {
         return this.$notify({
           title: "Warning",
           message: "Google map load failed,Please check your network and try to refresh the page.",
