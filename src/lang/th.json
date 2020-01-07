@@ -589,7 +589,13 @@
     "TrackingNo": "เลขออเดอร์",
     "print": "พิมพ์",
     "toBePrinted": "รอพิมพ์",
-    "PrintingNumber": "จำนวนที่พิมพ์"
+    "PrintingNumber": "จำนวนที่พิมพ์",
+    "sendNo": "เลขออเดอร์",
+    "all": "ทั้งหมด",
+    "needPrint": "พิมพ์สติกเกอร์",
+    "Pleaseenterthenumberofreceivedshipments": "กรุณาระบุจำนวนสินค้าที่รับเข้า",
+    "Pleaseenterthenumberofhandovershipments": "กรุณาระบุจำนวนสินค้าที่ส่งมอบ",
+    "Pleaseenterthenumberofprints": "กรุณาระบุจำนวนที่พิมพ์"
   },
   "setting": {
     "origin": "ต้นทาง",

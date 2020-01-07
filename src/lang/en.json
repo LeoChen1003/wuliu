@@ -597,7 +597,12 @@
     "QtyofHUBScanout": "Qty of HUB Scan out",
     "Receiptquantityisnotequaltoorderquantity": "Receipt quantity is not equal to order quantity, cannot be confirmed!",
     "ActualTimeofArrival": "Actual Time of Arrival",
-    "PrintingNumber": "Printing Number"
+    "PrintingNumber": "Printing Number",
+    "sendNo": "Tracking Number",
+    "needPrint": "Print Stickers",
+    "Pleaseenterthenumberofreceivedshipments": "Please enter the number of received shipments.",
+    "Pleaseenterthenumberofhandovershipments": "Please enter the number of handover shipments.",
+    "Pleaseenterthenumberofprints": "Please enter the number of prints"
   },
   "setting": {
     "origin": "Origin",

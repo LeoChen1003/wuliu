@@ -260,7 +260,7 @@ export default {
     // 确认打印
     confirmPrint() {
       if (!self.printNumber) {
-        self.$message.warning("请输入打印张数");
+        self.$message.warning(self.$t("inbound.Pleaseenterthenumberofprints"));
         return;
       }
       printJS({
@@ -295,7 +295,7 @@ export default {
           );
         }
       } else {
-        self.$message.warning("请输入收货件数");
+        self.$message.warning(self.$t("inbound.Pleaseenterthenumberofreceivedshipments"));
       }
     },
   },
