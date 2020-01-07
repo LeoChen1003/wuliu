@@ -153,7 +153,7 @@ export function updateOrderInfo(id, truck_id, driver_id) {
 }
 
 // 返程卡车
-export function returnTruck(id, charge, backTime, receiverAddress, senderAddress) {
+export function returnTruck(id, charge, backTime, toProvinceName, fromProvinceName, toCityCode, fromCityCode) {
   return requestJSON({
     url: `/api/supply/order/publish/ftl/back/${id}`,
     method: "post",
@@ -161,8 +161,10 @@ export function returnTruck(id, charge, backTime, receiverAddress, senderAddress
       orderId: id,
       charge: charge,
       backTime: backTime,
-      receiverAddress: receiverAddress,
-      senderAddress: senderAddress,
+      toProvinceName: toProvinceName,
+      fromProvinceName: fromProvinceName,
+      fromCityCode: fromCityCode,
+      toCityCode: toCityCode,
     },
   });
 }
