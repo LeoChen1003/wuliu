@@ -9,7 +9,7 @@
           <el-option label="Activated" value="ACTIVE" />
           <el-option label="Closed" value="CLOSED" />
         </el-select>
-        <el-button type="primary" style="margin-left: 20px;" @click="loadData()">Search</el-button>
+        <el-button type="primary" style="margin-left: 20px;" @click="loadData()">{{ $t("market.search") }}</el-button>
       </el-col>
       <el-col :span="10"></el-col>
     </el-row>
@@ -87,8 +87,15 @@
         </el-tabs>
       </el-col>
     </el-row>
-    <el-dialog class="edit-box" :title="$t('route.ltl')" v-loading="uploading"  :visible.sync="editDialog" width="1000px" :close-on-click-modal="false">
-      <div >
+    <el-dialog
+      class="edit-box"
+      :title="$t('route.ltl')"
+      v-loading="uploading"
+      :visible.sync="editDialog"
+      width="1000px"
+      :close-on-click-modal="false"
+    >
+      <div>
         <div class="edit-form-box">
           <el-form label-width="120px">
             <el-form-item required :label="$t('setting.routeName')">
@@ -182,8 +189,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="editDialog = false">{{$t('route.cancel')}}</el-button>
-        <el-button type="primary" @click="confirmIt">{{$t("route.confirm")}}</el-button>
+        <el-button @click="editDialog = false">{{ $t("route.cancel") }}</el-button>
+        <el-button type="primary" @click="confirmIt">{{ $t("route.confirm") }}</el-button>
       </span>
     </el-dialog>
     <el-dialog :visible.sync="previewDialog">

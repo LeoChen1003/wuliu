@@ -241,7 +241,7 @@ export default {
           );
         }
       } else {
-        self.$message.warning("请输入交货件数");
+        self.$message.warning(self.$t("inbound.Pleaseenterthenumberofhandovershipments"));
       }
     },
   },

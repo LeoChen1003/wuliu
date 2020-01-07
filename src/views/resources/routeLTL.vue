@@ -6,7 +6,7 @@
         <el-option label="Activated" value="ACTIVE" />
         <el-option label="Closed" value="CLOSED" />
       </el-select>
-      <el-button type="primary" style="margin-left: 20px;" @click="loadData()">{{$t('resources.search')}}</el-button>
+      <el-button type="primary" style="margin-left: 20px;" @click="loadData()">{{ $t("resources.search") }}</el-button>
     </div>
     <div class="container">
       <div class="table-box">
@@ -232,7 +232,9 @@
                           (item > 9 ? item : `0${item}`)
                       ]
                         ? 'dark'
-                        : 'plain'">
+                        : 'plain'
+                    "
+                  >
                     {{ item }}
                   </el-tag>
                 </div>
@@ -524,9 +526,9 @@
         </el-tabs>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="editDialog = false">{{$t('resources.cancel')}}</el-button>
+        <el-button @click="editDialog = false">{{ $t("resources.cancel") }}</el-button>
         <el-button :loading="confirmLoading" type="primary" @click="confirmIt">
-          {{$t('resources.confirm')}}
+          {{ $t("resources.confirm") }}
         </el-button>
       </span>
     </el-dialog>

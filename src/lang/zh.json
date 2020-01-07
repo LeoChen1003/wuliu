@@ -598,7 +598,10 @@
     "QtyofHUBScanout": "交接件数",
     "Receiptquantityisnotequaltoorderquantity": "入库数量不等于订单数量，不可以确认！",
     "ActualTimeofArrival": "实际到达HUB的时间",
-    "PrintingNumber": "打印张数"
+    "PrintingNumber": "打印张数",
+    "Pleaseenterthenumberofreceivedshipments": "请输入收货件数",
+    "Pleaseenterthenumberofhandovershipments": "请输入交货件数",
+    "Pleaseenterthenumberofprints": "请输入打印张数"
   },
   "setting": {
     "route": "路线",

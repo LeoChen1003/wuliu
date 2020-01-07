@@ -4,7 +4,7 @@
       <div class="status-txt">{{ $t("billing.account") }}</div>
       <div class="timePicker">
         <bcTime @changeBCtime="changeBCtimeFrom" :timeType="'all'" :dateDefault="fromDateDeFault"></bcTime>
-        <span style="margin:0 5px;">至</span>
+        <span style="margin:0 5px;">~</span>
         <bcTime @changeBCtime="changeBCtimeTo" :dateDefault="toDateDeFault" style="margin-left:5px;" :timeType="'all'"></bcTime>
         <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
       </div>
