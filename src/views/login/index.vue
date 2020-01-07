@@ -65,35 +65,35 @@
         </div>
         <div class="languageBox">
           <div class="languageBox-item" @click="changeLang('th_TH')" :class="language == 'th_TH' ? 'actived' : ''">
-            <img src="../../assets/image/th.png" class="banner" />
+            <img src="../../assets/image/th.png" class="banner" alt="image" />
             <div class="county">ไทย</div>
           </div>
           <div class="languageBox-item" @click="changeLang('zh_CN')" :class="language == 'zh_CN' ? 'actived' : ''">
-            <img src="../../assets/image/cn.png" class="banner" />
+            <img src="../../assets/image/cn.png" class="banner" alt="image" />
             <div class="county">中文</div>
           </div>
           <div class="languageBox-item" @click="changeLang('en_US')" :class="language == 'en_US' ? 'actived' : ''">
-            <img src="../../assets/image/en.png" class="banner" />
+            <img src="../../assets/image/en.png" class="banner" alt="image" />
             <div class="county">English</div>
           </div>
         </div>
         <div class="app-box">
           <el-popover placement="bottom" trigger="hover">
-            <img src="../../assets/image/iphoneQRC.png" class="qrCode" />
+            <img src="../../assets/image/iphoneQRC.png" class="qrCode" alt="image" />
             <div style="text-align:center;">司机端的APP</div>
             <el-button type="primary" slot="reference" plain round @click="iphoneDownload" size="mini">
               <div class="app-btn">
-                <img src="../../assets/image/iphone.png" />
+                <img src="../../assets/image/iphone.png" alt="image" />
                 <div>iphone</div>
               </div>
             </el-button>
           </el-popover>
           <el-popover placement="bottom" trigger="hover">
-            <img src="../../assets/image/androidQRC.png" class="qrCode" />
+            <img src="../../assets/image/androidQRC.png" class="qrCode" alt="image" />
             <div style="text-align:center;">司机端的APP</div>
             <el-button type="primary" slot="reference" plain round @click="androidDownload" size="mini">
               <div class="app-btn">
-                <img src="../../assets/image/android.png" />
+                <img src="../../assets/image/android.png" alt="image" />
                 <div>Android</div>
               </div>
             </el-button>
@@ -286,13 +286,13 @@
       </div>
     </transition>
     <el-dialog :title="$t('login.termAndConditions')" :visible.sync="conditionsDialog" width="700px">
-      <iframe :src="conditionsUrl" width="100%" height="700px" frameborder="0"> </iframe>
+      <iframe :src="conditionsUrl" title="conditions" width="100%" height="700px" frameborder="0"> </iframe>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="conditionsDialog = false">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog :title="$t('login.privacyPolicy')" :visible.sync="privacyPolicyDialog" width="700px">
-      <iframe :src="privacyPolicyUrl" width="100%" height="700px" frameborder="0"> </iframe>
+      <iframe :src="privacyPolicyUrl" title="privacyPolicy" width="100%" height="700px" frameborder="0"> </iframe>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="privacyPolicyDialog = false">确 定</el-button>
       </span>
