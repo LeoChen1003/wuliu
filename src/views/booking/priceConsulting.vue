@@ -1688,6 +1688,7 @@ export default {
       self.logisticType = type;
       if (type == "LTL") {
         self.searchForm.pickUpRegion = "";
+        self.searchForm.deliveryRegion = "";
         self.hideMap();
       } else {
         self.mapMode = true;
@@ -1768,10 +1769,12 @@ export default {
       });
       let arr = obj.fullname.split("-");
       self.mapStart = arr[1] + arr[0];
-      if (self.mapEnd === "") {
-        self.setCenter(self.mapStart);
-      } else {
-        self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
+      if (self.logisticType == "FTL") {
+        if (self.mapEnd === "") {
+          self.setCenter(self.mapStart);
+        } else {
+          self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
+        }
       }
     },
     deliveryChange(val) {
@@ -1781,8 +1784,10 @@ export default {
       });
       let arr = obj.fullname.split("-");
       self.mapEnd = arr[1] + arr[0];
-      if (self.mapStart !== "") {
-        self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
+      if (self.logisticType == "FTL") {
+        if (self.mapStart !== "") {
+          self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
+        }
       }
     },
     getCurLocation() {
