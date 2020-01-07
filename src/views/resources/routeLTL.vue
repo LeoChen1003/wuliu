@@ -1027,8 +1027,10 @@ export default {
       //   }
       // }
 
-      for (let i of template.lineTemplateProvinces) {
-        params += `provinceCodes=${i.provinceCode}&`;
+      if (template) {
+        for (let i of template.lineTemplateProvinces) {
+          params += `provinceCodes=${i.provinceCode}&`;
+        }
       }
       getCityLists(params).then(res => {
         let resData = res.data;
@@ -1071,34 +1073,36 @@ export default {
           }
         });
       }
-      form = {
-        ...form,
-        mapUrl: template.mapUrl,
-        cutOffTime: template.cutOffTime,
-        name: template.name,
-        cityList: list,
-        numberDiscountList: [
-          {
-            minNumber: 0,
-            maxNumber: "",
-            discount: 0,
-          },
-        ],
-        propertyDiscountList: [
-          {
-            discount: 100,
-            propertyType: "CONSUMER_PRODUCT",
-          },
-          {
-            discount: 100,
-            propertyType: "RAW_MATERIAL",
-          },
-          {
-            discount: 100,
-            propertyType: "SPECIAL_HANDLING",
-          },
-        ],
-      };
+      if (template) {
+        form = {
+          ...form,
+          mapUrl: template.mapUrl,
+          cutOffTime: template.cutOffTime,
+          name: template.name,
+          cityList: list,
+          numberDiscountList: [
+            {
+              minNumber: 0,
+              maxNumber: "",
+              discount: 0,
+            },
+          ],
+          propertyDiscountList: [
+            {
+              discount: 100,
+              propertyType: "CONSUMER_PRODUCT",
+            },
+            {
+              discount: 100,
+              propertyType: "RAW_MATERIAL",
+            },
+            {
+              discount: 100,
+              propertyType: "SPECIAL_HANDLING",
+            },
+          ],
+        };
+      }
       self.preViewList = [form.mapUrl];
       self.form = form;
     },
