@@ -93,7 +93,7 @@
           </el-table-column>
           <el-table-column :label="$t('inbound.QtyofHUBScanout')">
             <template slot-scope="scope">
-              <div v-if="scope.row.hubLtLStatus == 2">{{ scope.row.sum }}</div>
+              <div v-if="scope.row.hubLtLStatus >= 2">{{ scope.row.sum }}</div>
               <el-input v-model="scope.row.number" type="number" v-else></el-input>
             </template>
           </el-table-column>
