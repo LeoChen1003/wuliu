@@ -302,7 +302,7 @@
                 accept="image/*"
                 :on-change="handleChange"
               >
-                <img v-if="fileList.supply.logo[0]" :src="fileList.supply.logo[0].url" class="avatar" />
+                <img v-if="fileList.supply.logo[0]" :src="fileList.supply.logo[0].url" class="avatar" alt="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon" />
               </el-upload>
             </el-form-item>

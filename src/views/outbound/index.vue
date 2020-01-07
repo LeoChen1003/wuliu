@@ -93,7 +93,7 @@
           </el-table-column>
           <el-table-column :label="$t('inbound.QtyofHUBScanout')">
             <template slot-scope="scope">
-              <div v-if="scope.row.hubLtLStatus == 2">{{ scope.row.sum }}</div>
+              <div v-if="scope.row.hubLtLStatus >= 2">{{ scope.row.sum }}</div>
               <el-input v-model="scope.row.number" type="number" v-else></el-input>
             </template>
           </el-table-column>
@@ -102,7 +102,7 @@
               <el-button
                 v-if="status == 'WAIT_HANDOVER'"
                 type="primary"
-                :disabled="scope.row.hubLtLStatus != 1"
+                :disabled="scope.row.hubLtLStatus != 1 || !truckInfo"
                 style="width:90%;margin:0;"
                 @click="confirmIt(scope.row, scope.$index)"
                 >{{ $t("tracking.confirm") }}</el-button
@@ -133,6 +133,8 @@ export default {
       searchType: "plate",
       like: "",
       selectionRow: [],
+      truckInfo: false,
+      isChange: false,
     };
   },
   methods: {
@@ -155,7 +157,7 @@ export default {
     loadData(cb) {
       self.loading = true;
       self.rightData = [];
-      let page = self.data.number ? self.data.number : 0;
+      let page = self.isChange ? 0 : self.data.number ? self.data.number : 0;
       getOutboundList(self.status, {
         searchType: self.searchType,
         like: self.like,
@@ -192,6 +194,7 @@ export default {
     // 切换status
     changeStatus(type) {
       self.status = type;
+      self.isChange = true;
       self.clearSearch();
       self.loadData();
     },
@@ -207,6 +210,7 @@ export default {
           supplyId: val.supplyId,
           truckId: val.truckId,
         }).then(res => {
+          self.truckInfo = val.driverName && val.truckPlate ? true : false;
           self.rightData = res.data;
           self.rightLoading = false;
         });

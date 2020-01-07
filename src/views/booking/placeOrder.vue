@@ -60,7 +60,9 @@
               >
               </el-time-picker>
             </div>
-            <div v-if="bookingForm.orderInfo.lineType == 'LTL'" style="font-size:12px;color:#909399;margin-top:5px;">(Note:如果未选择上门揽件服务，需要按此时间把货物送到HUB)</div>
+            <div v-if="bookingForm.orderInfo.lineType == 'LTL'" style="font-size:12px;color:#909399;margin-top:5px;">
+              (Note:如果未选择上门揽件服务，需要按此时间把货物送到HUB)
+            </div>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -723,11 +725,11 @@ export default {
       booking.chargeList =
         type == "FTL"
           ? [
-              {
-                chargeType: "CARPOOL",
-                chargeIntro: "false",
-                money: 0,
-              },
+              // {
+              //   chargeType: "CARPOOL",
+              //   chargeIntro: "false",
+              //   money: 0,
+              // },
             ]
           : [];
       booking.propertyList = type == "FTL" ? [] : consultInfo.searchForm.propertyList;
@@ -867,6 +869,9 @@ export default {
               });
             }
           }
+          self.bookingForm.receiverAddress.propertyList = self.bookingForm.propertyList;
+          self.bookingForm.receiverAddressList = [];
+          self.bookingForm.receiverAddressList.push(self.bookingForm.receiverAddress);
           if (self.bookingForm.orderInfo.lineType == "FTL") {
             placeOrder(self.bookingForm)
               .then(res => {
@@ -878,13 +883,11 @@ export default {
                 self.todoLoading = false;
               });
           } else {
-            self.bookingForm.ltlLineId = self.bookingForm.transportInfo.ftlLineId;
-            self.bookingForm.outNumber = self.bookingForm.orderInfo.outNumber;
-            self.bookingForm.remark = self.bookingForm.orderInfo.remark;
+            self.bookingForm.orderInfo.ltlLineId = self.bookingForm.transportInfo.ftlLineId;
             placeOrderLTL(self.bookingForm).then(res => {
               self.todoLoading = false;
               self.$message.success(res.message);
-              self.$router.replace("/tracking/demandLTL")
+              self.$router.replace("/tracking/demandLTL");
             });
           }
         }
@@ -960,10 +963,11 @@ export default {
             } ${list[x].number}${self.unitListObj[list[x].unit]} `;
           }
           self.propertyListContent = content;
-          self.bookingForm.ltlLineId = self.bookingForm.transportInfo.ftlLineId;
-          self.bookingForm.outNumber = self.bookingForm.orderInfo.outNumber;
-          self.bookingForm.remark = self.bookingForm.orderInfo.remark;
+          self.bookingForm.orderInfo.ltlLineId = self.bookingForm.transportInfo.ftlLineId;
           self.bookingForm.senderAddress.pickAt = self.bookingForm.senderAddress.pickAt.split(" ")[0] + ` ${self.time}`;
+          self.bookingForm.receiverAddress.propertyList = self.bookingForm.propertyList;
+          self.bookingForm.receiverAddressList = [];
+          self.bookingForm.receiverAddressList.push(self.bookingForm.receiverAddress);
           calculationOrder(self.bookingForm).then(res => {
             for (let i of self.amountList) {
               if (i.key == "FREIGHT") {

@@ -52,15 +52,17 @@
       </div>
       <el-table :data="data.content" v-loading="tableLoading" border>
         <el-table-column :label="$t('market.pickupTime')">
-          <template slot-scope="scope">
+          <template slot-scope="scope" v-if="scope.row.senderAddress">
             <div>
               {{ scope.row.senderAddress.pickAt }}
             </div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('tracking.route')">
-          <template slot-scope="scope">
-            <div>{{ scope.row.senderAddress.province }}-->{{ scope.row.receiverAddress.province }}</div>
+          <template slot-scope="scope" v-if="scope.row.senderAddress && scope.row.receiverAddressList">
+            <div v-for="(receiverAddress, index) in scope.row.receiverAddressList" :key="index">
+              <div>{{ scope.row.senderAddress.province }}-->{{ receiverAddress.province }}</div>
+            </div>
           </template>
         </el-table-column>
         <el-table-column :label="$t('tracking.truckType')">
@@ -113,7 +115,14 @@
       </div>
     </div>
     <el-dialog :title="$t('market.quoteAPrice')" :visible.sync="quotePriceDialog" top="1vh" center width="60%">
-      <el-form :model="quotePriceCon" size="small" label-position="top" :show-message="false">
+      <el-form
+        :model="quotePriceForm"
+        :rules="quotePriceRule"
+        :show-message="false"
+        size="small"
+        label-position="top"
+        ref="quotePriceForm"
+      >
         <div style="display:flex;">
           <div style="width:50%;">
             <el-form-item :label="$t('booking.sender')">
@@ -125,18 +134,30 @@
                         class="inp"
                         disabled></el-input> -->
               <el-input v-model="quotePriceCon.senderAddress.addressDetail" class="inp" disabled></el-input>
-              <el-input v-model="quotePriceCon.senderAddress.fullName" class="inp" disabled></el-input>
+              <el-input
+                type="textarea"
+                resize="none"
+                v-model="quotePriceCon.senderAddress.fullName"
+                class="inp"
+                disabled
+              ></el-input>
             </el-form-item>
             <el-form-item :label="$t('booking.pickupTime')">
               <el-date-picker v-model="quotePriceCon.senderAddress.pickAt" class="inp" disabled type="datetime"> </el-date-picker>
             </el-form-item>
             <el-form-item :label="$t('booking.deliveryPoint')">
-              <el-input v-model="quotePriceCon.receiverAddress.name" class="inp" disabled></el-input>
-              <!-- <el-input v-model="quotePriceCon.receiverAddress.mobile"
+              <div v-for="(receiverAddress, index) in quotePriceCon.receiverAddressList" style="margin-bottom:10px;" :key="index">
+                <el-input v-model="receiverAddress.name" class="inp" disabled></el-input>
+                <!-- <el-input v-model="receiverAddress.mobile"
                         class="inp"
                         disabled></el-input> -->
-              <el-input v-model="quotePriceCon.receiverAddress.addressDetail" class="inp" disabled></el-input>
-              <el-input v-model="quotePriceCon.receiverAddress.fullName" class="inp" disabled></el-input>
+                <el-input v-model="receiverAddress.addressDetail" class="inp" disabled></el-input>
+                <el-input type="textarea" resize="none" v-model="receiverAddress.fullName" class="inp" disabled></el-input>
+              </div>
+            </el-form-item>
+            <el-form-item prop="receiveAt" :label="$t('booking.expectedDeliveryTime')" v-if="quotePriceCon.receiverAddressList">
+              <el-date-picker v-model="quotePriceCon.receiverAddressList[0].receiveAt" class="inp" disabled type="datetime">
+              </el-date-picker>
             </el-form-item>
             <el-form-item :label="$t('booking.truckType')">
               <el-select
@@ -179,7 +200,7 @@
             <el-form-item :label="$t('market.demandPrice')">
               <el-input v-model="quotePriceCon.settlementAmount" disabled class="inp" />
             </el-form-item>
-            <el-form-item :label="$t('booking.myQuotaion')">
+            <el-form-item prop="money" :label="$t('booking.myQuotaion')">
               <el-input
                 v-model.number="quotePriceForm.money"
                 @mousewheel.native.prevent
@@ -188,7 +209,7 @@
                 class="inp"
               />
             </el-form-item>
-            <el-form-item :label="$t('market.licencePlate')">
+            <el-form-item prop="truck_id" :label="$t('market.licencePlate')">
               <el-select v-model="quotePriceForm.truck_id" @change="truckSelect" class="inp">
                 <el-option v-for="item in truckData" :key="item.id" :label="item.plate" :value="item.id" />
               </el-select>
@@ -260,6 +281,13 @@ export default {
   // import引入的组件需要注入到对象中才能使用
   components: {},
   data() {
+    const validatorTruck = (rule, value, callback) => {
+      if (!self.quotePriceForm.truck_id) {
+        callback(new Error(" "));
+      } else {
+        callback();
+      }
+    };
     return {
       proDialog: false,
       proActive: "B",
@@ -315,6 +343,10 @@ export default {
         truck_id: null,
         category: "",
         subCategory: "",
+      },
+      quotePriceRule: {
+        money: [{ required: true, message: " ", trigger: "change" }],
+        truck_id: [{ required: true, validator: validatorTruck }],
       },
       shareTruck: false,
       truckData: [],
@@ -452,14 +484,14 @@ export default {
       self.loadData();
     },
     toquotePrice(row) {
+      getSupplyTD().then(res => {
+        self.truckData = res.data.trucks;
+      });
       self.quotePriceDialog = true;
       self.quotePriceCon = row;
       self.quotePriceForm.money = null;
       self.quotePriceForm.truck_id = null;
       self.shareTruck = row.chargeList[0].chargeIntro == "false" ? false : true;
-      getSupplyTD().then(res => {
-        self.truckData = res.data.trucks;
-      });
     },
     truckSelect(val) {
       self.truckData.forEach(item => {
@@ -472,17 +504,21 @@ export default {
     },
     // 报价抢单
     quotePriceConfirm() {
-      self.confirmLoading = true;
-      quoteOrder(self.quotePriceCon.id, self.quotePriceForm)
-        .then(res => {
-          self.$message.success(res.message);
-          self.confirmLoading = false;
-          self.quotePriceDialog = false;
-          self.loadData();
-        })
-        .catch(() => {
-          self.confirmLoading = false;
-        });
+      this.$refs.quotePriceForm.validate(valid => {
+        if (valid) {
+          self.confirmLoading = true;
+          quoteOrder(self.quotePriceCon.id, self.quotePriceForm)
+            .then(res => {
+              self.$message.success(res.message);
+              self.confirmLoading = false;
+              self.quotePriceDialog = false;
+              self.loadData();
+            })
+            .catch(() => {
+              self.confirmLoading = false;
+            });
+        }
+      });
     },
     searchIt() {
       if (self.searchForm.pickUpRegion == "" || self.searchForm.deliveryRegion == "" || self.searchForm.pickUpDate == "") {

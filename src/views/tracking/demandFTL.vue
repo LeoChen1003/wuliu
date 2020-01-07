@@ -93,17 +93,24 @@
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.deliveryPoint')">
-            <template slot-scope="scope" v-if="scope.row.receiverAddress">
-              <div>
-                {{ scope.row.receiverAddress.name }}
-                {{ scope.row.receiverAddress.mobile }}
-              </div>
-              <div>{{ scope.row.receiverAddress.addressDetail }}</div>
-              <div>
-                {{ scope.row.receiverAddress.district }}
-                {{ scope.row.receiverAddress.city }}
-                {{ scope.row.receiverAddress.province }}
-              </div>
+            <template slot-scope="scope" v-if="scope.row.receiverAddressList">
+              <el-card
+                shadow="never"
+                style="margin-bottom:5px;"
+                v-for="(receiverAddress, index) in scope.row.receiverAddressList"
+                :key="index"
+              >
+                <div>
+                  {{ receiverAddress.name }}
+                  {{ receiverAddress.mobile }}
+                </div>
+                <div>{{ receiverAddress.addressDetail }}</div>
+                <div>
+                  {{ receiverAddress.district }}
+                  {{ receiverAddress.city }}
+                  {{ receiverAddress.province }}
+                </div>
+              </el-card>
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.supply')">
@@ -248,7 +255,9 @@
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="confirmDialog = false">取 消</el-button>
-        <el-button :disabled="radio === ''" type="primary" @click="confirmIt">{{ $t("tracking.confirm") }}</el-button>
+        <el-button :disabled="radio === ''" type="primary" :loading="confirmLoading" @click="confirmIt">{{
+          $t("tracking.confirm")
+        }}</el-button>
       </span>
     </el-dialog>
     <el-dialog :title="$t('tracking.orderLog')" :visible.sync="logDialog">
@@ -365,6 +374,7 @@ export default {
       imgList: [],
       rdRow: {},
       rdLoading: false,
+      confirmLoading: false,
     };
   },
   // 监听属性 类似于data概念
@@ -472,11 +482,13 @@ export default {
     },
     confirmIt() {
       const self = this;
+      self.confirmLoading = true;
       demandquoteConfirm(self.curId, self.selected.id).then(res => {
         self.$message.success(res.message);
         self.loadData();
         self.radio = "";
         self.confirmDialog = false;
+        self.confirmLoading = false;
       });
     },
     orderLog(id) {
