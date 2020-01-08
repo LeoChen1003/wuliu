@@ -6,7 +6,9 @@ export function saveLineTemplate(data) {
   return requestJSON({
     url: "/api/ltl/lineTemplate/save",
     method: "post",
-    data: data,
+    data: {
+      lineTemplate: data,
+    },
   });
 }
 
