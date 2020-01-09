@@ -21,7 +21,7 @@
           </div>
         </el-form-item>
         <el-form-item :label="$t('tracking.pickupDate')">
-          <bcTime @changeBCtime="changeBCtime" :dateDefault="[]" style="width:100%;" :timeType="'all'"></bcTime>
+          <bc-picker @changeBCtime="changeBCtime" style="width:100%;"></bc-picker>
         </el-form-item>
         <el-form-item :label="$t('tracking.tracking')">
           <el-input v-model="orderNo" :placeholder="$t('placeholder.pleaseInput')"></el-input>
@@ -487,14 +487,11 @@ import {
   supplyStatusCount,
   chooseDriverAndTruck,
 } from "../../api/tracking.js";
-import bcTime from "@/components/bcTime";
 import { getToken } from "@/utils/auth";
 import { mapGetters } from "vuex";
 
 let self;
 export default {
-  // import引入的组件需要注入到对象中才能使用
-  components: { bcTime },
   data() {
     return {
       env: process.env.VUE_APP_BASE_API,
@@ -562,57 +559,8 @@ export default {
       returnCharge: "",
       returnDate: "",
       returnTime: "",
-      dateCascader: "",
       options: [],
       truckObj: {},
-      props: {
-        lazy: true,
-        lazyLoad(node, resolve) {
-          let year = self.bcYear;
-          let date = new Date();
-          let month = node.label == year ? date.getMonth() + 1 : 1;
-          let day = date.getDate();
-          if (node.level == 0) {
-            getBcYear().then(res => {
-              self.bcYear = res.data;
-              let years = [
-                {
-                  label: self.bcYear,
-                  value: self.bcYear,
-                },
-                {
-                  label: self.bcYear + 1,
-                  value: self.bcYear + 1,
-                },
-              ];
-              resolve(years);
-            });
-          } else if (node.level == 1) {
-            let months = [];
-            for (let y = month; y <= 12; y++) {
-              months.push({
-                label: y,
-                value: y,
-              });
-            }
-            resolve(months);
-          } else if (node.level == 2) {
-            getBcDay(node.parent.value, node.value).then(res => {
-              let days = res.data;
-              let dateList = [];
-              let d = node.parent.value == self.bcYear && node.value == date.getMonth() + 1 ? day : 1;
-              for (let x = d; x <= days; x++) {
-                dateList.push({
-                  label: x,
-                  value: x,
-                  leaf: true,
-                });
-              }
-              resolve(dateList);
-            });
-          }
-        },
-      },
       rdDialog: false,
       rdForm: {
         returnType: 1,

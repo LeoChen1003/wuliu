@@ -240,17 +240,7 @@
             <el-form-item prop="pickUpDate">
               <i class="el-icon-time" slot="label" style="font-size:22px;color:#8a8a8a;"></i>
               <div style="display:flex;" class="inputWidth">
-                <!-- <el-cascader
-                  v-model="dateCascader"
-                  class="innerInp"
-                  :options="DateDeFault"
-                  :props="props"
-                  separator="-"
-                  style="margin-right:5px;"
-                  :placeholder="$t('booking.pickupTime')"
-                  @change="dateChange"
-                ></el-cascader> -->
-                <bcTime @changeBCtime="dateChange" :dateDefault="DateDeFault" style="margin-right:5px;" :timeType="''"></bcTime>
+                <bc-picker @changeBCtime="dateChange" style="margin-right:5px;width:50%;" :timeType="''" :dateString="today" />
                 <el-time-picker
                   v-model="time"
                   format="HH:mm:ss"
@@ -563,8 +553,7 @@
 import { mapGetters } from "vuex";
 import { ftlLine, ftlLines, ltlLine } from "../../api/booking";
 import { getTruckType, findDistrictFullList, findDistrictOfHubFullList, getGoodsProperty } from "../../api/data";
-import { getTime, parseTime } from "../../utils/index";
-import bcTime from "@/components/bcTime";
+import { getBcTime, getTime, parseTime } from "../../utils/index";
 import Search from "@/components/HeaderSearch";
 
 let self;
@@ -572,7 +561,6 @@ let map, infoWindow, directionsService, directionsRenderer;
 
 export default {
   // import引入的组件需要注入到对象中才能使用
-  components: { bcTime },
   directives: {
     "el-select-loadmore": {
       bind(el, binding) {
@@ -654,7 +642,7 @@ export default {
       searchForm: {
         truckCategory: "",
         truckSubCategory: "",
-        pickUpDate: parseTime(new Date().getTime(), "{y}-{m}-{d}"),
+        pickUpDate: getBcTime(parseTime(new Date().getTime(), "{y}-{m}-{d}")),
         deliveryRegion: "",
         pickUpRegion: "",
         truckgroup: "",
@@ -1142,9 +1130,6 @@ export default {
   },
   // 监听属性 类似于data概念
   computed: {
-    DateDeFault() {
-      return self.today.split("-");
-    },
     ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化

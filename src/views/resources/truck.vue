@@ -240,15 +240,7 @@
               </div>
             </el-form-item>
             <el-form-item prop="insuranceExpiredAt" :label="$t('resources.expireDate')">
-              <el-cascader
-                v-model="dateCascader"
-                class="innerInp"
-                :options="options"
-                :props="props"
-                separator="-"
-                style="margin-right:5px;"
-                @change="dateChange"
-              ></el-cascader>
+              <bc-picker @changeBCtime="dateChange" style="margin-right:5px;" ref="bc"></bc-picker>
             </el-form-item>
             <el-form-item prop="insuranceAmount" :label="$t('resources.IinsuranceValue')">
               <el-input type="number" v-model="detailform.insuranceAmount" class="inputWidth"></el-input>
@@ -294,6 +286,7 @@ import { mapGetters } from "vuex";
 import { truckList, truckAdd, truckEdit, resetPassword } from "../../api/resources";
 import { getTruckType, getProvinceList, getBcYear, getBcDay } from "../../api/data";
 import { getToken } from "@/utils/auth";
+import { getNormalTime } from "@/utils/index";
 
 let self;
 
@@ -343,50 +336,6 @@ export default {
       resetLoading: false,
       activeTab: "first",
       curEditId: null,
-      dateCascader: [],
-      options: [],
-      props: {
-        lazy: true,
-        lazyLoad(node, resolve) {
-          let year = self.bcYear;
-          let date = new Date();
-          if (node.level == 0) {
-            getBcYear().then(res => {
-              self.bcYear = res.data;
-              let years = [];
-              for (let x = -1; x < 20; x++) {
-                years.push({
-                  label: self.bcYear + x,
-                  value: self.bcYear + x,
-                });
-              }
-              resolve(years);
-            });
-          } else if (node.level == 1) {
-            let months = [];
-            for (let y = 1; y <= 12; y++) {
-              months.push({
-                label: y,
-                value: y,
-              });
-            }
-            resolve(months);
-          } else if (node.level == 2) {
-            getBcDay(node.parent.value, node.value).then(res => {
-              let days = res.data;
-              let dateList = [];
-              for (let x = 1; x <= days; x++) {
-                dateList.push({
-                  label: x,
-                  value: x,
-                  leaf: true,
-                });
-              }
-              resolve(dateList);
-            });
-          }
-        },
-      },
       fileList1: [],
       fileList2: [],
       fileList3: [],
@@ -444,7 +393,9 @@ export default {
         status: "ACTIVE",
         mobile: "",
       };
-      self.dateCascader = [];
+      this.$nextTick(() => {
+        self.$refs.bc.clearData();
+      });
       if (self.$refs.detailform) {
         self.$refs.detailform.resetFields();
       }
@@ -465,7 +416,10 @@ export default {
         category: row.category,
         subCategory: row.subCategory,
         insuranceAmount: row.insuranceAmount,
-        insuranceExpiredAt: row.insuranceExpiredAt,
+        insuranceExpiredAt: row.insuranceExpiredAt
+          .split("/")
+          .reverse()
+          .join("-"),
         insuranceStatus: row.insuranceStatus,
         plate: row.plate,
         registerAtRegion: row.registerAtRegion,
@@ -496,11 +450,11 @@ export default {
       self.fileList1 = regPreList;
       self.fileList2 = insPreList;
       self.fileList3 = truPreList;
-      self.dateCascader = row.insuranceExpiredAt
-        .split(" ")[0]
-        .split("-")
-        .map(Number);
       self.curEditId = row.id;
+      this.$nextTick(() => {
+        self.$refs.bc.setData(row.insuranceExpiredAt);
+      });
+
       self.dialogVisible = true;
     },
     toConfirm() {
@@ -591,8 +545,8 @@ export default {
       self.truPreList = truPreList;
       self.thisRow = val;
     },
-    dateChange(e) {
-      self.detailform.insuranceExpiredAt = `${e[0]}-${e[1]}-${e[2]}`;
+    dateChange(time) {
+      self.detailform.insuranceExpiredAt = time;
     },
     reset(row) {
       this.$confirm(self.$t("resources.resetThePassword"), "", {

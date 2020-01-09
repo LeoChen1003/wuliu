@@ -3,9 +3,7 @@
     <div class="statusHeader">
       <div class="status-txt">{{ $t("billing.account") }}</div>
       <div class="timePicker">
-        <bcTime @changeBCtime="changeBCtimeFrom" :timeType="'all'" :dateDefault="fromDateDeFault"></bcTime>
-        <span style="margin:0 5px;">~</span>
-        <bcTime @changeBCtime="changeBCtimeTo" :dateDefault="toDateDeFault" style="margin-left:5px;" :timeType="'all'"></bcTime>
+        <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
         <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
       </div>
     </div>
@@ -69,50 +67,41 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { journalList } from "../../api/billing";
-import { getTime, parseTime, getLastMonthTime } from "../../utils/index";
-import bcTime from "@/components/bcTime";
+import { getTime, parseTime, getLastMonthTime, getBcTime, getNormalTime } from "../../utils/index";
 
 let self;
 export default {
-  // import引入的组件需要注入到对象中才能使用
-  components: {
-    bcTime,
-  },
   data() {
     return {
       tabActive: "GUARANTEE",
       applyType: localStorage.getItem("curRole"),
-      // value1: [parseTime((new Date().getTime() - 3600 * 1000 * 24 * 30), '{y}-{m}-{d}'), parseTime(new Date().getTime(), '{y}-{m}-{d}')],
-      fromDate: getLastMonthTime(new Date()),
-      toDate: parseTime(new Date().getTime(), "{y}-{m}-{d}"),
+      fromDate: getBcTime(getLastMonthTime(new Date())),
+      toDate: getBcTime(parseTime(new Date().getTime(), "{y}-{m}-{d}")),
       dataList: [],
       page: {
         total: 0,
         currentPage: 1,
       },
       pagesize: 20,
+      dateArrDeFault: [],
     };
   },
   // 监听属性 类似于data概念
-  computed: {
-    fromDateDeFault() {
-      return self.fromDate.split("-");
-    },
-    toDateDeFault() {
-      return self.toDate.split("-");
-    },
-  },
+  computed: {},
   // 监控data中的数据变化
   watch: {},
   created() {
     self = this;
+    let arr = [];
+    arr.push(getNormalTime(self.fromDate));
+    arr.push(getNormalTime(self.toDate));
+    self.dateArrDeFault = arr;
   },
   mounted() {
-    this.getJournalList();
+    self.getJournalList();
   },
   methods: {
     getJournalList() {
-      const self = this;
       journalList({
         accountType: self.tabActive,
         applyType: self.applyType,
@@ -129,28 +118,22 @@ export default {
       });
     },
     handleClick() {
-      this.getJournalList();
+      self.getJournalList();
     },
     searchIt() {
-      this.getJournalList();
+      self.getJournalList();
     },
     pageChange(val) {
-      let self = this;
       self.page.currentPage = val;
       self.getJournalList();
     },
     pageSizeChange(val) {
-      let self = this;
       self.pagesize = val;
       self.getJournalList();
     },
-    changeBCtimeFrom(time) {
-      const self = this;
-      self.fromDate = time;
-    },
-    changeBCtimeTo(time) {
-      const self = this;
-      self.toDate = time;
+    changeBCtime(time) {
+      self.fromDate = time[0];
+      self.toDate = time[1];
     },
   },
 };

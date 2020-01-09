@@ -11,9 +11,7 @@
       </div>
       <span style="margin:0 10px 0 20px;">{{ $t("billing.deliveredDate") }}</span>
       <div class="timePicker">
-        <bcTime @changeBCtime="changeBCtimeFrom" :timeType="'all'" :dateDefault="[0, 0, 0]" />
-        <span style="margin:0 5px;">-</span>
-        <bcTime @changeBCtime="changeBCtimeTo" :dateDefault="[0, 0, 0]" style="margin-left:5px;" :timeType="'all'" />
+        <bc-picker :dateType="'daterange'" @changeBCtime="changeBCtime"></bc-picker>
         <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
         <el-button
           size="small"
@@ -183,14 +181,11 @@
 <script>
 import { supplyFinance, billsupplyCount, getSupplyList, getRefundList, getRefundCount, confirmRefund } from "../../api/billing";
 import { getTime, parseTime, getLastMonthTime } from "../../utils/index";
-import bcTime from "@/components/bcTime";
 import { getToken } from "@/utils/auth";
 import { mapGetters } from "vuex";
 
 let self;
 export default {
-  // import引入的组件需要注入到对象中才能使用
-  components: { bcTime },
   data() {
     return {
       env: process.env.VUE_APP_BASE_API,
@@ -247,11 +242,9 @@ export default {
     self.loadData();
   },
   methods: {
-    changeBCtimeFrom(time) {
-      self.fromDate = time;
-    },
-    changeBCtimeTo(time) {
-      self.toDate = time;
+    changeBCtime(time) {
+      self.fromDate = time[0];
+      self.toDate = time[1];
     },
     pageChange(val) {
       self.page.currentPage = val;
