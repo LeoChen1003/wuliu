@@ -388,7 +388,8 @@
     "Quantity": "总件数",
     "discountRate": "折扣率",
     "search": "搜索",
-    "DistanceRange": " 距离(公里) >"
+    "DistanceRange": " 距离(公里) >",
+    "pricePerKm": "价格/每公里"
   },
   "billing": {
     "billingStatus": "状态",
