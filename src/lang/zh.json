@@ -387,7 +387,8 @@
     "volumeWeight": "价格系数",
     "Quantity": "总件数",
     "discountRate": "折扣率",
-    "search": "搜索"
+    "search": "搜索",
+    "DistanceRange": " 距离(公里) >"
   },
   "billing": {
     "billingStatus": "状态",

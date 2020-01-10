@@ -2,7 +2,9 @@
   <div class="LTL_manage">
     <el-input :placeholder="$t('tracking.trackingNo')" style="margin-left: 300px; width: 200px;" v-model="trackingNo"></el-input>
     <el-button type="primary" style="margin-left: 20px;" @click="search">{{ $t("tracking.search") }}</el-button>
-    <el-button type="primary" class="ltl_btn" @click="sendToHubAll()" v-if="tabActive=='WAIT_SEND_TO_HUB'">{{ $t("tracking.sendCargoToHUB") }}</el-button>
+    <el-button type="primary" class="ltl_btn" @click="sendToHubAll()" v-if="tabActive == 'WAIT_SEND_TO_HUB'">{{
+      $t("tracking.sendCargoToHUB")
+    }}</el-button>
     <div style="display:flex;box-sizing:border-box;padding:0 20px;">
       <!-- 导航 -->
       <div style="height:100%;">
@@ -139,11 +141,7 @@
             <template slot-scope="scope">
               <div v-if="!(tabActive == '0' || tabActive == '1')">
                 <div>
-                  {{
-                    scope.row.supply.type == "COMPANY"
-                      ? scope.row.supply.companyName
-                      : scope.row.supply.humanName
-                  }}
+                  {{ scope.row.supply.type == "COMPANY" ? scope.row.supply.companyName : scope.row.supply.humanName }}
                 </div>
                 <div>
                   {{ scope.row.supply.contactMobile }}
@@ -180,21 +178,21 @@
                 {{ $t("tracking.print") }}
               </el-button>
               <el-button
-                  type="primary"
-                  :disabled="!permissions.DemandOrderManage"
-                  v-if="scope.row.status == 'COMPLETE' && scope.row.rating == null"
-                  @click="rating(scope.row)"
-                  >{{ $t("tracking.rating") }}</el-button
-                >
-                <el-rate v-if="scope.row.status == 'COMPLETE' && scope.row.rating" disabled v-model="scope.row.rating.rating / 2">
-                </el-rate>
-                <el-button
-                  type="primary"
-                  v-if="scope.row.status == 'WILL_RETURN'"
-                  :disabled="!permissions.DemandOrderManage"
-                  @click="rdConfirmShow(scope.row)"
-                  >{{ $t("tracking.confirm") }}</el-button
-                >
+                type="primary"
+                :disabled="!permissions.DemandOrderManage"
+                v-if="scope.row.status == 'COMPLETE' && scope.row.rating == null"
+                @click="rating(scope.row)"
+                >{{ $t("tracking.rating") }}</el-button
+              >
+              <el-rate v-if="scope.row.status == 'COMPLETE' && scope.row.rating" disabled v-model="scope.row.rating.rating / 2">
+              </el-rate>
+              <el-button
+                type="primary"
+                v-if="scope.row.status == 'WILL_RETURN'"
+                :disabled="!permissions.DemandOrderManage"
+                @click="rdConfirmShow(scope.row)"
+                >{{ $t("tracking.confirm") }}</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -243,14 +241,13 @@
         </el-form-item>
         <el-form-item :label="$t('tracking.estiameteTimeOfArrival')" :show-message="false" prop="estimateTime">
           <div style="display:flex;align-items:center" class="inputWidth">
-            <bcTime
+            <bc-picker
               @changeBCtime="changeBCtime"
               style="width:26.7%;"
-              :timeType="'all'"
-              :dateDefault="isChange ? timeArr : []"
+              :dateString="isChange ? timeArr : ''"
               :isChange="isChange"
               ref="mychild"
-            ></bcTime>
+            ></bc-picker>
             <el-time-picker
               v-model="time"
               format="HH:mm:ss"
@@ -306,7 +303,12 @@
       <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 100px;" :disabled="btn_show" @click="print1">
         {{ $t("tracking.printPreview") }}
       </el-button>
-      <el-button type="primary" style="width:300px;margin-top: 100px; margin-left: 200px;" @click="confirm" :disabled="show_confirm">
+      <el-button
+        type="primary"
+        style="width:300px;margin-top: 100px; margin-left: 200px;"
+        @click="confirm"
+        :disabled="show_confirm"
+      >
         {{ $t("tracking.confirm") }}
       </el-button>
     </el-dialog>
@@ -353,18 +355,23 @@
 <script>
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
-let self;
-import printJS from '../../printjs/src'
-import { getLtlOrders, getLtlOrdersCount, postsendtohub,getOrderLog, demandquoteList, getImg, confirmRD, orderRating } from "../../api/tracking.js";
+import printJS from "../../printjs/src";
+import {
+  getLtlOrders,
+  getLtlOrdersCount,
+  postsendtohub,
+  getOrderLog,
+  demandquoteList,
+  getImg,
+  confirmRD,
+  orderRating,
+} from "../../api/tracking.js";
 import { getGoodsProperty, getTruckType } from "../../api/data.js";
 import { getToken } from "../../utils/auth";
-import bcTime from "@/components/bcTime";
 import { mapGetters } from "vuex";
+
+let self;
 export default {
-  // import引入的组件需要注入到对象中才能使用
-  components: {
-    bcTime,
-  },
   data() {
     var validatePass = (rule, value, callback) => {
       if (self.time_at === "" || self.time === "") {
@@ -427,7 +434,7 @@ export default {
       orderId: "",
       isChange: false,
       randomNumber: "",
-      timeArr: [],
+      timeArr: "",
       trackingNo: "",
       rules: {
         plate: [{ required: true, trigger: "blur" }],
@@ -483,22 +490,22 @@ export default {
     });
   },
   methods: {
-    clear(){
+    clear() {
       if (self.randomNumber != null) {
-          self.randomNumber = "";
-          self.isChange = false;
-          // self.timeArr = null;
-          // self.timeArr = [];
-          self.timeArr.length = 0;
-          self.form.plate = "";
-          self.form.driverName = "";
-          self.form.phone = "";
-          self.time_at = "";
-          self.time = "";
-          self.form.truckCategory = "";
-          self.clearTime();
-        }
-        self.getData();
+        self.randomNumber = "";
+        self.isChange = false;
+        // self.timeArr = null;
+        // self.timeArr = [];
+        self.timeArr = "";
+        self.form.plate = "";
+        self.form.driverName = "";
+        self.form.phone = "";
+        self.time_at = "";
+        self.time = "";
+        self.form.truckCategory = "";
+        self.clearTime();
+      }
+      self.getData();
     },
     rating(item) {
       self.thisId = item.id;
@@ -518,7 +525,7 @@ export default {
     // 返回文件确认
     rdConfirmShow(row) {
       self.rdRow = row;
-      console.log(row)
+      console.log(row);
       if (row.photoIds) {
         getImg(row.photoIds).then(res => {
           let arr = [];
@@ -552,17 +559,17 @@ export default {
         self.quotedata = res.data;
       });
     },
-    getSummaries(param){
-       const { columns, data } = param;
-        const sums = [];
-        columns.forEach((column, index) => {
-          if (index === 0) {
-            sums[index] = 'Total';
-            return;
-          }
-        })
-        sums[4] = self.totalNumber;
-        return sums;
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = "Total";
+          return;
+        }
+      });
+      sums[4] = self.totalNumber;
+      return sums;
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 2) {
@@ -580,7 +587,7 @@ export default {
     sendToHubAll() {
       if (self.chooseNumber === 0) {
         self.dialogVisible = false;
-        this.$message(self.$t('tracking.dialog'));
+        this.$message(self.$t("tracking.dialog"));
       } else {
         self.dialogVisible = true;
         self.totalNumber = 0;
@@ -588,8 +595,8 @@ export default {
         self.show_confirm = false;
         for (let i in self.gridData) {
           self.proList1 = self.gridData[i].receiverAddressList[0];
-          console.log(self.proList1)
-          for(let j in self.proList1.propertyList){
+          console.log(self.proList1);
+          for (let j in self.proList1.propertyList) {
             self.totalNumber += self.proList1.propertyList[j].number;
           }
         }
@@ -629,8 +636,8 @@ export default {
       self.getData();
     },
     getCount() {
-      getLtlOrdersCount({no: this.trackingNo}).then(res => {
-        this.orderStatus = res.data
+      getLtlOrdersCount({ no: this.trackingNo }).then(res => {
+        this.orderStatus = res.data;
       });
     },
     sendToHub(item) {
@@ -672,7 +679,7 @@ export default {
             });
             self.randomNumber = res.data.deliveryNo;
             self.isChange = true;
-            self.timeArr = self.time_at.split("-");
+            self.timeArr = self.time_at;
             self.btn_show = false;
             self.sendtohubid = res.data.id;
             self.show_confirm = true;
@@ -693,7 +700,9 @@ export default {
       printJS({
         printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
           row.sendToHubId
-        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,type:'pdf',showModal:true,
+        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,
+        type: "pdf",
+        showModal: true,
         onLoadingEnd: () => {
           row.loading1 = 0;
         },
@@ -705,16 +714,18 @@ export default {
       printJS({
         printable: `${process.env.VUE_APP_BASE_API}/api/token/pdf/downloadInvoice?sendToHubId=${
           self.sendtohubid
-        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,type:'pdf',showModal:true,
+        }&token=${getToken()}&Locale=${self.$store.state.app.language}`,
+        type: "pdf",
+        showModal: true,
         onLoadingEnd: () => {
           self.loading1 = 0;
         },
       });
     },
-    clearTime(){
+    clearTime() {
       self.$refs.mychild.clearData();
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

@@ -3,9 +3,7 @@
     <div class="statusHeader">
       <div class="status-txt">{{ $t("billing.billingStatus") }}</div>
       <div class="timePicker">
-        <bcTime @changeBCtime="changeBCtimeFrom" :timeType="'all'" :dateDefault="fromDateDeFault"></bcTime>
-        <span style="margin:0 5px;">至</span>
-        <bcTime @changeBCtime="changeBCtimeTo" :dateDefault="toDateDeFault" style="margin-left:5px;" :timeType="'all'"></bcTime>
+        <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
         <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
       </div>
     </div>
@@ -96,19 +94,16 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { supplyFinance, billsupplyCount } from "../../api/billing";
-import { getTime, parseTime, getLastMonthTime } from "../../utils/index";
-import bcTime from "@/components/bcTime";
+import { getTime, parseTime, getLastMonthTime, getNormalTime, getBcTime } from "../../utils/index";
 import { mapGetters } from "vuex";
 
 let self;
 export default {
-  // import引入的组件需要注入到对象中才能使用
-  components: { bcTime },
   data() {
     return {
       tabActive: "WAIT_SETTLE",
-      fromDate: getLastMonthTime(new Date()),
-      toDate: parseTime(new Date().getTime(), "{y}-{m}-{d}"),
+      fromDate: getBcTime(getLastMonthTime(new Date())),
+      toDate: getBcTime(parseTime(new Date().getTime(), "{y}-{m}-{d}")),
       tableData: [],
       page: {
         total: 0,
@@ -118,32 +113,29 @@ export default {
       loading: false,
       detailData: [],
       statusCount: {},
+      dateArrDeFault: [],
     };
   },
   // 监听属性 类似于data概念
   computed: {
-    fromDateDeFault() {
-      return self.fromDate.split("-");
-    },
-    toDateDeFault() {
-      return self.toDate.split("-");
-    },
     ...mapGetters(["permissions"]),
   },
   // 监控data中的数据变化
   watch: {},
   created() {
     self = this;
+    let arr = [];
+    arr.push(getNormalTime(self.fromDate));
+    arr.push(getNormalTime(self.toDate));
+    self.dateArrDeFault = arr;
   },
   mounted() {
     self.loadData();
   },
   methods: {
-    changeBCtimeFrom(time) {
-      self.fromDate = time;
-    },
-    changeBCtimeTo(time) {
-      self.toDate = time;
+    changeBCtime(time) {
+      self.fromDate = time[0];
+      self.toDate = time[1];
     },
     pageChange(val) {
       let self = this;

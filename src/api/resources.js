@@ -118,7 +118,9 @@ export function addLTLRoute(data) {
   return requestJSON({
     url: "/api/ltl/line/save",
     method: "post",
-    data,
+    data: {
+      ltlLine: data,
+    },
   });
 }
 

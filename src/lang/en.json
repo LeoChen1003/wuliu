@@ -385,7 +385,9 @@
     "volumeWeight": "Volume Weight",
     "Quantity": "Quantity",
     "discountRate": "Discount Rate",
-    "search": "Search"
+    "search": "Search",
+    "DistanceRange": "Distance range (KM) >",
+    "pricePerKm": "Price /per KM"
   },
   "billing": {
     "billingStatus": "Status",
