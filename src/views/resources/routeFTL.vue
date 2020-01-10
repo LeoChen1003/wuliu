@@ -236,7 +236,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item :label="$t('resources.quoteMode')" prop="ftlType" required>
-                  <el-select v-model="form.ftlType" class="formSelect">
+                  <el-select v-model="form.ftlType" class="formSelect" @change="changeFtlType">
                     <el-option :label="$t('resources.ftlType1')" :value="0" />
                     <el-option :label="$t('resources.ftlType2')" :value="1" />
                   </el-select>
@@ -1163,6 +1163,19 @@ export default {
       // }
       // list[list.length - 1].maxKm = "";
       self.form.kmQuotations = list;
+    },
+    changeFtlType(val) {
+      if (val == 1) {
+        if (!self.form.kmQuotations || self.form.kmQuotations.length < 1) {
+          self.form.kmQuotations = [
+            {
+              minKm: 0,
+              maxKm: null,
+              unitPrice: null,
+            },
+          ];
+        }
+      }
     },
     kmQuotationsdelRow(row, index) {
       let list = JSON.parse(JSON.stringify(self.form.kmQuotations));

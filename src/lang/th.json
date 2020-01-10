@@ -383,7 +383,9 @@
     "Quantity": "จำนวนชิ้น",
     "discountRate": "อัตราส่วนลด",
     "search": "ค้นหา",
-    "priceCoefficient": "ตัวแปลงปริมาตร"
+    "priceCoefficient": "ตัวแปลงปริมาตร",
+    "DistanceRange": "ระยะทาง(KM)",
+    "pricePerKm": "ราคา/กิโลเมตร"
   },
   "billing": {
     "billingStatus": "สถานะ",
