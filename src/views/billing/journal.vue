@@ -1,11 +1,5 @@
 <template>
   <div class="manage billing">
-    <div class="statusHeader">
-      <div class="timePicker">
-        <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
-        <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
-      </div>
-    </div>
     <div class="content">
       <div>
         <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
@@ -15,6 +9,10 @@
       </div>
 
       <div class="container">
+        <div class="timePicker">
+          <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
+          <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
+        </div>
         <div class="center">
           <el-table :data="dataList" border>
             <el-table-column prop="createdAt" :label="$t('billing.date')" />
@@ -141,7 +139,6 @@ export default {
 //@import url(); 引入公共css类
 .manage {
   box-sizing: border-box;
-  height: 100%;
   .statusHeader {
     display: flex;
     padding: 0px 20px;
@@ -160,14 +157,20 @@ export default {
     padding-left: 25px;
     display: flex;
     height: calc(100% - 50px);
+    margin-top: 5px;
+    overflow: scroll;
     .container {
       padding-left: 20px;
       padding-top: 20px;
       width: 100%;
+      height: 100%;
       overflow: scroll;
+      background-color: #fff;
+      margin-left: 10px;
       .center {
         width: 90%;
         margin-right: 1%;
+        margin-top: 20px;
       }
     }
   }
@@ -197,5 +200,45 @@ export default {
 .el-tabs--right .el-tabs__nav-wrap.is-left::after,
 .el-tabs--right .el-tabs__nav-wrap.is-right::after {
   width: 3px;
+}
+
+.billing .el-tabs--left .el-tabs__item.is-left{
+  text-align: left;
+}
+
+.billing .el-tabs__content{
+  background-color: #fff;
+}
+
+.billing .el-tabs__active-bar{
+  width: 0;
+  height: 0;
+  background-color: #fff;
+}
+
+.billing .el-tabs--left .el-tabs__active-bar.is-left{
+  width: 0;
+  height: 0;
+}
+
+.billing .el-tabs__nav-wrap::after{
+  background-color: #fff;
+}
+
+.billing .el-tabs--left .el-tabs__nav-wrap.is-left{
+  width: 185px;
+}
+
+.billing .el-tabs--left .el-tabs__header.is-left{
+  margin-left: -10px;
+  background-color: #fff;
+}
+
+.billing .el-table__header-wrapper{
+  background-color: #ccc !important;
+}
+
+.billing .el-table__header{
+  background-color: #ccc !important;
 }
 </style>

@@ -667,7 +667,7 @@ export default {
       },
       setRules: {
         exchange: [{ required: true, message: " ", trigger: "change" }],
-      },
+      }
     };
   },
   watch: {
@@ -865,7 +865,7 @@ export default {
           });
         }
       });
-    },
+    }
   },
 };
 </script>
@@ -967,5 +967,37 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+
+.wrapper .el-tabs--left .el-tabs__item.is-left{
+  text-align: left;
+}
+
+.wrapper .el-tabs__content{
+  background-color: #fff;
+}
+
+.wrapper .el-tabs__active-bar{
+  width: 0;
+  height: 0;
+  background-color: #fff;
+}
+
+.wrapper .el-tabs--left .el-tabs__active-bar.is-left{
+  width: 0;
+  height: 0;
+}
+
+.wrapper .el-tabs__nav-wrap::after{
+  background-color: #fff;
+}
+
+.wrapper .el-tabs--left .el-tabs__nav-wrap.is-left{
+  width: 185px;
+}
+
+.wrapper .el-tabs--left .el-tabs__header.is-left{
+  margin-left: 10px;
+  background-color: #fff;
 }
 </style>
