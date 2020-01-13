@@ -36,13 +36,33 @@ export const asyncRoutes = [
       roles: ["DEMAND"],
     },
     children: [
+      // {
+      //   path: "priceConsulting",
+      //   component: () => import("@/views/booking/priceConsulting"),
+      //   name: "priceConsulting",
+      //   hidden: true,
+      //   meta: {
+      //     title: "priceConsulting",
+      //     roles: ["DEMAND"],
+      //     permission: "DemandSearchSupply",
+      //   },
+      // },
       {
-        path: "priceConsulting",
-        component: () => import("@/views/booking/priceConsulting"),
-        name: "priceConsulting",
-        hidden: true,
+        path: "priceConsultingFTL",
+        component: () => import("@/views/booking/FTL"),
+        name: "priceConsultingFTL",
         meta: {
-          title: "priceConsulting",
+          title: "FTLNotHUB",
+          roles: ["DEMAND"],
+          permission: "DemandSearchSupply",
+        },
+      },
+      {
+        path: "priceConsultingLTL",
+        component: () => import("@/views/booking/LTL"),
+        name: "priceConsultingLTL",
+        meta: {
+          title: "LTLHUB",
           roles: ["DEMAND"],
           permission: "DemandSearchSupply",
         },

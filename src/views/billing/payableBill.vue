@@ -1,7 +1,6 @@
 <template>
   <div class="manage billing">
     <div class="statusHeader">
-      <div class="status-txt">{{ $t("billing.billingStatus") }}</div>
       <div class="timePicker">
         <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
         <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
@@ -186,17 +185,7 @@ export default {
     padding: 0px 20px;
     box-sizing: border-box;
     height: 50px;
-    border-bottom: 2px solid #dfe4ed;
     align-items: center;
-    .status-txt {
-      height: 50px;
-      line-height: 50px;
-      padding-left: 20px;
-      font-size: 20px;
-      width: 216px;
-      box-sizing: border-box;
-      border-right: 2px solid #dfe4ed;
-    }
   }
   .timePicker {
     height: 42px;

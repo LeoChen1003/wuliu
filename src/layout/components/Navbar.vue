@@ -110,6 +110,7 @@ export default {
   .right,
   .left {
     display: flex;
+    height: 100%;
     align-items: center;
   }
 
@@ -123,6 +124,8 @@ export default {
 
     .slidebar {
       width: 100%;
+      height: 100%;
+      padding: 3px 0;
     }
   }
 }
@@ -142,6 +145,7 @@ export default {
 .el-menu-item {
   border-bottom: 0px solid rgba($color: #000000, $alpha: 0) !important;
   transition: all 0.4s !important;
+  border-radius: 10px;
 
   &:hover {
     background: #fff !important;

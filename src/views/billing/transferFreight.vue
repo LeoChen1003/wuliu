@@ -1,7 +1,6 @@
 <template>
   <div class="manage billing">
     <div class="statusHeader">
-      <div class="status-txt">{{ $t("billing.billingStatus") }}</div>
       <div class="supply-box">
         <span style="margin:0 20px;">{{ $t("billing.supply") }}</span>
         <el-select v-model="supply" clearable placeholder="请选择">
@@ -463,17 +462,7 @@ export default {
     padding: 0px 20px;
     box-sizing: border-box;
     height: 50px;
-    border-bottom: 2px solid #dfe4ed;
     align-items: center;
-    .status-txt {
-      height: 50px;
-      line-height: 50px;
-      padding-left: 20px;
-      font-size: 20px;
-      width: 216px;
-      box-sizing: border-box;
-      border-right: 2px solid #dfe4ed;
-    }
   }
   .timePicker {
     height: 42px;
