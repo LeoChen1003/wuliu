@@ -994,7 +994,7 @@ export default {
         localStorage.setItem("consultInfo", JSON.stringify(self.consultInfo));
       }
       self.$router.replace({
-        path: "/booking/priceConsulting",
+        path: self.bookingForm.orderInfo.lineType == "FTL" ? "/booking/priceConsultingFTL" : "/booking/priceConsultingLTL",
         query: { return: 1 },
       });
     },

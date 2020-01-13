@@ -1,6 +1,6 @@
 <template>
   <div class="manage booking">
-    <div style="display:flex;align-items:center;margin-bottom:15px;">
+    <div style="display:flex;align-items:center;margin-top:10px;margin-bottom:10px;">
       <el-button
         icon="el-icon-arrow-left
 "
@@ -9,7 +9,7 @@
       >
     </div>
     <el-form ref="releaseform" :model="releaseForm" :rules="releaseRules" :show-message="false" label-position="top" size="small">
-      <el-row class="itemRow" style="border-top: 1px solid #dfe4ed;">
+      <el-row class="itemRow">
         <el-col :span="8">
           <el-form-item :label="$t('booking.logisiticsType')">
             <el-select
@@ -212,7 +212,7 @@
         </el-col> -->
         <el-col :span="8"> </el-col>
       </el-row>
-      <el-row class="itemRow">
+      <el-row class="itemRow" style="margin-top:10px;">
         <!-- 收货地址列表 -->
         <el-form-item prop="receiverAddressList">
           <div style="display:flex;align-items: flex-end;">
@@ -291,7 +291,7 @@
         </el-form-item>
       </el-row>
     </el-form>
-    <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:15px;margin-top:30px;">
+    <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:15px;margin-top:30px;margin-right:35px;">
       <el-button style="width:200px;" @click="$router.replace('/billing/topUp')" type="primary">{{
         $t("booking.topUp")
       }}</el-button>
@@ -1029,6 +1029,7 @@ export default {
 .manage {
   padding: 20px;
   padding-top: 0px;
+  max-height: calc(100vh - 101px);
   box-sizing: border-box;
 
   .go_back {
@@ -1044,7 +1045,7 @@ export default {
 
   .itemRow {
     // border-top: 1px solid #dfe4ed;
-    padding: 10px;
+    // padding: 10px;
     box-sizing: border-box;
   }
   .table-op {
@@ -1094,6 +1095,10 @@ export default {
 .booking .el-input-group__append {
   width: 40%;
 }
+.booking .el-form-item {
+  margin-bottom: 5px !important;
+}
+
 .edit_input .el-input__inner {
   padding: 0 30px 0 15px;
 }
