@@ -712,6 +712,7 @@ export default {
       this.$forceUpdate();
       self.editDialog = true;
       self.thisId = item.id;
+      self.checkAllCheck();
     },
     // 提交修改
     confirmIt() {
