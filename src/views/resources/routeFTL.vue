@@ -667,6 +667,7 @@ export default {
         },
       ];
       self.editDialog = true;
+      self.allChecked = false;
     },
     // 编辑按钮
     edit(row) {
