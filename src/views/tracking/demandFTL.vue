@@ -282,10 +282,10 @@
         <div style="text-align:center;margin-bottom:10px;">
           {{ $t("tracking.areYouSure") }}
         </div>
-        <div class="img-box">
+        <div class="img-box" style="width:100%;display:flex;flex-wrap:wrap;justify-content:space-around;">
           <el-image
             v-for="(img, index) in imgList"
-            :src="img + '?x-oss-process=style/th-90'"
+            :src="img"
             :key="index"
             style="width: 100px; height: 100px;margin-right:10px;"
             :preview-src-list="imgList"
@@ -520,9 +520,9 @@ export default {
           let arr = [];
           for (let i of res.data) {
             arr.push(i.path);
-            self.imgList = arr;
-            self.rdDialog = true;
           }
+          self.imgList = arr;
+          self.rdDialog = true;
         });
       } else {
         self.imgList = [];
