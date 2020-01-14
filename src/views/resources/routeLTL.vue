@@ -1202,9 +1202,9 @@ export default {
       }
       // 如果小于起始值
       if (val < list[index].minNumber) {
-        return self.$message.warning("不能小于总件数");
+        return self.$message.warning(self.$t("resources.CanNotlessthanthetotalnumber"));
       } else if (val === "") {
-        return self.$message.warning("不能为空");
+        return self.$message.warning(self.$t("resources.Cannotbeempty"));
       }
       // 操作队列
       // 有更大值
@@ -1221,7 +1221,7 @@ export default {
           discount: 0,
         });
       } else {
-        return self.$message.warning("不合法的数值");
+        return self.$message.warning(self.$t("resources.Non-conformingvalues"));
       }
       // 重新排序
       // list.sort((a, b) => {
@@ -1359,9 +1359,9 @@ export default {
       let optionalTimeList = [];
 
       if (form.templateId === "") {
-        return self.$message.warning("路线不能为空");
+        return self.$message.warning("No Route");
       } else if (form.status === "" || !form.status) {
-        return self.$message.warning("status不能为空");
+        return self.$message.warning("No Status");
       }
       self.confirmLoading = true;
 
@@ -1418,7 +1418,7 @@ export default {
             t.unitPrice === ""
           ) {
             self.confirmLoading = false;
-            return self.$message.warning("报价不能为空");
+            return self.$message.warning(self.$t("resources.Quotationcannotbeempty"));
           }
         }
       }
