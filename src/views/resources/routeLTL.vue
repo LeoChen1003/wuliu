@@ -1295,8 +1295,6 @@ export default {
     // 检测是否全选
     checkAllCheck() {
       let allChecked = true;
-      console.log(self.dateList);
-      console.log(self.sendDateList);
       for (let x in self.dateList) {
         if (!self.sendDateList[x]) {
           allChecked = false;
