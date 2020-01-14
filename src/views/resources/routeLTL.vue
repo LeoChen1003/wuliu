@@ -740,6 +740,7 @@ export default {
         templateId: "",
         mapUrl: "",
       };
+      self.allChecked = false;
       getLineTemplateShow({
         hubId: self.form.hubId,
         pagesize: 999,
@@ -766,6 +767,8 @@ export default {
           day: arr[2],
         };
       }
+      self.sendDateList = dateList;
+      self.checkAllCheck();
 
       for (let i of template.ltlLineProvinceList) {
         params += `provinceCodes=${i.provinceCode}&`;
@@ -879,7 +882,6 @@ export default {
           });
         });
       });
-
       // 整理cityList格式
       // parse();
       function parse() {
