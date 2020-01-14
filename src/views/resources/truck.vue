@@ -148,7 +148,14 @@
         </el-tabs>
       </el-col>
     </el-row>
-    <el-dialog :title="$t('resources.truck')" :visible.sync="dialogVisible" @close="dialogClose" width="700px" center>
+    <el-dialog
+      :close-on-click-modal="false"
+      :title="$t('resources.truck')"
+      :visible.sync="dialogVisible"
+      @close="dialogClose"
+      width="700px"
+      center
+    >
       <div>
         <el-form
           ref="detailform"
