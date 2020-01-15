@@ -11,7 +11,7 @@
       <div class="container">
         <div class="timePicker">
           <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
-          <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
+          <el-button @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
         </div>
         <div class="center">
           <el-table :data="dataList" border>
@@ -139,25 +139,17 @@ export default {
 //@import url(); 引入公共css类
 .manage {
   box-sizing: border-box;
-  .statusHeader {
-    display: flex;
-    padding: 0px 20px;
-    box-sizing: border-box;
-    height: 50px;
-    align-items: center;
-  }
   .timePicker {
     height: 42px;
     line-height: 40px;
-    padding-left: 30px;
     display: flex;
     align-items: center;
   }
   .content {
-    padding-left: 25px;
+    padding-left: 20px;
     display: flex;
-    height: calc(100% - 50px);
-    margin-top: 5px;
+    height: calc(100vh - 91px);
+    // margin-top: 5px;
     overflow: scroll;
     .container {
       padding-left: 20px;
@@ -202,43 +194,43 @@ export default {
   width: 3px;
 }
 
-.billing .el-tabs--left .el-tabs__item.is-left{
+.billing .el-tabs--left .el-tabs__item.is-left {
   text-align: left;
 }
 
-.billing .el-tabs__content{
+.billing .el-tabs__content {
   background-color: #fff;
 }
 
-.billing .el-tabs__active-bar{
+.billing .el-tabs__active-bar {
   width: 0;
   height: 0;
   background-color: #fff;
 }
 
-.billing .el-tabs--left .el-tabs__active-bar.is-left{
+.billing .el-tabs--left .el-tabs__active-bar.is-left {
   width: 0;
   height: 0;
 }
 
-.billing .el-tabs__nav-wrap::after{
+.billing .el-tabs__nav-wrap::after {
   background-color: #fff;
 }
 
-.billing .el-tabs--left .el-tabs__nav-wrap.is-left{
+.billing .el-tabs--left .el-tabs__nav-wrap.is-left {
   width: 185px;
 }
 
-.billing .el-tabs--left .el-tabs__header.is-left{
+.billing .el-tabs--left .el-tabs__header.is-left {
   margin-left: -10px;
   background-color: #fff;
 }
 
-.billing .el-table__header-wrapper{
+.billing .el-table__header-wrapper {
   background-color: #ccc !important;
 }
 
-.billing .el-table__header{
+.billing .el-table__header {
   background-color: #ccc !important;
 }
 </style>

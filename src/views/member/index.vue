@@ -1,6 +1,6 @@
 <!-- member index -->
 <template>
-  <div class="wrapper">
+  <div class="wrapper member">
     <el-tabs v-model="tabActive" tab-position="left" @tab-click="tabChange" style="height:100%">
       <!-- 会员申请流程 -->
       <el-tab-pane name="process" :label="$t('member.membershipApplicationProcess')">
@@ -38,7 +38,7 @@
       <!-- 基础资料 -->
       <el-tab-pane name="data" :label="$t('member.essentialData')">
         <div class="container">
-          <el-form ref="form" label-width="150px">
+          <el-form ref="form" label-width="150px" label-position="left">
             <!-- 会员类型 -->
             <el-form-item class="choose-type" :label="$t('member.memberType')">
               <el-checkbox-group v-model="typeList" @change="typeListChange">
@@ -164,6 +164,7 @@
                 applyStatus.demand.status === 'ACTIVATED' ||
                 applyStatus.demand.status === 'DEFAULT'
             "
+            label-position="left"
           >
             <el-form-item :label="$t('member.affidavit')">
               <el-upload
@@ -291,6 +292,7 @@
                 applyStatus.supply.status === 'ACTIVATED' ||
                 applyStatus.supply.status === 'DEFAULT'
             "
+            label-position="left"
           >
             <el-form-item :label="$t('member.logo')">
               <el-upload
@@ -523,9 +525,9 @@
         </div>
       </el-tab-pane>
       <!-- 基础设置 -->
-      <el-tab-pane name="setting" :label="$t('member.setting')">
+      <!-- <el-tab-pane name="setting" :label="$t('member.setting')">
         <div class="container">
-          <el-form hide-required-asterisk label-width="200px" ref="setForm" :model="setForm" :rules="setRules">
+          <el-form hide-required-asterisk label-width="200px" ref="setForm" :model="setForm" :rules="setRules" label-position="left">
             <el-form-item prop="exchange" :label="$t('member.VolumeWeightDivisor')">
               <el-select v-model="setForm.exchange" :placeholder="$t('placeholder.pleaseChoose')" class="inp">
                 <el-option :label="2500" :value="2500"> </el-option>
@@ -533,10 +535,10 @@
                 <el-option :label="3500" :value="3500"> </el-option>
               </el-select>
               <div style="color:#ccc;">
-                <div>{{$t('member.volumeWeightConversion')}}</div>
+                <div>{{ $t("member.volumeWeightConversion") }}</div>
                 <div class="inp">
-                  {{$t('member.example')}},<br />
-                  {{$t('member.example1')}}
+                  {{ $t("member.example") }},<br />
+                  {{ $t("member.example1") }}
                 </div>
               </div>
             </el-form-item>
@@ -545,7 +547,7 @@
             </el-form-item>
           </el-form>
         </div>
-      </el-tab-pane>
+      </el-tab-pane> -->
       <!-- 我的会员合同 -->
       <el-tab-pane name="contract" :label="$t('member.myContract')">
         <div class="container">
@@ -667,7 +669,7 @@ export default {
       },
       setRules: {
         exchange: [{ required: true, message: " ", trigger: "change" }],
-      }
+      },
     };
   },
   watch: {
@@ -865,7 +867,7 @@ export default {
           });
         }
       });
-    }
+    },
   },
 };
 </script>
@@ -877,7 +879,8 @@ export default {
 
 .container {
   height: 100%;
-  padding: 40px;
+  padding: 20px;
+  padding-left: 40px;
   overflow: scroll;
 }
 
@@ -969,34 +972,57 @@ export default {
   display: block;
 }
 
-.wrapper .el-tabs--left .el-tabs__item.is-left{
+.member .el-form-item {
+  margin-bottom: 15px;
+}
+
+.member .upload {
+  display: flex;
+  align-items: center;
+}
+
+.member .el-upload {
+  margin-right: 25px;
+}
+
+.member .el-upload-list__item:first-child {
+  margin-top: 0px;
+}
+
+.member .el-tabs--left .el-tabs__item.is-left {
   text-align: left;
+  max-width: 100%;
+  white-space: normal;
+  word-break: break-all;
+  line-height: 16px;
+  height: 50px;
 }
 
-.wrapper .el-tabs__content{
+.member .el-tabs__content {
   background-color: #fff;
 }
 
-.wrapper .el-tabs__active-bar{
+.member .el-tabs__active-bar {
   width: 0;
   height: 0;
   background-color: #fff;
 }
 
-.wrapper .el-tabs--left .el-tabs__active-bar.is-left{
+.member .el-tabs--left .el-tabs__active-bar.is-left {
   width: 0;
   height: 0;
 }
 
-.wrapper .el-tabs__nav-wrap::after{
+.member .el-tabs__nav-wrap::after {
   background-color: #fff;
 }
 
-.wrapper .el-tabs--left .el-tabs__nav-wrap.is-left{
+.member .el-tabs--left .el-tabs__nav-wrap.is-left {
   width: 185px;
+  padding-top: 20px;
 }
 
-.wrapper .el-tabs--left .el-tabs__header.is-left{
+.member .el-tabs--left .el-tabs__header.is-left {
   margin-left: 10px;
   background-color: #fff;
 }
