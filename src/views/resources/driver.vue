@@ -53,7 +53,7 @@
                     v-for="(img, index) in licPreList"
                     :key="index"
                     style="width: 100px; height: 100px;margin-right:10px;"
-                    :src="img + '?x-oss-process=style/th-90'"
+                    :src="img"
                     :preview-src-list="licPreList"
                   >
                   </el-image>
@@ -61,11 +61,19 @@
               </el-form-item>
               <el-form-item :label="$t('resources.identityCard')" v-if="idePreList.length != 0">
                 <div class="inputWidth">
-                  <el-image
+                  <!-- <el-image
                     v-for="(img, index) in idePreList"
                     :key="index"
                     style="width: 100px; height: 100px;margin-right:10px;"
                     :src="img + '?x-oss-process=style/th-90'"
+                    :preview-src-list="idePreList"
+                  >
+                  </el-image> -->
+                  <el-image
+                    v-for="(img, index) in idePreList"
+                    :key="index"
+                    style="width: 100px; height: 100px;margin-right:10px;"
+                    :src="img"
                     :preview-src-list="idePreList"
                   >
                   </el-image>
