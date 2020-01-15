@@ -75,7 +75,7 @@
                     v-for="(img, index) in regPreList"
                     :key="index"
                     style="width: 100px; height: 100px;margin-right:10px;"
-                    :src="img + '?x-oss-process=style/th-90'"
+                    :src="img"
                     :preview-src-list="regPreList"
                   >
                   </el-image>
@@ -117,7 +117,7 @@
                       v-for="(img, index) in insPreList"
                       :key="index"
                       style="width: 100px; height: 100px;margin-right:10px;"
-                      :src="img + '?x-oss-process=style/th-90'"
+                      :src="img"
                       :preview-src-list="insPreList"
                     >
                     </el-image>
@@ -136,7 +136,7 @@
                     v-for="(img, index) in truPreList"
                     :key="index"
                     style="width: 100px; height: 100px;margin-right:10px;"
-                    :src="img + '?x-oss-process=style/th-90'"
+                    :src="img"
                     :preview-src-list="truPreList"
                   >
                   </el-image>
@@ -552,6 +552,7 @@ export default {
       for (let i of val.truckResource) {
         truPreList.push(i.path);
       }
+      console.log(self.insPreList);
       self.regPreList = regPreList;
       self.insPreList = insPreList;
       self.truPreList = truPreList;
