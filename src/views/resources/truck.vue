@@ -552,7 +552,6 @@ export default {
       for (let i of val.truckResource) {
         truPreList.push(i.path);
       }
-      console.log(self.insPreList);
       self.regPreList = regPreList;
       self.insPreList = insPreList;
       self.truPreList = truPreList;
