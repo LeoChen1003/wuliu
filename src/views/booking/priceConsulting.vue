@@ -237,7 +237,7 @@
                 <el-option v-for="item in delRegionList" :key="item.code" :label="item.fullname" :value="item.code"> </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item prop="pickUpDate">
+            <el-form-item prop="pickUpDate" class="consultingTime">
               <i class="el-icon-time" slot="label" style="font-size:22px;color:#8a8a8a;"></i>
               <div style="display:flex;" class="inputWidth">
                 <bc-picker @changeBCtime="dateChange" style="margin-right:5px;width:50%;" :timeType="''" :dateString="today" />
@@ -2204,5 +2204,9 @@ export default {
 
 .edit_input .el-input__inner {
   padding: 0 30px 0 15px;
+}
+
+.consultingTime .el-input--suffix .el-input__inner {
+  padding-right: 5px;
 }
 </style>
