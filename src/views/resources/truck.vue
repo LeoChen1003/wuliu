@@ -75,7 +75,7 @@
                     v-for="(img, index) in regPreList"
                     :key="index"
                     style="width: 100px; height: 100px;margin-right:10px;"
-                    :src="img + '?x-oss-process=style/th-90'"
+                    :src="img"
                     :preview-src-list="regPreList"
                   >
                   </el-image>
@@ -117,7 +117,7 @@
                       v-for="(img, index) in insPreList"
                       :key="index"
                       style="width: 100px; height: 100px;margin-right:10px;"
-                      :src="img + '?x-oss-process=style/th-90'"
+                      :src="img"
                       :preview-src-list="insPreList"
                     >
                     </el-image>
@@ -136,7 +136,7 @@
                     v-for="(img, index) in truPreList"
                     :key="index"
                     style="width: 100px; height: 100px;margin-right:10px;"
-                    :src="img + '?x-oss-process=style/th-90'"
+                    :src="img"
                     :preview-src-list="truPreList"
                   >
                   </el-image>
@@ -309,7 +309,7 @@ export default {
         category: "",
         subCategory: "",
         insuranceAmount: 0,
-        insuranceExpiredAt: "2019-01-01",
+        insuranceExpiredAt: "",
         insuranceStatus: "HAS_INSURANCE",
         plate: "",
         registerAtRegion: "",
@@ -393,7 +393,7 @@ export default {
         category: "",
         subCategory: "",
         insuranceAmount: 0,
-        insuranceExpiredAt: "2019-01-01",
+        insuranceExpiredAt: "",
         insuranceStatus: "HAS_INSURANCE",
         plate: "",
         registerAtRegion: "",
@@ -403,7 +403,6 @@ export default {
       if (self.detailform.insuranceStatus == "HAS_INSURANCE") {
         this.$nextTick(() => {
           self.$refs.bc.clearData();
-          self.$refs.bc.setData(self.detailform.insuranceExpiredAt);
         });
       }
       if (self.$refs.detailform) {
@@ -427,9 +426,11 @@ export default {
         subCategory: row.subCategory,
         insuranceAmount: row.insuranceAmount,
         insuranceExpiredAt: row.insuranceExpiredAt
-          .split("/")
-          .reverse()
-          .join("-"),
+          ? row.insuranceExpiredAt
+              .split("/")
+              .reverse()
+              .join("-")
+          : "",
         insuranceStatus: row.insuranceStatus,
         plate: row.plate,
         registerAtRegion: row.registerAtRegion,
@@ -461,7 +462,7 @@ export default {
       self.fileList2 = insPreList;
       self.fileList3 = truPreList;
       self.curEditId = row.id;
-      if (self.detailform.insuranceStatus == "HAS_INSURANCE") {
+      if (self.detailform.insuranceStatus == "HAS_INSURANCE" && row.insuranceExpiredAt) {
         this.$nextTick(() => {
           self.$refs.bc.setData(row.insuranceExpiredAt);
         });

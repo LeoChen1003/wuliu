@@ -22,7 +22,7 @@
               {{ item }}
             </el-button>
           </div>
-          <div slot="reference" style="width:100px;text-align:center;">
+          <div slot="reference" style="width:100px;text-align:center;font-size: 16px;">
             {{ nowRole }}
           </div>
         </el-popover>
@@ -31,7 +31,7 @@
     </div>
     <div class="left">
       <div style="margin-right:40px;">
-        <div>{{ $t("route.welcome") }},{{ userInfo.name }}</div>
+        <div style="font-size: 16px;">{{ $t("route.welcome") }},{{ userInfo.name }}</div>
       </div>
       <el-popover placement="bottom-start" width="160">
         <div>
