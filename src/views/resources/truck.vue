@@ -469,7 +469,6 @@ export default {
       self.dialogVisible = true;
     },
     toConfirm() {
-      console.log(self.detailform.insuranceExpiredAt);
       if (!/^(0|66)\d{9}$/.test(self.detailform.mobile)) {
         return self.$message.warning(self.$t("login.phoneWrong"));
       }
