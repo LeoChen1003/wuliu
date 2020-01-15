@@ -400,9 +400,12 @@ export default {
         status: "ACTIVE",
         mobile: "",
       };
-      this.$nextTick(() => {
-        self.$refs.bc.clearData();
-      });
+      if (self.detailform.insuranceStatus == "HAS_INSURANCE") {
+        this.$nextTick(() => {
+          self.$refs.bc.clearData();
+          self.$refs.bc.setData(self.detailform.insuranceExpiredAt);
+        });
+      }
       if (self.$refs.detailform) {
         self.$refs.detailform.resetFields();
       }
@@ -458,13 +461,15 @@ export default {
       self.fileList2 = insPreList;
       self.fileList3 = truPreList;
       self.curEditId = row.id;
-      this.$nextTick(() => {
-        self.$refs.bc.setData(row.insuranceExpiredAt);
-      });
-
+      if (self.detailform.insuranceStatus == "HAS_INSURANCE") {
+        this.$nextTick(() => {
+          self.$refs.bc.setData(row.insuranceExpiredAt);
+        });
+      }
       self.dialogVisible = true;
     },
     toConfirm() {
+      console.log(self.detailform.insuranceExpiredAt);
       if (!/^(0|66)\d{9}$/.test(self.detailform.mobile)) {
         return self.$message.warning(self.$t("login.phoneWrong"));
       }
