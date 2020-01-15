@@ -25,15 +25,7 @@
             </div>
           </el-form-item>
           <el-form-item :label="$t('market.pickupDate')">
-            <el-cascader
-              v-model="dateCascader"
-              class="innerInp"
-              :options="options"
-              :props="props"
-              separator="-"
-              style="margin-right:5px;"
-              @change="dateChange"
-            ></el-cascader>
+            <bc-picker @changeBCtime="dateChange" style="margin-right:5px;"></bc-picker>
           </el-form-item>
           <el-form-item :label="$t('market.truckType')">
             <el-select v-model="searchForm.truckCategory" filterable class="formSelect" placeholder="Truck type">
@@ -351,57 +343,6 @@ export default {
       shareTruck: false,
       truckData: [],
       confirmLoading: false,
-      dateCascader: "",
-      options: [],
-      props: {
-        lazy: true,
-        lazyLoad(node, resolve) {
-          let year = self.bcYear;
-          let date = new Date();
-          let month = node.label == year ? date.getMonth() + 1 : 1;
-          let day = date.getDate();
-          let options = [];
-          if (node.level == 0) {
-            getBcYear().then(res => {
-              self.bcYear = res.data;
-              let years = [
-                {
-                  label: self.bcYear,
-                  value: self.bcYear,
-                },
-                {
-                  label: self.bcYear + 1,
-                  value: self.bcYear + 1,
-                },
-              ];
-              resolve(years);
-            });
-          } else if (node.level == 1) {
-            let months = [];
-            for (let y = month; y <= 12; y++) {
-              months.push({
-                label: y,
-                value: y,
-              });
-            }
-            resolve(months);
-          } else if (node.level == 2) {
-            getBcDay(node.parent.value, node.value).then(res => {
-              let days = res.data;
-              let dateList = [];
-              let d = node.parent.value == self.bcYear && node.value == date.getMonth() + 1 ? day : 1;
-              for (let x = d; x <= days; x++) {
-                dateList.push({
-                  label: x,
-                  value: x,
-                  leaf: true,
-                });
-              }
-              resolve(dateList);
-            });
-          }
-        },
-      },
       proType: "origin",
       proArea: [],
       tableLoading: false,
@@ -527,8 +468,8 @@ export default {
       self.data = {};
       self.loadData();
     },
-    dateChange(e) {
-      self.searchForm.pickUpDate = `${e[0]}-${e[1]}-${e[2]}`;
+    dateChange(time) {
+      self.searchForm.pickUpDate = time;
     },
     showProDialog(type) {
       self.proType = type;

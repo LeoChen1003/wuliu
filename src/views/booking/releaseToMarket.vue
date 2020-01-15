@@ -37,13 +37,7 @@
           </el-form-item>
           <el-form-item prop="pickAt" :label="$t('booking.pickupTime')">
             <div class="inputWidth" style="display:flex;">
-              <!-- <el-date-picker v-model="releaseForm.senderAddress.pickAt"
-                              type="date"
-                              value-format='yyyy-MM-dd'
-                              style="margin-right:5px;"
-                              :placeholder="$t('placeholder.chooseDate')">
-              </el-date-picker> -->
-              <bcTime @changeBCtime="changeBCtime" :dateDefault="pickDateDefault" style="margin-right:5px;"></bcTime>
+              <bc-picker @changeBCtime="changeBCtime" :timeType="''" :dateString="pickDateDefault" style="margin-right:5px;" />
               <el-time-picker
                 v-model="time"
                 format="HH:mm:ss"
@@ -55,7 +49,7 @@
           </el-form-item>
           <el-form-item prop="receiveAt" :label="$t('booking.expectedDeliveryTime')">
             <div class="inputWidth" style="display:flex;">
-              <bcTime @changeBCtime="changeBCtimeReceive" :dateDefault="[]" style="margin-right:5px;"></bcTime>
+              <bc-picker @changeBCtime="changeBCtimeReceive" :timeType="''" :dateString="''" style="margin-right:5px;" />
               <el-time-picker
                 v-model="receive_time"
                 format="HH:mm:ss"
@@ -434,7 +428,7 @@
 import { mapGetters } from "vuex";
 import { releaseOrder } from "../../api/booking";
 import { getTruckType, findDistrictFullList, getGoodsProperty, getSenderList, getTransportList } from "../../api/data";
-import bcTime from "@/components/bcTime";
+import { getNormalTime } from "../../utils/index";
 
 let self;
 export default {
@@ -453,7 +447,6 @@ export default {
     },
   },
   // import引入的组件需要注入到对象中才能使用
-  components: { bcTime },
   data() {
     const validatorOrderInfo = (rule, value, callback) => {
       if (!value.settlementAmount) {
@@ -637,7 +630,7 @@ export default {
       receive_time_at: "",
       receive_time: "",
       releaseInfo: {},
-      pickDateDefault: [],
+      pickDateDefault: "",
       cargoListDialog: false,
       cargoTip: [
         {
@@ -757,7 +750,9 @@ export default {
     self = this;
     let releaseInfo = JSON.parse(localStorage.getItem("releaseInfo"));
     self.releaseInfo = releaseInfo;
-    self.pickDateDefault = releaseInfo.searchForm.pickUpDate.split("-").map(Number);
+    console.log("0000");
+    self.pickDateDefault = getNormalTime(releaseInfo.searchForm.pickUpDate);
+    console.log(self.pickDateDefault);
   },
   mounted() {
     let releaseInfo = self.releaseInfo;
@@ -905,6 +900,7 @@ export default {
     },
     // 下单
     todoIt() {
+      console.log(self.releaseForm);
       this.$refs.releaseform.validate(valid => {
         if (valid) {
           self.todoLoading = true;

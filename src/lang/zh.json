@@ -387,7 +387,16 @@
     "volumeWeight": "价格系数",
     "Quantity": "总件数",
     "discountRate": "折扣率",
-    "search": "搜索"
+    "search": "搜索",
+    "DistanceRange": " 距离(公里)",
+    "pricePerKm": "价格/每公里",
+    "Cannotbelessthanthetotalnumberofpieces": "不能小于总件数",
+    "Distancecalculationfailedretrying": "距离计算失败，正在重试...",
+    "Mustnotbelessthantotalkilometers": "不能小于总公里数",
+    "Cannotbeempty": "不能为空",
+    "Non-conformingvalues": "不合法的数值",
+    "CanNotlessthanthetotalnumber": "不能小于总件数",
+    "Quotationcannotbeempty": "报价不能为空"
   },
   "billing": {
     "billingStatus": "状态",

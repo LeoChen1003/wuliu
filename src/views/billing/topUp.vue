@@ -102,14 +102,8 @@
             </el-select>
           </el-form-item>
           <el-form-item prop="operate_at" :label="$t('billing.date')">
-            <!-- <el-date-picker v-model="topUpform.operate_at"
-                            type="datetime"
-                            class="inputWidth"
-                            value-format='yyyy-MM-dd HH:mm:ss'
-                            :placeholder="$t('placeholder.pleaseChoose')">
-            </el-date-picker> -->
             <div style="display:flex;align-items:center;justify-content:space-between;" class="inputWidth">
-              <bcTime @changeBCtime="changeBCtime" :dateDefault="[]" style="width:50%;" :timeType="'all'"></bcTime>
+              <bc-picker @changeBCtime="changeBCtime" style="width:50%;"></bc-picker>
               <el-time-picker
                 v-model="time"
                 format="HH:mm:ss"
@@ -165,13 +159,10 @@
 // 例如：import 《组件名称》 from '《组件路径》';
 import { topUpList, topUp, billTopUpCount } from "../../api/billing";
 import { getToken } from "@/utils/auth";
-import bcTime from "@/components/bcTime";
 import { mapGetters } from "vuex";
 
 let self;
 export default {
-  // import引入的组件需要注入到对象中才能使用
-  components: { bcTime },
   data() {
     const self = this;
     const validateTimeAt = (rule, value, callback) => {

@@ -99,7 +99,7 @@
             </div>
           </el-tab-pane>
           <el-tab-pane name="1" :label="$t('resources.price_2')">
-            <div>
+            <div v-if="thisRow.ftlType == 0">
               <el-table border :data="priceList">
                 <el-table-column header-align="center" align="center" :label="$t('resources.origin')">
                   <template slot-scope="scope">
@@ -127,6 +127,25 @@
                 <el-table-column header-align="center" align="center" prop="transitTime" :label="$t('resources.transitTime')">
                 </el-table-column>
                 <el-table-column header-align="center" align="center" prop="charge" :label="$t('resources.price')">
+                </el-table-column>
+              </el-table>
+            </div>
+            <div v-if="thisRow.ftlType == 1">
+              <el-table border :data="thisRow.kmQuotations">
+                <el-table-column :label="$t('resources.DistanceRange')">
+                  <template slot-scope="scope">
+                    {{ scope.row.minKm }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="≤">
+                  <template slot-scope="scope">
+                    {{ scope.row.maxKm }}
+                  </template>
+                </el-table-column>
+                <el-table-column :label="$t('resources.pricePerKm')">
+                  <template slot-scope="scope">
+                    {{ scope.row.unitPrice }}
+                  </template>
                 </el-table-column>
               </el-table>
             </div>
@@ -217,9 +236,9 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item :label="$t('resources.quoteMode')" prop="ftlType" required>
-                  <el-select v-model="form.ftlType" class="formSelect">
+                  <el-select v-model="form.ftlType" class="formSelect" @change="changeFtlType">
                     <el-option :label="$t('resources.ftlType1')" :value="0" />
-                    <el-option :label="$t('resources.ftlType2')" disabled :value="1" />
+                    <el-option :label="$t('resources.ftlType2')" :value="1" />
                   </el-select>
                 </el-form-item>
                 <el-form-item :label="$t('resources.cutOffTime')" prop="finishedAt">
@@ -254,7 +273,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane :label="$t('resources.quotation')" name="quotation">
-          <div class="tab-wrapper">
+          <div class="tab-wrapper" v-if="form.ftlType == 0">
             <el-table :data="form.cityList" border v-loading="cityLoading" style="width: 100%">
               <el-table-column width="200" :label="$t('resources.origin')">
                 <template slot-scope="scope">
@@ -349,6 +368,57 @@
               <el-button type="primary" @click="addRow" icon="el-icon-plus" circle></el-button>
             </div>
           </div>
+          <div class="tab-wrapper" v-if="form.ftlType == 1">
+            <el-table border :data="form.kmQuotations">
+              <el-table-column :label="$t('resources.DistanceRange')">
+                <template slot-scope="scope">
+                  {{ scope.row.minKm }}
+                </template>
+              </el-table-column>
+              <el-table-column label="≤">
+                <template slot-scope="scope">
+                  <el-input
+                    @change="
+                      val => {
+                        maxNumberChange(val, scope.$index);
+                      }
+                    "
+                    type="number"
+                    @mousewheel.native.prevent
+                    v-model.number="scope.row.maxKm"
+                  />
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('resources.pricePerKm')">
+                <template slot-scope="scope">
+                  <el-input
+                    type="number"
+                    @mousewheel.native.prevent
+                    v-model.number="scope.row.unitPrice"
+                    @change="
+                      val => {
+                        checkNumInt(val, scope.$index);
+                      }
+                    "
+                  >
+                  </el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="DELETE" width="80px">
+                <template slot-scope="scope">
+                  <div style="text-align: center;">
+                    <el-button
+                      v-if="scope.$index !== 0"
+                      type="danger"
+                      icon="el-icon-delete"
+                      circle
+                      @click="kmQuotationsdelRow(scope.row, scope.$index)"
+                    />
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
         </el-tab-pane>
         <el-tab-pane :label="$t('resources.availableDate')" name="available">
           <div class="tab-wrapper">
@@ -417,6 +487,13 @@ export default {
         dateList: [],
         truckId: "",
         status: "",
+        kmQuotations: [
+          {
+            minKm: 0,
+            maxKm: null,
+            unitPrice: null,
+          },
+        ],
       },
       provinceList: [],
       cityList: [],
@@ -590,6 +667,7 @@ export default {
         },
       ];
       self.editDialog = true;
+      self.allChecked = false;
     },
     // 编辑按钮
     edit(row) {
@@ -622,6 +700,7 @@ export default {
         truckId: item.truckId,
         status: item.status,
         ftlType: item.ftlType,
+        kmQuotations: item.kmQuotations,
       };
       // 读取waitFrom和waitTo
       getCityListGroup(item.toProvinceCodes).then(res => {
@@ -634,17 +713,27 @@ export default {
       this.$forceUpdate();
       self.editDialog = true;
       self.thisId = item.id;
+      self.checkAllCheck();
     },
     // 提交修改
     confirmIt() {
       let form = JSON.parse(JSON.stringify(self.form));
       this.$refs.form.validate(valid => {
         if (valid) {
-          // 验证cityList是否有空值
-          for (let i of form.cityList) {
-            if (i.fromCityCode === "" || i.toCityCodes.length === 0 || i.charge === "") {
-              self.editActive = "quotation";
-              return self.$message.warning(self.$t("resources.quotationIsRequired"));
+          if (form.ftlType == 0) {
+            // 验证cityList是否有空值
+            for (let i of form.cityList) {
+              if (i.fromCityCode === "" || i.toCityCodes.length === 0 || i.charge === "") {
+                self.editActive = "quotation";
+                return self.$message.warning(self.$t("resources.quotationIsRequired"));
+              }
+            }
+          } else {
+            for (let x of form.kmQuotations) {
+              if (!x.unitPrice) {
+                self.editActive = "quotation";
+                return self.$message.warning(self.$t("resources.quotationIsRequired"));
+              }
             }
           }
           self.editLoading = true;
@@ -729,6 +818,13 @@ export default {
         dateList: [],
         truckId: "",
         status: "",
+        kmQuotations: [
+          {
+            minKm: 0,
+            maxKm: null,
+            unitPrice: null,
+          },
+        ],
       };
       self.sendDateList = [];
       this.$refs.form.resetFields();
@@ -897,7 +993,7 @@ export default {
                 this.$forceUpdate();
               })
               .catch(res => {
-                self.$message.info("距离计算失败，正在重试...");
+                self.$message.info(self.$t("resources.Distancecalculationfailedretrying"));
                 setTimeout(() => {
                   self.toProvinceCodeChange(e);
                 }, 1500);
@@ -950,7 +1046,7 @@ export default {
             this.$forceUpdate();
           })
           .catch(() => {
-            self.$message.info("距离计算失败，正在重试...");
+            self.$message.info(self.$t("resources.Distancecalculationfailedretrying"));
             setTimeout(() => {
               self.formCityChange(row);
             }, 1500);
@@ -1009,6 +1105,100 @@ export default {
     },
     search(e) {
       console.log(e);
+    },
+    checkNumInt(val, index) {
+      val = val.split(".")[0];
+      self.form.kmQuotations[index].unitPrice = val;
+    },
+    // 最大值更变
+    maxNumberChange(val, index) {
+      let list = JSON.parse(JSON.stringify(self.form.kmQuotations));
+      let sameCount = 0;
+      val = parseInt(val);
+      // 数量过滤
+      for (let x in list) {
+        if (val == list[x].minKm || val == list[x].maxKm) {
+          sameCount++;
+          if (sameCount > 2) {
+            return self.$message.warning("error_1");
+          }
+        }
+      }
+      // 如果小于起始值
+      if (val < list[index].minKm) {
+        return self.$message.warning(self.$t("resources.Mustnotbelessthantotalkilometers"));
+      } else if (val === "") {
+        return self.$message.warning(self.$t("resources.Cannotbeempty"));
+      }
+      // 操作队列
+      // 有更大值
+      if (list[index + 1] && val < list[index + 1].maxKm) {
+        list[index + 1].minKm = val + 1;
+      } else if (list[index + 1] && list[index + 1].maxKm === "") {
+        // 下一位为最大值
+        list[index + 1].minKm = val + 1;
+      } else if (!list[index + 1]) {
+        // 无更大值
+        list.push({
+          minKm: val + 1,
+          maxKm: "",
+          unitPrice: null,
+        });
+      } else {
+        return self.$message.warning(self.$t("resources.Non-conformingvalues"));
+      }
+      // 重新排序
+      // list.sort((a, b) => {
+      //   if (a.minKm < b.minKm) {
+      //     return -1;
+      //   } else if (a.minKm === b.minKm) {
+      //     return 0;
+      //   } else {
+      //     return 1;
+      //   }
+      // });
+      // 设置最大值
+      // for (let x in list) {
+      //   if (x != list.length - 1) {
+      //     list[x].maxKm = list[parseInt(x) + 1].minKm;
+      //   }
+      // }
+      // list[list.length - 1].maxKm = "";
+      self.form.kmQuotations = list;
+    },
+    changeFtlType(val) {
+      if (val == 1) {
+        if (!self.form.kmQuotations || self.form.kmQuotations.length < 1) {
+          self.form.kmQuotations = [
+            {
+              minKm: 0,
+              maxKm: null,
+              unitPrice: null,
+            },
+          ];
+        }
+      } else {
+        if (!self.form.cityList || self.form.cityList.length < 1) {
+          self.form.cityList = [
+            {
+              fromCityCode: "",
+              toCityCodes: [],
+              charge: "",
+              transitTime: "",
+            },
+          ];
+        }
+      }
+    },
+    kmQuotationsdelRow(row, index) {
+      let list = JSON.parse(JSON.stringify(self.form.kmQuotations));
+      list.splice(index, 1);
+      if (index == list.length) {
+        list[list.length - 1].maxKm = "";
+      } else {
+        list[index].minKm = list[index - 1].maxKm + 1;
+      }
+      self.form.kmQuotations = list;
     },
   },
   created() {

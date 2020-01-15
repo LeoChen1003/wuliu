@@ -43,10 +43,11 @@
           <el-form-item prop="senderAddress" :label="$t('booking.pickupTime')">
             <div class="inputWidth" style="display:flex;">
               <el-date-picker
-                v-model="bookingForm.senderAddress.pickAt"
+                v-model="pickAt"
                 type="date"
                 disabled
                 value-format="yyyy-MM-dd"
+                format="dd-MM-yyyy"
                 style="margin-right:5px;"
                 :placeholder="$t('placeholder.chooseDate')"
               >
@@ -423,6 +424,7 @@
 import { ftlCharge, placeOrder, placeOrderLTL, calculationOrder } from "../../api/booking";
 import { getTruckType, findDistrictFullList, getGoodsProperty, getSenderList, getTransportList, myAccount } from "../../api/data";
 import path from "path";
+import { getNormalTime } from "../../utils/index";
 
 let self;
 
@@ -622,7 +624,11 @@ export default {
     };
   },
   // 监听属性 类似于data概念
-  computed: {},
+  computed: {
+    pickAt() {
+      return getNormalTime(self.bookingForm.senderAddress.pickAt);
+    },
+  },
   // 监控data中的数据变化
   watch: {
     shareTruck(val) {

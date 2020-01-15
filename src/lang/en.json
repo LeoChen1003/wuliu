@@ -385,7 +385,17 @@
     "volumeWeight": "Volume Weight",
     "Quantity": "Quantity",
     "discountRate": "Discount Rate",
-    "search": "Search"
+    "search": "Search",
+    "DistanceRange": "Distance range (KM)",
+    "pricePerKm": "Price /per KM",
+    "quotationIsRequired": "Content cannot be empty",
+    "Cannotbelessthanthetotalnumberofpieces": "Cannot be less than the total number of pieces",
+    "Distancecalculationfailedretrying": "Distance calculation failed, retrying ...",
+    "Mustnotbelessthantotalkilometers": "Must not be less than total kilometers",
+    "Cannotbeempty": "Can not be empty",
+    "Non-conformingvalues": "Non-conforming values",
+    "CanNotlessthanthetotalnumber": "Can Not less than the total number",
+    "Quotationcannotbeempty": "Quotation cannot be empty"
   },
   "billing": {
     "billingStatus": "Status",

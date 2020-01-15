@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 
 import "normalize.css/normalize.css"; // a modern alternative to CSS resets
 
-import Element from "element-ui";
+import Element from "lg-element-ui";
 import "./styles/element-variables.scss";
 
 import "@/styles/index.scss"; // global css
@@ -23,6 +23,7 @@ import "xe-utils";
 import VXETable from "vxe-table";
 import "vxe-table/lib/index.css";
 import "./theme/index.css";
+import BcPicker from "./components/bcPicker/index";
 
 /**
  * If you don't want to use mock-server
@@ -43,6 +44,8 @@ Vue.use(Element, {
   size: Cookies.get("size") || "medium", // set element-ui default size
   i18n: (key, value) => i18n.t(key, value),
 });
+
+Vue.use(BcPicker);
 
 // register global utility filters
 Object.keys(filters).forEach(key => {

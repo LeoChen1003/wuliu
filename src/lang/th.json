@@ -312,7 +312,7 @@
     "VAS": "บริการเสริม"
   },
   "resources": {
-    "add": "เพิ่มเส้นทาง",
+    "add": "เพิ่ม",
     "driver_name": "พนักงานขับรถ",
     "phoneNo": "เบอร์มือถือ",
     "status": "สถานะ",
@@ -383,7 +383,17 @@
     "Quantity": "จำนวนชิ้น",
     "discountRate": "อัตราส่วนลด",
     "search": "ค้นหา",
-    "priceCoefficient": "ตัวแปลงปริมาตร"
+    "priceCoefficient": "ตัวแปลงปริมาตร",
+    "DistanceRange": "ระยะทาง(KM)",
+    "pricePerKm": "ราคา/กิโลเมตร",
+    "quotationIsRequired": "เนื้อหาไม่สามารถว่างเปล่า",
+    "Cannotbelessthanthetotalnumberofpieces": "ไม่สามารถน้อยกว่าจำนวนของข้อความทั้งหมด",
+    "Distancecalculationfailedretrying": "การคำนวณระยะทางล้มเหลว กำลังลองอีกครั้ง...",
+    "Mustnotbelessthantotalkilometers": "ไม่สามารถน้อยกว่ากิโลเมตรรวม",
+    "Cannotbeempty": "ไม่สามารถปล่อยว่าง",
+    "Non-conformingvalues": "ข้อมูลไม่สอดคล้องกัน",
+    "CanNotlessthanthetotalnumber": "ไม่สามารถน้อยกว่าจำนวนชิ้นทั้งหมด",
+    "Quotationcannotbeempty": "ใบเสนอราคาไม่สามารถว่างได้"
   },
   "billing": {
     "billingStatus": "สถานะ",
