@@ -265,7 +265,7 @@
                     </el-table-column>
                     <el-table-column :label="$t('booking.cargoList')">
                       <template slot-scope="scope">
-                        <div v-for="(item, index) in scope.propertyList" :key="index">
+                        <div v-for="(item, index) in scope.row.propertyList" :key="index">
                           <div v-if="item.name">
                             {{ propertyObj[item.propertyType] }} {{ item.name }} {{ item.number }} {{ sizeObj[item.sizeType] }}
                             {{ item.weightOfEach }}
@@ -303,7 +303,7 @@
               </div>
             </el-tab-pane>
             <el-tab-pane :label="$t('tracking.orderLog')" name="log">
-              <div class="rightDetail">
+              <div class="rightDetail" :style="`max-height:${detailHeight + 40}px;`">
                 <el-timeline :reverse="true" style="margin-top:15px;">
                   <el-timeline-item v-for="(item, index) in logs" :key="index" :timestamp="item.createdAt">
                     {{ item.introduce }}
@@ -312,7 +312,7 @@
               </div>
             </el-tab-pane>
             <el-tab-pane :label="'签收凭证'" name="r">
-              <div class="rightDetail"></div>
+              <div class="rightDetail" :style="`max-height:${detailHeight + 40}px;`"></div>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -737,7 +737,7 @@ div::-webkit-scrollbar {
     font-size: 12px;
     margin-left: 5px;
     color: #aaa;
-    width: 19px;
+    width: 25px;
     text-align: right;
   }
 

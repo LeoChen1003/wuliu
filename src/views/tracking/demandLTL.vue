@@ -289,7 +289,7 @@
                       </el-table-column>
                       <el-table-column :label="$t('booking.cargoList')">
                         <template slot-scope="scope">
-                          <div v-for="(item, index) in scope.propertyList" :key="index">
+                          <div v-for="(item, index) in scope.row.propertyList" :key="index">
                             <div v-if="item.name">
                               {{ propertyObj[item.propertyType] }} {{ item.name }} {{ item.number }} {{ sizeObj[item.sizeType] }}
                               {{ item.weightOfEach }}
@@ -302,11 +302,21 @@
                   <div style="margin-top:10px;text-align:center;">
                     <el-button
                       type="primary"
-                      v-if="thisRow.status == 'WAIT_DEMAND_TO_ACCEPT'"
-                      :disabled="!permissions.DemandOrderManage"
-                      @click="toShowConfirm(thisRow)"
-                      >{{ $t("tracking.confirm") }}</el-button
+                      style="width:140px;text-align:center; padding: 10px 5px;margin-left: 8%;"
+                      v-if="tabActive === 'WAIT_SEND_TO_HUB'"
+                      @click="sendToHub(thisRow)"
                     >
+                      {{ $t("tracking.sendCargoToHUB") }}
+                    </el-button>
+                    <el-button
+                      type="primary"
+                      style="width:140px;text-align:center; padding: 10px 5px;margin-left: 8%;"
+                      v-if="tabActive === 'WAIT_HUB_TO_PUT'"
+                      @click="print(thisRow)"
+                      :loading="thisRow.loading1 == 1"
+                    >
+                      {{ $t("tracking.print") }}
+                    </el-button>
                     <el-button
                       type="primary"
                       :disabled="!permissions.DemandOrderManage"
@@ -327,7 +337,7 @@
                 </div>
               </el-tab-pane>
               <el-tab-pane :label="$t('tracking.orderLog')" name="log">
-                <div class="rightDetail">
+                <div class="rightDetail" :style="`max-height:${detailHeight + 40}px;`">
                   <el-timeline :reverse="true" style="margin-top:15px;">
                     <el-timeline-item v-for="(item, index) in logs" :key="index" :timestamp="item.createdAt">
                       {{ item.introduce }}
@@ -336,7 +346,7 @@
                 </div>
               </el-tab-pane>
               <el-tab-pane :label="'签收凭证'" name="r">
-                <div class="rightDetail"></div>
+                <div class="rightDetail" :style="`max-height:${detailHeight + 40}px;`"></div>
               </el-tab-pane>
             </el-tabs>
           </div>
@@ -499,7 +509,7 @@ import {
   confirmRD,
   orderRating,
 } from "../../api/tracking.js";
-import { getGoodsProperty, getTruckType } from "../../api/data.js";
+import { getGoodsProperty, getTruckType, getExtraServer } from "../../api/data.js";
 import { getToken } from "../../utils/auth";
 import { mapGetters } from "vuex";
 
@@ -591,6 +601,7 @@ export default {
       thisRow: null,
       tableHeight: 0,
       detailHeight: 0,
+      serveObj: {},
     };
   },
   // 监听属性 类似于data概念
@@ -626,6 +637,13 @@ export default {
       self.propertyObj = propertyObj;
       self.sizeObj = sizeObj;
       self.unitObj = unitObj;
+    });
+    getExtraServer().then(res => {
+      let serveObj = new Object();
+      for (let i of res.data) {
+        serveObj[i.key] = i.trans;
+      }
+      self.serveObj = serveObj;
     });
     getTruckType().then(res => {
       self.truckType = res.data.categories;
@@ -678,7 +696,6 @@ export default {
     // 返回文件确认
     rdConfirmShow(row) {
       self.rdRow = row;
-      console.log(row);
       if (row.photoIds) {
         getImg(row.photoIds).then(res => {
           let arr = [];
@@ -748,7 +765,6 @@ export default {
         self.show_confirm = false;
         for (let i in self.gridData) {
           self.proList1 = self.gridData[i].receiverAddressList[0];
-          console.log(self.proList1);
           for (let j in self.proList1.propertyList) {
             self.totalNumber += self.proList1.propertyList[j].number;
           }
@@ -777,7 +793,6 @@ export default {
           i.loading1 = 0;
         }
         self.data = res.data;
-        console.log(self.data.content);
         this.page = self.data.number ? self.data.number : 0;
         if (cb) {
           cb();
@@ -857,7 +872,6 @@ export default {
     orderLog(id) {
       getOrderLog(id).then(res => {
         self.logs = res.data;
-        self.logDialog = true;
       });
     },
     print(row, index) {
@@ -934,6 +948,8 @@ export default {
       font-size: 12px;
       margin-left: 5px;
       color: #aaa;
+      width: 25px;
+      text-align: right;
     }
     .red {
       color: red;

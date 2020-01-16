@@ -158,3 +158,12 @@ export function getHub() {
     method: "post",
   });
 }
+
+// 获取距离和时间
+export function getdistanceandtranstime(params) {
+  return request({
+    url: "/api/demand/order/search/distanceandtranstime",
+    method: "get",
+    params,
+  });
+}
