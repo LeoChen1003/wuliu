@@ -28,7 +28,7 @@
             <bc-picker @changeBCtime="dateChange" style="margin-right:5px;"></bc-picker>
           </el-form-item>
           <el-form-item :label="$t('market.truckType')">
-            <el-select v-model="searchForm.truckCategory" filterable class="formSelect" placeholder="Truck type">
+            <el-select v-model="searchForm.truckCategory" clearable filterable class="formSelect" placeholder="Truck type">
               <el-option
                 v-for="(item, index) in truckTypes.categories"
                 :key="index"
@@ -462,9 +462,9 @@ export default {
       });
     },
     searchIt() {
-      if (self.searchForm.pickUpRegion == "" || self.searchForm.deliveryRegion == "" || self.searchForm.pickUpDate == "") {
-        return self.$message.warning(self.$t("market.theSearchTermCannotBeEmpty"));
-      }
+      // if (self.searchForm.pickUpRegion == "" || self.searchForm.deliveryRegion == "" || self.searchForm.pickUpDate == "") {
+      //   return self.$message.warning(self.$t("market.theSearchTermCannotBeEmpty"));
+      // }
       self.data = {};
       self.loadData();
     },
