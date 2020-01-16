@@ -187,7 +187,7 @@
                   @focus="clearSelect('pk')"
                   :loading="loading"
                 >
-                  <el-option v-for="item in pickUpRegionList" :key="item.code" :label="item.fullname" :value="item.code">
+                  <el-option v-for="(item, index) in pickUpRegionList" :key="index" :label="item.fullname" :value="item.code">
                   </el-option>
                 </el-select>
                 <div
@@ -226,7 +226,8 @@
                 :remote-method="pickUpMethod"
                 :loading="loading"
               >
-                <el-option v-for="item in delRegionList" :key="item.code" :label="item.fullname" :value="item.code"> </el-option>
+                <el-option v-for="(item, index) in delRegionList" :key="index" :label="item.fullname" :value="item.code">
+                </el-option>
               </el-select>
             </el-form-item>
             <el-form-item prop="pickUpDate">
@@ -544,7 +545,13 @@
 // 例如：import 《组件名称》 from '《组件路径》';
 import { mapGetters } from "vuex";
 import { ftlLine, ftlLines, ltlLine } from "../../../api/booking";
-import { getTruckType, findDistrictFullList, findDistrictOfHubFullList, getGoodsProperty } from "../../../api/data";
+import {
+  getTruckType,
+  findDistrictFullList,
+  findDistrictOfHubFullList,
+  getGoodsProperty,
+  getdistanceandtranstime,
+} from "../../../api/data";
 import { getBcTime, getTime, parseTime } from "../../../utils/index";
 import Search from "@/components/HeaderSearch";
 
@@ -1086,6 +1093,8 @@ export default {
       showDisInfo: false,
       mapStart: "", //地图起始点
       mapEnd: "", //地图终点
+      mapStartCode: "", //地图起始点
+      mapEndCode: "", //地图终点
       locationLoading: false,
       cargoListDialog: false,
       cargoTip: [
@@ -1197,10 +1206,10 @@ export default {
         cb();
       }
     },
-    getDis(start, end, truckType) {
+    getDis(start, end, truckType, startCode, endCode) {
       self.mapMode = true;
       if (!map) {
-        return self.initMaps(self.getDis(start, end, truckType));
+        return self.initMaps(self.getDis(start, end, truckType, startCode, endCode));
       }
       if (!directionsService) {
         directionsService = new google.maps.DirectionsService();
@@ -1221,35 +1230,15 @@ export default {
 
           directionsRenderer.setDirections(result);
 
-          // 卡车速度
-          let speed;
-          if (truckType !== "") {
-            if (truckType == 4) {
-              speed = 70;
-            } else if (truckType == 6 || truckType == 10 || truckType == 12) {
-              speed = 60;
-            } else if (truckType == 18 || truckType == 22) {
-              speed = 50;
-            } else {
-              return self.$message.error("Truck type ERROR!");
-            }
-
-            // 休息次数
-            let count = parseInt(distance / 400);
-            if (count != 0 && count % 400 == 0) {
-              count--;
-            }
-            // 运输天数
-            let day = parseInt((distance / speed + count * 0.5) / 12);
-            if (day < 1) {
-              day = 1;
-            }
-
+          getdistanceandtranstime({
+            fromCode: startCode,
+            toCode: endCode,
+            truckGroup: truckType,
+          }).then(res => {
             self.disInfo = {
-              distance: distance,
-              days: day,
+              distance: res.data.distance,
+              days: res.data.transitTime,
             };
-
             // infoWindow样式悬浮框
             // let contentString = '<div class="info-box">' +
             //   '<div>123' +
@@ -1264,7 +1253,36 @@ export default {
             let Popup = self.createPopupClass();
             let popup = new Popup(middleStep, document.getElementById("content"));
             popup.setMap(map);
-          }
+          });
+
+          // // 卡车速度
+          // let speed;
+          // if (truckType !== "") {
+          //   if (truckType == 4) {
+          //     speed = 70;
+          //   } else if (truckType == 6 || truckType == 10 || truckType == 12) {
+          //     speed = 60;
+          //   } else if (truckType == 18 || truckType == 22) {
+          //     speed = 50;
+          //   } else {
+          //     return self.$message.error("Truck type ERROR!");
+          //   }
+
+          //   // 休息次数
+          //   let count = parseInt(distance / 400);
+          //   if (count != 0 && count % 400 == 0) {
+          //     count--;
+          //   }
+          //   // 运输天数
+          //   let day = parseInt((distance / speed + count * 0.5) / 12);
+          //   if (day < 1) {
+          //     day = 1;
+          //   }
+
+          //   self.disInfo = {
+          //     distance: distance,
+          //     days: day,
+          //   };
         } else {
           self.$notify({
             title: "Network Error",
@@ -1469,12 +1487,14 @@ export default {
         });
         let arr = obj.fullname.split("-");
         self.mapStart = arr[1] + arr[0];
+        self.mapStartCode = obj.code;
         let obj2 = {};
         obj2 = self.delRegionList.find(item => {
           return item.code === self.searchForm.deliveryRegion;
         });
         let arr2 = obj2.fullname.split("-");
         self.mapEnd = arr2[1] + arr2[0];
+        self.mapEndCode = obj2.code;
         self.searchSupply();
       }
     },
@@ -1605,7 +1625,7 @@ export default {
               .catch(el => {
                 self.searchloading = false;
               });
-            self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
+            self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup, self.mapStartCode, self.mapEndCode);
             self.showDisInfo = true;
           } else {
             searchForm.fromCityCode = searchForm.pickUpRegion;
@@ -1745,11 +1765,12 @@ export default {
       });
       let arr = obj.fullname.split("-");
       self.mapStart = arr[1] + arr[0];
-      if (self.logisticType == "FTL") {
+      self.mapStartCode = obj.code;
+      if (self.logisticType == "FTL" && self.searchForm.truckgroup) {
         if (self.mapEnd === "") {
           self.setCenter(self.mapStart);
         } else {
-          self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
+          self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup, self.mapStartCode, self.mapEndCode);
         }
       }
     },
@@ -1760,9 +1781,10 @@ export default {
       });
       let arr = obj.fullname.split("-");
       self.mapEnd = arr[1] + arr[0];
+      self.mapEndCode = obj.code;
       if (self.logisticType == "FTL") {
-        if (self.mapStart !== "") {
-          self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup);
+        if (self.mapStart !== "" && self.searchForm.truckgroup) {
+          self.getDis(self.mapStart, self.mapEnd, self.searchForm.truckgroup, self.mapStartCode, self.mapEndCode);
         }
       }
     },

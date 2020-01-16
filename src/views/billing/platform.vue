@@ -1,19 +1,7 @@
 <template>
   <div class="manage billing">
-    <div class="statusHeader">
-      <div class="date-box">
-        <span style="margin: 0 10px;">{{ $t("billing.date") }}</span>
-        <bc-picker :dateType="'daterange'" @changeBCtime="changeBCtime"></bc-picker>
-      </div>
-      <span style="margin: 0 10px 0 15px;">{{ $t("placeholder.amount") }}</span>
-      <el-input type="number" v-model.number="amount" style="width:200px;"></el-input>
-      <span style="margin: 0 10px 0 15px;">{{ $t("billing.member") }}</span>
-      <el-input v-model="member" style="width:200px;"></el-input>
-      <el-button style="margin-left:10px;width:100px;" @click="searchIt">{{ $t("billing.search") }}</el-button>
-      <!-- <el-button @click="cancelIt">{{ $t("billing.cancel") }}</el-button> -->
-    </div>
     <div class="content">
-      <div>
+      <div style="height:100%;">
         <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
           <el-tab-pane name="DEFAULT">
             <span slot="label">
@@ -45,77 +33,91 @@
         </el-tabs>
       </div>
       <div class="container">
-        <div class="center">
-          <el-table :data="dataList" highlight-current-row @current-change="handleCurrentChange" border>
-            <el-table-column prop="operateAt" width="100" :label="$t('billing.date')">
-              <template slot-scope="scope">
-                {{ scope.row.operateAt.slice(0, 10) + " " + scope.row.operateAt.slice(11, 19) }}
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('billing.description')">
-              <template slot-scope="scope">
-                <div>{{ scope.row.financeAccountType }}</div>
-                <div>
-                  {{ scope.row.site.type == "COMPANY" ? scope.row.site.companyName : scope.row.site.humanName }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="amount" :label="$t('billing.amount')">
-              <template slot-scope="scope">
-                {{ scope.row.amount }}
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-pagination
-            style="margin-top:10px;text-align: center;margin-bottom:50px;"
-            background
-            :page-sizes="[1, 5, 10, 20, 50]"
-            :page-size="pagesize"
-            @size-change="pageSizeChange"
-            :current-page.sync="page.currentPage"
-            @current-change="pageChange"
-            layout="prev, pager, next, jumper"
-            :total="page.total"
-          ></el-pagination>
+        <div class="statusHeader">
+          <div class="date-box">
+            <span style="margin-right:10px;">{{ $t("billing.date") }}</span>
+            <bc-picker :dateType="'daterange'" @changeBCtime="changeBCtime"></bc-picker>
+          </div>
+          <span style="margin: 0 10px 0 15px;">{{ $t("placeholder.amount") }}</span>
+          <el-input type="number" v-model.number="amount" style="width:200px;"></el-input>
+          <span style="margin: 0 10px 0 15px;">{{ $t("billing.member") }}</span>
+          <el-input v-model="member" style="width:200px;"></el-input>
+          <el-button style="margin-left:10px;width:100px;" @click="searchIt">{{ $t("billing.search") }}</el-button>
+          <!-- <el-button @click="cancelIt">{{ $t("billing.cancel") }}</el-button> -->
         </div>
-        <el-card class="right" shadow="never">
-          <el-image :src="thisRow.resource.path" style="height:400px;" :preview-src-list="thisRow.preViewList" v-if="thisRow">
-            <!-- <div slot="error"
+        <div class="containerContent">
+          <div class="center">
+            <el-table :data="dataList" highlight-current-row @current-change="handleCurrentChange" border>
+              <el-table-column prop="operateAt" width="100" :label="$t('billing.date')">
+                <template slot-scope="scope">
+                  {{ scope.row.operateAt.slice(0, 10) + " " + scope.row.operateAt.slice(11, 19) }}
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('billing.description')">
+                <template slot-scope="scope">
+                  <div>{{ scope.row.financeAccountType }}</div>
+                  <div>
+                    {{ scope.row.site.type == "COMPANY" ? scope.row.site.companyName : scope.row.site.humanName }}
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="amount" :label="$t('billing.amount')">
+                <template slot-scope="scope">
+                  {{ scope.row.amount }}
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination
+              style="margin-top:10px;text-align: center;margin-bottom:50px;"
+              background
+              :page-sizes="[1, 5, 10, 20, 50]"
+              :page-size="pagesize"
+              @size-change="pageSizeChange"
+              :current-page.sync="page.currentPage"
+              @current-change="pageChange"
+              layout="prev, pager, next, jumper"
+              :total="page.total"
+            ></el-pagination>
+          </div>
+          <el-card class="right" shadow="never">
+            <el-image :src="thisRow.resource.path" style="height:400px;" :preview-src-list="thisRow.preViewList" v-if="thisRow">
+              <!-- <div slot="error"
                  class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div> -->
-          </el-image>
-          <div class="note-box" v-if="thisRow">{{ $t("billing.note") }}:{{ thisRow.remarks }}</div>
-          <div class="handle-box" v-if="thisRow && (tabActive == 'ACCEPT' || tabActive == 'REJECTED')">
-            <el-form label-width="150px" label-position="left" size="small">
-              <el-form-item :label="$t('billing.confirmedBy')">
-                {{ thisRow.handledName }}
-              </el-form-item>
-              <el-form-item :label="$t('billing.date')">
-                {{ thisRow.handledAt }}
-              </el-form-item>
-              <el-form-item :label="$t('billing.note')" v-if="tabActive == 'REJECTED'">
-                {{ thisRow.handleNote }}
-              </el-form-item>
-            </el-form>
-          </div>
-          <div class="btn-box" v-if="thisRow && tabActive == 'DEFAULT'">
-            <el-button type="primary" :disabled="!permissions.PlatformFianceConfirm" @click="confirmDialog = true">{{
-              $t("billing.confirm")
-            }}</el-button>
-            <el-button
-              type="info"
-              :disabled="!permissions.PlatformFianceConfirm"
-              @click="
-                () => {
-                  refuseVisible = true;
-                  reason = '';
-                }
-              "
-              >{{ $t("billing.reject") }}</el-button
-            >
-          </div>
-        </el-card>
+            </el-image>
+            <div class="note-box" v-if="thisRow">{{ $t("billing.note") }}:{{ thisRow.remarks }}</div>
+            <div class="handle-box" v-if="thisRow && (tabActive == 'ACCEPT' || tabActive == 'REJECTED')">
+              <el-form label-width="150px" label-position="left" size="small">
+                <el-form-item :label="$t('billing.confirmedBy')">
+                  {{ thisRow.handledName }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.date')">
+                  {{ thisRow.handledAt }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.note')" v-if="tabActive == 'REJECTED'">
+                  {{ thisRow.handleNote }}
+                </el-form-item>
+              </el-form>
+            </div>
+            <div class="btn-box" v-if="thisRow && tabActive == 'DEFAULT'">
+              <el-button type="primary" :disabled="!permissions.PlatformFianceConfirm" @click="confirmDialog = true">{{
+                $t("billing.confirm")
+              }}</el-button>
+              <el-button
+                type="info"
+                :disabled="!permissions.PlatformFianceConfirm"
+                @click="
+                  () => {
+                    refuseVisible = true;
+                    reason = '';
+                  }
+                "
+                >{{ $t("billing.reject") }}</el-button
+              >
+            </div>
+          </el-card>
+        </div>
       </div>
     </div>
     <el-dialog :title="$t('billing.refuseTitle')" :visible.sync="refuseVisible" center width="600px">
@@ -320,9 +322,8 @@ export default {
   height: 100%;
   .statusHeader {
     display: flex;
-    padding: 0px 20px;
     box-sizing: border-box;
-    height: 50px;
+    margin-bottom: 20px;
     align-items: center;
   }
   .timePicker {
@@ -331,15 +332,19 @@ export default {
     padding-left: 30px;
   }
   .content {
-    padding-left: 25px;
+    padding-left: 20px;
     display: flex;
-    height: calc(100% - 50px);
+    height: 100%;
     .container {
-      display: flex;
-      padding-left: 20px;
-      padding-top: 20px;
       width: 100%;
-      overflow: scroll;
+      background: #fff;
+      padding: 20px;
+      height: calc(100vh - 91px);
+      overflow: auto;
+      box-sizing: border-box;
+      .containerContent {
+        display: flex;
+      }
       .center {
         width: 49%;
         margin-right: 1%;
@@ -377,10 +382,22 @@ export default {
   display: flex;
   justify-content: flex-end;
 
+  .text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 150px;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 16px;
+  }
+
   .badge {
     font-size: 12px;
     margin-left: 5px;
     color: #aaa;
+    width: 25px;
+    text-align: right;
   }
 
   .red {
@@ -422,18 +439,48 @@ div::-webkit-scrollbar {
 }
 </style>
 
-<style>
-.billing .el-tabs--left .el-tabs__header.is-left {
-  margin-right: 0px;
-  width: 211px;
-}
-.billing .el-tabs--left .el-tabs__active-bar.is-left {
-  width: 3px;
-}
-.billing .el-tabs--left .el-tabs__nav-wrap.is-left::after,
-.el-tabs--left .el-tabs__nav-wrap.is-right::after,
-.el-tabs--right .el-tabs__nav-wrap.is-left::after,
-.el-tabs--right .el-tabs__nav-wrap.is-right::after {
-  width: 3px;
+<style lang="scss">
+.billing {
+  .el-tabs--left .el-tabs__item.is-left {
+    text-align: left;
+    height: 50px;
+  }
+
+  .el-tabs__content {
+    background-color: #fff;
+  }
+
+  .el-tabs__active-bar {
+    width: 0;
+    height: 0;
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__active-bar.is-left {
+    width: 0;
+    height: 0;
+  }
+
+  .el-tabs__nav-wrap::after {
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__nav-wrap.is-left {
+    width: 185px;
+    padding-top: 20px;
+  }
+
+  .el-tabs--left .el-tabs__header.is-left {
+    margin-left: -10px;
+    background-color: #fff;
+  }
+
+  .el-table__header-wrapper {
+    background-color: #ccc !important;
+  }
+
+  .el-table__header {
+    background-color: #ccc !important;
+  }
 }
 </style>

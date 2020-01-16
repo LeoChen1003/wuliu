@@ -1,102 +1,82 @@
-
 <template>
-  <div class="manage cardFix">
-    <!-- <div class="statusHeader">
-      <el-button type="primary">{{$t('tracking.releaseAReturnTruck')}}</el-button>
-    </div> -->
-    <el-input v-model="orderNo" style="width: 200px;margin-left: 400px;" :placeholder="$t('tracking.trackingNo')"></el-input>
-    <el-button type="primary" style="margin-left:20px;" @click="search">{{$t('tracking.search')}}</el-button>
-    <div style="display:flex;box-sizing:border-box;padding:0 20px;margin-top:20px;">
+  <div class="manage cardFix tracking">
+    <div style="display:flex;box-sizing:border-box;padding-left:20px;height:100%;">
       <!-- 导航 -->
-      <div style="height:100%;padding-right:18px;">
-                <div class="statusText">{{ $t("billing.billingStatus") }}</div>
-                <el-tabs v-model="tabActive" tab-position="left" @tab-click="tabChange" style="height:calc(100% - 50px);">
-                <el-tab-pane name="WAIT_SEND_TO_HUB">
-                    <span slot="label">
-                    <div class="tabLabel">
-                        <div class="text">
-                        {{$t('tracking.toBeSentCargoToHub')}}<sub class="badge">{{ orderStatus.WAIT_SEND_TO_HUB }}</sub>
-                        </div>
-                    </div>
-                    </span>
-                </el-tab-pane>
-                <el-tab-pane name="WAIT_HUB_TO_PUT">
-                    <span slot="label">
-                    <div class="tabLabel">
-                        <div class="text">
-                        {{$t('tracking.toBeconfirmedReceiptByHub')}}<sub class="badge">{{ orderStatus.WAIT_HUB_TO_PUT }}</sub>
-                        </div>
-                    </div>
-                    </span>
-                </el-tab-pane>
-                <el-tab-pane name="HUB_PUT">
-                    <span slot="label">
-                    <div class="tabLabel">
-                        <div class="text">
-                        {{$t('tracking.cargoArrivedAtHUB')}}<sub class="badge red">{{ orderStatus.HUB_PUT }}</sub>
-                        </div>
-                    </div>
-                    </span>
-                </el-tab-pane>
-                <el-tab-pane name="WILL_PICK">
-                    <span slot="label">
-                    <div class="tabLabel">
-                        <div class="text">
-                        {{ $t("tracking.tobePickedUp") }}<sub class="badge red">{{ orderStatus.WILL_PICK }}</sub>
-                        </div>
-                    </div>
-                    </span>
-                </el-tab-pane>
-                <el-tab-pane name="SENDING">
-                    <span slot="label">
-                    <div class="tabLabel">
-                        <div class="text">
-                        {{ $t("tracking.intransit") }}<sub class="badge">{{ orderStatus.SENDING }}</sub>
-                        </div>
-                    </div>
-                    </span>
-                </el-tab-pane>
-                <el-tab-pane name="WILL_RETURN">
-                    <span slot="label">
-                    <div class="tabLabel">
-                        <div class="text">
-                        {{ $t("tracking.documentTobereturned") }}<sub class="badge">{{ orderStatus.WILL_RETURN }}</sub>
-                        </div>
-                    </div>
-                    </span>
-                </el-tab-pane>
-                <el-tab-pane name="COMPLETE">
-                    <span slot="label">
-                    <div class="tabLabel">
-                        <div class="text">
-                        {{ $t("tracking.completed") }}<sub class="badge">{{ orderStatus.COMPLETE }}</sub>
-                        </div>
-                    </div>
-                    </span>
-                </el-tab-pane>
-                <el-tab-pane> </el-tab-pane>
-                </el-tabs>
-            </div>
+      <div style="height:100%;" class="nav">
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="tabChange" style="height:100%;">
+          <el-tab-pane name="WAIT_SEND_TO_HUB">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">
+                  {{ $t("tracking.toBeSentCargoToHub") }}<sub class="badge">{{ orderStatus.WAIT_SEND_TO_HUB }}</sub>
+                </div>
+              </div>
+            </span>
+          </el-tab-pane>
+          <el-tab-pane name="WAIT_HUB_TO_PUT">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">
+                  {{ $t("tracking.toBeconfirmedReceiptByHub") }}<sub class="badge">{{ orderStatus.WAIT_HUB_TO_PUT }}</sub>
+                </div>
+              </div>
+            </span>
+          </el-tab-pane>
+          <el-tab-pane name="HUB_PUT">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">
+                  {{ $t("tracking.cargoArrivedAtHUB") }}<sub class="badge red">{{ orderStatus.HUB_PUT }}</sub>
+                </div>
+              </div>
+            </span>
+          </el-tab-pane>
+          <el-tab-pane name="WILL_PICK">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">
+                  {{ $t("tracking.tobePickedUp") }}<sub class="badge red">{{ orderStatus.WILL_PICK }}</sub>
+                </div>
+              </div>
+            </span>
+          </el-tab-pane>
+          <el-tab-pane name="SENDING">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">
+                  {{ $t("tracking.intransit") }}<sub class="badge">{{ orderStatus.SENDING }}</sub>
+                </div>
+              </div>
+            </span>
+          </el-tab-pane>
+          <el-tab-pane name="WILL_RETURN">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">
+                  {{ $t("tracking.documentTobereturned") }}<sub class="badge">{{ orderStatus.WILL_RETURN }}</sub>
+                </div>
+              </div>
+            </span>
+          </el-tab-pane>
+          <el-tab-pane name="COMPLETE">
+            <span slot="label">
+              <div class="tabLabel">
+                <div class="text">
+                  {{ $t("tracking.completed") }}<sub class="badge">{{ orderStatus.COMPLETE }}</sub>
+                </div>
+              </div>
+            </span>
+          </el-tab-pane>
+          <el-tab-pane> </el-tab-pane>
+        </el-tabs>
+      </div>
       <!-- 表格 -->
       <div class="container">
-        <!-- <div class="container-header">
-          <div>
-            <el-select v-model="searchForm.province"
-                       filterable
-                       class="formSelect"
-                       :placeholder="$t('tracking.destination')">
-              <el-option v-for="(item,index) in provinceList"
-                         :key='index'
-                         :label="item.name"
-                         :value="item.code"></el-option>
-            </el-select>
-          </div>
-          <div>
-            <el-input prefix-icon="el-icon-search"></el-input>
-          </div>`
-          <el-button type="primary">{{$t('tracking.search')}}</el-button>
-        </div> -->
-        <el-table :data="data.content" v-loading="loading" border>
+        <div style="margin-bottom:20px;">
+          <el-input v-model="orderNo" style="width: 200px;" :placeholder="$t('tracking.trackingNo')"></el-input>
+          <el-button type="primary" style="margin-left:20px;" @click="search">{{ $t("tracking.search") }}</el-button>
+        </div>
+        <el-table :data="data.content" v-loading="loading" border :max-height="tableHeight">
           <el-table-column :label="$t('tracking.tracking')">
             <template slot-scope="scope">
               <el-button style="width:100%;text-align:left;" @click="orderLog(scope.row.order.id)">
@@ -157,7 +137,7 @@
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.pickupPoint')">
-            <template slot-scope="scope" v-if="scope.row.order.senderAddress!=null">
+            <template slot-scope="scope" v-if="scope.row.order.senderAddress != null">
               <div>
                 {{ scope.row.order.senderAddress.name }}
                 {{ scope.row.order.senderAddress.mobile }}
@@ -301,7 +281,14 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { getTruckType, getProvinceList, getCityList, getExtraServer, getGoodsProperty } from "../../api/data";
-import { confirmOrder, updateOrderInfo, rejectOrder, getOrderLTLPF, getOrderLogPF, getOrderLTLStatusPF } from "../../api/tracking.js";
+import {
+  confirmOrder,
+  updateOrderInfo,
+  rejectOrder,
+  getOrderLTLPF,
+  getOrderLogPF,
+  getOrderLTLStatusPF,
+} from "../../api/tracking.js";
 
 let self;
 export default {
@@ -351,7 +338,7 @@ export default {
         // WAIT_SUPPLY_TO_ACCEPT: 0,
         WAIT_SEND_TO_HUB: 0,
         WAIT_HUB_TO_PUT: 0,
-        HUB_PUT:0,
+        HUB_PUT: 0,
         WAITTING: 0,
         WILL_PICK: 0,
         WILL_RETURN: 0,
@@ -370,6 +357,7 @@ export default {
       },
       logs: [],
       orderNo: "",
+      tableHeight: 0,
     };
   },
   // 监听属性 类似于data概念
@@ -380,6 +368,9 @@ export default {
     self = this;
   },
   mounted() {
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 36 - 20 - 32 - 40;
+    });
     getProvinceList().then(res => {
       self.provinceList = res.data;
     });
@@ -421,7 +412,7 @@ export default {
     self.loadData();
   },
   methods: {
-    loadData(cb) { 
+    loadData(cb) {
       self.loading = true;
       let page = self.data.number ? self.data.number : 0;
       getOrderLTLPF({
@@ -436,7 +427,7 @@ export default {
         }
       });
       getOrderLTLStatusPF({
-          orderNo: self.orderNo
+        orderNo: self.orderNo,
       }).then(res => {
         self.orderStatus = res.data;
       });
@@ -505,9 +496,9 @@ export default {
         self.logDialog = true;
       });
     },
-    search(){
-        self.loadData();
-    }
+    search() {
+      self.loadData();
+    },
   },
 };
 </script>
@@ -515,21 +506,11 @@ export default {
 //@import url(); 引入公共css类
 .manage {
   height: 100%;
-  padding-top: 20px;
   box-sizing: border-box;
 }
 .statusHeader {
   display: flex;
   margin-bottom: 20px;
-}
-
-.statusText {
-  height: 50px;
-  border-bottom: 2px solid #dfe4ed;
-  margin-right: 9px;
-  box-sizing: border-box;
-  padding-bottom: 30px;
-  line-height: 50px;
 }
 
 .comfirmDialog {
@@ -541,7 +522,12 @@ export default {
 }
 
 .container {
-  width: 90%;
+  width: 100%;
+  background: #fff;
+  padding: 20px;
+  height: calc(100vh - 91px);
+  overflow: auto;
+  box-sizing: border-box;
 }
 
 .container-header {
@@ -557,10 +543,22 @@ export default {
   display: flex;
   justify-content: flex-end;
 
+  .text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 150px;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 16px;
+  }
+
   .badge {
     font-size: 12px;
     margin-left: 5px;
     color: #aaa;
+    width: 25px;
+    text-align: right;
   }
 
   .red {
@@ -571,7 +569,7 @@ export default {
   width: 100%;
 }
 </style>
-<style>
+<style lang="scss">
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
@@ -580,46 +578,48 @@ input::-webkit-inner-spin-button {
 .cardFix .el-card__body {
   padding: 5px 10px;
 }
-</style>
 
-.pl_manage{
-    height: 100%;
+.tracking .nav {
+  .el-tabs--left .el-tabs__item.is-left {
+    text-align: left;
+    height: 50px;
+  }
+
+  .el-tabs__content {
+    background-color: #fff;
+  }
+
+  .el-tabs__active-bar {
+    width: 0;
+    height: 0;
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__active-bar.is-left {
+    width: 0;
+    height: 0;
+  }
+
+  .el-tabs__nav-wrap::after {
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__nav-wrap.is-left {
+    width: 185px;
     padding-top: 20px;
-    box-sizing: border-box;
-    .statusText {
-        height: 50px;
-        border-bottom: 2px solid #dfe4ed;
-        margin-right: 9px;
-        box-sizing: border-box;
-        padding-bottom: 30px;
-        line-height: 50px;
-    }
-    .container {
-  width: 90%;
-}
-
-.container-header {
-  height: 50px;
-  display: flex;
-  align-items: center;
-  div {
-    margin-right: 20px;
-  }
-}
-
-.tabLabel {
-  display: flex;
-  justify-content: flex-end;
-
-  .badge {
-    font-size: 12px;
-    margin-left: 5px;
-    color: #aaa;
   }
 
-  .red {
-    color: red;
+  .el-tabs--left .el-tabs__header.is-left {
+    margin-left: -10px;
+    background-color: #fff;
   }
-}
+
+  .el-table__header-wrapper {
+    background-color: #ccc !important;
+  }
+
+  .el-table__header {
+    background-color: #ccc !important;
+  }
 }
 </style>

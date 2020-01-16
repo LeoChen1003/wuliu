@@ -345,6 +345,33 @@ export const asyncRoutes = [
         },
       },
       {
+        path: "setSupply",
+        component: () => import("@/views/member/setSupply"),
+        meta: {
+          title: "setSupply",
+          roles: ["DEMAND", "SUPPLY", "HUB"],
+          permission: "MemberInfo",
+        },
+      },
+      {
+        path: "setDemand",
+        component: () => import("@/views/member/setdemand"),
+        meta: {
+          title: "setDemand",
+          roles: ["DEMAND", "SUPPLY", "HUB"],
+          permission: "MemberInfo",
+        },
+      },
+      {
+        path: "setHub",
+        component: () => import("@/views/member/setHub"),
+        meta: {
+          title: "setHub",
+          roles: ["DEMAND", "SUPPLY", "HUB"],
+          permission: "MemberInfo",
+        },
+      },
+      {
         path: "toBeVerified",
         component: () => import("@/views/member/toBeVerified"),
         meta: {

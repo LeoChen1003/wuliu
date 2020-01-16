@@ -3,15 +3,15 @@
     <div class="content">
       <div>
         <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
-          <el-tab-pane name="GUARANTEE" :label="$t('billing.gaurantee')"> </el-tab-pane>
           <el-tab-pane name="FEE" :label="$t('billing.freight')"> </el-tab-pane>
+          <el-tab-pane name="GUARANTEE" :label="$t('billing.gaurantee')"> </el-tab-pane>
         </el-tabs>
       </div>
 
       <div class="container">
         <div class="timePicker">
           <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
-          <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
+          <el-button @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
         </div>
         <div class="center">
           <el-table :data="dataList" border>
@@ -70,7 +70,7 @@ let self;
 export default {
   data() {
     return {
-      tabActive: "GUARANTEE",
+      tabActive: "FEE",
       applyType: localStorage.getItem("curRole"),
       fromDate: getBcTime(getLastMonthTime(new Date())),
       toDate: getBcTime(parseTime(new Date().getTime(), "{y}-{m}-{d}")),
@@ -139,25 +139,17 @@ export default {
 //@import url(); 引入公共css类
 .manage {
   box-sizing: border-box;
-  .statusHeader {
-    display: flex;
-    padding: 0px 20px;
-    box-sizing: border-box;
-    height: 50px;
-    align-items: center;
-  }
   .timePicker {
     height: 42px;
     line-height: 40px;
-    padding-left: 30px;
     display: flex;
     align-items: center;
   }
   .content {
-    padding-left: 25px;
+    padding-left: 20px;
     display: flex;
-    height: calc(100% - 50px);
-    margin-top: 5px;
+    height: calc(100vh - 91px);
+    // margin-top: 5px;
     overflow: scroll;
     .container {
       padding-left: 20px;
@@ -166,7 +158,6 @@ export default {
       height: 100%;
       overflow: scroll;
       background-color: #fff;
-      margin-left: 10px;
       .center {
         width: 90%;
         margin-right: 1%;
@@ -187,58 +178,48 @@ export default {
 }
 </style>
 
-<style>
-.billing .el-tabs--left .el-tabs__header.is-left {
-  margin-right: 0px;
-  width: 211px;
-}
-.billing .el-tabs--left .el-tabs__active-bar.is-left {
-  width: 3px;
-}
-.billing .el-tabs--left .el-tabs__nav-wrap.is-left::after,
-.el-tabs--left .el-tabs__nav-wrap.is-right::after,
-.el-tabs--right .el-tabs__nav-wrap.is-left::after,
-.el-tabs--right .el-tabs__nav-wrap.is-right::after {
-  width: 3px;
-}
+<style lang="scss">
+.billing {
+  .el-tabs--left .el-tabs__item.is-left {
+    text-align: left;
+    height: 50px;
+  }
 
-.billing .el-tabs--left .el-tabs__item.is-left{
-  text-align: left;
-}
+  .el-tabs__content {
+    background-color: #fff;
+  }
 
-.billing .el-tabs__content{
-  background-color: #fff;
-}
+  .el-tabs__active-bar {
+    width: 0;
+    height: 0;
+    background-color: #fff;
+  }
 
-.billing .el-tabs__active-bar{
-  width: 0;
-  height: 0;
-  background-color: #fff;
-}
+  .el-tabs--left .el-tabs__active-bar.is-left {
+    width: 0;
+    height: 0;
+  }
 
-.billing .el-tabs--left .el-tabs__active-bar.is-left{
-  width: 0;
-  height: 0;
-}
+  .el-tabs__nav-wrap::after {
+    background-color: #fff;
+  }
 
-.billing .el-tabs__nav-wrap::after{
-  background-color: #fff;
-}
+  .el-tabs--left .el-tabs__nav-wrap.is-left {
+    width: 185px;
+    padding-top: 20px;
+  }
 
-.billing .el-tabs--left .el-tabs__nav-wrap.is-left{
-  width: 185px;
-}
+  .el-tabs--left .el-tabs__header.is-left {
+    margin-left: -10px;
+    background-color: #fff;
+  }
 
-.billing .el-tabs--left .el-tabs__header.is-left{
-  margin-left: -10px;
-  background-color: #fff;
-}
+  .el-table__header-wrapper {
+    background-color: #ccc !important;
+  }
 
-.billing .el-table__header-wrapper{
-  background-color: #ccc !important;
-}
-
-.billing .el-table__header{
-  background-color: #ccc !important;
+  .el-table__header {
+    background-color: #ccc !important;
+  }
 }
 </style>

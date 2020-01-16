@@ -1,20 +1,5 @@
 <template>
   <div class="manage billing">
-    <!-- <div class="statusHeader"> -->
-      <!-- <div class="timePicker">
-        <el-date-picker v-model="value1"
-                        type="daterange"
-                        :range-separator="$t('placeholder.to')"
-                        :start-placeholder="$t('placeholder.startDate')"
-                        :end-placeholder="$t('placeholder.endDate')"
-                        size="small" />
-      </div>
-      <el-button size="small"
-                 style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button> -->
-      <!-- <el-button size="small" type="primary" style="width:150px;margin-left:50px;" @click="toTopup">{{
-        $t("billing.topUp")
-      }}</el-button> -->
-    <!-- </div> -->
     <div class="content">
       <div>
         <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
@@ -51,9 +36,9 @@
         </el-tabs>
       </div>
       <div class="container">
-        <el-button size="small" type="primary" style="width:150px;margin-left:50px;margin-top:20px;" @click="toTopup">{{
-        $t("billing.topUp")
-      }}</el-button>
+        <el-button size="small" type="primary" style="width:150px;margin-top:20px;" @click="toTopup">{{
+          $t("billing.topUp")
+        }}</el-button>
         <div class="container_center">
           <div class="center">
             <el-table :data="dataList" highlight-current-row @current-change="handleCurrentChange" border>
@@ -364,7 +349,7 @@ export default {
     padding-left: 30px;
   }
   .content {
-    padding-left: 25px;
+    padding-left: 20px;
     display: flex;
     height: calc(100vh - 91px);
     // margin-top: 5px;
@@ -373,15 +358,15 @@ export default {
       height: 100%;
       overflow: scroll;
       background-color: #fff;
-      margin-left: 10px;
-      .container_center{
+      padding-left: 20px;
+
+      .container_center {
         display: flex;
-        padding-left: 20px;
         padding-top: 20px;
         width: 100%;
         overflow: scroll;
         background-color: #fff;
-      }   
+      }
       .center {
         width: 49%;
         margin-right: 1%;
@@ -410,18 +395,24 @@ export default {
   width: 350px;
 }
 .tabLabel {
-  .text{
+  display: flex;
+  justify-content: flex-end;
+  .text {
     display: flex;
     justify-content: space-between;
-    width: 160px;
+    align-items: center;
+    width: 150px;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 16px;
   }
-  
 
   .badge {
     font-size: 12px;
     margin-left: 5px;
     color: #aaa;
-    margin-top: 15px;
+    width: 25px;
+    text-align: right;
   }
 
   .red {
@@ -430,58 +421,48 @@ export default {
 }
 </style>
 
-<style>
-.billing .el-tabs--left .el-tabs__header.is-left {
-  margin-right: 0px;
-  width: 211px;
-}
-.billing .el-tabs--left .el-tabs__active-bar.is-left {
-  width: 3px;
-}
-.billing .el-tabs--left .el-tabs__nav-wrap.is-left::after,
-.el-tabs--left .el-tabs__nav-wrap.is-right::after,
-.el-tabs--right .el-tabs__nav-wrap.is-left::after,
-.el-tabs--right .el-tabs__nav-wrap.is-right::after {
-  width: 3px;
-}
+<style lang="scss">
+.billing {
+  .el-tabs--left .el-tabs__item.is-left {
+    text-align: left;
+    height: 50px;
+  }
 
-.billing .el-tabs--left .el-tabs__item.is-left{
-  text-align: left;
-}
+  .el-tabs__content {
+    background-color: #fff;
+  }
 
-.billing .el-tabs__content{
-  background-color: #fff;
-}
+  .el-tabs__active-bar {
+    width: 0;
+    height: 0;
+    background-color: #fff;
+  }
 
-.billing .el-tabs__active-bar{
-  width: 0;
-  height: 0;
-  background-color: #fff;
-}
+  .el-tabs--left .el-tabs__active-bar.is-left {
+    width: 0;
+    height: 0;
+  }
 
-.billing .el-tabs--left .el-tabs__active-bar.is-left{
-  width: 0;
-  height: 0;
-}
+  .el-tabs__nav-wrap::after {
+    background-color: #fff;
+  }
 
-.billing .el-tabs__nav-wrap::after{
-  background-color: #fff;
-}
+  .el-tabs--left .el-tabs__nav-wrap.is-left {
+    width: 185px;
+    padding-top: 20px;
+  }
 
-.billing .el-tabs--left .el-tabs__nav-wrap.is-left{
-  width: 185px;
-}
+  .el-tabs--left .el-tabs__header.is-left {
+    margin-left: -10px;
+    background-color: #fff;
+  }
 
-.billing .el-tabs--left .el-tabs__header.is-left{
-  margin-left: -10px;
-  background-color: #fff;
-}
+  .el-table__header-wrapper {
+    background-color: #ccc !important;
+  }
 
-.billing .el-table__header-wrapper{
-  background-color: #ccc !important;
-}
-
-.billing .el-table__header{
-  background-color: #ccc !important;
+  .el-table__header {
+    background-color: #ccc !important;
+  }
 }
 </style>

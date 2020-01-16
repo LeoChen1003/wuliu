@@ -2,7 +2,7 @@
   <div class="manage billing">
     <div class="content">
       <div>
-        <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:calc(100% - 50px);">
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
           <el-tab-pane name="WAIT_SETTLE">
             <span slot="label">
               <div class="tabLabel">
@@ -47,8 +47,8 @@
       </div>
       <div class="container">
         <div class="timePicker">
-              <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
-              <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
+          <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
+          <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
         </div>
         <div class="container_center">
           <div class="center">
@@ -197,24 +197,22 @@ export default {
   .timePicker {
     height: 42px;
     line-height: 40px;
-    padding-left: 30px;
     display: flex;
     margin-top: 20px;
     align-items: center;
   }
   .content {
-    padding-left: 25px;
+    padding-left: 20px;
     display: flex;
     // margin-top: 5px;
     height: calc(100vh - 91px);
     .container {
       width: 100%;
+      padding-left: 20px;
       background-color: #fff;
-      margin-left: 10px;
       overflow: scroll;
       height: 100%;
-      .container_center{
-        padding-left: 20px;
+      .container_center {
         padding-top: 20px;
         width: 100%;
         display: flex;
@@ -232,22 +230,25 @@ export default {
   }
 }
 .tabLabel {
-  // display: flex;
-  width: 100%;
-  // justify-content: space-between;
-  // padding-right: 20px;
+  display: flex;
+  justify-content: flex-end;
 
-  .text{
-    width: 160px;
+  .text {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    width: 150px;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 16px;
   }
 
   .badge {
     font-size: 12px;
     margin-left: 5px;
     color: #aaa;
-    margin-top: 15px;
+    width: 25px;
+    text-align: right;
   }
 
   .red {
@@ -255,58 +256,48 @@ export default {
   }
 }
 </style>
-<style>
-.billing .el-tabs--left .el-tabs__header.is-left {
-  margin-right: 0px;
-  width: 211px;
-}
-.billing .el-tabs--left .el-tabs__active-bar.is-left {
-  width: 3px;
-}
-.billing .el-tabs--left .el-tabs__nav-wrap.is-left::after,
-.el-tabs--left .el-tabs__nav-wrap.is-right::after,
-.el-tabs--right .el-tabs__nav-wrap.is-left::after,
-.el-tabs--right .el-tabs__nav-wrap.is-right::after {
-  width: 3px;
-}
+<style lang="scss">
+.billing {
+  .el-tabs--left .el-tabs__item.is-left {
+    text-align: left;
+    height: 50px;
+  }
 
-.billing .el-tabs--left .el-tabs__item.is-left{
-  text-align: left;
-}
+  .el-tabs__content {
+    background-color: #fff;
+  }
 
-.billing .el-tabs__content{
-  background-color: #fff;
-}
+  .el-tabs__active-bar {
+    width: 0;
+    height: 0;
+    background-color: #fff;
+  }
 
-.billing .el-tabs__active-bar{
-  width: 0;
-  height: 0;
-  background-color: #fff;
-}
+  .el-tabs--left .el-tabs__active-bar.is-left {
+    width: 0;
+    height: 0;
+  }
 
-.billing .el-tabs--left .el-tabs__active-bar.is-left{
-  width: 0;
-  height: 0;
-}
+  .el-tabs__nav-wrap::after {
+    background-color: #fff;
+  }
 
-.billing .el-tabs__nav-wrap::after{
-  background-color: #fff;
-}
+  .el-tabs--left .el-tabs__nav-wrap.is-left {
+    width: 185px;
+    padding-top: 20px;
+  }
 
-.billing .el-tabs--left .el-tabs__nav-wrap.is-left{
-  width: 185px;
-}
+  .el-tabs--left .el-tabs__header.is-left {
+    margin-left: -10px;
+    background-color: #fff;
+  }
 
-.billing .el-tabs--left .el-tabs__header.is-left{
-  margin-left: -10px;
-  background-color: #fff;
-}
+  .el-table__header-wrapper {
+    background-color: #ccc !important;
+  }
 
-.billing .el-table__header-wrapper{
-  background-color: #ccc !important;
-}
-
-.billing .el-table__header{
-  background-color: #ccc !important;
+  .el-table__header {
+    background-color: #ccc !important;
+  }
 }
 </style>

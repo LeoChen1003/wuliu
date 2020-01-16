@@ -1,47 +1,9 @@
 <template>
-  <div class="manage cardFix">
-    <!-- 搜索 -->
-    <div class="statusHeader">
-      <el-form ref="searchForm" inline :show-message="false">
-        <el-form-item :label="$t('tracking.destinaiton')">
-          <div class="search_item">
-            <el-button size="mini" @click="proDialog = true" style="margin-right:5px;" icon="el-icon-more"></el-button>
-            <el-select
-              v-model="provinces"
-              style="width:240px;"
-              class="formSelect"
-              clearable
-              filterable
-              multiple
-              collapse-tags
-              placeholder="province"
-            >
-              <el-option v-for="(item, index) in provinceList" :key="index" :label="item.name" :value="item.code"></el-option>
-            </el-select>
-          </div>
-        </el-form-item>
-        <el-form-item :label="$t('tracking.pickupDate')">
-          <bc-picker @changeBCtime="changeBCtime" style="width:100%;"></bc-picker>
-        </el-form-item>
-        <el-form-item :label="$t('tracking.tracking')">
-          <el-input v-model="orderNo" :placeholder="$t('placeholder.pleaseInput')"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="searchIt">{{ $t("tracking.search") }}</el-button>
-          <el-button
-            type="primary"
-            v-if="tabActive == 'WAIT_SEND_TO_HUB' || tabActive == 'WAIT_HUB_TO_PUT' || tabActive == 'HUB_PUT' || tabActive == 'WILL_PICK'"
-            @click="assignMultiple"
-            >{{ $t("tracking.assignTruckAndDriver") }}</el-button
-          >
-        </el-form-item>
-      </el-form>
-    </div>
-    <div style="display:flex;box-sizing:border-box;padding:0 20px;">
+  <div class="manage cardFix tracking">
+    <div style="display:flex;box-sizing:border-box;padding-left:20px;height:100%;">
       <!-- 导航 -->
-      <div style="height:100%;padding-right:18px;">
-        <div class="statusText">{{ $t("billing.billingStatus") }}</div>
-        <el-tabs v-model="tabActive" tab-position="left" @tab-click="tabChange" style="height:calc(100% - 50px);">
+      <div style="height:100%;" class="nav">
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="tabChange" style="height:100%;">
           <el-tab-pane name="WAIT_SEND_TO_HUB">
             <span slot="label">
               <div class="tabLabel">
@@ -109,156 +71,376 @@
       </div>
       <!-- 表格 -->
       <div class="container">
-        <el-table :data="data.content" v-loading="loading" border @selection-change="handleSelectionChange">
-          <el-table-column
-            type="selection"
-            width="55"
-            align="center"
-            v-if="tabActive == 'WAIT_SEND_TO_HUB' || tabActive == 'WAIT_HUB_TO_PUT' || tabActive == 'HUB_PUT' || tabActive == 'WILL_PICK'"
-          >
-          </el-table-column>
-          <el-table-column :label="$t('tracking.TrackingNoAndDemand')">
-            <template slot-scope="scope">
-              <el-button style="width:100%;text-align:left;" @click="orderLog(scope.row.order.id)">
-                <div>{{ scope.row.order.orderNo }}</div>
-                <div>{{ scope.row.order.outNumber }}</div>
-                <div>{{ scope.row.order.createdAt }}</div>
-                <div>{{ scope.row.ownerName }}</div>
-              </el-button>
-            </template>
-          </el-table-column>
-          <el-table-column :label="$t('tracking.Discription')">
-            <template slot-scope="scope">
-              <!-- <el-card shadow="never"> -->
-              <span v-for="(item, index) in scope.row.order.receiverAddressList[0].propertyList" :key="index">
-                {{
-                  `${parseInt(index) + 1}.${propertyObj[item.propertyType]} ${item.name} ${sizeObj[item.sizeType]} ${
-                    item.number
-                  }${unitObj[item.unit]} `
-                }}
-              </span>
-              <!-- </el-card> -->
-              <!-- <el-card shadow="never" style="margin-top:5px;" v-if="scope.row.order.chargeList.length > 0"> -->
-              <div style="display:flex;margin-top:5px;" v-for="(item, index) in scope.row.order.chargeList" :key="index + '1'">
-                <div>{{ serveObj[item.chargeType] }}</div>
-              </div>
-              <!-- </el-card> -->
-              <div style="margin-top:5px;">Total Amt：{{ scope.row.order.settlementAmount }}</div>
-              <!-- </el-card> -->
-            </template>
-          </el-table-column>
-          <el-table-column :label="$t('tracking.deliveryPoint')">
-            <template slot-scope="scope">
-              <div v-if="scope.row.order.receiverAddressList">
-                <el-card
-                  shadow="never"
-                  style="margin-bottom:5px;"
-                  v-for="(receiverAddress, index) in scope.row.order.receiverAddressList"
-                  :key="index"
+        <!-- 搜索 -->
+        <div class="statusHeader">
+          <el-form ref="searchForm" inline :show-message="false">
+            <el-form-item :label="$t('tracking.destinaiton')">
+              <div class="search_item">
+                <el-button size="mini" @click="proDialog = true" style="margin-right:5px;" icon="el-icon-more"></el-button>
+                <el-select
+                  v-model="provinces"
+                  style="width:210px;"
+                  class="formSelect"
+                  clearable
+                  filterable
+                  multiple
+                  collapse-tags
+                  placeholder="province"
                 >
-                  <div>
-                    {{ receiverAddress.name }}
+                  <el-option v-for="(item, index) in provinceList" :key="index" :label="item.name" :value="item.code"></el-option>
+                </el-select>
+              </div>
+            </el-form-item>
+            <el-form-item :label="$t('tracking.pickupDate')">
+              <bc-picker @changeBCtime="changeBCtime" style="width:160px;"></bc-picker>
+            </el-form-item>
+            <el-form-item :label="$t('tracking.tracking')">
+              <el-input v-model="orderNo" :placeholder="$t('placeholder.pleaseInput')" style="width:160px;"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button @click="searchIt">{{ $t("tracking.search") }}</el-button>
+              <el-button
+                type="primary"
+                v-if="
+                  tabActive == 'WAIT_SEND_TO_HUB' ||
+                    tabActive == 'WAIT_HUB_TO_PUT' ||
+                    tabActive == 'HUB_PUT' ||
+                    tabActive == 'WILL_PICK'
+                "
+                @click="assignMultiple"
+                >{{ $t("tracking.assignTruckAndDriver") }}</el-button
+              >
+            </el-form-item>
+          </el-form>
+        </div>
+        <div class="containerContent">
+          <div style="width:49%;">
+            <el-table
+              :data="data.content"
+              v-loading="loading"
+              border
+              @selection-change="handleSelectionChange"
+              :max-height="tableHeight"
+              highlight-current-row
+              @current-change="handleCurrentChange"
+            >
+              <el-table-column
+                type="selection"
+                width="55"
+                align="center"
+                v-if="
+                  tabActive == 'WAIT_SEND_TO_HUB' ||
+                    tabActive == 'WAIT_HUB_TO_PUT' ||
+                    tabActive == 'HUB_PUT' ||
+                    tabActive == 'WILL_PICK'
+                "
+              >
+              </el-table-column>
+              <el-table-column :label="$t('tracking.TrackingNoAndDemand')">
+                <template slot-scope="scope">
+                  <!-- <el-button style="width:100%;text-align:left;" @click="orderLog(scope.row.order.id)"> -->
+                  <div>{{ scope.row.order.orderNo }}</div>
+                  <div>{{ scope.row.order.outNumber }}</div>
+                  <div>{{ scope.row.order.createdAt }}</div>
+                  <div>{{ scope.row.ownerName }}</div>
+                  <!-- </el-button> -->
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('tracking.VAS')">
+                <template slot-scope="scope">
+                  <!-- <el-card shadow="never"> -->
+                  <!-- <span v-for="(item, index) in scope.row.order.receiverAddressList[0].propertyList" :key="index">
                     {{
-                      tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
-                        ? ""
-                        : receiverAddress.mobile
+                      `${parseInt(index) + 1}.${propertyObj[item.propertyType]} ${item.name} ${sizeObj[item.sizeType]} ${
+                        item.number
+                      }${unitObj[item.unit]} `
                     }}
+                  </span> -->
+                  <!-- </el-card> -->
+                  <!-- <el-card shadow="never" style="margin-top:5px;" v-if="scope.row.order.chargeList.length > 0"> -->
+                  <div
+                    style="display:flex;margin-top:5px;"
+                    v-for="(item, index) in scope.row.order.chargeList"
+                    :key="index + '1'"
+                  >
+                    <div>{{ serveObj[item.chargeType] }}</div>
                   </div>
-                  <div>{{ receiverAddress.addressDetail }}</div>
-                  <div>
-                    {{ receiverAddress.district }}
-                    {{ receiverAddress.city }}
-                    {{ receiverAddress.province }}
+                  <!-- </el-card> -->
+                  <!-- <div style="margin-top:5px;">Total Amt：{{ scope.row.order.settlementAmount }}</div> -->
+                  <!-- </el-card> -->
+                </template>
+              </el-table-column>
+              <!-- <el-table-column :label="$t('tracking.deliveryPoint')">
+                <template slot-scope="scope">
+                  <div v-if="scope.row.order.receiverAddressList">
+                    <el-card
+                      shadow="never"
+                      style="margin-bottom:5px;"
+                      v-for="(receiverAddress, index) in scope.row.order.receiverAddressList"
+                      :key="index"
+                    >
+                      <div>
+                        {{ receiverAddress.name }}
+                        {{
+                          tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
+                            ? ""
+                            : receiverAddress.mobile
+                        }}
+                      </div>
+                      <div>{{ receiverAddress.addressDetail }}</div>
+                      <div>
+                        {{ receiverAddress.district }}
+                        {{ receiverAddress.city }}
+                        {{ receiverAddress.province }}
+                      </div>
+                    </el-card>
                   </div>
-                </el-card>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column :label="$t('tracking.pickupPoint')">
-            <template slot-scope="scope">
-              <div v-if="scope.row.order.senderAddress">
-                <div>
-                  {{ scope.row.order.senderAddress.name }}
-                  {{
-                    tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
-                      ? ""
-                      : scope.row.order.senderAddress.mobile
-                  }}
-                </div>
-                <div>{{ scope.row.order.senderAddress.addressDetail }}</div>
-                <div>
-                  {{ scope.row.order.senderAddress.province }}
-                  {{ scope.row.order.senderAddress.city }}
-                  {{ scope.row.order.senderAddress.district }}
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column :label="$t('tracking.VechicleDriver')">
-            <template slot-scope="scope">
-              <div>{{ scope.row.plate }}</div>
-              <div>{{ scope.row.driverName }}</div>
-            </template>
-          </el-table-column>
-          <!-- <el-table-column :label="$t('tracking.ETD')"></el-table-column> -->
-          <el-table-column :label="$t('tracking.Operation')">
-            <template slot-scope="scope">
-              <div style="text-align:center;">
-                <el-button
-                  v-if="
-                    scope.row.order.status == 'WAIT_SEND_TO_HUB' ||
-                      scope.row.order.status == 'WAIT_HUB_TO_PUT' ||
-                      scope.row.order.status == 'HUB_PUT' || scope.row.order.status == 'WILL_PICK'
-                  "
-                  @click="assignItem(scope.row)"
-                  :disabled="!permissions.SupplyOrderManage"
-                  type="primary"
-                  style="margin-bottom:10px;"
-                  >{{ $t("tracking.assignTruckAndDriver") }}</el-button
-                >
-                <el-button
-                  v-if="scope.row.order.status == 'WAIT_SUPPLY_TO_ACCEPT'"
-                  @click="confirmB(scope.row.order)"
-                  :disabled="!permissions.SupplyOrderManage"
-                  type="primary"
-                  >{{ $t("tracking.confirm") }}</el-button
-                >
-                <el-button
-                  v-if="scope.row.order.status == 'WAIT_SUPPLY_TO_ACCEPT'"
-                  @click="reject(scope.row.order)"
-                  :disabled="!permissions.SupplyOrderManage"
-                  type="primary"
-                  >{{ $t("tracking.reject") }}</el-button
-                >
-                <!-- <el-button
+                </template>
+              </el-table-column>
+              <el-table-column :label="$t('tracking.pickupPoint')">
+                <template slot-scope="scope">
+                  <div v-if="scope.row.order.senderAddress">
+                    <div>
+                      {{ scope.row.order.senderAddress.name }}
+                      {{
+                        tabActive == "toBeconfirmedOrderbyDemand" || tabActive == "toBeconfirmedOrderbySupply"
+                          ? ""
+                          : scope.row.order.senderAddress.mobile
+                      }}
+                    </div>
+                    <div>{{ scope.row.order.senderAddress.addressDetail }}</div>
+                    <div>
+                      {{ scope.row.order.senderAddress.province }}
+                      {{ scope.row.order.senderAddress.city }}
+                      {{ scope.row.order.senderAddress.district }}
+                    </div>
+                  </div>
+                </template>
+              </el-table-column> -->
+              <!-- <el-table-column :label="$t('tracking.VechicleDriver')">
+                <template slot-scope="scope">
+                  <div>{{ scope.row.plate }}</div>
+                  <div>{{ scope.row.driverName }}</div>
+                </template>
+              </el-table-column> -->
+              <!-- <el-table-column :label="$t('tracking.ETD')"></el-table-column> -->
+              <!-- <el-table-column :label="$t('tracking.Operation')">
+                <template slot-scope="scope">
+                  <div style="text-align:center;">
+                    <el-button
+                      v-if="
+                        scope.row.order.status == 'WAIT_SEND_TO_HUB' ||
+                          scope.row.order.status == 'WAIT_HUB_TO_PUT' ||
+                          scope.row.order.status == 'HUB_PUT' ||
+                          scope.row.order.status == 'WILL_PICK'
+                      "
+                      @click="assignItem(scope.row)"
+                      :disabled="!permissions.SupplyOrderManage"
+                      type="primary"
+                      style="margin-bottom:10px;"
+                      >{{ $t("tracking.assignTruckAndDriver") }}</el-button
+                    >
+                    <el-button
+                      v-if="scope.row.order.status == 'WAIT_SUPPLY_TO_ACCEPT'"
+                      @click="confirmB(scope.row.order)"
+                      :disabled="!permissions.SupplyOrderManage"
+                      type="primary"
+                      >{{ $t("tracking.confirm") }}</el-button
+                    >
+                    <el-button
+                      v-if="scope.row.order.status == 'WAIT_SUPPLY_TO_ACCEPT'"
+                      @click="reject(scope.row.order)"
+                      :disabled="!permissions.SupplyOrderManage"
+                      type="primary"
+                      >{{ $t("tracking.reject") }}</el-button
+                    >
+                    <el-button
+                      v-if="scope.row.order.status == 'WILL_RETURN'"
+                      :disabled="
+                        scope.row.order.returnType == 1 || scope.row.order.returnType == 2 || !permissions.SupplyOrderManage
+                      "
+                      @click="rdShow(scope.row.order)"
+                      type="primary"
+                      >{{ $t("tracking.returnDocument") }}</el-button
+                    >
+                  </div>
+                </template>
+              </el-table-column> -->
+              <el-table-column :label="$t('tracking.route')">
+                <template slot-scope="scope">
+                  <div v-if="scope.row.order.senderAddress">
+                    From:{{ scope.row.order.senderAddress.district }} {{ scope.row.order.senderAddress.city }}
+                    {{ scope.row.order.senderAddress.province }}
+                  </div>
+                  <div v-if="scope.row.order.receiverAddressList.length > 0">
+                    To:{{ scope.row.order.receiverAddressList[0].district }} {{ scope.row.order.receiverAddressList[0].city }}
+                    {{ scope.row.order.receiverAddressList[0].province }}
+                  </div>
+                  <div>共{{ scope.row.order.receiverAddressList.length }}个派送点</div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div style="text-align:center;margin:10px 0;">
+              <el-pagination
+                background
+                :page-size.sync="data.size"
+                :page-count="data.totalElements"
+                :total="data.totalElements"
+                :current-page.sync="data.number + 1"
+                @current-change="pageChange"
+                layout="total, prev, pager, next, jumper"
+              >
+              </el-pagination>
+            </div>
+          </div>
+          <div style="width:49%;">
+            <el-tabs v-model="curTab" @tab-click="handleClick">
+              <el-tab-pane :label="'订单详情'" name="detail" class="trackingDetail">
+                <div v-if="thisRow">
+                  <div class="rightDetail" :style="`max-height:${detailHeight}px;`">
+                    <el-form label-position="left" label-width="100px">
+                      <el-form-item :label="$t('booking.logisiticsType')">{{ thisRow.order.lineType }}</el-form-item>
+                      <el-form-item :label="$t('tracking.remarks')">{{ thisRow.order.remark }}</el-form-item>
+                       <!-- <el-form-item :label="$t('booking.truckType')">
+                        <div v-if="thisRow.order.transport">
+                          {{ truckObj[thisRow.order.transport.carType] }} {{ subtruckObj[thisRow.order.transport.carriage] }}
+                        </div>
+                      </el-form-item> -->
+                      <el-form-item :label="$t('resources.plateLicense')">
+                        <div v-if="thisRow">
+                          {{ thisRow.plate }}
+                        </div>
+                      </el-form-item>
+                      <el-form-item :label="$t('resources.driver')">
+                        <div v-if="thisRow">
+                          {{ thisRow.driverName }}
+                        </div>
+                      </el-form-item>
+                      <el-form-item :label="$t('booking.valueAddedService')">
+                        <span v-for="(item, index) in thisRow.order.chargeList" :key="index">
+                          {{ serveObj[item.chargeType] + " " }}</span
+                        >
+                      </el-form-item>
+                      <el-form-item :label="$t('tracking.price')">
+                        <div v-if="thisRow.order.settlementAmount">合计：{{ thisRow.order.settlementAmount }}</div>
+                        <div v-if="thisRow.order.settlementAmount" style="line-height:20px;">
+                          <div>运费：{{ thisRow.order.settlementAmount - thisRow.order.serviceAmount }}</div>
+                          <div v-for="(item, index) in thisRow.order.chargeList" :key="index">
+                            {{ serveObj[item.chargeType] }}：{{ item.money }}
+                          </div>
+                        </div>
+                      </el-form-item>
+                      <el-form-item :label="$t('booking.expectedDeliveryTime')">
+                        {{ thisRow.order.receiverAddressList[0].receiveAt }}
+                      </el-form-item>
+                      <el-form-item :label="$t('booking.pickupTime')"
+                        ><div v-if="thisRow.order.senderAddress">{{ thisRow.order.senderAddress.pickAt }}</div></el-form-item
+                      >
+                      <el-form-item :label="$t('booking.sender')"
+                        ><div v-if="thisRow.order.senderAddress">{{ thisRow.order.senderAddress.name }}</div></el-form-item
+                      >
+                      <el-form-item :label="$t('booking.pickupPoint')">
+                        <div v-if="thisRow.order.senderAddress">
+                          <div>{{ thisRow.order.senderAddress.name }} {{ thisRow.order.senderAddress.mobile }}</div>
+                          <div style="line-height:20px;">
+                            {{ thisRow.order.senderAddress.addressDetail }} {{ thisRow.order.senderAddress.district }}
+                            {{ thisRow.order.senderAddress.city }}
+                            {{ thisRow.order.senderAddress.province }}
+                          </div>
+                        </div>
+                      </el-form-item>
+                    </el-form>
+                    <el-table
+                      :data="thisRow.order.receiverAddressList ? thisRow.order.receiverAddressList : []"
+                      style="width:100%;border-top:1px solid #ebeef5;margin-top:5px;"
+                    >
+                      <el-table-column :label="$t('booking.deliveryPoint')">
+                        <template slot-scope="scope">
+                          <div>
+                            {{ scope.row.name }}
+                            {{ scope.row.mobile }}
+                          </div>
+                          <div>
+                            {{ scope.row.addressDetail }}
+                          </div>
+                          <div>
+                            {{ scope.row.district }}
+                            {{ scope.row.city }}
+                            {{ scope.row.province }}
+                          </div>
+                        </template>
+                      </el-table-column>
+                      <el-table-column :label="$t('booking.cargoList')">
+                        <template slot-scope="scope">
+                          <div v-for="(item, index) in scope.row.propertyList" :key="index">
+                            <div v-if="item.name">
+                              {{ propertyObj[item.propertyType] }} {{ item.name }} {{ item.number }} {{ sizeObj[item.sizeType] }}
+                              {{ item.weightOfEach }}
+                            </div>
+                          </div>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                  <div style="text-align:center;margin-top:10px;">
+                    <el-button
+                      v-if="
+                        thisRow.order.status == 'WAIT_SEND_TO_HUB' ||
+                          thisRow.order.status == 'WAIT_HUB_TO_PUT' ||
+                          thisRow.order.status == 'HUB_PUT' ||
+                          thisRow.order.status == 'WILL_PICK'
+                      "
+                      @click="assignItem(thisRow)"
+                      :disabled="!permissions.SupplyOrderManage"
+                      type="primary"
+                      style="margin-bottom:10px;"
+                      >{{ $t("tracking.assignTruckAndDriver") }}</el-button
+                    >
+                    <el-button
+                      v-if="thisRow.order.status == 'WAIT_SUPPLY_TO_ACCEPT'"
+                      @click="confirmB(thisRow.order)"
+                      :disabled="!permissions.SupplyOrderManage"
+                      type="primary"
+                      >{{ $t("tracking.confirm") }}</el-button
+                    >
+                    <el-button
+                      v-if="thisRow.order.status == 'WAIT_SUPPLY_TO_ACCEPT'"
+                      @click="reject(thisRow.order)"
+                      :disabled="!permissions.SupplyOrderManage"
+                      type="primary"
+                      >{{ $t("tracking.reject") }}</el-button
+                    >
+                    <!-- <el-button
                   v-if="scope.row.order.status == 'WILL_PICK' && scope.row.ordertransport && scope.row.order.transport.driverName == null"
                   @click="confirmB(scope.row.order)"
                   :disabled="!permissions.SupplyOrderManage"
                   type="primary"
                   >{{ $t("tracking.operation") }}</el-button
                 > -->
-                <el-button
-                  v-if="scope.row.order.status == 'WILL_RETURN'"
-                  :disabled="scope.row.order.returnType == 1 || scope.row.order.returnType == 2 || !permissions.SupplyOrderManage"
-                  @click="rdShow(scope.row.order)"
-                  type="primary"
-                  >{{ $t("tracking.returnDocument") }}</el-button
-                >
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div style="text-align:center;margin:20px 0;">
-          <el-pagination
-            background
-            :page-size.sync="data.size"
-            :page-count="data.totalElements"
-            :total="data.totalElements"
-            :current-page.sync="data.number + 1"
-            @current-change="pageChange"
-            layout="total, prev, pager, next, jumper"
-          >
-          </el-pagination>
+                    <el-button
+                      v-if="thisRow.order.status == 'WILL_RETURN'"
+                      :disabled="thisRow.order.returnType == 1 || thisRow.order.returnType == 2 || !permissions.SupplyOrderManage"
+                      @click="rdShow(thisRow.order)"
+                      type="primary"
+                      >{{ $t("tracking.returnDocument") }}</el-button
+                    >
+                  </div>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane :label="$t('tracking.orderLog')" name="log">
+                <div class="rightDetail" :style="`max-height:${detailHeight + 40}px;`">
+                  <el-timeline :reverse="true" style="margin-top:15px;">
+                    <el-timeline-item v-for="(item, index) in logs" :key="index" :timestamp="item.createdAt">
+                      {{ item.introduce }}
+                    </el-timeline-item>
+                  </el-timeline>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane :label="'签收凭证'" name="r">
+                <div class="rightDetail" :style="`max-height:${detailHeight + 40}px;`"></div>
+              </el-tab-pane>
+            </el-tabs>
+          </div>
         </div>
       </div>
     </div>
@@ -586,6 +768,10 @@ export default {
         driverId: [{ required: true, message: " ", trigger: "change" }],
         truckId: [{ required: true, message: " ", trigger: "change" }],
       },
+      curTab: "detail",
+      thisRow: null,
+      tableHeight: 0,
+      detailHeight: 0,
     };
   },
   // 监听属性 类似于data概念
@@ -601,6 +787,10 @@ export default {
     self = this;
   },
   mounted() {
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 58 - 32 - 20;
+      this.detailHeight = window.innerHeight - 91 - 40 - 58 - 55 - 56;
+    });
     getProvinceList().then(res => {
       self.provinceList = res.data;
     });
@@ -672,6 +862,19 @@ export default {
       }).then(res => {
         self.orderStatus = res.data;
       });
+    },
+    handleClick() {
+      if (self.curTab == "log" && self.thisRow) {
+        self.orderLog(self.thisRow.order.id);
+      }
+    },
+    handleCurrentChange(val) {
+      self.thisRow = val;
+      if (self.curTab == "log" && self.thisRow) {
+        self.orderLog(self.thisRow.order.id);
+      } else {
+        self.logs = [];
+      }
     },
     // 搜索
     searchIt() {
@@ -794,7 +997,6 @@ export default {
     orderLog(id) {
       getOrderLog(id).then(res => {
         self.logs = res.data;
-        self.logDialog = true;
       });
     },
     rdShow(row) {
@@ -845,26 +1047,15 @@ export default {
 //@import url(); 引入公共css类
 .manage {
   height: 100%;
-  padding-top: 20px;
   box-sizing: border-box;
 }
 .statusHeader {
-  padding: 0 20px;
   box-sizing: border-box;
   display: flex;
 
   .search_item {
     display: flex;
   }
-}
-
-.statusText {
-  height: 50px;
-  border-bottom: 2px solid #dfe4ed;
-  margin-right: 9px;
-  box-sizing: border-box;
-  padding-bottom: 30px;
-  line-height: 50px;
 }
 
 .comfirmDialog {
@@ -876,10 +1067,19 @@ export default {
 }
 
 .container {
-  width: 90%;
-  margin-top: 48px;
-  height: calc(100vh - 161px);
+  width: 100%;
+  height: calc(100vh - 91px);
   overflow: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  background: #fff;
+
+  .containerContent {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    overflow: scroll;
+  }
 }
 
 div::-webkit-scrollbar {
@@ -899,10 +1099,22 @@ div::-webkit-scrollbar {
   display: flex;
   justify-content: flex-end;
 
+  .text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 150px;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 16px;
+  }
+
   .badge {
     font-size: 12px;
     margin-left: 5px;
     color: #aaa;
+    width: 25px;
+    text-align: right;
   }
 
   .red {
@@ -932,6 +1144,10 @@ div::-webkit-scrollbar {
     color: #fff;
   }
 }
+
+.rightDetail {
+  overflow: scroll;
+}
 </style>
 <style lang="scss">
 input::-webkit-outer-spin-button,
@@ -960,6 +1176,66 @@ input::-webkit-inner-spin-button {
 .upload-box {
   .el-icon-plus {
     transform: translateY(-38px) !important;
+  }
+}
+
+.tracking .nav {
+  .el-tabs--left .el-tabs__item.is-left {
+    text-align: left;
+    height: 50px;
+  }
+
+  .el-tabs__content {
+    background-color: #fff;
+  }
+
+  .el-tabs__active-bar {
+    width: 0;
+    height: 0;
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__active-bar.is-left {
+    width: 0;
+    height: 0;
+  }
+
+  .el-tabs__nav-wrap::after {
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__nav-wrap.is-left {
+    width: 185px;
+    padding-top: 20px;
+  }
+
+  .el-tabs--left .el-tabs__header.is-left {
+    margin-left: -10px;
+    background-color: #fff;
+  }
+
+  .el-table__header-wrapper {
+    background-color: #ccc !important;
+  }
+
+  .el-table__header {
+    background-color: #ccc !important;
+  }
+}
+
+.trackingDetail {
+  .el-form-item {
+    margin-bottom: 0px !important;
+  }
+  .el-table__header tr,
+  .el-table__header th {
+    padding: 0;
+    height: 40px;
+  }
+  .el-table__body tr,
+  .el-table__body td {
+    padding: 0;
+    height: 40px;
   }
 }
 </style>
