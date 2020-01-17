@@ -35,12 +35,12 @@
       <div class="container">
         <div class="statusHeader">
           <div class="date-box">
-            <span style="margin-right:10px;">{{ $t("billing.date") }}</span>
+            <span style="margin-right:10px;font-size:16px;">{{ $t("billing.date") }}</span>
             <bc-picker :dateType="'daterange'" @changeBCtime="changeBCtime"></bc-picker>
           </div>
-          <span style="margin: 0 10px 0 15px;">{{ $t("placeholder.amount") }}</span>
+          <span style="margin: 0 10px 0 15px;font-size:16px;">{{ $t("placeholder.amount") }}</span>
           <el-input type="number" v-model.number="amount" style="width:200px;"></el-input>
-          <span style="margin: 0 10px 0 15px;">{{ $t("billing.member") }}</span>
+          <span style="margin: 0 10px 0 15px;font-size:16px;">{{ $t("billing.member") }}</span>
           <el-input v-model="member" style="width:200px;"></el-input>
           <el-button style="margin-left:10px;width:100px;" @click="searchIt">{{ $t("billing.search") }}</el-button>
           <!-- <el-button @click="cancelIt">{{ $t("billing.cancel") }}</el-button> -->

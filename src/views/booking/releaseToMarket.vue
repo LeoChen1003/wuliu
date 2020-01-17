@@ -729,7 +729,6 @@ export default {
       }
     },
     time_at(val) {
-      console.log(val);
       let t = self.time ? self.time : "23:59:59";
       self.releaseForm.senderAddress.pickAt = val + ` ${t}`;
     },
@@ -750,9 +749,7 @@ export default {
     self = this;
     let releaseInfo = JSON.parse(localStorage.getItem("releaseInfo"));
     self.releaseInfo = releaseInfo;
-    console.log("0000");
     self.pickDateDefault = getNormalTime(releaseInfo.searchForm.pickUpDate);
-    console.log(self.pickDateDefault);
   },
   mounted() {
     let releaseInfo = self.releaseInfo;
@@ -900,7 +897,6 @@ export default {
     },
     // 下单
     todoIt() {
-      console.log(self.releaseForm);
       this.$refs.releaseform.validate(valid => {
         if (valid) {
           self.todoLoading = true;

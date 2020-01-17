@@ -214,7 +214,6 @@ export default {
     confirmIt(item, index) {
       if (item.number && item.number > 0) {
         if (item.number == item.sum) {
-          console.log(self.rightData);
           confirmhand({
             count: item.number,
             orderId: item.orderId,

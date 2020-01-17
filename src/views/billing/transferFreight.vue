@@ -26,13 +26,13 @@
       <div class="container">
         <div class="statusHeader">
           <div>
-            <span style="margin-right:10px;">{{ $t("billing.supply") }}</span>
+            <span style="margin-right:10px;font-size:16px;">{{ $t("billing.supply") }}</span>
             <el-select v-model="supply" clearable placeholder="请选择">
               <el-option v-for="item in supplyList" :key="item.supply_id" :label="item.company_name" :value="item.supply_id">
               </el-option>
             </el-select>
           </div>
-          <span style="margin:0 10px 0 20px;">{{ $t("billing.deliveredDate") }}</span>
+          <span style="margin:0 10px 0 20px;font-size:16px;">{{ $t("billing.deliveredDate") }}</span>
           <div class="timePicker">
             <bc-picker :dateType="'daterange'" @changeBCtime="changeBCtime"></bc-picker>
             <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
@@ -42,7 +42,7 @@
               v-if="tabActive == 'UNPAID'"
               :disabled="!permissions.PlatformFianceConfirm"
               type="primary"
-              style="width:100px;margin-left:20px;"
+              style="margin-left:20px;"
               >{{ $t("billing.transferFreight") }}</el-button
             >
           </div>

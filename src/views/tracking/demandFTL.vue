@@ -219,9 +219,9 @@
                       <span v-for="(item, index) in thisRow.chargeList" :key="index"> {{ serveObj[item.chargeType] + " " }}</span>
                     </el-form-item>
                     <el-form-item :label="$t('tracking.price')">
-                      <div v-if="thisRow.settlementAmount">合计：{{ thisRow.settlementAmount }}</div>
+                      <div v-if="thisRow.settlementAmount">{{ $t("booking.totalamt") }}：{{ thisRow.settlementAmount }}</div>
                       <div v-if="thisRow.settlementAmount" style="line-height:20px;">
-                        <div>运费：{{ thisRow.settlementAmount - thisRow.serviceAmount }}</div>
+                        <div>{{ $t("billing.freight") }}：{{ thisRow.settlementAmount - thisRow.serviceAmount }}</div>
                         <div v-for="(item, index) in thisRow.chargeList" :key="index">
                           {{ serveObj[item.chargeType] }}：{{ item.money }}
                         </div>

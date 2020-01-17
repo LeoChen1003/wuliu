@@ -268,9 +268,9 @@
                         >
                       </el-form-item>
                       <el-form-item :label="$t('tracking.price')">
-                        <div v-if="thisRow.settlementAmount">合计：{{ thisRow.settlementAmount }}</div>
+                        <div v-if="thisRow.settlementAmount">{{ $t("booking.totalamt") }}：{{ thisRow.settlementAmount }}</div>
                         <div v-if="thisRow.settlementAmount" style="line-height:20px;">
-                          <div>运费：{{ thisRow.settlementAmount - thisRow.serviceAmount }}</div>
+                          <div>{{ $t("billing.freight") }}：{{ thisRow.settlementAmount - thisRow.serviceAmount }}</div>
                           <div v-for="(item, index) in thisRow.chargeList" :key="index">
                             {{ serveObj[item.chargeType] }}：{{ item.money }}
                           </div>
@@ -851,8 +851,6 @@ export default {
         obj[next.province] ? "" : (obj[next.province] = true && item.push(next));
         return item;
       }, []);
-      console.log(list);
-      console.log(item.senderAddress);
       self.returnForm_show = {
         sender: list,
         receiver: item.senderAddress.province,
