@@ -37,29 +37,31 @@
       </el-tab-pane>
       <!-- 基础资料 -->
       <el-tab-pane name="data" :label="$t('member.essentialData')">
-        <div class="container">
+        <div class="container fixform">
           <el-form ref="form" label-width="150px" label-position="left">
             <!-- 会员类型 -->
             <el-form-item class="choose-type" :label="$t('member.memberType')">
-              <el-checkbox-group v-model="typeList" @change="typeListChange">
-                <el-checkbox
-                  label="DEMAND"
-                  :disabled="applyStatus.demand.status === 'ACCEPTED' || applyStatus.demand.status === 'ACTIVATED'"
-                >
-                  {{ $t("member.demand") }} ผู้ใช้บริการว่าจ้างขนส่งสินค้า ผ่านการให้บริการของ แพลตฟอร์ม
-                </el-checkbox>
-                <el-checkbox
-                  label="SUPPLY"
-                  :disabled="applyStatus.supply.status === 'ACCEPTED' || applyStatus.supply.status === 'ACTIVATED'"
-                >
-                  {{ $t("member.supply") }} ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่งผู้รับปลายทาง
-                  โดยผ่านการบริการของแพลตฟอร์ม
-                </el-checkbox>
-                <el-checkbox label="HUB" disabled>
-                  {{ $t("member.hub") }} ศูนย์รวบรวมและแลกเปลี่ยนสินค้า ระหว่างผู้ส่งสินค้าและผู้ขนส่ง
-                  โดยผ่านการบริการของแพลตฟอร์ม
-                </el-checkbox>
-              </el-checkbox-group>
+              <div style="line-height:25px;">
+                <el-checkbox-group v-model="typeList" @change="typeListChange">
+                  <el-checkbox
+                    label="DEMAND"
+                    :disabled="applyStatus.demand.status === 'ACCEPTED' || applyStatus.demand.status === 'ACTIVATED'"
+                  >
+                    {{ $t("member.demand") }} ผู้ใช้บริการว่าจ้างขนส่งสินค้า ผ่านการให้บริการของ แพลตฟอร์ม
+                  </el-checkbox>
+                  <el-checkbox
+                    label="SUPPLY"
+                    :disabled="applyStatus.supply.status === 'ACCEPTED' || applyStatus.supply.status === 'ACTIVATED'"
+                  >
+                    {{ $t("member.supply") }} ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่งผู้รับปลายทาง
+                    โดยผ่านการบริการของแพลตฟอร์ม
+                  </el-checkbox>
+                  <el-checkbox label="HUB" disabled>
+                    {{ $t("member.hub") }} ศูนย์รวบรวมและแลกเปลี่ยนสินค้า ระหว่างผู้ส่งสินค้าและผู้ขนส่ง
+                    โดยผ่านการบริการของแพลตฟอร์ม
+                  </el-checkbox>
+                </el-checkbox-group>
+              </div>
             </el-form-item>
             <!-- 注册类型 -->
             <el-form-item :label="$t('member.typeOfRegistration')">
@@ -121,7 +123,7 @@
       </el-tab-pane>
       <!-- 相关文件（发货人）150px -->
       <el-tab-pane name="DEMAND" :label="$t('member.relevantDocument_demand')">
-        <div class="container">
+        <div class="container fixupload">
           <el-alert
             v-if="applyStatus.demand.status === 'REJECTED'"
             class="rejectMsg"
@@ -249,7 +251,7 @@
       </el-tab-pane>
       <!-- 相关文件(运输公司) -->
       <el-tab-pane name="SUPPLY" :label="$t('member.relevantdocument_supply')">
-        <div class="container">
+        <div class="container fixupload">
           <el-alert
             v-if="applyStatus.supply.status === 'REJECTED'"
             class="rejectMsg"
@@ -497,7 +499,7 @@
       </el-tab-pane>
       <!-- 相关文件(货运站) -->
       <el-tab-pane disabled name="5" :label="$t('member.relevantdocument_HUB')">
-        <div class="container">
+        <div class="container fixupload">
           <el-form label-width="200px">
             <el-form-item :label="$t('member.affidavit')">
               <el-upload class="upload" action="https://jsonplaceholder.typicode.com/posts/" multiple>
@@ -927,7 +929,7 @@ export default {
   width: 300px;
 }
 </style>
-<style>
+<style lang="scss">
 .el-step {
   width: 100% !important;
 }
@@ -972,21 +974,26 @@ export default {
   display: block;
 }
 
+.member .fixform .el-form-item {
+  margin-bottom: 5px;
+}
+
 .member .el-form-item {
   margin-bottom: 15px;
 }
 
-.member .upload {
-  display: flex;
-  align-items: center;
-}
-
-.member .el-upload {
-  margin-right: 25px;
-}
-
-.member .el-upload-list__item:first-child {
-  margin-top: 0px;
+.member .fixupload {
+  .upload {
+    display: flex;
+    align-items: center;
+  }
+  .el-upload {
+    margin-right: 25px;
+  }
+  .el-upload-list__item:first-child {
+    margin-top: 0px;
+    margin-left: 20px;
+  }
 }
 
 .member .el-tabs--left .el-tabs__item.is-left {

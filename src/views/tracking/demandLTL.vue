@@ -154,7 +154,7 @@
                     </div>
                     <!-- <div>
                       {{ scope.row.supply.contactMobile }}
-                    </div>
+                    </div> -->
                     <div>
                       {{ scope.row.driverAndTruckVo.plate }}
                     </div>
@@ -163,7 +163,7 @@
                     </div>
                     <div v-if="scope.row.driverAndTruckVo">
                       {{ scope.row.driverAndTruckVo.driverPhone }}
-                    </div> -->
+                    </div>
                   </div>
                 </template>
               </el-table-column>
@@ -227,7 +227,7 @@
               <el-tab-pane :label="'订单详情'" name="detail" class="trackingDetail">
                 <div v-if="thisRow">
                   <div class="rightDetail" :style="`max-height:${detailHeight}px;`">
-                    <el-form label-position="left" label-width="100px">
+                    <el-form label-position="left" label-width="200px">
                       <el-form-item :label="$t('booking.logisiticsType')">{{ thisRow.lineType }}</el-form-item>
                       <el-form-item :label="$t('tracking.remarks')">{{ thisRow.remark }}</el-form-item>
                       <el-form-item :label="$t('booking.truckType')">
