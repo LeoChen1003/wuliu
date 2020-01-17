@@ -301,7 +301,7 @@
                     <el-form label-position="left" label-width="100px">
                       <el-form-item :label="$t('booking.logisiticsType')">{{ thisRow.order.lineType }}</el-form-item>
                       <el-form-item :label="$t('tracking.remarks')">{{ thisRow.order.remark }}</el-form-item>
-                       <!-- <el-form-item :label="$t('booking.truckType')">
+                      <!-- <el-form-item :label="$t('booking.truckType')">
                         <div v-if="thisRow.order.transport">
                           {{ truckObj[thisRow.order.transport.carType] }} {{ subtruckObj[thisRow.order.transport.carriage] }}
                         </div>
@@ -322,9 +322,13 @@
                         >
                       </el-form-item>
                       <el-form-item :label="$t('tracking.price')">
-                        <div v-if="thisRow.order.settlementAmount">合计：{{ thisRow.order.settlementAmount }}</div>
+                        <div v-if="thisRow.order.settlementAmount">
+                          {{ $t("booking.totalamt") }}：{{ thisRow.order.settlementAmount }}
+                        </div>
                         <div v-if="thisRow.order.settlementAmount" style="line-height:20px;">
-                          <div>运费：{{ thisRow.order.settlementAmount - thisRow.order.serviceAmount }}</div>
+                          <div>
+                            {{ $t("billing.freight") }}：{{ thisRow.order.settlementAmount - thisRow.order.serviceAmount }}
+                          </div>
                           <div v-for="(item, index) in thisRow.order.chargeList" :key="index">
                             {{ serveObj[item.chargeType] }}：{{ item.money }}
                           </div>

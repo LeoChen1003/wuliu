@@ -225,14 +225,33 @@ export const asyncRoutes = [
     redirect: "/inbound",
     name: "inbound",
     meta: {
+      title: "inbound",
       roles: ["HUB"],
     },
     children: [
+      //  {
+      //    path: "index",
+      //    component: () => import("@/views/inbound/index"),
+      //    meta: {
+      //      title: "inbound",
+      //      roles: ["HUB"],
+      //      permission: "HubInBound",
+      //    },
+      //  },
       {
-        path: "index",
-        component: () => import("@/views/inbound/index"),
+        path: "waitPut",
+        component: () => import("@/views/inbound/waitPut"),
         meta: {
-          title: "inbound",
+          title: "TobeConfirmedReceipt",
+          roles: ["HUB"],
+          permission: "HubInBound",
+        },
+      },
+      {
+        path: "handover",
+        component: () => import("@/views/inbound/handover"),
+        meta: {
+          title: "Received",
           roles: ["HUB"],
           permission: "HubInBound",
         },
@@ -245,12 +264,40 @@ export const asyncRoutes = [
     redirect: "/outbound",
     name: "outbound",
     meta: {
+      title: "Outbound",
       roles: ["HUB"],
     },
     children: [
+      // {
+      //   path: "index",
+      //   component: () => import("@/views/outbound/index"),
+      //   meta: {
+      //     title: "Outbound",
+      //     roles: ["HUB"],
+      //     permission: "HubOutBound",
+      //   },
+      // },
       {
-        path: "index",
-        component: () => import("@/views/outbound/index"),
+        path: "waitHandover",
+        component: () => import("@/views/outbound/waitHandover"),
+        meta: {
+          title: "TobeHandedOver",
+          roles: ["HUB"],
+          permission: "HubOutBound",
+        },
+      },
+      {
+        path: "waitDriverConfirm",
+        component: () => import("@/views/outbound/waitDriverConfirm"),
+        meta: {
+          title: "TobeConfirmedbyDriver",
+          roles: ["HUB"],
+          permission: "HubOutBound",
+        },
+      },
+      {
+        path: "handover",
+        component: () => import("@/views/outbound/handover"),
         meta: {
           title: "Outbound",
           roles: ["HUB"],

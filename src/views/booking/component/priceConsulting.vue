@@ -389,7 +389,11 @@
                 <div style="text-align:center;">
                   <el-button
                     type="primary"
-                    :disabled="!permissions.DemandNewOrderOrRelease || (scope.row.check && scope.row.check == 'false')"
+                    :disabled="
+                      !permissions.DemandNewOrderOrRelease ||
+                        (scope.row.check && scope.row.check == 'false') ||
+                        isTimeout(scope.row.finishedAt)
+                    "
                     @click="toBooking(scope.row)"
                     >{{ $t("booking.placeOrder") }}</el-button
                   >
@@ -552,7 +556,7 @@ import {
   getGoodsProperty,
   getdistanceandtranstime,
 } from "../../../api/data";
-import { getBcTime, getTime, parseTime } from "../../../utils/index";
+import { getBcTime, getTime, parseTime, getNormalTime } from "../../../utils/index";
 import Search from "@/components/HeaderSearch";
 
 let self;
@@ -1177,6 +1181,15 @@ export default {
     }
   },
   methods: {
+    isTimeout(time) {
+      let str = getNormalTime(self.searchForm.pickUpDate) + " " + time;
+      let t = new Date(str);
+      if (new Date().getTime() < t.getTime()) {
+        return false;
+      } else {
+        return true;
+      }
+    },
     initMaps(cb) {
       try {
         google;

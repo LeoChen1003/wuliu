@@ -65,7 +65,12 @@
     "setting": "设置",
     "cancel": "取 消",
     "confirm": "确 认",
-    "ltl": "路线模板（LTL）"
+    "ltl": "路线模板（LTL）",
+    "TobeConfirmedReceipt": "待确认收货",
+    "Received": "已收货",
+    "TobeHandedOver": "待交接",
+    "TobeConfirmedbyDriver": "待司机确认",
+    "HandedOver": "已交接"
   },
   "layout": {
     "logout": "退出"

@@ -182,13 +182,14 @@ export default {
   box-sizing: border-box;
 
   .subNav-item {
-    width: 150px;
+    width: 170px;
     height: 40px;
     // text-align: center;
     font-size: 14px;
     line-height: 40px;
     // margin: 0 10px;
     margin-right: 10px;
+    // margin-right: 50px;
     cursor: pointer;
     transition: all 0.4s;
 

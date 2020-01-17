@@ -1,27 +1,13 @@
 <template>
   <div class="manage">
     <div class="status_header">
-      <div class="route_btn_box">
-        <div
-          class="route_btn_item"
-          :class="status == 'WAIT_HANDOVER' ? 'route_btn_active' : ''"
-          @click="changeStatus('WAIT_HANDOVER')"
-        >
-          {{ $t("inbound.TobeHandedOver") }}
-        </div>
-        <div
-          class="route_btn_item"
-          :class="status == 'WAIT_DRIVER_CONFIRM' ? 'route_btn_active' : ''"
-          @click="changeStatus('WAIT_DRIVER_CONFIRM')"
-        >
-          {{ $t("inbound.TobeConfirmedbyDriver") }}
-        </div>
-        <div class="route_btn_item" :class="status == 'HANDOVER' ? 'route_btn_active' : ''" @click="changeStatus('HANDOVER')">
-          {{ $t("inbound.HandedOver") }}
-        </div>
-      </div>
       <div class="search_box">
-        <el-select v-model="searchType" :placeholder="$t('placeholder.pleaseChoose')" style="margin:0;" class="select_btn">
+        <el-select
+          v-model="searchType"
+          :placeholder="$t('placeholder.pleaseChoose')"
+          style="margin:0;width:160px;"
+          class="select_btn"
+        >
           <el-option :label="$t('inbound.LicensePlate')" :value="'plate'"> </el-option>
           <el-option :label="$t('inbound.TrackingNo')" :value="'sendNo'"> </el-option>
         </el-select>
@@ -37,6 +23,7 @@
           highlight-current-row
           @current-change="handleCurrentChange"
           border
+          :max-height="tableHeight"
           v-loading="loading"
         >
           <el-table-column :label="$t('inbound.Supply')">
@@ -82,6 +69,7 @@
           v-loading="rightLoading"
           ref="rightData"
           :row-style="rowStyle"
+          :max-height="tableHeight + 52"
           :row-class-name="rowClassName"
         >
           <el-table-column prop="orderNo" :label="$t('inbound.TrackingNo')"></el-table-column>
@@ -116,14 +104,19 @@
 </template>
 
 <script>
-import { getOutboundList, getOutorders, confirmhand } from "../../api/inbound";
-import { getGoodsProperty } from "../../api/data";
+import { getOutboundList, getOutorders, confirmhand } from "../../../api/inbound";
+import { getGoodsProperty } from "../../../api/data";
 
 let self;
 export default {
+  props: {
+    status: {
+      type: String,
+      default: "WAIT_HANDOVER",
+    },
+  },
   data() {
     return {
-      status: "WAIT_HANDOVER",
       loading: false,
       rightLoading: false,
       data: [],
@@ -135,6 +128,7 @@ export default {
       selectionRow: [],
       truckInfo: false,
       isChange: false,
+      tableHeight: 0,
     };
   },
   methods: {
@@ -248,6 +242,9 @@ export default {
     self = this;
   },
   mounted() {
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 36 - 20 - 32 - 20;
+    });
     getGoodsProperty().then(res => {
       // let propertyObj = new Object();
       let sizeObj = new Object();
@@ -271,15 +268,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .manage {
-  margin-top: -20px;
   box-sizing: border-box;
-  padding-left: 20px;
+  padding: 20px;
 
   .status_header {
     display: flex;
 
     .search_box {
-      margin-left: 20px;
       display: flex;
       line-height: 35px;
     }
