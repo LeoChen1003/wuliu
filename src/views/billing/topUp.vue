@@ -1,7 +1,7 @@
 <template>
   <div class="manage billing">
     <div class="content">
-      <div>
+      <div style="height:100%;" class="nav">
         <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
           <el-tab-pane name="DEFAULT">
             <span slot="label">
@@ -71,9 +71,14 @@
               :total="page.total"
             ></el-pagination>
           </div>
-          <el-card class="right" shadow="never">
-            <el-image :src="showUrl" v-if="showUrl"> </el-image>
-          </el-card>
+          <div class="right">
+            <el-tabs v-model="curTab" @tab-click="handleClick">
+              <el-tab-pane :label="'充值图片'" name="image" class="trackingDetail">
+                <el-image :src="showUrl" v-if="showUrl"></el-image>
+              </el-tab-pane>
+              <el-tab-pane :label="'日志'" name="log" class="trackingDetail"> </el-tab-pane>
+            </el-tabs>
+          </div>
         </div>
       </div>
     </div>
@@ -209,6 +214,7 @@ export default {
       time_at: "",
       time: "",
       statusCount: {},
+      curTab: "image",
     };
   },
   // 监听属性 类似于data概念
@@ -422,7 +428,7 @@ export default {
 </style>
 
 <style lang="scss">
-.billing {
+.billing .nav {
   .el-tabs--left .el-tabs__item.is-left {
     text-align: left;
     height: 50px;

@@ -1,7 +1,7 @@
 <template>
   <div class="manage billing">
     <div class="content">
-      <div>
+      <div class="nav">
         <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
           <el-tab-pane name="FEE" :label="$t('billing.freight')"> </el-tab-pane>
           <el-tab-pane name="GUARANTEE" :label="$t('billing.gaurantee')"> </el-tab-pane>
@@ -179,7 +179,7 @@ export default {
 </style>
 
 <style lang="scss">
-.billing {
+.billing .nav {
   .el-tabs--left .el-tabs__item.is-left {
     text-align: left;
     height: 50px;

@@ -1,7 +1,7 @@
 <template>
   <div class="manage billing">
     <div class="content">
-      <div style="height:100%;">
+      <div style="height:100%;" class="nav">
         <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
           <el-tab-pane name="DEFAULT">
             <span slot="label">
@@ -440,7 +440,7 @@ div::-webkit-scrollbar {
 </style>
 
 <style lang="scss">
-.billing {
+.billing .nav {
   .el-tabs--left .el-tabs__item.is-left {
     text-align: left;
     height: 50px;

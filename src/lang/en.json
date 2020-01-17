@@ -65,7 +65,12 @@
     "route": "Route",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "ltl": "Route Template (LTL)"
+    "ltl": "Route Template (LTL)",
+    "TobeConfirmedReceipt": "To be Confirmed Receipt",
+    "Received": "Received",
+    "TobeConfirmedbyDriver": "To be Confirmed by Driver",
+    "TobeHandedOver": "To be Handed  Over ",
+    "HandedOver": "Handed  Over "
   },
   "layout": {
     "logout": "Logout"

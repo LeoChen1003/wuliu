@@ -1,7 +1,7 @@
 <template>
   <div class="manage billing">
     <div class="content">
-      <div style="">
+      <div style="height:100%;" class="nav">
         <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
           <el-tab-pane name="UNPAID">
             <span slot="label">
@@ -475,6 +475,7 @@ export default {
     align-items: center;
   }
   .content {
+    height: 100%;
     padding-left: 20px;
     display: flex;
     .container {
@@ -553,7 +554,7 @@ export default {
   }
 }
 
-.billing {
+.billing .nav {
   .el-tabs--left .el-tabs__item.is-left {
     text-align: left;
     height: 50px;

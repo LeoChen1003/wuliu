@@ -1,7 +1,7 @@
 <template>
   <div class="manage billing">
     <div class="content">
-      <div>
+      <div style="height:100%;" class="nav">
         <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
           <el-tab-pane name="WAIT_SETTLE">
             <span slot="label">
@@ -57,22 +57,24 @@
             ></el-pagination>
           </div>
           <div class="right">
-            <el-table :data="detailData" border>
-              <el-table-column :label="$t('billing.supply')">
-                <template slot-scope="scope">
-                  {{
-                    scope.row.supply
-                      ? scope.row.supply.type == "COMPANY"
-                        ? scope.row.supply.companyName
-                        : scope.row.supply.humanName
-                      : ""
-                  }}
-                </template>
-              </el-table-column>
-              <el-table-column :label="$t('billing.amount')">
-                <template slot-scope="scope"> {{ $t("billing.freight") }}: {{ scope.row.settlementAmount }} </template>
-              </el-table-column>
-            </el-table>
+            <el-tabs v-model="curTab" @tab-click="handleClick">
+              <el-tab-pane :label="'收费详情'" name="detail" class="trackingDetail">
+                <el-form v-if="thisRow" label-width="130px" label-position="left">
+                  <el-form-item :label="$t('booking.supply')">
+                    {{ thisRow.supply.type == "COMPANY" ? thisRow.supply.companyName : thisRow.supply.humanName }}
+                  </el-form-item>
+                  <el-form-item :label="$t('billing.freight')">
+                    {{ thisRow.settlementAmount - thisRow.serviceAmount }}
+                  </el-form-item>
+                  <div v-for="(item, index) in thisRow.chargeList" :key="index">
+                    <el-form-item :label="serveObj[item.chargeType]">{{ item.money }}</el-form-item>
+                  </div>
+                  <el-form-item :label="$t('booking.totalamt')">
+                    {{ thisRow.settlementAmount }}
+                  </el-form-item>
+                </el-form>
+              </el-tab-pane>
+            </el-tabs>
           </div>
         </div>
       </div>
@@ -84,6 +86,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { demandFinance, billdemandCount } from "../../api/billing";
+import { getExtraServer } from "../../api/data";
 import { getTime, parseTime, getLastMonthTime, getNormalTime, getBcTime } from "../../utils/index";
 import { mapGetters } from "vuex";
 
@@ -105,6 +108,9 @@ export default {
       detailData: [],
       statusCount: {},
       dateArrDeFault: [],
+      thisRow: null,
+      curTab: "detail",
+      serveObj: {},
     };
   },
   // 监听属性 类似于data概念
@@ -122,6 +128,13 @@ export default {
   },
   mounted() {
     self.loadData();
+    getExtraServer().then(res => {
+      let serveObj = new Object();
+      for (let i of res.data) {
+        serveObj[i.key] = i.trans;
+      }
+      self.serveObj = serveObj;
+    });
   },
   methods: {
     changeBCtime(time) {
@@ -169,8 +182,7 @@ export default {
       self.loadData();
     },
     handleCurrentChange(val) {
-      self.detailData = [];
-      self.detailData.push(val);
+      self.thisRow = val;
     },
   },
 };
@@ -191,8 +203,7 @@ export default {
     display: flex;
     height: calc(100vh - 91px);
     .container {
-      padding-top: 20px;
-      padding-left: 20px;
+      padding: 20px;
       width: 100%;
       height: 100%;
       overflow: scroll;
@@ -201,11 +212,11 @@ export default {
         padding-top: 20px;
         width: 100%;
         display: flex;
+        justify-content: space-between;
         overflow: scroll;
       }
       .center {
         width: 49%;
-        margin-right: 1%;
       }
       .right {
         width: 49%;
@@ -240,7 +251,7 @@ export default {
 }
 </style>
 <style lang="scss">
-.billing {
+.billing .nav {
   .el-tabs--left .el-tabs__item.is-left {
     text-align: left;
     height: 50px;

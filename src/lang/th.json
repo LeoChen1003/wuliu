@@ -65,7 +65,12 @@
     "Outbound": "ขาออก",
     "cancel": "ยกเลิก",
     "confirm": "ยืนยัน",
-    "ltl": "สร้างเส้นทาง(LTL)"
+    "ltl": "สร้างเส้นทาง(LTL)",
+    "TobeConfirmedReceipt": "รอยืนยันรับสินค้า",
+    "Received": "รับสินค้าแล้ว",
+    "TobeConfirmedbyDriver": "รอคนขับรถยืนยัน",
+    "TobeHandedOver": "รอส่งมอบ",
+    "HandedOver": "ส่งมอบแล้ว"
   },
   "layout": {
     "logout": "ออกจากระบบ"
