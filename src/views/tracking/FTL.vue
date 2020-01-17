@@ -5,7 +5,7 @@
     </div> -->
     <div style="display:flex;box-sizing:border-box;padding-left:20px;height:100%;">
       <!-- 导航 -->
-      <div style="height:100%;padding-right:18px;" class="nav">
+      <div style="height:100%;" class="nav">
         <el-tabs v-model="tabActive" tab-position="left" @tab-click="tabChange" style="height:100%;">
           <el-tab-pane name="WAIT_DEMAND_TO_ACCEPT">
             <span slot="label">
@@ -244,7 +244,7 @@
               <el-tab-pane :label="'订单详情'" name="detail" class="trackingDetail">
                 <div v-if="thisRow">
                   <div class="rightDetail" :style="`max-height:${detailHeight}px;`">
-                    <el-form label-position="left" label-width="100px">
+                    <el-form label-position="left" label-width="200px">
                       <el-form-item :label="$t('booking.logisiticsType')">{{ thisRow.lineType }}</el-form-item>
                       <el-form-item :label="$t('tracking.remarks')">{{ thisRow.remark }}</el-form-item>
                       <el-form-item :label="$t('booking.truckType')">

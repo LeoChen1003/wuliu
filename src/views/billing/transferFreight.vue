@@ -84,7 +84,7 @@
           </div>
           <div class="right">
             <el-card shadow="never" v-if="thisRow">
-              <el-form label-width="150px" v-if="thisRow" size="mini">
+              <el-form label-width="150px" v-if="thisRow" size="mini" label-position="left">
                 <el-form-item :label="$t('billing.trackingNo')">
                   {{ thisRow.orderNo }}
                 </el-form-item>

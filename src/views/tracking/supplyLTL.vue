@@ -298,7 +298,7 @@
               <el-tab-pane :label="'订单详情'" name="detail" class="trackingDetail">
                 <div v-if="thisRow">
                   <div class="rightDetail" :style="`max-height:${detailHeight}px;`">
-                    <el-form label-position="left" label-width="100px">
+                    <el-form label-position="left" label-width="200px">
                       <el-form-item :label="$t('booking.logisiticsType')">{{ thisRow.order.lineType }}</el-form-item>
                       <el-form-item :label="$t('tracking.remarks')">{{ thisRow.order.remark }}</el-form-item>
                       <!-- <el-form-item :label="$t('booking.truckType')">

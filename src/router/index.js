@@ -299,7 +299,7 @@ export const asyncRoutes = [
         path: "handover",
         component: () => import("@/views/outbound/handover"),
         meta: {
-          title: "Outbound",
+          title: "HandedOver",
           roles: ["HUB"],
           permission: "HubOutBound",
         },

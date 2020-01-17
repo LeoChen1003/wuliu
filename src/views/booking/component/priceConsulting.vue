@@ -389,14 +389,18 @@
                 <div style="text-align:center;">
                   <el-button
                     type="primary"
-                    :disabled="
-                      !permissions.DemandNewOrderOrRelease ||
-                        (scope.row.check && scope.row.check == 'false') ||
-                        isTimeout(scope.row.finishedAt)
-                    "
+                    v-if="logisticType == 'FTL'"
+                    :disabled="!permissions.DemandNewOrderOrRelease"
                     @click="toBooking(scope.row)"
-                    >{{ $t("booking.placeOrder") }}</el-button
-                  >
+                    >{{ $t("booking.placeOrder") }}
+                  </el-button>
+                  <el-button
+                    type="primary"
+                    v-if="logisticType == 'LTL'"
+                    :disabled="!permissions.DemandNewOrderOrRelease || (scope.row.check && scope.row.check == 'false')"
+                    @click="toBooking(scope.row)"
+                    >{{ $t("booking.placeOrder") }}
+                 </el-button>
                 </div>
               </template>
             </el-table-column>
@@ -1181,15 +1185,6 @@ export default {
     }
   },
   methods: {
-    isTimeout(time) {
-      let str = getNormalTime(self.searchForm.pickUpDate) + " " + time;
-      let t = new Date(str);
-      if (new Date().getTime() < t.getTime()) {
-        return false;
-      } else {
-        return true;
-      }
-    },
     initMaps(cb) {
       try {
         google;

@@ -126,13 +126,13 @@
             <el-table-column :label="$t('tracking.supply')">
               <template slot-scope="scope">
                 <div v-if="!(tabActive == '0' || tabActive == '1') && scope.row.transport.supply">
-                  <!-- <div>
+                  <div>
                     {{
                       scope.row.transport.supply.companyName == ""
                         ? scope.row.transport.supply.humanName
                         : scope.row.transport.supply.companyName
                     }}
-                  </div> -->
+                  </div>
                   <!-- <div>
                     {{ scope.row.transport.supply.contactMobile }}
                   </div> -->
@@ -140,7 +140,7 @@
                     {{ truckObj[scope.row.transport.carType] }}
                     {{ subtruckObj[scope.row.transport.carriage] }}
                   </div>
-                  <!-- <div>
+                  <div>
                     {{ scope.row.transport.plate }}
                   </div>
                   <div v-if="scope.row.transport.driver">
@@ -148,7 +148,7 @@
                   </div>
                   <div v-if="scope.row.transport.driver">
                     {{ scope.row.transport.driver.phone }}
-                  </div> -->
+                  </div>
                 </div>
               </template>
             </el-table-column>
@@ -207,7 +207,7 @@
             <el-tab-pane :label="'订单详情'" name="detail" class="trackingDetail">
               <div v-if="thisRow">
                 <div class="rightDetail" :style="`max-height:${detailHeight}px;`">
-                  <el-form label-position="left" label-width="100px">
+                  <el-form label-position="left" label-width="200px">
                     <el-form-item :label="$t('booking.logisiticsType')">{{ thisRow.lineType }}</el-form-item>
                     <el-form-item :label="$t('tracking.remarks')">{{ thisRow.remark }}</el-form-item>
                     <el-form-item :label="$t('booking.truckType')">
