@@ -216,8 +216,32 @@
         <!-- 收货地址列表 -->
         <el-form-item prop="receiverAddressList">
           <div style="display:flex;align-items: flex-end;">
-            <el-table :data="releaseForm.receiverAddressList" border :header-cell-style="headerCellStyle" style="width:95%;">
+            <el-table
+              v-loading="uploadLoading"
+              :data="releaseForm.receiverAddressList"
+              border
+              :header-cell-style="headerCellStyle"
+              style="width:95%;"
+            >
               <el-table-column prop="name" :label="$t('booking.destination')">
+                <template slot="header">
+                  <div style="display:flex;height:35px;">
+                    <div>{{ $t("booking.destination") }}</div>
+                    <el-upload
+                      ref="upload"
+                      :action="baseUrl"
+                      :headers="headers"
+                      :limit="1"
+                      name="excel"
+                      accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                      :on-success="uploadSuccess"
+                      :before-upload="beforeUpload"
+                      :on-error="uploadError"
+                    >
+                      <el-button size="mini" type="primary">点击上传</el-button>
+                    </el-upload>
+                  </div>
+                </template>
                 <template slot-scope="scope">
                   <el-input :placeholder="$t('placeholder.pleaseEnterRecipieName')" v-model="scope.row.name"></el-input>
                 </template>
@@ -426,6 +450,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { getToken } from "@/utils/auth";
 import { releaseOrder } from "../../api/booking";
 import { getTruckType, findDistrictFullList, getGoodsProperty, getSenderList, getTransportList } from "../../api/data";
 import { getNormalTime } from "../../utils/index";
@@ -554,6 +579,11 @@ export default {
           // },
         ],
       },
+      baseUrl: process.env.VUE_APP_BASE_API + "/api/excel/order/parse",
+      headers: {
+        authorization: getToken(),
+        locale: this.$store.getters.language,
+      },
       releaseRules: {
         senderAddress: [
           {
@@ -632,6 +662,7 @@ export default {
       releaseInfo: {},
       pickDateDefault: "",
       cargoListDialog: false,
+      uploadLoading: false,
       cargoTip: [
         {
           unit: "Dimension",
@@ -1016,6 +1047,51 @@ export default {
           self.releaseForm.receiverAddressList[self.curCargoIndex] = self.itemForm;
         }
       });
+    },
+    beforeUpload() {
+      self.uploadLoading = true;
+    },
+    uploadError(res) {
+      self.uploadLoading = false;
+      self.$message.warning(res.message);
+    },
+    uploadSuccess(res) {
+      self.$refs.upload.clearFiles();
+      if (res.status != 200) {
+        self.uploadLoading = false;
+        return self.$message.warning(res.message);
+      }
+      let arr = [];
+      for (let i of res.data) {
+        let content = "";
+        let propertyList = [];
+        for (let x in i.propertyList) {
+          if (i.propertyList[x].number !== 0) {
+            propertyList.push(i.propertyList[x]);
+            content += `${parseInt(x) + 1}.${self.propertyTypeListObj[i.propertyList[x].propertyType]} ${
+              i.propertyList[x].name
+            } ${self.sizeTypeListObj[i.propertyList[x].sizeType]} ${i.propertyList[x].number}${
+              self.unitListObj[i.propertyList[x].unit]
+            } `;
+          }
+        }
+        arr.push({
+          addressDetail: i.addressDetail,
+          code: i.code,
+          mobile: i.mobile,
+          name: i.name,
+          propertyList: propertyList,
+          propertyListContent: content,
+          delRegionList: [
+            {
+              fullname: i.fullName,
+              code: i.code,
+            },
+          ],
+        });
+      }
+      self.releaseForm.receiverAddressList = arr;
+      self.uploadLoading = false;
     },
   },
 };
