@@ -224,7 +224,7 @@
           </div>
           <div style="width:49%;">
             <el-tabs v-model="curTab" @tab-click="handleClick">
-              <el-tab-pane :label="'订单详情'" name="detail" class="trackingDetail">
+              <el-tab-pane :label="$t('tracking.OrderDetails')" name="detail" class="trackingDetail">
                 <div v-if="thisRow">
                   <div class="rightDetail" :style="`max-height:${detailHeight}px;`">
                     <el-form label-position="left" label-width="200px">
@@ -345,8 +345,84 @@
                   </el-timeline>
                 </div>
               </el-tab-pane>
-              <el-tab-pane :label="'签收凭证'" name="r">
-                <div class="rightDetail" :style="`max-height:${detailHeight + 40}px;`"></div>
+              <el-tab-pane :label="$t('tracking.Receipt')" name="r">
+                <div class="rightDetail fixcollapse" :style="`max-height:${detailHeight + 40}px;`" v-if="thisRow">
+                  <el-collapse v-model="activeModel" @change="activeModelChange">
+                    <el-collapse-item name="1">
+                      <template slot="title"> 揽件信息 </template>
+                      <div>
+                        <el-row :gutter="7" style="max-height:110px;">
+                          <el-col :span="8">
+                            <div v-if="thisRow.senderAddress">
+                              <div>{{ thisRow.senderAddress.name }} {{ thisRow.senderAddress.mobile }}</div>
+                              <div>{{ thisRow.senderAddress.addressDetail }}</div>
+                              <div style="line-height:20px;">
+                                {{ thisRow.senderAddress.district }}
+                                {{ thisRow.senderAddress.city }}
+                                {{ thisRow.senderAddress.province }}
+                              </div>
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="margin-top:23px;">{{ thisRow.handoverTime }}</div>
+                          </el-col>
+                          <el-col :span="5">
+                            <el-image
+                              :src="thisRow.pickupSignature"
+                              v-if="thisRow.pickupSignature"
+                              :preview-src-list="[thisRow.pickupSignature]"
+                            ></el-image>
+                          </el-col>
+                          <el-col :span="5">
+                            <el-image
+                              :src="thisRow.pickupPicture"
+                              v-if="thisRow.pickupPicture"
+                              :preview-src-list="[thisRow.pickupPicture]"
+                            ></el-image>
+                          </el-col>
+                        </el-row>
+                      </div>
+                    </el-collapse-item>
+                    <el-collapse-item name="2">
+                      <template slot="title"> 派件列表 </template>
+                      <div v-for="(item, index) in thisRow.receiverAddressList" :key="index" style="margin-bottom:10px;">
+                        <el-row :gutter="7" style="max-height:110px;">
+                          <el-col :span="8">
+                            <div>
+                              {{ item.name }}
+                              {{ item.mobile }}
+                            </div>
+                            <div>
+                              {{ item.addressDetail }}
+                            </div>
+                            <div>
+                              {{ item.district }}
+                              {{ item.city }}
+                              {{ item.province }}
+                            </div>
+                          </el-col>
+                          <el-col :span="6">
+                            <div style="margin-top:23px;">{{ item.deliveryAt }}</div>
+                          </el-col>
+                          <el-col :span="5">
+                            <el-image
+                              :src="item.deliverySignature"
+                              v-if="item.deliverySignature"
+                              :preview-src-list="[item.deliverySignature]"
+                            ></el-image>
+                          </el-col>
+                          <el-col :span="5">
+                            <el-image
+                              :src="item.deliveryPicture"
+                              v-if="item.deliveryPicture"
+                              :preview-src-list="[item.deliveryPicture]"
+                            ></el-image>
+                          </el-col>
+                        </el-row>
+                      </div>
+                    </el-collapse-item>
+                  </el-collapse>
+                </div>
               </el-tab-pane>
             </el-tabs>
           </div>
@@ -602,6 +678,7 @@ export default {
       tableHeight: 0,
       detailHeight: 0,
       serveObj: {},
+      activeModel: ["1", "2"],
     };
   },
   // 监听属性 类似于data概念
@@ -661,6 +738,9 @@ export default {
     });
   },
   methods: {
+    activeModelChange() {
+      self.activeModel = ["1", "2"];
+    },
     clear() {
       if (self.randomNumber != null) {
         self.randomNumber = "";
@@ -1034,6 +1114,12 @@ export default {
   .el-table__body td {
     padding: 0;
     height: 40px;
+  }
+}
+
+.fixcollapse {
+  .el-collapse-item__arrow.is-active {
+    color: #fff;
   }
 }
 </style>

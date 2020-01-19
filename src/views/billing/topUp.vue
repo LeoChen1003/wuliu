@@ -41,7 +41,13 @@
         }}</el-button>
         <div class="container_center">
           <div class="center">
-            <el-table :data="dataList" highlight-current-row @current-change="handleCurrentChange" border>
+            <el-table
+              :data="dataList"
+              highlight-current-row
+              @current-change="handleCurrentChange"
+              border
+              :max-height="tableHeight"
+            >
               <el-table-column prop="operateAt" :label="$t('billing.date')">
                 <template slot-scope="scope">
                   {{ scope.row.operateAt.slice(0, 10) + " " + scope.row.operateAt.slice(11, 19) }}
@@ -60,7 +66,7 @@
               ></el-table-column>
             </el-table>
             <el-pagination
-              style="margin-top:10px;text-align: center;margin-bottom:50px;"
+              style="margin-top:10px;text-align: center;margin-bottom:10px;"
               background
               :page-sizes="[1, 5, 10, 20, 50]"
               :page-size="pagesize"
@@ -73,10 +79,12 @@
           </div>
           <div class="right">
             <el-tabs v-model="curTab" @tab-click="handleClick">
-              <el-tab-pane :label="'充值图片'" name="image" class="trackingDetail">
-                <el-image :src="showUrl" v-if="showUrl"></el-image>
+              <el-tab-pane :label="$t('tracking.TopUPPicture')" name="image" class="trackingDetail">
+                <div class="rightDetail" :style="`max-height:${detailHeight}px;`">
+                  <el-image :src="showUrl" v-if="showUrl"></el-image>
+                </div>
               </el-tab-pane>
-              <el-tab-pane :label="'日志'" name="log" class="trackingDetail"> </el-tab-pane>
+              <el-tab-pane :label="$t('tracking.Log')" name="log" class="trackingDetail"> </el-tab-pane>
             </el-tabs>
           </div>
         </div>
@@ -215,6 +223,8 @@ export default {
       time: "",
       statusCount: {},
       curTab: "image",
+      tableHeight: 0,
+      detailHeight: 0,
     };
   },
   // 监听属性 类似于data概念
@@ -238,6 +248,10 @@ export default {
   mounted() {
     this.getTopUpList();
     self.getCount();
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 32 - 20 - 32 - 20;
+      this.detailHeight = window.innerHeight - 91 - 40 - 32 - 20 - 40 - 15 - 32 - 20;
+    });
   },
   methods: {
     cell({ row, column, rowIndex, columnIndex }) {
@@ -424,6 +438,10 @@ export default {
   .red {
     color: red;
   }
+}
+
+.rightDetail {
+  overflow: scroll;
 }
 </style>
 

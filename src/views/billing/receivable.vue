@@ -52,13 +52,20 @@
         </div>
         <div class="container_center">
           <div class="center">
-            <el-table :data="tableData" highlight-current-row v-loading="loading" @current-change="handleCurrentChange" border>
+            <el-table
+              :data="tableData"
+              highlight-current-row
+              v-loading="loading"
+              @current-change="handleCurrentChange"
+              border
+              :max-height="tableHeight"
+            >
               <el-table-column prop="createdAt" :label="$t('billing.bookingTime')" />
               <el-table-column prop="orderNo" :label="$t('billing.trackingNo')" />
               <el-table-column prop="settlementAmount" :label="$t('billing.totalAmount')" />
             </el-table>
             <el-pagination
-              style="margin-top:10px;text-align: center;margin-bottom:50px;"
+              style="margin-top:10px;text-align: center;margin-bottom:10px;"
               background
               :page-sizes="[1, 5, 10, 20, 50]"
               :page-size="pagesize"
@@ -71,21 +78,23 @@
           </div>
           <div class="right">
             <el-tabs v-model="curTab" @tab-click="handleClick">
-              <el-tab-pane :label="'收费详情'" name="detail" class="trackingDetail">
-                <el-form v-if="thisRow" label-width="130px" label-position="left">
-                  <el-form-item :label="$t('booking.supply')">
-                    {{ thisRow.supply.type == "COMPANY" ? thisRow.supply.companyName : thisRow.supply.humanName }}
-                  </el-form-item>
-                  <el-form-item :label="$t('billing.freight')">
-                    {{ thisRow.settlementAmount - thisRow.serviceAmount }}
-                  </el-form-item>
-                  <div v-for="(item, index) in thisRow.chargeList" :key="index">
-                    <el-form-item :label="serveObj[item.chargeType]">{{ item.money }}</el-form-item>
-                  </div>
-                  <el-form-item :label="$t('booking.totalamt')">
-                    {{ thisRow.settlementAmount }}
-                  </el-form-item>
-                </el-form>
+              <el-tab-pane :label="$t('tracking.FeeDetails')" name="detail" class="trackingDetail">
+                <div class="rightDetail" :style="`max-height:${detailHeight}px;`">
+                  <el-form v-if="thisRow" label-width="130px" label-position="left">
+                    <el-form-item :label="$t('booking.supply')">
+                      {{ thisRow.supply.type == "COMPANY" ? thisRow.supply.companyName : thisRow.supply.humanName }}
+                    </el-form-item>
+                    <el-form-item :label="$t('billing.freight')">
+                      {{ thisRow.settlementAmount - thisRow.serviceAmount }}
+                    </el-form-item>
+                    <div v-for="(item, index) in thisRow.chargeList" :key="index">
+                      <el-form-item :label="serveObj[item.chargeType]">{{ item.money }}</el-form-item>
+                    </div>
+                    <el-form-item :label="$t('booking.totalamt')">
+                      {{ thisRow.settlementAmount }}
+                    </el-form-item>
+                  </el-form>
+                </div>
               </el-tab-pane>
             </el-tabs>
           </div>
@@ -122,6 +131,8 @@ export default {
       dateArrDeFault: [],
       curTab: "detail",
       thisRow: null,
+      tableHeight: 0,
+      detailHeight: 0,
     };
   },
   // 监听属性 类似于data概念
@@ -138,6 +149,10 @@ export default {
     self.dateArrDeFault = arr;
   },
   mounted() {
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 42 - 20 - 32 - 20;
+      this.detailHeight = window.innerHeight - 91 - 40 - 42 - 20 - 40 - 15 - 32 - 20;
+    });
     self.loadData();
     getExtraServer().then(res => {
       let serveObj = new Object();
@@ -209,7 +224,6 @@ export default {
     height: 42px;
     line-height: 40px;
     display: flex;
-    margin-top: 20px;
     align-items: center;
   }
   .content {
@@ -266,6 +280,10 @@ export default {
     color: red;
   }
 }
+
+.rightDetail {
+  overflow: scroll;
+}
 </style>
 <style lang="scss">
 .billing .nav {
@@ -309,6 +327,12 @@ export default {
 
   .el-table__header {
     background-color: #ccc !important;
+  }
+}
+
+.trackingDetail {
+  .el-form-item {
+    margin-bottom: 10px !important;
   }
 }
 </style>

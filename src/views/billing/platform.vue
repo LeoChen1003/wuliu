@@ -47,7 +47,13 @@
         </div>
         <div class="containerContent">
           <div class="center">
-            <el-table :data="dataList" highlight-current-row @current-change="handleCurrentChange" border>
+            <el-table
+              :data="dataList"
+              highlight-current-row
+              @current-change="handleCurrentChange"
+              border
+              :max-height="tableHeight"
+            >
               <el-table-column prop="operateAt" width="100" :label="$t('billing.date')">
                 <template slot-scope="scope">
                   {{ scope.row.operateAt.slice(0, 10) + " " + scope.row.operateAt.slice(11, 19) }}
@@ -68,7 +74,7 @@
               </el-table-column>
             </el-table>
             <el-pagination
-              style="margin-top:10px;text-align: center;margin-bottom:50px;"
+              style="margin-top:10px;text-align: center;margin-bottom:10px;"
               background
               :page-sizes="[1, 5, 10, 20, 50]"
               :page-size="pagesize"
@@ -79,7 +85,7 @@
               :total="page.total"
             ></el-pagination>
           </div>
-          <el-card class="right" shadow="never">
+          <el-card class="right" shadow="never" :style="`max-height:${detailHeight}px;overflow:scroll;`">
             <el-image :src="thisRow.resource.path" style="height:400px;" :preview-src-list="thisRow.preViewList" v-if="thisRow">
               <!-- <div slot="error"
                  class="image-slot">
@@ -198,6 +204,8 @@ export default {
       fromDate: null,
       toDate: null,
       member: "",
+      tableHeight: 0,
+      detailHeight: 0,
     };
   },
   // 监听属性 类似于data概念
@@ -210,6 +218,10 @@ export default {
     self = this;
   },
   mounted() {
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 36 - 20 - 32 - 20;
+      this.detailHeight = window.innerHeight - 91 - 40 - 36 - 20;
+    });
     this.getList();
     this.getCount();
   },

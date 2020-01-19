@@ -14,7 +14,7 @@
           <el-button @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
         </div>
         <div class="center">
-          <el-table :data="dataList" border>
+          <el-table :data="dataList" border :max-height="tableHeight">
             <el-table-column prop="createdAt" :label="$t('billing.date')" />
             <el-table-column prop="eventType" :label="$t('billing.transactionType')" />
             <el-table-column :label="$t('billing.documentNo')">
@@ -44,7 +44,7 @@
             </el-table-column>
           </el-table>
           <el-pagination
-            style="margin-top:10px;text-align: center;margin-bottom:50px;"
+            style="margin-top:10px;text-align: center;margin-bottom:10px;"
             background
             :page-sizes="[1, 5, 10, 20, 50]"
             :page-size="pagesize"
@@ -81,6 +81,7 @@ export default {
       },
       pagesize: 20,
       dateArrDeFault: [],
+      tableHeight: 0,
     };
   },
   // 监听属性 类似于data概念
@@ -96,6 +97,9 @@ export default {
   },
   mounted() {
     self.getJournalList();
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 42 - 20 - 32 - 20;
+    });
   },
   methods: {
     getJournalList() {
