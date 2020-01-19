@@ -440,13 +440,17 @@
                   </el-timeline>
                 </div>
               </el-tab-pane>
-              <el-tab-pane :label="$t('tracking.Receipt')" name="r">
+              <el-tab-pane
+                :label="$t('tracking.Receipt')"
+                name="r"
+                v-if="tabActive == 'SENDING' || tabActive == 'WILL_RETURN' || tabActive == 'COMPLETE'"
+              >
                 <div class="rightDetail fixcollapse" :style="`max-height:${detailHeight + 40}px;`" v-if="thisRow">
                   <el-collapse v-model="activeModel" @change="activeModelChange">
                     <el-collapse-item name="1">
                       <template slot="title"> 揽件信息 </template>
                       <div>
-                        <el-row :gutter="7" style="max-height:110px;">
+                        <el-row :gutter="7" style="max-height:100px;overflow:hidden;">
                           <el-col :span="8">
                             <div v-if="thisRow.order.senderAddress">
                               <div>{{ thisRow.order.senderAddress.name }} {{ thisRow.order.senderAddress.mobile }}</div>
@@ -462,18 +466,26 @@
                             <div style="margin-top:23px;">{{ thisRow.order.handoverTime }}</div>
                           </el-col>
                           <el-col :span="5">
-                            <el-image
-                              :src="thisRow.order.pickupSignature"
-                              v-if="thisRow.order.pickupSignature"
-                              :preview-src-list="[thisRow.order.pickupSignature]"
-                            ></el-image>
+                            <div style="height:100px;width:100px;">
+                              <el-image
+                                :src="thisRow.pickupSignature"
+                                v-if="thisRow.pickupSignature"
+                                :preview-src-list="[thisRow.pickupSignature]"
+                                fit="contain"
+                                style="height:100px;width:100px;"
+                              ></el-image>
+                            </div>
                           </el-col>
                           <el-col :span="5">
-                            <el-image
-                              :src="thisRow.order.pickupPicture"
-                              v-if="thisRow.order.pickupPicture"
-                              :preview-src-list="[thisRow.order.pickupPicture]"
-                            ></el-image>
+                            <div style="height:100px;width:100px;">
+                              <el-image
+                                :src="thisRow.pickupPicture"
+                                v-if="thisRow.pickupPicture"
+                                :preview-src-list="[thisRow.pickupPicture]"
+                                fit="contain"
+                                style="height:100px;width:100px;"
+                              ></el-image>
+                            </div>
                           </el-col>
                         </el-row>
                       </div>
@@ -481,7 +493,7 @@
                     <el-collapse-item name="2">
                       <template slot="title"> 派件列表 </template>
                       <div v-for="(item, index) in thisRow.order.receiverAddressList" :key="index" style="margin-bottom:10px;">
-                        <el-row :gutter="7" style="max-height:110px;">
+                        <el-row :gutter="7" style="max-height:100px;overflow:hidden;">
                           <el-col :span="8">
                             <div>
                               {{ item.name }}
@@ -500,18 +512,26 @@
                             <div style="margin-top:23px;">{{ item.deliveryAt }}</div>
                           </el-col>
                           <el-col :span="5">
-                            <el-image
-                              :src="item.deliverySignature"
-                              v-if="item.deliverySignature"
-                              :preview-src-list="[item.deliverySignature]"
-                            ></el-image>
+                            <div style="height:100px;width:100px;">
+                              <el-image
+                                :src="item.deliverySignature"
+                                v-if="item.deliverySignature"
+                                :preview-src-list="[item.deliverySignature]"
+                                fit="contain"
+                                style="height:100px;width:100px;"
+                              ></el-image>
+                            </div>
                           </el-col>
                           <el-col :span="5">
-                            <el-image
-                              :src="item.deliveryPicture"
-                              v-if="item.deliveryPicture"
-                              :preview-src-list="[item.deliveryPicture]"
-                            ></el-image>
+                            <div style="height:100px;width:100px;">
+                              <el-image
+                                :src="item.deliveryPicture"
+                                v-if="item.deliveryPicture"
+                                :preview-src-list="[item.deliveryPicture]"
+                                fit="contain"
+                                style="height:100px;width:100px;"
+                              ></el-image>
+                            </div>
                           </el-col>
                         </el-row>
                       </div>

@@ -289,6 +289,8 @@ export default {
       if (val) {
         val.preViewList = [val.resource.path];
         self.thisRow = val;
+      } else {
+        self.thisRow = val;
       }
     },
     // 确认
