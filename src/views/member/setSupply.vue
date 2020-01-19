@@ -3,7 +3,7 @@
   <div class="wrapper member">
     <el-tabs v-model="tabActive" tab-position="left" style="height:100%">
       <!-- 基础设置 -->
-      <el-tab-pane name="setting" :label="'体积重量换算'">
+      <el-tab-pane name="setting" :label="$t('member.VolumeWeightDivisor')">
         <div class="container">
           <el-form
             hide-required-asterisk
@@ -33,8 +33,8 @@
           </el-form>
         </div>
       </el-tab-pane>
-      <el-tab-pane name="d" :label="'偏远地区'"><div class="container"></div></el-tab-pane>
-      <el-tab-pane name="s" :label="'用户管理'"><div class="container"></div></el-tab-pane>
+      <el-tab-pane name="d" :label="$t('member.Remotearea')"><div class="container"></div></el-tab-pane>
+      <el-tab-pane name="s" :label="$t('member.UserManagement')"><div class="container"></div></el-tab-pane>
     </el-tabs>
   </div>
 </template>

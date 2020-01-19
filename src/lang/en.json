@@ -70,7 +70,10 @@
     "Received": "Received",
     "TobeConfirmedbyDriver": "To be Confirmed by Driver",
     "TobeHandedOver": "To be Handed  Over ",
-    "HandedOver": "Handed  Over "
+    "HandedOver": "Handed  Over ",
+    "setSupply": "Set Supply",
+    "setDemand": "Set Demand",
+    "setHub": "Set Hub"
   },
   "layout": {
     "logout": "Logout"
@@ -316,7 +319,12 @@
     "cargoArrivedAtHUB": "cargoArrivedAtHUB",
     "confirmedReceiptByHub": "HUB Has Received",
     "save": "Save successfully",
-    "dialog": "Please Select the Order to be Shipped First"
+    "dialog": "Please Select the Order to be Shipped First",
+    "OrderDetails": "Order Details",
+    "Receipt": "Receipt",
+    "FeeDetails": "Fee Details",
+    "TopUPPicture": "Top-UP Picture",
+    "Log": "Log"
   },
   "resources": {
     "add": "Add",
@@ -551,7 +559,10 @@
     "setting": "Basic settings (Supply)",
     "example": "Assuming the conversion ratio is 2500, volume = 100 * 80 * 20 = 160000cm³",
     "example1": "then weight = 160000/2500 = 64kg",
-    "volumeWeightConversion": "Volume weight conversion"
+    "volumeWeightConversion": "Volume weight conversion",
+    "Remote area": "Remote area",
+    "UserManagement": "User Management",
+    "Remotearea": "Remote area"
   },
   "confirm": {
     "tips": "Tips",

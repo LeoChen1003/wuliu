@@ -390,7 +390,7 @@
                   <el-button
                     type="primary"
                     v-if="logisticType == 'FTL'"
-                    :disabled="!permissions.DemandNewOrderOrRelease"
+                    :disabled="!permissions.DemandNewOrderOrRelease || (scope.row.check && scope.row.check == 'false')"
                     @click="toBooking(scope.row)"
                     >{{ $t("booking.placeOrder") }}
                   </el-button>
