@@ -311,13 +311,17 @@
                 </el-timeline>
               </div>
             </el-tab-pane>
-            <el-tab-pane :label="$t('tracking.Receipt')" name="r">
+            <el-tab-pane
+              :label="$t('tracking.Receipt')"
+              name="r"
+              v-if="tabActive == 'SENDING' || tabActive == 'WILL_RETURN' || tabActive == 'COMPLETE'"
+            >
               <div class="rightDetail fixcollapse" :style="`max-height:${detailHeight + 40}px;`" v-if="thisRow">
                 <el-collapse v-model="activeModel" @change="activeModelChange">
                   <el-collapse-item name="1">
                     <template slot="title"> 揽件信息 </template>
                     <div>
-                      <el-row :gutter="7" style="max-height:110px;">
+                      <el-row :gutter="7" style="max-height:100px;overflow:hidden;">
                         <el-col :span="8">
                           <div>
                             <div>{{ thisRow.senderAddress.name }} {{ thisRow.senderAddress.mobile }}</div>
@@ -333,18 +337,26 @@
                           <div style="margin-top:23px;">{{ thisRow.handoverTime }}</div>
                         </el-col>
                         <el-col :span="5">
-                          <el-image
-                            :src="thisRow.pickupSignature"
-                            v-if="thisRow.pickupSignature"
-                            :preview-src-list="[thisRow.pickupSignature]"
-                          ></el-image>
+                          <div style="height:100px;width:100px;">
+                            <el-image
+                              :src="thisRow.pickupSignature"
+                              v-if="thisRow.pickupSignature"
+                              :preview-src-list="[thisRow.pickupSignature]"
+                               fit="contain"
+                               style="height:100px;width:100px;"
+                            ></el-image>
+                          </div>
                         </el-col>
                         <el-col :span="5">
-                          <el-image
-                            :src="thisRow.pickupPicture"
-                            v-if="thisRow.pickupPicture"
-                            :preview-src-list="[thisRow.pickupPicture]"
-                          ></el-image>
+                          <div style="height:100px;width:100px;">
+                            <el-image
+                              :src="thisRow.pickupPicture"
+                              v-if="thisRow.pickupPicture"
+                              :preview-src-list="[thisRow.pickupPicture]"
+                               fit="contain"
+                               style="height:100px;width:100px;"
+                            ></el-image>
+                          </div>
                         </el-col>
                       </el-row>
                     </div>
@@ -352,7 +364,7 @@
                   <el-collapse-item name="2">
                     <template slot="title"> 派件列表 </template>
                     <div v-for="(item, index) in thisRow.receiverAddressList" :key="index" style="margin-bottom:10px;">
-                      <el-row :gutter="7" style="max-height:110px;">
+                      <el-row :gutter="7" style="max-height:100px;overflow:hidden;">
                         <el-col :span="8">
                           <div>
                             {{ item.name }}
@@ -371,18 +383,26 @@
                           <div style="margin-top:23px;">{{ item.deliveryAt }}</div>
                         </el-col>
                         <el-col :span="5">
-                          <el-image
-                            :src="item.deliverySignature"
-                            v-if="item.deliverySignature"
-                            :preview-src-list="[item.deliverySignature]"
-                          ></el-image>
+                          <div style="height:100px;width:100px;">
+                            <el-image
+                              :src="item.deliverySignature"
+                              v-if="item.deliverySignature"
+                              :preview-src-list="[item.deliverySignature]"
+                              fit="contain"
+                              style="height:100px;width:100px;"
+                            ></el-image>
+                          </div>
                         </el-col>
                         <el-col :span="5">
-                          <el-image
-                            :src="item.deliveryPicture"
-                            v-if="item.deliveryPicture"
-                            :preview-src-list="[item.deliveryPicture]"
-                          ></el-image>
+                          <div style="height:100px;width:100px;">
+                            <el-image
+                              :src="item.deliveryPicture"
+                              v-if="item.deliveryPicture"
+                              :preview-src-list="[item.deliveryPicture]"
+                              fit="contain"
+                              style="height:100px;width:100px;"
+                            ></el-image>
+                          </div>
                         </el-col>
                       </el-row>
                     </div>
@@ -427,7 +447,11 @@
               }}
             </div>
             <div v-if="scope.row.supply.companyLogo">
-              <el-image style="width: 50px;max-height:100px;" :src="scope.row.supply.companyLogo" fit="contain"></el-image>
+              <el-image
+                style="width: 50px;max-height:100px;overflow:hidden;"
+                :src="scope.row.supply.companyLogo"
+                fit="contain"
+              ></el-image>
             </div>
           </template>
         </el-table-column>
@@ -712,13 +736,17 @@ export default {
     confirmIt() {
       const self = this;
       self.confirmLoading = true;
-      demandquoteConfirm(self.curId, self.selected.id).then(res => {
-        self.$message.success(res.message);
-        self.loadData();
-        self.radio = "";
-        self.confirmDialog = false;
-        self.confirmLoading = false;
-      });
+      demandquoteConfirm(self.curId, self.selected.id)
+        .then(res => {
+          self.$message.success(res.message);
+          self.loadData();
+          self.radio = "";
+          self.confirmDialog = false;
+          self.confirmLoading = false;
+        })
+        .catch(() => {
+          self.confirmLoading = false;
+        });
     },
     orderLog(id) {
       getOrderLog(id).then(res => {
