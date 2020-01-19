@@ -70,7 +70,10 @@
     "Received": "รับสินค้าแล้ว",
     "TobeConfirmedbyDriver": "รอคนขับรถยืนยัน",
     "TobeHandedOver": "รอส่งมอบ",
-    "HandedOver": "ส่งมอบแล้ว"
+    "HandedOver": "ส่งมอบแล้ว",
+    "setSupply": "ตั้งค่าผู้ให้บริการ",
+    "setDemand": "ตั้งค่าผู้ใช้บริการ",
+    "setHub": "ตั้งค่าHub"
   },
   "layout": {
     "logout": "ออกจากระบบ"
@@ -314,7 +317,12 @@
     "pickupDate": "เวลาเข้ารับสินค้า",
     "orderQty": "จำนวนออเดอร์",
     "truck": "รถบรรทุก",
-    "VAS": "บริการเสริม"
+    "VAS": "บริการเสริม",
+    "OrderDetails": "รายละเอียดออเดอร์",
+    "Receipt": "ลายมือชื่อผู้รับ",
+    "FeeDetails": "รายละเอียดการเรียกเก็บเงิน",
+    "TopUPPicture": "สลิปโอนเงิน",
+    "Log": "Log"
   },
   "resources": {
     "add": "เพิ่มเส้นทาง",
@@ -547,7 +555,10 @@
     "VolumeWeightDivisor": "แปลงปริมาตรเป็นน้ำหนัก",
     "example": "หากตัวแปลงปริมาตรคือ2500 ปริมาตร=100*80*20=16000cm³",
     "example1": "ฉะนั้น น้ำหนัก=160000/2500=64kg",
-    "volumeWeightConversion": "แปลงปริมาตรเป็นน้ำหนัก"
+    "volumeWeightConversion": "แปลงปริมาตรเป็นน้ำหนัก",
+    "Remote area": "พื้นที่ห่างไกล",
+    "UserManagement": "จัดการบัญชี",
+    "Remotearea": "พื้นที่ห่างไกล"
   },
   "confirm": {
     "tips": "คำแนะนำ",

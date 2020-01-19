@@ -35,9 +35,8 @@
           <span style="margin:0 10px 0 20px;font-size:16px;">{{ $t("billing.deliveredDate") }}</span>
           <div class="timePicker">
             <bc-picker :dateType="'daterange'" @changeBCtime="changeBCtime"></bc-picker>
-            <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
+            <el-button @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
             <el-button
-              size="small"
               @click="confirmShow"
               v-if="tabActive == 'UNPAID'"
               :disabled="!permissions.PlatformFianceConfirm"
@@ -49,7 +48,14 @@
         </div>
         <div class="containerContent">
           <div class="center">
-            <el-table :data="tableData" highlight-current-row v-loading="loading" @current-change="handleCurrentChange" border>
+            <el-table
+              :data="tableData"
+              highlight-current-row
+              v-loading="loading"
+              @current-change="handleCurrentChange"
+              border
+              :max-height="tableHeight"
+            >
               <el-table-column prop="orderNo" :label="$t('billing.trackingNo')" />
               <el-table-column :label="$t('billing.supply')">
                 <template slot-scope="scope">
@@ -71,7 +77,7 @@
               </el-table-column>
             </el-table>
             <el-pagination
-              style="margin-top:10px;text-align: center;margin-bottom:50px;"
+              style="margin-top:10px;text-align: center;margin-bottom:10px;"
               background
               :page-sizes="[1, 5, 10, 20, 50]"
               :page-size="pagesize"
@@ -83,7 +89,7 @@
             />
           </div>
           <div class="right">
-            <el-card shadow="never" v-if="thisRow">
+            <el-card shadow="never" v-if="thisRow" :style="`max-height:${detailHeight}px;overflow:scroll;`">
               <el-form label-width="150px" v-if="thisRow" size="mini" label-position="left">
                 <el-form-item :label="$t('billing.trackingNo')">
                   {{ thisRow.orderNo }}
@@ -221,6 +227,8 @@ export default {
       previewDialog: false,
       previewImg: "",
       confirmLoading: false,
+      tableHeight: 0,
+      detailHeight: 0,
     };
   },
   // 监听属性 类似于data概念
@@ -242,6 +250,10 @@ export default {
     self = this;
   },
   mounted() {
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 42 - 20 - 32 - 20;
+      this.detailHeight = window.innerHeight - 91 - 40 - 42 - 20;
+    });
     self.loadData();
   },
   methods: {
