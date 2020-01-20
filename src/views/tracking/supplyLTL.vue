@@ -276,7 +276,10 @@
                     To:{{ scope.row.order.receiverAddressList[0].district }} {{ scope.row.order.receiverAddressList[0].city }}
                     {{ scope.row.order.receiverAddressList[0].province }}
                   </div>
-                  <div>共{{ scope.row.order.receiverAddressList.length }}个派送点</div>
+                  <div v-if="scope.row.order.receiverAddressList.length > 1">
+                    {{ $t("tracking.Total") }} {{ scope.row.order.receiverAddressList.length }}
+                    {{ $t("tracking.deliverypoints") }}
+                  </div>
                 </template>
               </el-table-column>
             </el-table>
@@ -448,7 +451,7 @@
                 <div class="rightDetail fixcollapse" :style="`max-height:${detailHeight + 40}px;`" v-if="thisRow">
                   <el-collapse v-model="activeModel" @change="activeModelChange">
                     <el-collapse-item name="1">
-                      <template slot="title"> 揽件信息 </template>
+                      <template slot="title"> {{ $t("tracking.Pickupinformation") }} </template>
                       <div>
                         <el-row :gutter="7" style="max-height:100px;overflow:hidden;">
                           <el-col :span="8">
@@ -468,9 +471,9 @@
                           <el-col :span="5">
                             <div style="height:100px;width:100px;">
                               <el-image
-                                :src="thisRow.pickupSignature"
-                                v-if="thisRow.pickupSignature"
-                                :preview-src-list="[thisRow.pickupSignature]"
+                                :src="thisRow.order.pickupSignature"
+                                v-if="thisRow.order.pickupSignature"
+                                :preview-src-list="[thisRow.order.pickupSignature]"
                                 fit="contain"
                                 style="height:100px;width:100px;"
                               ></el-image>
@@ -479,9 +482,9 @@
                           <el-col :span="5">
                             <div style="height:100px;width:100px;">
                               <el-image
-                                :src="thisRow.pickupPicture"
-                                v-if="thisRow.pickupPicture"
-                                :preview-src-list="[thisRow.pickupPicture]"
+                                :src="thisRow.order.pickupPicture"
+                                v-if="thisRow.order.pickupPicture"
+                                :preview-src-list="[thisRow.order.pickupPicture]"
                                 fit="contain"
                                 style="height:100px;width:100px;"
                               ></el-image>
@@ -491,7 +494,7 @@
                       </div>
                     </el-collapse-item>
                     <el-collapse-item name="2">
-                      <template slot="title"> 派件列表 </template>
+                      <template slot="title"> {{ $t("tracking.Deliverylist") }} </template>
                       <div v-for="(item, index) in thisRow.order.receiverAddressList" :key="index" style="margin-bottom:10px;">
                         <el-row :gutter="7" style="max-height:100px;overflow:hidden;">
                           <el-col :span="8">

@@ -322,7 +322,11 @@
     "Receipt": "ลายมือชื่อผู้รับ",
     "FeeDetails": "รายละเอียดการเรียกเก็บเงิน",
     "TopUPPicture": "สลิปโอนเงิน",
-    "Log": "Log"
+    "Log": "Log",
+    "Pickupinformation": "ข้อมูลงานรับ",
+    "Deliverylist": "รายการงานส่ง",
+    "Total": "รวม",
+    "deliverypoints": "จุดส่ง"
   },
   "resources": {
     "add": "เพิ่มเส้นทาง",
@@ -558,7 +562,8 @@
     "volumeWeightConversion": "แปลงปริมาตรเป็นน้ำหนัก",
     "Remote area": "พื้นที่ห่างไกล",
     "UserManagement": "จัดการบัญชี",
-    "Remotearea": "พื้นที่ห่างไกล"
+    "Remotearea": "พื้นที่ห่างไกล",
+    "Addressbook": "สมุดที่อยู่"
   },
   "confirm": {
     "tips": "คำแนะนำ",
