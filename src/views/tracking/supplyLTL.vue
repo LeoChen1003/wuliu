@@ -445,7 +445,7 @@
               </el-tab-pane>
               <el-tab-pane
                 :label="$t('tracking.Receipt')"
-                name="r"
+                name="receipt"
                 v-if="tabActive == 'SENDING' || tabActive == 'WILL_RETURN' || tabActive == 'COMPLETE'"
               >
                 <div class="rightDetail fixcollapse" :style="`max-height:${detailHeight + 40}px;`" v-if="thisRow">
@@ -655,7 +655,7 @@
         </el-tab-pane>
       </el-tabs>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="proDialog = false">取 消</el-button>
+        <el-button @click="proDialog = false">{{ $t("route.cancel") }}</el-button>
         <el-button type="primary" @click="proDialog = false">确 定</el-button>
       </span>
     </el-dialog>
@@ -739,7 +739,7 @@
         </el-table-column>
       </el-table>
       <div style="display:flex;justify-content:flex-end;margin-top:20px;">
-        <el-button @click="assignDialog = false" type="info">取 消</el-button>
+        <el-button @click="assignDialog = false" type="info">{{ $t("route.cancel") }}</el-button>
         <el-button type="primary" style="width:150px;" @click="assignConfirm">确 定</el-button>
       </div>
     </el-dialog>
@@ -1051,6 +1051,14 @@ export default {
       });
     },
     tabChange() {
+      if (
+        self.tabActive != "SENDING" &&
+        self.tabActive != "WILL_RETURN" &&
+        self.tabActive != "COMPLETE" &&
+        self.curTab == "receipt"
+      ) {
+        self.curTab = "detail";
+      }
       self.data.number = 0;
       self.loadData();
     },

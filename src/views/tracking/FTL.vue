@@ -381,7 +381,7 @@
               </el-tab-pane>
               <el-tab-pane
                 :label="$t('tracking.Receipt')"
-                name="r"
+                name="receipt"
                 v-if="tabActive == 'SENDING' || tabActive == 'WILL_RETURN' || tabActive == 'COMPLETE'"
               >
                 <div class="rightDetail fixcollapse" :style="`max-height:${detailHeight + 40}px;`" v-if="thisRow">
@@ -891,6 +891,14 @@ export default {
       });
     },
     tabChange() {
+      if (
+        self.tabActive != "SENDING" &&
+        self.tabActive != "WILL_RETURN" &&
+        self.tabActive != "COMPLETE" &&
+        self.curTab == "receipt"
+      ) {
+        self.curTab = "detail";
+      }
       self.data.number = 0;
       self.loadData();
     },
