@@ -269,7 +269,7 @@
         </el-tab-pane>
       </el-tabs>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="proDialog = false">取 消</el-button>
+        <el-button @click="proDialog = false">{{ $t("route.cancel") }}</el-button>
         <el-button type="primary" @click="proDialog = false">确 定</el-button>
       </span>
     </el-dialog>

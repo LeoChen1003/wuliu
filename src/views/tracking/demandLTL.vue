@@ -347,7 +347,7 @@
               </el-tab-pane>
               <el-tab-pane
                 :label="$t('tracking.Receipt')"
-                name="r"
+                name="receipt"
                 v-if="tabActive == 'SENDING' || tabActive == 'WILL_RETURN' || tabActive == 'COMPLETE'"
               >
                 <div class="rightDetail fixcollapse" :style="`max-height:${detailHeight + 40}px;`" v-if="thisRow">
@@ -584,7 +584,7 @@
         <el-input v-model="ratingForm.remark" type="textarea" :placeholder="$t('tracking.remark')" resize="none"></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="ratingDialog = false">取 消</el-button>
+        <el-button @click="ratingDialog = false">{{ $t("route.cancel") }}</el-button>
         <el-button type="primary" @click="ratingConfirm">确 定</el-button>
       </span>
     </el-dialog>
@@ -880,6 +880,14 @@ export default {
       self.time_at = time;
     },
     changeTab() {
+      if (
+        self.tabActive != "SENDING" &&
+        self.tabActive != "WILL_RETURN" &&
+        self.tabActive != "COMPLETE" &&
+        self.curTab == "receipt"
+      ) {
+        self.curTab = "detail";
+      }
       self.tableLoading = true;
       self.getData();
     },

@@ -313,7 +313,7 @@
             </el-tab-pane>
             <el-tab-pane
               :label="$t('tracking.Receipt')"
-              name="r"
+              name="receipt"
               v-if="tabActive == 'SENDING' || tabActive == 'WILL_RETURN' || tabActive == 'COMPLETE'"
             >
               <div class="rightDetail fixcollapse" :style="`max-height:${detailHeight + 40}px;`" v-if="thisRow">
@@ -342,8 +342,8 @@
                               :src="thisRow.pickupSignature"
                               v-if="thisRow.pickupSignature"
                               :preview-src-list="[thisRow.pickupSignature]"
-                               fit="contain"
-                               style="height:100px;width:100px;"
+                              fit="contain"
+                              style="height:100px;width:100px;"
                             ></el-image>
                           </div>
                         </el-col>
@@ -353,8 +353,8 @@
                               :src="thisRow.pickupPicture"
                               v-if="thisRow.pickupPicture"
                               :preview-src-list="[thisRow.pickupPicture]"
-                               fit="contain"
-                               style="height:100px;width:100px;"
+                              fit="contain"
+                              style="height:100px;width:100px;"
                             ></el-image>
                           </div>
                         </el-col>
@@ -480,7 +480,7 @@
         </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="confirmDialog = false">取 消</el-button>
+        <el-button @click="confirmDialog = false">{{ $t("route.cancel") }}</el-button>
         <el-button :disabled="radio === ''" type="primary" :loading="confirmLoading" @click="confirmIt">{{
           $t("tracking.confirm")
         }}</el-button>
@@ -499,7 +499,7 @@
         <el-input v-model="ratingForm.remark" type="textarea" :placeholder="$t('tracking.remark')" resize="none"></el-input>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="ratingDialog = false">取 消</el-button>
+        <el-button @click="ratingDialog = false">{{ $t("route.cancel") }}</el-button>
         <el-button type="primary" @click="ratingConfirm">确 定</el-button>
       </span>
     </el-dialog>
@@ -714,6 +714,14 @@ export default {
       });
     },
     changeTab() {
+      if (
+        self.tabActive != "SENDING" &&
+        self.tabActive != "WILL_RETURN" &&
+        self.tabActive != "COMPLETE" &&
+        self.curTab == "receipt"
+      ) {
+        self.curTab = "detail";
+      }
       self.data = {};
       self.loadData();
       self.thisRow = null;
