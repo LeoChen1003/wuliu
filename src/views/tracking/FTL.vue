@@ -222,7 +222,9 @@
                     To:{{ scope.row.receiverAddressList[0].district }} {{ scope.row.receiverAddressList[0].city }}
                     {{ scope.row.receiverAddressList[0].province }}
                   </div>
-                  <div>共{{ scope.row.receiverAddressList.length }}个派送点</div>
+                  <div v-if="scope.row.receiverAddressList.length > 1">
+                    {{ $t("tracking.Total") }} {{ scope.row.receiverAddressList.length }} {{ $t("tracking.deliverypoints") }}
+                  </div>
                 </template>
               </el-table-column>
             </el-table>
@@ -385,7 +387,7 @@
                 <div class="rightDetail fixcollapse" :style="`max-height:${detailHeight + 40}px;`" v-if="thisRow">
                   <el-collapse v-model="activeModel" @change="activeModelChange">
                     <el-collapse-item name="1">
-                      <template slot="title"> 揽件信息 </template>
+                      <template slot="title"> {{ $t("tracking.Pickupinformation") }} </template>
                       <div>
                         <el-row :gutter="7" style="max-height:100px;overflow:hidden;">
                           <el-col :span="8">
@@ -428,7 +430,7 @@
                       </div>
                     </el-collapse-item>
                     <el-collapse-item name="2">
-                      <template slot="title"> 派件列表 </template>
+                      <template slot="title"> {{ $t("tracking.Deliverylist") }} </template>
                       <div v-for="(item, index) in thisRow.receiverAddressList" :key="index" style="margin-bottom:10px;">
                         <el-row :gutter="7" style="max-height:100px;overflow:hidden;">
                           <el-col :span="8">

@@ -2,7 +2,7 @@
 <template>
   <div class="wrapper member">
     <el-tabs v-model="tabActive" tab-position="left" style="height:100%">
-      <el-tab-pane name="t" :label="'通讯录'"><div class="container"></div></el-tab-pane>
+      <el-tab-pane name="t" :label="$t('member.Addressbook')"><div class="container"></div></el-tab-pane>
       <el-tab-pane name="s" :label="$t('member.UserManagement')"><div class="container"></div></el-tab-pane>
     </el-tabs>
   </div>

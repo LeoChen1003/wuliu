@@ -324,7 +324,11 @@
     "Receipt": "Receipt",
     "FeeDetails": "Fee Details",
     "TopUPPicture": "Top-UP Picture",
-    "Log": "Log"
+    "Log": "Log",
+    "Pickupinformation": "Pickup information",
+    "Deliverylist": "Delivery list",
+    "Total": "Total",
+    "deliverypoints": "delivery points"
   },
   "resources": {
     "add": "Add",
@@ -562,7 +566,8 @@
     "volumeWeightConversion": "Volume weight conversion",
     "Remote area": "Remote area",
     "UserManagement": "User Management",
-    "Remotearea": "Remote area"
+    "Remotearea": "Remote area",
+    "Addressbook": "Address book"
   },
   "confirm": {
     "tips": "Tips",
