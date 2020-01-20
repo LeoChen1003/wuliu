@@ -224,24 +224,6 @@
               style="width:95%;"
             >
               <el-table-column prop="name" :label="$t('booking.destination')">
-                <template slot="header">
-                  <div style="display:flex;height:35px;">
-                    <div>{{ $t("booking.destination") }}</div>
-                    <el-upload
-                      ref="upload"
-                      :action="baseUrl"
-                      :headers="headers"
-                      :limit="1"
-                      name="excel"
-                      accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                      :on-success="uploadSuccess"
-                      :before-upload="beforeUpload"
-                      :on-error="uploadError"
-                    >
-                      <el-button size="mini" type="primary">点击上传</el-button>
-                    </el-upload>
-                  </div>
-                </template>
                 <template slot-scope="scope">
                   <el-input :placeholder="$t('placeholder.pleaseEnterRecipieName')" v-model="scope.row.name"></el-input>
                 </template>
@@ -315,18 +297,36 @@
         </el-form-item>
       </el-row>
     </el-form>
-    <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:15px;margin-top:30px;margin-right:35px;">
-      <el-button style="width:200px;" @click="$router.replace('/billing/topUp')" type="primary">{{
-        $t("booking.topUp")
-      }}</el-button>
-      <el-button
-        style="width:200px;"
-        @click="todoIt"
-        :loading="todoLoading"
-        :disabled="!permissions.DemandNewOrderOrRelease"
-        type="primary"
-        >{{ $t("booking.releaseToMarket") }}</el-button
+    <div
+      style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;margin-top:30px;margin-right:35px;"
+    >
+      <el-upload
+        ref="upload"
+        :action="baseUrl"
+        :headers="headers"
+        :limit="1"
+        name="excel"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+        :on-success="uploadSuccess"
+        :before-upload="beforeUpload"
+        :on-error="uploadError"
+        :show-file-list="false"
       >
+        <el-button type="primary">批量导入</el-button>
+      </el-upload>
+      <div>
+        <el-button style="width:200px;" @click="$router.replace('/billing/topUp')" type="primary">{{
+          $t("booking.topUp")
+        }}</el-button>
+        <el-button
+          style="width:200px;"
+          @click="todoIt"
+          :loading="todoLoading"
+          :disabled="!permissions.DemandNewOrderOrRelease"
+          type="primary"
+          >{{ $t("booking.releaseToMarket") }}</el-button
+        >
+      </div>
     </div>
     <!-- 货物清单 dialog -->
     <el-dialog :visible.sync="cargoListDialog" :title="$t('booking.cargoList')" width="1250px" center>
