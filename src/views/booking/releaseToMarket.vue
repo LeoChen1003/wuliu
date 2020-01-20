@@ -300,20 +300,25 @@
     <div
       style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;margin-top:30px;margin-right:35px;"
     >
-      <el-upload
-        ref="upload"
-        :action="baseUrl"
-        :headers="headers"
-        :limit="1"
-        name="excel"
-        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-        :on-success="uploadSuccess"
-        :before-upload="beforeUpload"
-        :on-error="uploadError"
-        :show-file-list="false"
-      >
-        <el-button type="primary">批量导入</el-button>
-      </el-upload>
+      <div style="display:flex;align-items:center;">
+        <el-upload
+          ref="upload"
+          :action="baseUrl"
+          :headers="headers"
+          :limit="1"
+          name="excel"
+          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          :on-success="uploadSuccess"
+          :before-upload="beforeUpload"
+          :on-error="uploadError"
+          :show-file-list="false"
+        >
+          <el-button type="primary">{{ $t("booking.importExcel") }}</el-button>
+        </el-upload>
+        <el-button type="text" style="margin-left:20px;" @click="downloadTemplate">{{
+          $t("booking.downloadExcelTemplate")
+        }}</el-button>
+      </div>
       <div>
         <el-button style="width:200px;" @click="$router.replace('/billing/topUp')" type="primary">{{
           $t("booking.topUp")
@@ -1092,6 +1097,9 @@ export default {
       }
       self.releaseForm.receiverAddressList = arr;
       self.uploadLoading = false;
+    },
+    downloadTemplate() {
+      window.open("https://oss-pro.t-rex56.com/logistics/upload/template.xlsx");
     },
   },
 };

@@ -633,5 +633,7 @@
     "operation": "Manage",
     "edit": "Edit",
     "routeDetails": "Route Details"
-  }
+  },
+  "booking.importExcel": "Import Excel",
+  "booking.downloadExcelTemplate": "Download Excel template"
 }

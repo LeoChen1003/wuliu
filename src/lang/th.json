@@ -626,5 +626,7 @@
     "edit": "แก้ไข",
     "routeDetails": "รายละเอียดเส้นทาง",
     "cutOffTime": "Cut off Time"
-  }
+  },
+  "booking.importExcel": "นำเข้าไฟล์ excel",
+  "booking.downloadExcelTemplate": "ดาวน์โหลดไฟล์ Excel"
 }
