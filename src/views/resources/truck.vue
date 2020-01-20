@@ -643,23 +643,23 @@ export default {
   text-align: center;
 }
 
-.el-upload {
-  width: 60px !important;
-  height: 60px !important;
-}
-
-.el-upload-list {
-  .is-success,
-  .is-uploading,
-  .is-ready {
-    width: 60px !important;
-    height: 60px !important;
-  }
-}
-
 .inputWidth {
   .el-icon-plus {
     transform: translateY(-38px) !important;
+  }
+
+  .el-upload {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .el-upload-list {
+    .is-success,
+    .is-uploading,
+    .is-ready {
+      width: 60px !important;
+      height: 60px !important;
+    }
   }
 }
 </style>
