@@ -21,7 +21,7 @@
         </el-table>
       </el-col>
       <el-col :span="12">
-        <el-tabs v-model="activeTab" type="border-card">
+        <el-tabs v-model="activeTab">
           <el-tab-pane :label="$t('resources.task')" name="first">
             <el-table :data="[]" border :cell-style="cell">
               <el-table-column prop="" :label="$t('resources.TaskNo')"></el-table-column>
@@ -30,56 +30,54 @@
             </el-table>
           </el-tab-pane>
           <el-tab-pane :label="$t('resources.detailedInformation')" name="second">
-            <el-form class="form" v-if="thisRow" label-position="left" label-width="160px">
-              <el-form-item prop="name" :label="$t('resources.name')">
-                <el-input v-model="thisRow.name" disabled class="inputWidth"></el-input>
-              </el-form-item>
-              <el-form-item prop="phone" :label="$t('resources.phone')">
-                <el-input v-model="thisRow.phone" disabled class="inputWidth"></el-input>
-              </el-form-item>
-              <el-form-item prop="status" :label="$t('resources.status')">
-                <el-select
-                  v-model="thisRow.activeStatus"
-                  disabled
-                  :placeholder="$t('placeholder.pleaseChoose')"
-                  class="inputWidth"
-                >
-                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item :label="$t('resources.license')" v-if="licPreList.length != 0">
-                <div class="inputWidth">
-                  <el-image
-                    v-for="(img, index) in licPreList"
-                    :key="index"
-                    style="width: 100px; height: 100px;margin-right:10px;"
-                    :src="img"
-                    :preview-src-list="licPreList"
+            <div style="background:#fff;">
+              <el-form class="form" v-if="thisRow" label-position="left" label-width="160px">
+                <el-form-item prop="name" :label="$t('resources.name')">
+                  <div class="inputWidth">
+                    {{ thisRow.name }}
+                  </div>
+                </el-form-item>
+                <el-form-item prop="phone" :label="$t('resources.phone')">
+                  <div class="inputWidth">
+                    {{ thisRow.phone }}
+                  </div>
+                </el-form-item>
+                <el-form-item prop="status" :label="$t('resources.status')">
+                  <el-select
+                    v-model="thisRow.activeStatus"
+                    disabled
+                    :placeholder="$t('placeholder.pleaseChoose')"
+                    class="inputWidth"
                   >
-                  </el-image>
-                </div>
-              </el-form-item>
-              <el-form-item :label="$t('resources.identityCard')" v-if="idePreList.length != 0">
-                <div class="inputWidth">
-                  <!-- <el-image
-                    v-for="(img, index) in idePreList"
-                    :key="index"
-                    style="width: 100px; height: 100px;margin-right:10px;"
-                    :src="img + '?x-oss-process=style/th-90'"
-                    :preview-src-list="idePreList"
-                  >
-                  </el-image> -->
-                  <el-image
-                    v-for="(img, index) in idePreList"
-                    :key="index"
-                    style="width: 100px; height: 100px;margin-right:10px;"
-                    :src="img"
-                    :preview-src-list="idePreList"
-                  >
-                  </el-image>
-                </div>
-              </el-form-item>
-            </el-form>
+                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item :label="$t('resources.license')" v-if="licPreList.length != 0">
+                  <div class="inputWidth">
+                    <el-image
+                      v-for="(img, index) in licPreList"
+                      :key="index"
+                      style="width: 100px; height: 100px;margin-right:10px;"
+                      :src="img"
+                      :preview-src-list="licPreList"
+                    >
+                    </el-image>
+                  </div>
+                </el-form-item>
+                <el-form-item :label="$t('resources.identityCard')" v-if="idePreList.length != 0">
+                  <div class="inputWidth">
+                    <el-image
+                      v-for="(img, index) in idePreList"
+                      :key="index"
+                      style="width: 100px; height: 100px;margin-right:10px;"
+                      :src="img"
+                      :preview-src-list="idePreList"
+                    >
+                    </el-image>
+                  </div>
+                </el-form-item>
+              </el-form>
+            </div>
           </el-tab-pane>
           <el-tab-pane :label="$t('resources.locationTracking')" name="third"></el-tab-pane>
         </el-tabs>

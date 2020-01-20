@@ -762,6 +762,10 @@ export default {
     }
   }
 
+  .county {
+    font-size: 16px;
+  }
+
   .actived {
     border: 1px solid red;
   }

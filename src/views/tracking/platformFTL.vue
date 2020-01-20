@@ -1,13 +1,12 @@
 <template>
-  <div class="manage cardFix">
+  <div class="manage cardFix tracking">
     <!-- <div class="statusHeader">
       <el-button type="primary">{{$t('tracking.releaseAReturnTruck')}}</el-button>
     </div> -->
-    <div style="display:flex;box-sizing:border-box;padding:0 20px;">
+    <div style="display:flex;box-sizing:border-box;padding-left:20px;height:100%;">
       <!-- 导航 -->
-      <div style="height:100%;padding-right:18px;">
-        <div class="statusText">{{ $t("billing.billingStatus") }}</div>
-        <el-tabs v-model="tabActive" tab-position="left" @tab-click="tabChange" style="height:calc(100% - 50px);">
+      <div style="height:100%;" class="nav">
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="tabChange" style="height:100%;">
           <el-tab-pane name="WAIT_DEMAND_TO_ACCEPT">
             <span slot="label">
               <div class="tabLabel">
@@ -85,7 +84,7 @@
           </div>`
           <el-button type="primary">{{$t('tracking.search')}}</el-button>
         </div> -->
-        <el-table :data="data.content" v-loading="loading" border>
+        <el-table :data="data.content" v-loading="loading" border :max-height="tableHeight">
           <el-table-column :label="$t('tracking.tracking')">
             <template slot-scope="scope">
               <el-button style="width:100%;text-align:left;" @click="orderLog(scope.row.id)">
@@ -146,7 +145,7 @@
             </template>
           </el-table-column>
           <el-table-column :label="$t('tracking.pickupPoint')">
-            <template slot-scope="scope">
+            <template slot-scope="scope" v-if="scope.row.senderAddress">
               <div>
                 {{ scope.row.senderAddress.name }}
                 {{ scope.row.senderAddress.mobile }}
@@ -354,6 +353,7 @@ export default {
         province: "",
       },
       logs: [],
+      tableHeight:0,
     };
   },
   // 监听属性 类似于data概念
@@ -364,6 +364,9 @@ export default {
     self = this;
   },
   mounted() {
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 32 - 40;
+    });
     getProvinceList().then(res => {
       self.provinceList = res.data;
     });
@@ -493,21 +496,11 @@ export default {
 //@import url(); 引入公共css类
 .manage {
   height: 100%;
-  padding-top: 20px;
   box-sizing: border-box;
 }
 .statusHeader {
   display: flex;
   margin-bottom: 20px;
-}
-
-.statusText {
-  height: 50px;
-  border-bottom: 2px solid #dfe4ed;
-  margin-right: 9px;
-  box-sizing: border-box;
-  padding-bottom: 30px;
-  line-height: 50px;
 }
 
 .comfirmDialog {
@@ -519,7 +512,12 @@ export default {
 }
 
 .container {
-  width: 90%;
+  width: 100%;
+  background: #fff;
+  padding: 20px;
+  height: calc(100vh - 91px);
+  overflow: auto;
+  box-sizing: border-box;
 }
 
 .container-header {
@@ -535,10 +533,22 @@ export default {
   display: flex;
   justify-content: flex-end;
 
+  .text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 150px;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 16px;
+  }
+
   .badge {
     font-size: 12px;
     margin-left: 5px;
     color: #aaa;
+    width: 25px;
+    text-align: right;
   }
 
   .red {
@@ -549,7 +559,7 @@ export default {
   width: 100%;
 }
 </style>
-<style>
+<style lang="scss">
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
@@ -557,5 +567,49 @@ input::-webkit-inner-spin-button {
 }
 .cardFix .el-card__body {
   padding: 5px 10px;
+}
+
+.tracking .nav {
+  .el-tabs--left .el-tabs__item.is-left {
+    text-align: left;
+    height: 50px;
+  }
+
+  .el-tabs__content {
+    background-color: #fff;
+  }
+
+  .el-tabs__active-bar {
+    width: 0;
+    height: 0;
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__active-bar.is-left {
+    width: 0;
+    height: 0;
+  }
+
+  .el-tabs__nav-wrap::after {
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__nav-wrap.is-left {
+    width: 185px;
+    padding-top: 20px;
+  }
+
+  .el-tabs--left .el-tabs__header.is-left {
+    margin-left: -10px;
+    background-color: #fff;
+  }
+
+  .el-table__header-wrapper {
+    background-color: #ccc !important;
+  }
+
+  .el-table__header {
+    background-color: #ccc !important;
+  }
 }
 </style>

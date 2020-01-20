@@ -1,15 +1,8 @@
 <template>
   <div class="manage billing">
-    <div class="statusHeader">
-      <div class="status-txt">{{ $t("billing.billingStatus") }}</div>
-      <div class="timePicker">
-        <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
-        <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
-      </div>
-    </div>
     <div class="content">
-      <div>
-        <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:calc(100% - 50px);">
+      <div style="height:100%;" class="nav">
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
           <el-tab-pane name="WAIT_SETTLE">
             <span slot="label">
               <div class="tabLabel">
@@ -40,41 +33,58 @@
         </el-tabs>
       </div>
       <div class="container">
-        <div class="center">
-          <el-table :data="tableData" highlight-current-row v-loading="loading" @current-change="handleCurrentChange" border>
-            <el-table-column prop="createdAt" :label="$t('billing.bookingTime')" />
-            <el-table-column prop="orderNo" :label="$t('billing.trackingNo')" />
-            <el-table-column prop="settlementAmount" :label="$t('billing.totalAmount')" />
-          </el-table>
-          <el-pagination
-            style="margin-top:10px;text-align: center;margin-bottom:50px;"
-            background
-            :page-sizes="[1, 5, 10, 20, 50]"
-            :page-size="pagesize"
-            @size-change="pageSizeChange"
-            :current-page.sync="page.currentPage"
-            @current-change="pageChange"
-            layout="prev, pager, next, jumper"
-            :total="page.total"
-          ></el-pagination>
+        <div class="timePicker">
+          <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
+          <el-button @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
         </div>
-        <div class="right">
-          <el-table :data="detailData" border>
-            <el-table-column :label="$t('billing.supply')">
-              <template slot-scope="scope">
-                {{
-                  scope.row.supply
-                    ? scope.row.supply.type == "COMPANY"
-                      ? scope.row.supply.companyName
-                      : scope.row.supply.humanName
-                    : ""
-                }}
-              </template>
-            </el-table-column>
-            <el-table-column :label="$t('billing.amount')">
-              <template slot-scope="scope"> {{ $t("billing.freight") }}: {{ scope.row.settlementAmount }} </template>
-            </el-table-column>
-          </el-table>
+        <div class="container_center">
+          <div class="center">
+            <el-table
+              :data="tableData"
+              highlight-current-row
+              v-loading="loading"
+              @current-change="handleCurrentChange"
+              border
+              :max-height="tableHeight"
+            >
+              <el-table-column prop="createdAt" :label="$t('billing.bookingTime')" />
+              <el-table-column prop="orderNo" :label="$t('billing.trackingNo')" />
+              <el-table-column prop="settlementAmount" :label="$t('billing.totalAmount')" />
+            </el-table>
+            <el-pagination
+              style="margin-top:10px;text-align: center;margin-bottom:10px;"
+              background
+              :page-sizes="[1, 5, 10, 20, 50]"
+              :page-size="pagesize"
+              @size-change="pageSizeChange"
+              :current-page.sync="page.currentPage"
+              @current-change="pageChange"
+              layout="prev, pager, next, jumper"
+              :total="page.total"
+            ></el-pagination>
+          </div>
+          <div class="right">
+            <el-tabs v-model="curTab" @tab-click="handleClick">
+              <el-tab-pane :label="$t('tracking.FeeDetails')" name="detail" class="trackingDetail">
+                <div class="rightDetail" :style="`max-height:${detailHeight}px;`">
+                  <el-form v-if="thisRow" label-width="130px" label-position="left">
+                    <el-form-item :label="$t('booking.supply')">
+                      {{ thisRow.supply.type == "COMPANY" ? thisRow.supply.companyName : thisRow.supply.humanName }}
+                    </el-form-item>
+                    <el-form-item :label="$t('billing.freight')">
+                      {{ thisRow.settlementAmount - thisRow.serviceAmount }}
+                    </el-form-item>
+                    <div v-for="(item, index) in thisRow.chargeList" :key="index">
+                      <el-form-item :label="serveObj[item.chargeType]">{{ item.money }}</el-form-item>
+                    </div>
+                    <el-form-item :label="$t('booking.totalamt')">
+                      {{ thisRow.settlementAmount }}
+                    </el-form-item>
+                  </el-form>
+                </div>
+              </el-tab-pane>
+            </el-tabs>
+          </div>
         </div>
       </div>
     </div>
@@ -85,6 +95,7 @@
 // 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 // 例如：import 《组件名称》 from '《组件路径》';
 import { demandFinance, billdemandCount } from "../../api/billing";
+import { getExtraServer } from "../../api/data";
 import { getTime, parseTime, getLastMonthTime, getNormalTime, getBcTime } from "../../utils/index";
 import { mapGetters } from "vuex";
 
@@ -106,6 +117,11 @@ export default {
       detailData: [],
       statusCount: {},
       dateArrDeFault: [],
+      thisRow: null,
+      curTab: "detail",
+      serveObj: {},
+      tableHeight: 0,
+      detailHeight: 0,
     };
   },
   // 监听属性 类似于data概念
@@ -123,6 +139,17 @@ export default {
   },
   mounted() {
     self.loadData();
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 42 - 20 - 32 - 20;
+      this.detailHeight = window.innerHeight - 91 - 40 - 42 - 20 - 40 - 15 - 32 - 20;
+    });
+    getExtraServer().then(res => {
+      let serveObj = new Object();
+      for (let i of res.data) {
+        serveObj[i.key] = i.trans;
+      }
+      self.serveObj = serveObj;
+    });
   },
   methods: {
     changeBCtime(time) {
@@ -170,8 +197,7 @@ export default {
       self.loadData();
     },
     handleCurrentChange(val) {
-      self.detailData = [];
-      self.detailData.push(val);
+      self.thisRow = val;
     },
   },
 };
@@ -181,43 +207,31 @@ export default {
 .manage {
   height: 100%;
   box-sizing: border-box;
-  .statusHeader {
-    display: flex;
-    padding: 0px 20px;
-    box-sizing: border-box;
-    height: 50px;
-    border-bottom: 2px solid #dfe4ed;
-    align-items: center;
-    .status-txt {
-      height: 50px;
-      line-height: 50px;
-      padding-left: 20px;
-      font-size: 20px;
-      width: 216px;
-      box-sizing: border-box;
-      border-right: 2px solid #dfe4ed;
-    }
-  }
   .timePicker {
     height: 42px;
     line-height: 40px;
-    padding-left: 30px;
     display: flex;
     align-items: center;
   }
   .content {
-    padding-left: 25px;
+    padding-left: 20px;
     display: flex;
-    height: calc(100% - 50px);
+    height: calc(100vh - 91px);
     .container {
-      padding-left: 20px;
-      padding-top: 20px;
+      padding: 20px;
       width: 100%;
-      display: flex;
+      height: 100%;
       overflow: scroll;
+      background-color: #fff;
+      .container_center {
+        padding-top: 20px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        overflow: scroll;
+      }
       .center {
         width: 49%;
-        margin-right: 1%;
       }
       .right {
         width: 49%;
@@ -228,30 +242,80 @@ export default {
 .tabLabel {
   display: flex;
   justify-content: flex-end;
+  .text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 150px;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 16px;
+  }
 
   .badge {
     font-size: 12px;
     margin-left: 5px;
     color: #aaa;
+    width: 25px;
+    text-align: right;
   }
 
   .red {
     color: red;
   }
 }
+.rightDetail {
+  overflow: scroll;
+}
 </style>
-<style>
-.billing .el-tabs--left .el-tabs__header.is-left {
-  margin-right: 0px;
-  width: 211px;
+<style lang="scss">
+.billing .nav {
+  .el-tabs--left .el-tabs__item.is-left {
+    text-align: left;
+    height: 50px;
+  }
+
+  .el-tabs__content {
+    background-color: #fff;
+  }
+
+  .el-tabs__active-bar {
+    width: 0;
+    height: 0;
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__active-bar.is-left {
+    width: 0;
+    height: 0;
+  }
+
+  .el-tabs__nav-wrap::after {
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__nav-wrap.is-left {
+    width: 185px;
+    padding-top: 20px;
+  }
+
+  .el-tabs--left .el-tabs__header.is-left {
+    margin-left: -10px;
+    background-color: #fff;
+  }
+
+  .el-table__header-wrapper {
+    background-color: #ccc !important;
+  }
+
+  .el-table__header {
+    background-color: #ccc !important;
+  }
 }
-.billing .el-tabs--left .el-tabs__active-bar.is-left {
-  width: 3px;
-}
-.billing .el-tabs--left .el-tabs__nav-wrap.is-left::after,
-.el-tabs--left .el-tabs__nav-wrap.is-right::after,
-.el-tabs--right .el-tabs__nav-wrap.is-left::after,
-.el-tabs--right .el-tabs__nav-wrap.is-right::after {
-  width: 3px;
+
+.trackingDetail {
+  .el-form-item {
+    margin-bottom: 10px !important;
+  }
 }
 </style>

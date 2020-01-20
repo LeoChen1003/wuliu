@@ -1,6 +1,6 @@
 <template>
   <div class="manage booking">
-    <div style="display:flex;align-items:center;margin-bottom:15px;">
+    <div style="display:flex;align-items:center;margin-top:10px;margin-bottom:10px;">
       <el-button
         icon="el-icon-arrow-left
 "
@@ -9,7 +9,7 @@
       >
     </div>
     <el-form ref="releaseform" :model="releaseForm" :rules="releaseRules" :show-message="false" label-position="top" size="small">
-      <el-row class="itemRow" style="border-top: 1px solid #dfe4ed;">
+      <el-row class="itemRow">
         <el-col :span="8">
           <el-form-item :label="$t('booking.logisiticsType')">
             <el-select
@@ -212,11 +212,17 @@
         </el-col> -->
         <el-col :span="8"> </el-col>
       </el-row>
-      <el-row class="itemRow">
+      <el-row class="itemRow" style="margin-top:10px;">
         <!-- 收货地址列表 -->
         <el-form-item prop="receiverAddressList">
           <div style="display:flex;align-items: flex-end;">
-            <el-table :data="releaseForm.receiverAddressList" border :header-cell-style="headerCellStyle" style="width:95%;">
+            <el-table
+              v-loading="uploadLoading"
+              :data="releaseForm.receiverAddressList"
+              border
+              :header-cell-style="headerCellStyle"
+              style="width:95%;"
+            >
               <el-table-column prop="name" :label="$t('booking.destination')">
                 <template slot-scope="scope">
                   <el-input :placeholder="$t('placeholder.pleaseEnterRecipieName')" v-model="scope.row.name"></el-input>
@@ -291,18 +297,41 @@
         </el-form-item>
       </el-row>
     </el-form>
-    <div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:15px;margin-top:30px;">
-      <el-button style="width:200px;" @click="$router.replace('/billing/topUp')" type="primary">{{
-        $t("booking.topUp")
-      }}</el-button>
-      <el-button
-        style="width:200px;"
-        @click="todoIt"
-        :loading="todoLoading"
-        :disabled="!permissions.DemandNewOrderOrRelease"
-        type="primary"
-        >{{ $t("booking.releaseToMarket") }}</el-button
-      >
+    <div
+      style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;margin-top:30px;margin-right:35px;"
+    >
+      <div style="display:flex;align-items:center;">
+        <el-upload
+          ref="upload"
+          :action="baseUrl"
+          :headers="headers"
+          :limit="1"
+          name="excel"
+          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          :on-success="uploadSuccess"
+          :before-upload="beforeUpload"
+          :on-error="uploadError"
+          :show-file-list="false"
+        >
+          <el-button type="primary">{{ $t("booking.importExcel") }}</el-button>
+        </el-upload>
+        <el-button type="text" style="margin-left:20px;" @click="downloadTemplate">{{
+          $t("booking.downloadExcelTemplate")
+        }}</el-button>
+      </div>
+      <div>
+        <el-button style="width:200px;" @click="$router.replace('/billing/topUp')" type="primary">{{
+          $t("booking.topUp")
+        }}</el-button>
+        <el-button
+          style="width:200px;"
+          @click="todoIt"
+          :loading="todoLoading"
+          :disabled="!permissions.DemandNewOrderOrRelease"
+          type="primary"
+          >{{ $t("booking.releaseToMarket") }}</el-button
+        >
+      </div>
     </div>
     <!-- 货物清单 dialog -->
     <el-dialog :visible.sync="cargoListDialog" :title="$t('booking.cargoList')" width="1250px" center>
@@ -426,6 +455,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { getToken } from "@/utils/auth";
 import { releaseOrder } from "../../api/booking";
 import { getTruckType, findDistrictFullList, getGoodsProperty, getSenderList, getTransportList } from "../../api/data";
 import { getNormalTime } from "../../utils/index";
@@ -554,6 +584,11 @@ export default {
           // },
         ],
       },
+      baseUrl: process.env.VUE_APP_BASE_API + "/api/excel/order/parse",
+      headers: {
+        authorization: getToken(),
+        locale: this.$store.getters.language,
+      },
       releaseRules: {
         senderAddress: [
           {
@@ -632,6 +667,7 @@ export default {
       releaseInfo: {},
       pickDateDefault: "",
       cargoListDialog: false,
+      uploadLoading: false,
       cargoTip: [
         {
           unit: "Dimension",
@@ -729,7 +765,6 @@ export default {
       }
     },
     time_at(val) {
-      console.log(val);
       let t = self.time ? self.time : "23:59:59";
       self.releaseForm.senderAddress.pickAt = val + ` ${t}`;
     },
@@ -750,9 +785,7 @@ export default {
     self = this;
     let releaseInfo = JSON.parse(localStorage.getItem("releaseInfo"));
     self.releaseInfo = releaseInfo;
-    console.log("0000");
     self.pickDateDefault = getNormalTime(releaseInfo.searchForm.pickUpDate);
-    console.log(self.pickDateDefault);
   },
   mounted() {
     let releaseInfo = self.releaseInfo;
@@ -900,7 +933,6 @@ export default {
     },
     // 下单
     todoIt() {
-      console.log(self.releaseForm);
       this.$refs.releaseform.validate(valid => {
         if (valid) {
           self.todoLoading = true;
@@ -1021,6 +1053,54 @@ export default {
         }
       });
     },
+    beforeUpload() {
+      self.uploadLoading = true;
+    },
+    uploadError(res) {
+      self.uploadLoading = false;
+      self.$message.warning(res.message);
+    },
+    uploadSuccess(res) {
+      self.$refs.upload.clearFiles();
+      if (res.status != 200) {
+        self.uploadLoading = false;
+        return self.$message.warning(res.message);
+      }
+      let arr = [];
+      for (let i of res.data) {
+        let content = "";
+        let propertyList = [];
+        for (let x in i.propertyList) {
+          if (i.propertyList[x].number !== 0) {
+            propertyList.push(i.propertyList[x]);
+            content += `${parseInt(x) + 1}.${self.propertyTypeListObj[i.propertyList[x].propertyType]} ${
+              i.propertyList[x].name
+            } ${self.sizeTypeListObj[i.propertyList[x].sizeType]} ${i.propertyList[x].number}${
+              self.unitListObj[i.propertyList[x].unit]
+            } `;
+          }
+        }
+        arr.push({
+          addressDetail: i.addressDetail,
+          code: i.code,
+          mobile: i.mobile,
+          name: i.name,
+          propertyList: propertyList,
+          propertyListContent: content,
+          delRegionList: [
+            {
+              fullname: i.fullName,
+              code: i.code,
+            },
+          ],
+        });
+      }
+      self.releaseForm.receiverAddressList = arr;
+      self.uploadLoading = false;
+    },
+    downloadTemplate() {
+      window.open("https://oss-pro.t-rex56.com/logistics/upload/template.xlsx");
+    },
   },
 };
 </script>
@@ -1029,6 +1109,7 @@ export default {
 .manage {
   padding: 20px;
   padding-top: 0px;
+  max-height: calc(100vh - 101px);
   box-sizing: border-box;
 
   .go_back {
@@ -1044,7 +1125,7 @@ export default {
 
   .itemRow {
     // border-top: 1px solid #dfe4ed;
-    padding: 10px;
+    // padding: 10px;
     box-sizing: border-box;
   }
   .table-op {
@@ -1094,6 +1175,10 @@ export default {
 .booking .el-input-group__append {
   width: 40%;
 }
+.booking .el-form-item {
+  margin-bottom: 5px !important;
+}
+
 .edit_input .el-input__inner {
   padding: 0 30px 0 15px;
 }

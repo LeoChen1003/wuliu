@@ -61,6 +61,7 @@
               <el-form
                 :label-width="$store.getters.language === 'zh_CN' ? '150px' : '220px'"
                 :show-message="false"
+                label-position="left"
                 v-if="thisRow.citys"
               >
                 <el-form-item :label="$t('resources.plateLicense')">
@@ -74,7 +75,9 @@
                   {{ thisRow.fromProvince }}
                 </el-form-item>
                 <el-form-item :label="$t('resources.destination')">
-                  {{ thisRow.toProvinceName }}
+                  <div style="word-break: break-word;">
+                    {{ thisRow.toProvinceName }}
+                  </div>
                 </el-form-item>
                 <el-form-item :label="$t('resources.quoteMode')">
                   {{ thisRow.ftlType === 0 ? $t("resources.ftlType1") : $t("resources.ftlType2") }}

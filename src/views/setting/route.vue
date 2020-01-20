@@ -536,6 +536,7 @@ $border: 1px solid #ddd;
       height: 40px;
       border-bottom: $border;
       line-height: 40px;
+      font-size: 16px;
     }
 
     .item-box {
@@ -556,6 +557,7 @@ $border: 1px solid #ddd;
         cursor: pointer;
         position: relative;
         background: #fff;
+        font-size: 16px;
 
         &:hover {
           color: red;

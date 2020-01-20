@@ -1538,6 +1538,7 @@
 }
 .el-menu.el-menu--horizontal {
   border-bottom: solid 1px #e6e6e6;
+  border:none;
 }
 .el-menu--horizontal {
   border-right: none;
@@ -1642,8 +1643,8 @@
 }
 .el-menu-item,
 .el-submenu__title {
-  height: 56px;
-  line-height: 56px;
+  height: 44px;
+  line-height: 44px;
   position: relative;
   -webkit-box-sizing: border-box;
   white-space: nowrap;

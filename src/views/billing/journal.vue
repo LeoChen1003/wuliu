@@ -1,23 +1,20 @@
 <template>
   <div class="manage billing">
-    <div class="statusHeader">
-      <div class="status-txt">{{ $t("billing.account") }}</div>
-      <div class="timePicker">
-        <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
-        <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
-      </div>
-    </div>
     <div class="content">
-      <div>
+      <div class="nav">
         <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
-          <el-tab-pane name="GUARANTEE" :label="$t('billing.gaurantee')"> </el-tab-pane>
           <el-tab-pane name="FEE" :label="$t('billing.freight')"> </el-tab-pane>
+          <el-tab-pane name="GUARANTEE" :label="$t('billing.gaurantee')"> </el-tab-pane>
         </el-tabs>
       </div>
 
       <div class="container">
+        <div class="timePicker">
+          <bc-picker :dateType="'daterange'" :dateArray="dateArrDeFault" @changeBCtime="changeBCtime"></bc-picker>
+          <el-button @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
+        </div>
         <div class="center">
-          <el-table :data="dataList" border>
+          <el-table :data="dataList" border :max-height="tableHeight">
             <el-table-column prop="createdAt" :label="$t('billing.date')" />
             <el-table-column prop="eventType" :label="$t('billing.transactionType')" />
             <el-table-column :label="$t('billing.documentNo')">
@@ -47,7 +44,7 @@
             </el-table-column>
           </el-table>
           <el-pagination
-            style="margin-top:10px;text-align: center;margin-bottom:50px;"
+            style="margin-top:10px;text-align: center;margin-bottom:10px;"
             background
             :page-sizes="[1, 5, 10, 20, 50]"
             :page-size="pagesize"
@@ -73,7 +70,7 @@ let self;
 export default {
   data() {
     return {
-      tabActive: "GUARANTEE",
+      tabActive: "FEE",
       applyType: localStorage.getItem("curRole"),
       fromDate: getBcTime(getLastMonthTime(new Date())),
       toDate: getBcTime(parseTime(new Date().getTime(), "{y}-{m}-{d}")),
@@ -84,6 +81,7 @@ export default {
       },
       pagesize: 20,
       dateArrDeFault: [],
+      tableHeight: 0,
     };
   },
   // 监听属性 类似于data概念
@@ -99,6 +97,9 @@ export default {
   },
   mounted() {
     self.getJournalList();
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 42 - 20 - 32 - 20;
+    });
   },
   methods: {
     getJournalList() {
@@ -142,44 +143,29 @@ export default {
 //@import url(); 引入公共css类
 .manage {
   box-sizing: border-box;
-  height: 100%;
-  .statusHeader {
-    display: flex;
-    padding: 0px 20px;
-    box-sizing: border-box;
-    height: 50px;
-    border-bottom: 2px solid #dfe4ed;
-    align-items: center;
-
-    .status-txt {
-      height: 50px;
-      line-height: 50px;
-      padding-left: 20px;
-      font-size: 20px;
-      width: 216px;
-      box-sizing: border-box;
-      border-right: 2px solid #dfe4ed;
-    }
-  }
   .timePicker {
     height: 42px;
     line-height: 40px;
-    padding-left: 30px;
     display: flex;
     align-items: center;
   }
   .content {
-    padding-left: 25px;
+    padding-left: 20px;
     display: flex;
-    height: calc(100% - 50px);
+    height: calc(100vh - 91px);
+    // margin-top: 5px;
+    overflow: scroll;
     .container {
       padding-left: 20px;
       padding-top: 20px;
       width: 100%;
+      height: 100%;
       overflow: scroll;
+      background-color: #fff;
       .center {
         width: 90%;
         margin-right: 1%;
+        margin-top: 20px;
       }
     }
   }
@@ -196,18 +182,48 @@ export default {
 }
 </style>
 
-<style>
-.billing .el-tabs--left .el-tabs__header.is-left {
-  margin-right: 0px;
-  width: 211px;
-}
-.billing .el-tabs--left .el-tabs__active-bar.is-left {
-  width: 3px;
-}
-.billing .el-tabs--left .el-tabs__nav-wrap.is-left::after,
-.el-tabs--left .el-tabs__nav-wrap.is-right::after,
-.el-tabs--right .el-tabs__nav-wrap.is-left::after,
-.el-tabs--right .el-tabs__nav-wrap.is-right::after {
-  width: 3px;
+<style lang="scss">
+.billing .nav {
+  .el-tabs--left .el-tabs__item.is-left {
+    text-align: left;
+    height: 50px;
+  }
+
+  .el-tabs__content {
+    background-color: #fff;
+  }
+
+  .el-tabs__active-bar {
+    width: 0;
+    height: 0;
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__active-bar.is-left {
+    width: 0;
+    height: 0;
+  }
+
+  .el-tabs__nav-wrap::after {
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__nav-wrap.is-left {
+    width: 185px;
+    padding-top: 20px;
+  }
+
+  .el-tabs--left .el-tabs__header.is-left {
+    margin-left: -10px;
+    background-color: #fff;
+  }
+
+  .el-table__header-wrapper {
+    background-color: #ccc !important;
+  }
+
+  .el-table__header {
+    background-color: #ccc !important;
+  }
 }
 </style>

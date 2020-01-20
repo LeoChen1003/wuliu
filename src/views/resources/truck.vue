@@ -31,7 +31,7 @@
         </el-table>
       </el-col>
       <el-col :span="12">
-        <el-tabs v-model="activeTab" type="border-card">
+        <el-tabs v-model="activeTab">
           <el-tab-pane :label="$t('resources.task')" name="first">
             <el-table :data="[]" border :cell-style="cell">
               <el-table-column prop="" :label="$t('resources.TaskNo')"></el-table-column>
@@ -40,109 +40,112 @@
             </el-table>
           </el-tab-pane>
           <el-tab-pane :label="$t('resources.detailedInformation')" name="second">
-            <el-form class="form" size="small" v-if="thisRow" label-position="left" label-width="160px">
-              <el-form-item :label="$t('resources.licensePlate')">
-                <el-input v-model="thisRow.plate" disabled class="inputWidth"></el-input>
-              </el-form-item>
-              <el-form-item prop="category" :label="$t('resources.truckType')">
-                <div class="double">
-                  <el-select v-model="thisRow.category" disabled :placeholder="$t('placeholder.pleaseChoose')" class="inputWidth">
-                    <el-option v-for="item in categoryList" :key="item.key" :label="item.value" :value="item.key"> </el-option>
-                  </el-select>
+            <div style="background:#fff;">
+              <el-form class="form" size="small" v-if="thisRow" label-position="left" label-width="160px">
+                <el-form-item :label="$t('resources.licensePlate')">
+                  <div class="inputWidth">{{ thisRow.plate }}</div>
+                </el-form-item>
+                <el-form-item prop="category" :label="$t('resources.truckType')">
+                  <div class="double">
+                    <el-select
+                      v-model="thisRow.category"
+                      disabled
+                      :placeholder="$t('placeholder.pleaseChoose')"
+                      class="inputWidth"
+                    >
+                      <el-option v-for="item in categoryList" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+                    </el-select>
+                    <el-select
+                      v-model="thisRow.subCategory"
+                      disabled
+                      :placeholder="$t('placeholder.pleaseChoose')"
+                      class="inputWidth"
+                    >
+                      <el-option v-for="item in subCategoryList" :key="item.key" :label="item.value" :value="item.key">
+                      </el-option>
+                    </el-select>
+                  </div>
+                </el-form-item>
+                <el-form-item prop="registerAtRegion" :label="$t('resources.provinceOfRegistrationPlace')">
                   <el-select
-                    v-model="thisRow.subCategory"
+                    v-model="thisRow.registerAtRegion"
                     disabled
                     :placeholder="$t('placeholder.pleaseChoose')"
                     class="inputWidth"
                   >
-                    <el-option v-for="item in subCategoryList" :key="item.key" :label="item.value" :value="item.key"> </el-option>
+                    <el-option v-for="item in provList" :key="item.code" :label="item.name" :value="item.code"> </el-option>
                   </el-select>
-                </div>
-              </el-form-item>
-              <el-form-item prop="registerAtRegion" :label="$t('resources.provinceOfRegistrationPlace')">
-                <el-select
-                  v-model="thisRow.registerAtRegion"
-                  disabled
-                  :placeholder="$t('placeholder.pleaseChoose')"
-                  class="inputWidth"
-                >
-                  <el-option v-for="item in provList" :key="item.code" :label="item.name" :value="item.code"> </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item v-if="regPreList.length != 0">
-                <div class="inputWidth">
-                  <el-image
-                    v-for="(img, index) in regPreList"
-                    :key="index"
-                    style="width: 100px; height: 100px;margin-right:10px;"
-                    :src="img"
-                    :preview-src-list="regPreList"
-                  >
-                  </el-image>
-                </div>
-              </el-form-item>
-              <el-form-item prop="mobile" :label="$t('resources.phone')">
-                <el-input
-                  v-model="thisRow.mobile"
-                  disabled
-                  @mousewheel.native.prevent
-                  type="number"
-                  class="inputWidth"
-                ></el-input>
-              </el-form-item>
-              <el-form-item prop="status" :label="$t('resources.status')">
-                <el-select
-                  v-model="thisRow.activeStatus"
-                  disabled
-                  :placeholder="$t('placeholder.pleaseChoose')"
-                  class="inputWidth"
-                >
-                  <el-option v-for="item in optionsStatus" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item prop="insuranceExpiredAt" :label="$t('resources.annualProductDamageInsurancePolicy')">
-                <template>
-                  <div class="inputWidth">
-                    <el-tag v-if="thisRow.insuranceStatus == 'HAS_INSURANCE'" type="success">{{
-                      $t("resources.HAS_INSURANCE")
-                    }}</el-tag>
-                    <el-tag v-else type="info">{{ $t("resources.DO_NOT_HAS_INSURANCE") }}</el-tag>
-                  </div>
-                </template>
-              </el-form-item>
-              <div v-if="thisRow.insuranceStatus == 'HAS_INSURANCE'">
-                <el-form-item v-if="insPreList.length != 0">
+                </el-form-item>
+                <el-form-item v-if="regPreList.length != 0">
                   <div class="inputWidth">
                     <el-image
-                      v-for="(img, index) in insPreList"
+                      v-for="(img, index) in regPreList"
                       :key="index"
                       style="width: 100px; height: 100px;margin-right:10px;"
                       :src="img"
-                      :preview-src-list="insPreList"
+                      :preview-src-list="regPreList"
                     >
                     </el-image>
                   </div>
                 </el-form-item>
-                <el-form-item prop="insuranceExpiredAt" :label="$t('resources.expireDate')">
-                  <div class="inputWidth">{{ thisRow.insuranceExpiredAt }}</div>
+                <el-form-item prop="mobile" :label="$t('resources.phone')">
+                  <div class="inputWidth">{{ thisRow.mobile }}</div>
                 </el-form-item>
-                <el-form-item prop="insuranceAmount" :label="$t('resources.IinsuranceValue')">
-                  <div class="inputWidth">{{ thisRow.insuranceAmount }}</div>
-                </el-form-item>
-              </div>
-              <el-form-item :label="$t('resources.truckPhotos')" v-if="truPreList.length != 0">
-                <div class="inputWidth">
-                  <el-image
-                    v-for="(img, index) in truPreList"
-                    :key="index"
-                    style="width: 100px; height: 100px;margin-right:10px;"
-                    :src="img"
-                    :preview-src-list="truPreList"
+                <el-form-item prop="status" :label="$t('resources.status')">
+                  <el-select
+                    v-model="thisRow.activeStatus"
+                    disabled
+                    :placeholder="$t('placeholder.pleaseChoose')"
+                    class="inputWidth"
                   >
-                  </el-image>
+                    <el-option v-for="item in optionsStatus" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item prop="insuranceExpiredAt" :label="$t('resources.annualProductDamageInsurancePolicy')">
+                  <template>
+                    <div class="inputWidth">
+                      <el-tag v-if="thisRow.insuranceStatus == 'HAS_INSURANCE'" type="success">{{
+                        $t("resources.HAS_INSURANCE")
+                      }}</el-tag>
+                      <el-tag v-else type="info">{{ $t("resources.DO_NOT_HAS_INSURANCE") }}</el-tag>
+                    </div>
+                  </template>
+                </el-form-item>
+                <div v-if="thisRow.insuranceStatus == 'HAS_INSURANCE'">
+                  <el-form-item v-if="insPreList.length != 0">
+                    <div class="inputWidth">
+                      <el-image
+                        v-for="(img, index) in insPreList"
+                        :key="index"
+                        style="width: 100px; height: 100px;margin-right:10px;"
+                        :src="img"
+                        :preview-src-list="insPreList"
+                      >
+                      </el-image>
+                    </div>
+                  </el-form-item>
+                  <el-form-item prop="insuranceExpiredAt" :label="$t('resources.expireDate')">
+                    <div class="inputWidth">{{ thisRow.insuranceExpiredAt }}</div>
+                  </el-form-item>
+                  <el-form-item prop="insuranceAmount" :label="$t('resources.IinsuranceValue')">
+                    <div class="inputWidth">{{ thisRow.insuranceAmount }}</div>
+                  </el-form-item>
                 </div>
-              </el-form-item>
-            </el-form>
+                <el-form-item :label="$t('resources.truckPhotos')" v-if="truPreList.length != 0">
+                  <div class="inputWidth">
+                    <el-image
+                      v-for="(img, index) in truPreList"
+                      :key="index"
+                      style="width: 100px; height: 100px;margin-right:10px;"
+                      :src="img"
+                      :preview-src-list="truPreList"
+                    >
+                    </el-image>
+                  </div>
+                </el-form-item>
+              </el-form>
+            </div>
           </el-tab-pane>
           <el-tab-pane :label="$t('resources.locationTracking')" name="third"></el-tab-pane>
         </el-tabs>
@@ -640,23 +643,23 @@ export default {
   text-align: center;
 }
 
-.el-upload {
-  width: 60px !important;
-  height: 60px !important;
-}
-
-.el-upload-list {
-  .is-success,
-  .is-uploading,
-  .is-ready {
-    width: 60px !important;
-    height: 60px !important;
-  }
-}
-
 .inputWidth {
   .el-icon-plus {
     transform: translateY(-38px) !important;
+  }
+
+  .el-upload {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .el-upload-list {
+    .is-success,
+    .is-uploading,
+    .is-ready {
+      width: 60px !important;
+      height: 60px !important;
+    }
   }
 }
 </style>

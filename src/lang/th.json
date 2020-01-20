@@ -33,7 +33,7 @@
     "releaseToMarket": "จองรถ",
     "tracking": "ติดตามสถานะขนส่ง",
     "FTLNotHUB": "เหมาคัน (FTL)",
-    "LTLHUB": "รายชิ้น",
+    "LTLHUB": "รายชิ้น (LTL)",
     "billing": "การเรียกเก็บเงิน",
     "payableBill": "บัญชีเจ้าหนี้",
     "topUp": "เติมเงิน",
@@ -65,7 +65,15 @@
     "Outbound": "ขาออก",
     "cancel": "ยกเลิก",
     "confirm": "ยืนยัน",
-    "ltl": "สร้างเส้นทาง(LTL)"
+    "ltl": "สร้างเส้นทาง(LTL)",
+    "TobeConfirmedReceipt": "รอยืนยันรับสินค้า",
+    "Received": "รับสินค้าแล้ว",
+    "TobeConfirmedbyDriver": "รอคนขับรถยืนยัน",
+    "TobeHandedOver": "รอส่งมอบ",
+    "HandedOver": "ส่งมอบแล้ว",
+    "setSupply": "ตั้งค่าผู้ให้บริการ",
+    "setDemand": "ตั้งค่าผู้ใช้บริการ",
+    "setHub": "ตั้งค่าHub"
   },
   "layout": {
     "logout": "ออกจากระบบ"
@@ -309,7 +317,16 @@
     "pickupDate": "เวลาเข้ารับสินค้า",
     "orderQty": "จำนวนออเดอร์",
     "truck": "รถบรรทุก",
-    "VAS": "บริการเสริม"
+    "VAS": "บริการเสริม",
+    "OrderDetails": "รายละเอียดออเดอร์",
+    "Receipt": "ลายมือชื่อผู้รับ",
+    "FeeDetails": "รายละเอียดการเรียกเก็บเงิน",
+    "TopUPPicture": "สลิปโอนเงิน",
+    "Log": "Log",
+    "Pickupinformation": "ข้อมูลงานรับ",
+    "Deliverylist": "รายการงานส่ง",
+    "Total": "รวม",
+    "deliverypoints": "จุดส่ง"
   },
   "resources": {
     "add": "เพิ่ม",
@@ -550,7 +567,11 @@
     "VolumeWeightDivisor": "แปลงปริมาตรเป็นน้ำหนัก",
     "example": "หากตัวแปลงปริมาตรคือ2500 ปริมาตร=100*80*20=16000cm³",
     "example1": "ฉะนั้น น้ำหนัก=160000/2500=64kg",
-    "volumeWeightConversion": "แปลงปริมาตรเป็นน้ำหนัก"
+    "volumeWeightConversion": "แปลงปริมาตรเป็นน้ำหนัก",
+    "Remote area": "พื้นที่ห่างไกล",
+    "UserManagement": "จัดการบัญชี",
+    "Remotearea": "พื้นที่ห่างไกล",
+    "Addressbook": "สมุดที่อยู่"
   },
   "confirm": {
     "tips": "คำแนะนำ",
@@ -618,5 +639,7 @@
     "edit": "แก้ไข",
     "routeDetails": "รายละเอียดเส้นทาง",
     "cutOffTime": "Cut off Time"
-  }
+  },
+  "booking.importExcel": "นำเข้าไฟล์ excel",
+  "booking.downloadExcelTemplate": "ดาวน์โหลดไฟล์ Excel"
 }

@@ -30,8 +30,8 @@
     "placeOrder": "下单",
     "releaseToMarket": "发布需求",
     "tracking": "跟单",
-    "FTLNotHUB": "整车物流(不经过HUB)",
-    "LTLHUB": "零担物流(经过HUB)",
+    "FTLNotHUB": "整车物流",
+    "LTLHUB": "零担物流",
     "billing": "账单",
     "payableBill": "应付账单",
     "topUp": "充值",
@@ -65,7 +65,15 @@
     "setting": "设置",
     "cancel": "取 消",
     "confirm": "确 认",
-    "ltl": "路线模板（LTL）"
+    "ltl": "路线模板（LTL）",
+    "TobeConfirmedReceipt": "待确认收货",
+    "Received": "已收货",
+    "TobeHandedOver": "待交接",
+    "TobeConfirmedbyDriver": "待司机确认",
+    "HandedOver": "已交接",
+    "setSupply": "设置(运输公司)",
+    "setDemand": "设置(需求方)",
+    "setHub": "设置(货运站)"
   },
   "layout": {
     "logout": "退出"
@@ -309,7 +317,16 @@
     "cargoArrivedAtHUB": "HUB已收货",
     "confirmedReceiptByHub": "HUB已收货",
     "save": "保存成功",
-    "dialog": "请先选择需要发货的订单"
+    "dialog": "请先选择需要发货的订单",
+    "OrderDetails": "订单详情",
+    "Receipt": "签收凭证",
+    "FeeDetails": "收费详情",
+    "TopUPPicture": "充值图片",
+    "Log": "日志",
+    "Pickupinformation": "揽件信息",
+    "Deliverylist": "派件列表",
+    "Total": "共",
+    "deliverypoints": "个派送点"
   },
   "resources": {
     "add": "添加",
@@ -555,7 +572,11 @@
     "VolumeWeightDivisor": "体积重量换算",
     "example": "假设换算比为2500、体积=100*80*20=160000cm³",
     "example1": "那么，重量=160000/2500=64kg",
-    "volumeWeightConversion": "体积重量换算"
+    "volumeWeightConversion": "体积重量换算",
+    "Remote area": "偏远地区",
+    "UserManagement": "用户管理",
+    "Remotearea": "偏远地区",
+    "Addressbook": "通讯录"
   },
   "confirm": {
     "tips": "提示",
@@ -625,5 +646,7 @@
     "undeliverableDistrict": "不可派送的地区",
     "origin": "始发地",
     "edit": "编辑"
-  }
+  },
+  "booking.importExcel": "导入excel",
+  "booking.downloadExcelTemplate": "下载excel模板"
 }

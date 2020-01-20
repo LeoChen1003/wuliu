@@ -1,6 +1,6 @@
 <!-- member index -->
 <template>
-  <div class="wrapper">
+  <div class="wrapper member">
     <el-tabs v-model="tabActive" tab-position="left" @tab-click="tabChange" style="height:100%">
       <!-- 会员申请流程 -->
       <el-tab-pane name="process" :label="$t('member.membershipApplicationProcess')">
@@ -37,29 +37,31 @@
       </el-tab-pane>
       <!-- 基础资料 -->
       <el-tab-pane name="data" :label="$t('member.essentialData')">
-        <div class="container">
-          <el-form ref="form" label-width="150px">
+        <div class="container fixform">
+          <el-form ref="form" label-width="150px" label-position="left">
             <!-- 会员类型 -->
             <el-form-item class="choose-type" :label="$t('member.memberType')">
-              <el-checkbox-group v-model="typeList" @change="typeListChange">
-                <el-checkbox
-                  label="DEMAND"
-                  :disabled="applyStatus.demand.status === 'ACCEPTED' || applyStatus.demand.status === 'ACTIVATED'"
-                >
-                  {{ $t("member.demand") }} ผู้ใช้บริการว่าจ้างขนส่งสินค้า ผ่านการให้บริการของ แพลตฟอร์ม
-                </el-checkbox>
-                <el-checkbox
-                  label="SUPPLY"
-                  :disabled="applyStatus.supply.status === 'ACCEPTED' || applyStatus.supply.status === 'ACTIVATED'"
-                >
-                  {{ $t("member.supply") }} ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่งผู้รับปลายทาง
-                  โดยผ่านการบริการของแพลตฟอร์ม
-                </el-checkbox>
-                <el-checkbox label="HUB" disabled>
-                  {{ $t("member.hub") }} ศูนย์รวบรวมและแลกเปลี่ยนสินค้า ระหว่างผู้ส่งสินค้าและผู้ขนส่ง
-                  โดยผ่านการบริการของแพลตฟอร์ม
-                </el-checkbox>
-              </el-checkbox-group>
+              <div style="line-height:25px;">
+                <el-checkbox-group v-model="typeList" @change="typeListChange">
+                  <el-checkbox
+                    label="DEMAND"
+                    :disabled="applyStatus.demand.status === 'ACCEPTED' || applyStatus.demand.status === 'ACTIVATED'"
+                  >
+                    {{ $t("member.demand") }} ผู้ใช้บริการว่าจ้างขนส่งสินค้า ผ่านการให้บริการของ แพลตฟอร์ม
+                  </el-checkbox>
+                  <el-checkbox
+                    label="SUPPLY"
+                    :disabled="applyStatus.supply.status === 'ACCEPTED' || applyStatus.supply.status === 'ACTIVATED'"
+                  >
+                    {{ $t("member.supply") }} ผู้ให้บริการขนส่ง ที่รับสินค้าจากศูนย์แลกเปลี่ยนสินค้า เพื่อนำส่งผู้รับปลายทาง
+                    โดยผ่านการบริการของแพลตฟอร์ม
+                  </el-checkbox>
+                  <el-checkbox label="HUB" disabled>
+                    {{ $t("member.hub") }} ศูนย์รวบรวมและแลกเปลี่ยนสินค้า ระหว่างผู้ส่งสินค้าและผู้ขนส่ง
+                    โดยผ่านการบริการของแพลตฟอร์ม
+                  </el-checkbox>
+                </el-checkbox-group>
+              </div>
             </el-form-item>
             <!-- 注册类型 -->
             <el-form-item :label="$t('member.typeOfRegistration')">
@@ -121,7 +123,7 @@
       </el-tab-pane>
       <!-- 相关文件（发货人）150px -->
       <el-tab-pane name="DEMAND" :label="$t('member.relevantDocument_demand')">
-        <div class="container">
+        <div class="container fixupload">
           <el-alert
             v-if="applyStatus.demand.status === 'REJECTED'"
             class="rejectMsg"
@@ -164,6 +166,7 @@
                 applyStatus.demand.status === 'ACTIVATED' ||
                 applyStatus.demand.status === 'DEFAULT'
             "
+            label-position="left"
           >
             <el-form-item :label="$t('member.affidavit')">
               <el-upload
@@ -248,7 +251,7 @@
       </el-tab-pane>
       <!-- 相关文件(运输公司) -->
       <el-tab-pane name="SUPPLY" :label="$t('member.relevantdocument_supply')">
-        <div class="container">
+        <div class="container fixupload">
           <el-alert
             v-if="applyStatus.supply.status === 'REJECTED'"
             class="rejectMsg"
@@ -291,6 +294,7 @@
                 applyStatus.supply.status === 'ACTIVATED' ||
                 applyStatus.supply.status === 'DEFAULT'
             "
+            label-position="left"
           >
             <el-form-item :label="$t('member.logo')">
               <el-upload
@@ -495,7 +499,7 @@
       </el-tab-pane>
       <!-- 相关文件(货运站) -->
       <el-tab-pane disabled name="5" :label="$t('member.relevantdocument_HUB')">
-        <div class="container">
+        <div class="container fixupload">
           <el-form label-width="200px">
             <el-form-item :label="$t('member.affidavit')">
               <el-upload class="upload" action="https://jsonplaceholder.typicode.com/posts/" multiple>
@@ -523,9 +527,9 @@
         </div>
       </el-tab-pane>
       <!-- 基础设置 -->
-      <el-tab-pane name="setting" :label="$t('member.setting')">
+      <!-- <el-tab-pane name="setting" :label="$t('member.setting')">
         <div class="container">
-          <el-form hide-required-asterisk label-width="200px" ref="setForm" :model="setForm" :rules="setRules">
+          <el-form hide-required-asterisk label-width="200px" ref="setForm" :model="setForm" :rules="setRules" label-position="left">
             <el-form-item prop="exchange" :label="$t('member.VolumeWeightDivisor')">
               <el-select v-model="setForm.exchange" :placeholder="$t('placeholder.pleaseChoose')" class="inp">
                 <el-option :label="2500" :value="2500"> </el-option>
@@ -533,10 +537,10 @@
                 <el-option :label="3500" :value="3500"> </el-option>
               </el-select>
               <div style="color:#ccc;">
-                <div>{{$t('member.volumeWeightConversion')}}</div>
+                <div>{{ $t("member.volumeWeightConversion") }}</div>
                 <div class="inp">
-                  {{$t('member.example')}},<br />
-                  {{$t('member.example1')}}
+                  {{ $t("member.example") }},<br />
+                  {{ $t("member.example1") }}
                 </div>
               </div>
             </el-form-item>
@@ -545,7 +549,7 @@
             </el-form-item>
           </el-form>
         </div>
-      </el-tab-pane>
+      </el-tab-pane> -->
       <!-- 我的会员合同 -->
       <el-tab-pane name="contract" :label="$t('member.myContract')">
         <div class="container">
@@ -877,7 +881,8 @@ export default {
 
 .container {
   height: 100%;
-  padding: 40px;
+  padding: 20px;
+  padding-left: 40px;
   overflow: scroll;
 }
 
@@ -924,7 +929,7 @@ export default {
   width: 300px;
 }
 </style>
-<style>
+<style lang="scss">
 .el-step {
   width: 100% !important;
 }
@@ -967,5 +972,65 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+
+.member .fixform .el-form-item {
+  margin-bottom: 5px;
+}
+
+.member .el-form-item {
+  margin-bottom: 15px;
+}
+
+.member .fixupload {
+  .upload {
+    display: flex;
+    align-items: center;
+  }
+  .el-upload {
+    margin-right: 25px;
+  }
+  .el-upload-list__item:first-child {
+    margin-top: 0px;
+    margin-left: 20px;
+  }
+}
+
+.member .el-tabs--left .el-tabs__item.is-left {
+  text-align: left;
+  max-width: 100%;
+  white-space: normal;
+  word-break: break-all;
+  line-height: 16px;
+  height: 50px;
+}
+
+.member .el-tabs__content {
+  background-color: #fff;
+}
+
+.member .el-tabs__active-bar {
+  width: 0;
+  height: 0;
+  background-color: #fff;
+}
+
+.member .el-tabs--left .el-tabs__active-bar.is-left {
+  width: 0;
+  height: 0;
+}
+
+.member .el-tabs__nav-wrap::after {
+  background-color: #fff;
+}
+
+.member .el-tabs--left .el-tabs__nav-wrap.is-left {
+  width: 185px;
+  padding-top: 20px;
+}
+
+.member .el-tabs--left .el-tabs__header.is-left {
+  margin-left: 10px;
+  background-color: #fff;
 }
 </style>

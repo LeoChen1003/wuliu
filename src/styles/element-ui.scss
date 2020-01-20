@@ -77,3 +77,35 @@
 .el-range-editor.el-input__inner {
   display: inline-flex !important;
 }
+
+// 表格边框颜色
+// .el-table--border:after,
+// .el-table--group:after,
+// .el-table:before {
+//   background-color: #ddd !important;
+// }
+
+// .el-table--border,
+// .el-table--group {
+//   border-color: #ddd !important;
+// }
+
+// .el-table td,
+// .el-table th.is-leaf {
+//   border-bottom: 1px solid #ddd !important;
+// }
+
+// .el-table--border th,
+// .el-table--border th.gutter:last-of-type {
+//   border-bottom: 1px solid #ddd !important;
+// }
+
+// .el-table--border td,
+// .el-table--border th {
+//   border-right: 1px solid #ddd !important;
+// }
+
+// 隐藏滚动条
+::-webkit-scrollbar {
+  display: none;
+}

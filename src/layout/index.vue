@@ -20,6 +20,9 @@
             {{ generateTitle(item.meta.title) }}
           </div>
         </div>
+        <div class="subNav" v-else>
+          <div class="subNav-item"></div>
+        </div>
         <!-- <breadcrumb id="breadcrumb-container"
                     class="breadcrumb-container" /> -->
         <!-- <tags-view v-if="needTagsView" /> -->
@@ -172,17 +175,21 @@ export default {
 
 .subNav {
   display: flex;
-  justify-content: center;
-  background: rgb(249, 249, 249);
+  // justify-content: center;
+  padding-left: 20px;
+  background: #f2f2f2;
   border-bottom: 1px solid #ddd;
+  box-sizing: border-box;
 
   .subNav-item {
-    width: 150px;
+    width: 170px;
     height: 40px;
-    text-align: center;
+    // text-align: center;
     font-size: 14px;
     line-height: 40px;
-    margin: 0 10px;
+    // margin: 0 10px;
+    margin-right: 10px;
+    // margin-right: 50px;
     cursor: pointer;
     transition: all 0.4s;
 

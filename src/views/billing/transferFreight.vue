@@ -1,32 +1,8 @@
 <template>
   <div class="manage billing">
-    <div class="statusHeader">
-      <div class="status-txt">{{ $t("billing.billingStatus") }}</div>
-      <div class="supply-box">
-        <span style="margin:0 20px;">{{ $t("billing.supply") }}</span>
-        <el-select v-model="supply" clearable placeholder="请选择">
-          <el-option v-for="item in supplyList" :key="item.supply_id" :label="item.company_name" :value="item.supply_id">
-          </el-option>
-        </el-select>
-      </div>
-      <span style="margin:0 10px 0 20px;">{{ $t("billing.deliveredDate") }}</span>
-      <div class="timePicker">
-        <bc-picker :dateType="'daterange'" @changeBCtime="changeBCtime"></bc-picker>
-        <el-button size="small" @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
-        <el-button
-          size="small"
-          @click="confirmShow"
-          v-if="tabActive == 'UNPAID'"
-          :disabled="!permissions.PlatformFianceConfirm"
-          type="primary"
-          style="width:100px;margin-left:20px;"
-          >{{ $t("billing.transferFreight") }}</el-button
-        >
-      </div>
-    </div>
     <div class="content">
-      <div>
-        <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:calc(100% - 50px);">
+      <div style="height:100%;" class="nav">
+        <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
           <el-tab-pane name="UNPAID">
             <span slot="label">
               <div class="tabLabel">
@@ -48,86 +24,119 @@
         </el-tabs>
       </div>
       <div class="container">
-        <div class="center">
-          <el-table :data="tableData" highlight-current-row v-loading="loading" @current-change="handleCurrentChange" border>
-            <el-table-column prop="orderNo" :label="$t('billing.trackingNo')" />
-            <el-table-column :label="$t('billing.supply')">
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.supplyName }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="settlementAmount" :label="$t('billing.totalAmount')" />
-            <el-table-column align="right" header-align="center" v-if="tabActive == 'UNPAID'" width="50px">
-              <template slot="header" slot-scope="scope">
-                <el-checkbox v-model="allChecked" @change="allCheckChange" />
-              </template>
-              <template slot-scope="scope">
-                <div class="check-box">
-                  <el-checkbox @change="checkChange(scope.row)" :disabled="!scope.row.canCheck" v-model="scope.row.checked" />
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-pagination
-            style="margin-top:10px;text-align: center;margin-bottom:50px;"
-            background
-            :page-sizes="[1, 5, 10, 20, 50]"
-            :page-size="pagesize"
-            @size-change="pageSizeChange"
-            :current-page.sync="page.currentPage"
-            @current-change="pageChange"
-            layout="prev, pager, next, jumper"
-            :total="page.total"
-          />
+        <div class="statusHeader">
+          <div>
+            <span style="margin-right:10px;font-size:16px;">{{ $t("billing.supply") }}</span>
+            <el-select v-model="supply" clearable placeholder="请选择">
+              <el-option v-for="item in supplyList" :key="item.supply_id" :label="item.company_name" :value="item.supply_id">
+              </el-option>
+            </el-select>
+          </div>
+          <span style="margin:0 10px 0 20px;font-size:16px;">{{ $t("billing.deliveredDate") }}</span>
+          <div class="timePicker">
+            <bc-picker :dateType="'daterange'" @changeBCtime="changeBCtime"></bc-picker>
+            <el-button @click="searchIt" style="width:100px;margin-left:20px;">{{ $t("billing.search") }}</el-button>
+            <el-button
+              @click="confirmShow"
+              v-if="tabActive == 'UNPAID'"
+              :disabled="!permissions.PlatformFianceConfirm"
+              type="primary"
+              style="margin-left:20px;"
+              >{{ $t("billing.transferFreight") }}</el-button
+            >
+          </div>
         </div>
-        <div class="right">
-          <el-form label-width="150px" v-if="thisRow" size="mini">
-            <el-form-item :label="$t('billing.trackingNo')">
-              {{ thisRow.orderNo }}
-            </el-form-item>
-            <el-form-item :label="$t('billing.deliveredDate')">
-              {{ thisRow.settleAt }}
-            </el-form-item>
-            <el-form-item :label="$t('billing.supply')">
-              {{ thisRow.supplyName }}
-            </el-form-item>
-            <el-form-item :label="$t('billing.total')">
-              {{ thisRow.payAmount }}
-            </el-form-item>
-            <el-form-item :label="$t('billing.VATFreight')">
-              {{ thisRow.freight }}
-            </el-form-item>
-            <el-form-item :label="$t('billing.VATService')">
-              {{ thisRow.serviceCharge }}
-            </el-form-item>
-            <el-form-item :label="$t('billing.platformServiceCharge')">
-              {{ thisRow.commission }}
-            </el-form-item>
-            <el-form-item :label="$t('billing.amountPayable')">
-              {{ thisRow.actualAmount }}
-            </el-form-item>
-            <el-form-item :label="$t('billing.operator')" v-if="thisRow.orderRefunds">
-              {{ thisRow.orderRefunds.handleName }}
-            </el-form-item>
-            <el-form-item :label="$t('billing.transferNo')" v-if="thisRow.orderRefunds">
-              {{ thisRow.orderRefunds.sn }}
-            </el-form-item>
-            <el-form-item :label="$t('billing.transferedDate')" v-if="thisRow.orderRefunds">
-              {{ thisRow.orderRefunds.refundDateTime }}
-            </el-form-item>
-            <el-form-item :label="$t('billing.transferVoucher')" v-if="thisRow.orderRefunds">
-              <el-image
-                v-for="(img, index) in thisRow.imgList"
-                :key="index"
-                style="margin-right:20px;"
-                :src="img + '?x-oss-process=style/th-90'"
-                :preview-src-list="thisRow.imgList"
-              >
-              </el-image>
-            </el-form-item>
-          </el-form>
+        <div class="containerContent">
+          <div class="center">
+            <el-table
+              :data="tableData"
+              highlight-current-row
+              v-loading="loading"
+              @current-change="handleCurrentChange"
+              border
+              :max-height="tableHeight"
+            >
+              <el-table-column prop="orderNo" :label="$t('billing.trackingNo')" />
+              <el-table-column :label="$t('billing.supply')">
+                <template slot-scope="scope">
+                  <div>
+                    {{ scope.row.supplyName }}
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="settlementAmount" :label="$t('billing.totalAmount')" />
+              <el-table-column align="right" header-align="center" v-if="tabActive == 'UNPAID'" width="50px">
+                <template slot="header" slot-scope="scope">
+                  <el-checkbox v-model="allChecked" @change="allCheckChange" />
+                </template>
+                <template slot-scope="scope">
+                  <div class="check-box">
+                    <el-checkbox @change="checkChange(scope.row)" :disabled="!scope.row.canCheck" v-model="scope.row.checked" />
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination
+              style="margin-top:10px;text-align: center;margin-bottom:10px;"
+              background
+              :page-sizes="[1, 5, 10, 20, 50]"
+              :page-size="pagesize"
+              @size-change="pageSizeChange"
+              :current-page.sync="page.currentPage"
+              @current-change="pageChange"
+              layout="prev, pager, next, jumper"
+              :total="page.total"
+            />
+          </div>
+          <div class="right">
+            <el-card shadow="never" v-if="thisRow" :style="`max-height:${detailHeight}px;overflow:scroll;`">
+              <el-form label-width="150px" v-if="thisRow" size="mini" label-position="left">
+                <el-form-item :label="$t('billing.trackingNo')">
+                  {{ thisRow.orderNo }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.deliveredDate')">
+                  {{ thisRow.settleAt }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.supply')">
+                  {{ thisRow.supplyName }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.total')">
+                  {{ thisRow.payAmount }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.VATFreight')">
+                  {{ thisRow.freight }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.VATService')">
+                  {{ thisRow.serviceCharge }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.platformServiceCharge')">
+                  {{ thisRow.commission }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.amountPayable')">
+                  {{ thisRow.actualAmount }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.operator')" v-if="thisRow.orderRefunds">
+                  {{ thisRow.orderRefunds.handleName }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.transferNo')" v-if="thisRow.orderRefunds">
+                  {{ thisRow.orderRefunds.sn }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.transferedDate')" v-if="thisRow.orderRefunds">
+                  {{ thisRow.orderRefunds.refundDateTime }}
+                </el-form-item>
+                <el-form-item :label="$t('billing.transferVoucher')" v-if="thisRow.orderRefunds">
+                  <el-image
+                    v-for="(img, index) in thisRow.imgList"
+                    :key="index"
+                    style="margin-right:20px;"
+                    :src="img + '?x-oss-process=style/th-90'"
+                    :preview-src-list="thisRow.imgList"
+                  >
+                  </el-image>
+                </el-form-item>
+              </el-form>
+            </el-card>
+          </div>
         </div>
       </div>
     </div>
@@ -218,6 +227,8 @@ export default {
       previewDialog: false,
       previewImg: "",
       confirmLoading: false,
+      tableHeight: 0,
+      detailHeight: 0,
     };
   },
   // 监听属性 类似于data概念
@@ -239,6 +250,10 @@ export default {
     self = this;
   },
   mounted() {
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 42 - 20 - 32 - 20;
+      this.detailHeight = window.innerHeight - 91 - 40 - 42 - 20;
+    });
     self.loadData();
   },
   methods: {
@@ -460,20 +475,10 @@ export default {
   box-sizing: border-box;
   .statusHeader {
     display: flex;
-    padding: 0px 20px;
     box-sizing: border-box;
-    height: 50px;
-    border-bottom: 2px solid #dfe4ed;
+    margin-bottom: 20px;
     align-items: center;
-    .status-txt {
-      height: 50px;
-      line-height: 50px;
-      padding-left: 20px;
-      font-size: 20px;
-      width: 216px;
-      box-sizing: border-box;
-      border-right: 2px solid #dfe4ed;
-    }
+    justify-content: flex-start;
   }
   .timePicker {
     height: 42px;
@@ -482,14 +487,20 @@ export default {
     align-items: center;
   }
   .content {
-    padding-left: 25px;
+    height: 100%;
+    padding-left: 20px;
     display: flex;
     .container {
-      padding-left: 20px;
-      padding-top: 20px;
       width: 100%;
-      display: flex;
+      background: #fff;
+      padding: 20px;
+      height: calc(100vh - 91px);
+      overflow: auto;
+      box-sizing: border-box;
 
+      .containerContent {
+        display: flex;
+      }
       .center {
         width: 49%;
         margin-right: 1%;
@@ -499,7 +510,6 @@ export default {
         width: 49%;
         background: #fff;
         box-sizing: border-box;
-        padding: 20px 0;
       }
     }
   }
@@ -508,10 +518,22 @@ export default {
   display: flex;
   justify-content: flex-end;
 
+  .text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 150px;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 16px;
+  }
+
   .badge {
     font-size: 12px;
     margin-left: 5px;
     color: #aaa;
+    width: 25px;
+    text-align: right;
   }
 
   .red {
@@ -519,31 +541,11 @@ export default {
   }
 }
 
-.supply-box {
-  margin-left: 20px;
-}
-
 .check-box {
   text-align: center;
 }
 </style>
 <style lang="scss">
-.billing .el-tabs--left .el-tabs__header.is-left {
-  margin-right: 0px;
-  width: 211px;
-}
-
-.billing .el-tabs--left .el-tabs__active-bar.is-left {
-  width: 3px;
-}
-
-.billing .el-tabs--left .el-tabs__nav-wrap.is-left::after,
-.el-tabs--left .el-tabs__nav-wrap.is-right::after,
-.el-tabs--right .el-tabs__nav-wrap.is-left::after,
-.el-tabs--right .el-tabs__nav-wrap.is-right::after {
-  width: 3px;
-}
-
 .el-upload {
   width: 60px !important;
   height: 60px !important;
@@ -561,6 +563,50 @@ export default {
 .inputWidth {
   .el-icon-plus {
     transform: translateY(-38px) !important;
+  }
+}
+
+.billing .nav {
+  .el-tabs--left .el-tabs__item.is-left {
+    text-align: left;
+    height: 50px;
+  }
+
+  .el-tabs__content {
+    background-color: #fff;
+  }
+
+  .el-tabs__active-bar {
+    width: 0;
+    height: 0;
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__active-bar.is-left {
+    width: 0;
+    height: 0;
+  }
+
+  .el-tabs__nav-wrap::after {
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__nav-wrap.is-left {
+    width: 185px;
+    padding-top: 20px;
+  }
+
+  .el-tabs--left .el-tabs__header.is-left {
+    margin-left: -10px;
+    background-color: #fff;
+  }
+
+  .el-table__header-wrapper {
+    background-color: #ccc !important;
+  }
+
+  .el-table__header {
+    background-color: #ccc !important;
   }
 }
 </style>

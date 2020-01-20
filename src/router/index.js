@@ -36,13 +36,33 @@ export const asyncRoutes = [
       roles: ["DEMAND"],
     },
     children: [
+      // {
+      //   path: "priceConsulting",
+      //   component: () => import("@/views/booking/priceConsulting"),
+      //   name: "priceConsulting",
+      //   hidden: true,
+      //   meta: {
+      //     title: "priceConsulting",
+      //     roles: ["DEMAND"],
+      //     permission: "DemandSearchSupply",
+      //   },
+      // },
       {
-        path: "priceConsulting",
-        component: () => import("@/views/booking/priceConsulting"),
-        name: "priceConsulting",
-        hidden: true,
+        path: "priceConsultingFTL",
+        component: () => import("@/views/booking/FTL"),
+        name: "priceConsultingFTL",
         meta: {
-          title: "priceConsulting",
+          title: "FTLNotHUB",
+          roles: ["DEMAND"],
+          permission: "DemandSearchSupply",
+        },
+      },
+      {
+        path: "priceConsultingLTL",
+        component: () => import("@/views/booking/LTL"),
+        name: "priceConsultingLTL",
+        meta: {
+          title: "LTLHUB",
           roles: ["DEMAND"],
           permission: "DemandSearchSupply",
         },
@@ -205,14 +225,33 @@ export const asyncRoutes = [
     redirect: "/inbound",
     name: "inbound",
     meta: {
+      title: "inbound",
       roles: ["HUB"],
     },
     children: [
+      //  {
+      //    path: "index",
+      //    component: () => import("@/views/inbound/index"),
+      //    meta: {
+      //      title: "inbound",
+      //      roles: ["HUB"],
+      //      permission: "HubInBound",
+      //    },
+      //  },
       {
-        path: "index",
-        component: () => import("@/views/inbound/index"),
+        path: "waitPut",
+        component: () => import("@/views/inbound/waitPut"),
         meta: {
-          title: "inbound",
+          title: "TobeConfirmedReceipt",
+          roles: ["HUB"],
+          permission: "HubInBound",
+        },
+      },
+      {
+        path: "handover",
+        component: () => import("@/views/inbound/handover"),
+        meta: {
+          title: "Received",
           roles: ["HUB"],
           permission: "HubInBound",
         },
@@ -225,14 +264,42 @@ export const asyncRoutes = [
     redirect: "/outbound",
     name: "outbound",
     meta: {
+      title: "Outbound",
       roles: ["HUB"],
     },
     children: [
+      // {
+      //   path: "index",
+      //   component: () => import("@/views/outbound/index"),
+      //   meta: {
+      //     title: "Outbound",
+      //     roles: ["HUB"],
+      //     permission: "HubOutBound",
+      //   },
+      // },
       {
-        path: "index",
-        component: () => import("@/views/outbound/index"),
+        path: "waitHandover",
+        component: () => import("@/views/outbound/waitHandover"),
         meta: {
-          title: "Outbound",
+          title: "TobeHandedOver",
+          roles: ["HUB"],
+          permission: "HubOutBound",
+        },
+      },
+      {
+        path: "waitDriverConfirm",
+        component: () => import("@/views/outbound/waitDriverConfirm"),
+        meta: {
+          title: "TobeConfirmedbyDriver",
+          roles: ["HUB"],
+          permission: "HubOutBound",
+        },
+      },
+      {
+        path: "handover",
+        component: () => import("@/views/outbound/handover"),
+        meta: {
+          title: "HandedOver",
           roles: ["HUB"],
           permission: "HubOutBound",
         },
@@ -320,6 +387,33 @@ export const asyncRoutes = [
         component: () => import("@/views/member/index"),
         meta: {
           title: "member",
+          roles: ["DEMAND", "SUPPLY", "HUB"],
+          permission: "MemberInfo",
+        },
+      },
+      {
+        path: "setSupply",
+        component: () => import("@/views/member/setSupply"),
+        meta: {
+          title: "setSupply",
+          roles: ["DEMAND", "SUPPLY", "HUB"],
+          permission: "MemberInfo",
+        },
+      },
+      {
+        path: "setDemand",
+        component: () => import("@/views/member/setdemand"),
+        meta: {
+          title: "setDemand",
+          roles: ["DEMAND", "SUPPLY", "HUB"],
+          permission: "MemberInfo",
+        },
+      },
+      {
+        path: "setHub",
+        component: () => import("@/views/member/setHub"),
+        meta: {
+          title: "setHub",
           roles: ["DEMAND", "SUPPLY", "HUB"],
           permission: "MemberInfo",
         },

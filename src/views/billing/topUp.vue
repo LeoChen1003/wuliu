@@ -1,29 +1,14 @@
 <template>
   <div class="manage billing">
-    <div class="statusHeader">
-      <div class="status-txt">{{ $t("billing.billingStatus") }}</div>
-      <!-- <div class="timePicker">
-        <el-date-picker v-model="value1"
-                        type="daterange"
-                        :range-separator="$t('placeholder.to')"
-                        :start-placeholder="$t('placeholder.startDate')"
-                        :end-placeholder="$t('placeholder.endDate')"
-                        size="small" />
-      </div>
-      <el-button size="small"
-                 style='width:100px;margin-left:20px;'>{{ $t('billing.search') }}</el-button> -->
-      <el-button size="small" type="primary" style="width:150px;margin-left:50px;" @click="toTopup">{{
-        $t("billing.topUp")
-      }}</el-button>
-    </div>
     <div class="content">
-      <div>
+      <div style="height:100%;" class="nav">
         <el-tabs v-model="tabActive" tab-position="left" @tab-click="handleClick" style="height:100%;">
           <el-tab-pane name="DEFAULT">
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.toBeConfirmed") }}<sub class="badge red">{{ statusCount.DEFAULT }}</sub>
+                  <span>{{ $t("billing.toBeConfirmed") }}</span>
+                  <sub class="badge red">{{ statusCount.DEFAULT }}</sub>
                 </div>
               </div>
             </span>
@@ -32,7 +17,8 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.confirmed") }}<sub class="badge">{{ statusCount.ACCEPT }}</sub>
+                  <span>{{ $t("billing.confirmed") }}</span>
+                  <sub class="badge">{{ statusCount.ACCEPT }}</sub>
                 </div>
               </div>
             </span>
@@ -41,7 +27,8 @@
             <span slot="label">
               <div class="tabLabel">
                 <div class="text">
-                  {{ $t("billing.rejected") }}<sub class="badge">{{ statusCount.REJECTED }}</sub>
+                  <span>{{ $t("billing.rejected") }}</span>
+                  <sub class="badge">{{ statusCount.REJECTED }}</sub>
                 </div>
               </div>
             </span>
@@ -49,40 +36,58 @@
         </el-tabs>
       </div>
       <div class="container">
-        <div class="center">
-          <el-table :data="dataList" highlight-current-row @current-change="handleCurrentChange" border>
-            <el-table-column prop="operateAt" :label="$t('billing.date')">
-              <template slot-scope="scope">
-                {{ scope.row.operateAt.slice(0, 10) + " " + scope.row.operateAt.slice(11, 19) }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="financeAccountType" :label="$t('billing.type')"></el-table-column>
-            <el-table-column :label="$t('billing.amount')">
-              <template slot-scope="scope">
-                {{ scope.row.amount }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="remarks"
-              :label="$t('billing.reasonsForRefusal')"
-              v-if="tabActive == 'REJECTED'"
-            ></el-table-column>
-          </el-table>
-          <el-pagination
-            style="margin-top:10px;text-align: center;margin-bottom:50px;"
-            background
-            :page-sizes="[1, 5, 10, 20, 50]"
-            :page-size="pagesize"
-            @size-change="pageSizeChange"
-            :current-page.sync="page.currentPage"
-            @current-change="pageChange"
-            layout="prev, pager, next, jumper"
-            :total="page.total"
-          ></el-pagination>
+        <el-button size="small" type="primary" style="width:150px;margin-top:20px;" @click="toTopup">{{
+          $t("billing.topUp")
+        }}</el-button>
+        <div class="container_center">
+          <div class="center">
+            <el-table
+              :data="dataList"
+              highlight-current-row
+              @current-change="handleCurrentChange"
+              border
+              :max-height="tableHeight"
+            >
+              <el-table-column prop="operateAt" :label="$t('billing.date')">
+                <template slot-scope="scope">
+                  {{ scope.row.operateAt.slice(0, 10) + " " + scope.row.operateAt.slice(11, 19) }}
+                </template>
+              </el-table-column>
+              <el-table-column prop="financeAccountType" :label="$t('billing.type')"></el-table-column>
+              <el-table-column :label="$t('billing.amount')">
+                <template slot-scope="scope">
+                  {{ scope.row.amount }}
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="remarks"
+                :label="$t('billing.reasonsForRefusal')"
+                v-if="tabActive == 'REJECTED'"
+              ></el-table-column>
+            </el-table>
+            <el-pagination
+              style="margin-top:10px;text-align: center;margin-bottom:10px;"
+              background
+              :page-sizes="[1, 5, 10, 20, 50]"
+              :page-size="pagesize"
+              @size-change="pageSizeChange"
+              :current-page.sync="page.currentPage"
+              @current-change="pageChange"
+              layout="prev, pager, next, jumper"
+              :total="page.total"
+            ></el-pagination>
+          </div>
+          <div class="right">
+            <el-tabs v-model="curTab" @tab-click="handleClick">
+              <el-tab-pane :label="$t('tracking.TopUPPicture')" name="image" class="trackingDetail">
+                <div class="rightDetail" :style="`max-height:${detailHeight}px;`">
+                  <el-image :src="showUrl" v-if="showUrl"></el-image>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane :label="$t('tracking.Log')" name="log" class="trackingDetail"> </el-tab-pane>
+            </el-tabs>
+          </div>
         </div>
-        <el-card class="right" shadow="never">
-          <el-image :src="showUrl" v-if="showUrl"> </el-image>
-        </el-card>
       </div>
     </div>
     <el-dialog :title="$t('billing.topUp')" :visible.sync="dialogVisible" width="60%" top="10vh" center>
@@ -217,6 +222,9 @@ export default {
       time_at: "",
       time: "",
       statusCount: {},
+      curTab: "image",
+      tableHeight: 0,
+      detailHeight: 0,
     };
   },
   // 监听属性 类似于data概念
@@ -240,6 +248,10 @@ export default {
   mounted() {
     this.getTopUpList();
     self.getCount();
+    this.$nextTick(() => {
+      this.tableHeight = window.innerHeight - 91 - 40 - 32 - 20 - 32 - 20;
+      this.detailHeight = window.innerHeight - 91 - 40 - 32 - 20 - 40 - 15 - 32 - 20;
+    });
   },
   methods: {
     cell({ row, column, rowIndex, columnIndex }) {
@@ -344,23 +356,12 @@ export default {
 //@import url(); 引入公共css类
 .manage {
   box-sizing: border-box;
-  height: 100%;
   .statusHeader {
     display: flex;
     padding: 0px 20px;
     box-sizing: border-box;
     height: 50px;
-    border-bottom: 2px solid #dfe4ed;
     align-items: center;
-    .status-txt {
-      height: 50px;
-      line-height: 50px;
-      padding-left: 20px;
-      font-size: 20px;
-      width: 216px;
-      box-sizing: border-box;
-      border-right: 2px solid #dfe4ed;
-    }
   }
   .timePicker {
     height: 42px;
@@ -368,15 +369,24 @@ export default {
     padding-left: 30px;
   }
   .content {
-    padding-left: 25px;
+    padding-left: 20px;
     display: flex;
-    height: calc(100% - 50px);
+    height: calc(100vh - 91px);
+    // margin-top: 5px;
     .container {
-      display: flex;
-      padding-left: 20px;
-      padding-top: 20px;
       width: 100%;
+      height: 100%;
       overflow: scroll;
+      background-color: #fff;
+      padding-left: 20px;
+
+      .container_center {
+        display: flex;
+        padding-top: 20px;
+        width: 100%;
+        overflow: scroll;
+        background-color: #fff;
+      }
       .center {
         width: 49%;
         margin-right: 1%;
@@ -407,31 +417,76 @@ export default {
 .tabLabel {
   display: flex;
   justify-content: flex-end;
+  .text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 150px;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 16px;
+  }
 
   .badge {
     font-size: 12px;
     margin-left: 5px;
     color: #aaa;
+    width: 25px;
+    text-align: right;
   }
 
   .red {
     color: red;
   }
 }
+
+.rightDetail {
+  overflow: scroll;
+}
 </style>
 
-<style>
-.billing .el-tabs--left .el-tabs__header.is-left {
-  margin-right: 0px;
-  width: 211px;
-}
-.billing .el-tabs--left .el-tabs__active-bar.is-left {
-  width: 3px;
-}
-.billing .el-tabs--left .el-tabs__nav-wrap.is-left::after,
-.el-tabs--left .el-tabs__nav-wrap.is-right::after,
-.el-tabs--right .el-tabs__nav-wrap.is-left::after,
-.el-tabs--right .el-tabs__nav-wrap.is-right::after {
-  width: 3px;
+<style lang="scss">
+.billing .nav {
+  .el-tabs--left .el-tabs__item.is-left {
+    text-align: left;
+    height: 50px;
+  }
+
+  .el-tabs__content {
+    background-color: #fff;
+  }
+
+  .el-tabs__active-bar {
+    width: 0;
+    height: 0;
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__active-bar.is-left {
+    width: 0;
+    height: 0;
+  }
+
+  .el-tabs__nav-wrap::after {
+    background-color: #fff;
+  }
+
+  .el-tabs--left .el-tabs__nav-wrap.is-left {
+    width: 185px;
+    padding-top: 20px;
+  }
+
+  .el-tabs--left .el-tabs__header.is-left {
+    margin-left: -10px;
+    background-color: #fff;
+  }
+
+  .el-table__header-wrapper {
+    background-color: #ccc !important;
+  }
+
+  .el-table__header {
+    background-color: #ccc !important;
+  }
 }
 </style>
