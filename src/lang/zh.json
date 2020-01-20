@@ -322,7 +322,11 @@
     "Receipt": "签收凭证",
     "FeeDetails": "收费详情",
     "TopUPPicture": "充值图片",
-    "Log": "日志"
+    "Log": "日志",
+    "Pickupinformation": "揽件信息",
+    "Deliverylist": "派件列表",
+    "Total": "共",
+    "deliverypoints": "个派送点"
   },
   "resources": {
     "add": "添加",
@@ -564,7 +568,8 @@
     "volumeWeightConversion": "体积重量换算",
     "Remote area": "偏远地区",
     "UserManagement": "用户管理",
-    "Remotearea": "偏远地区"
+    "Remotearea": "偏远地区",
+    "Addressbook": "通讯录"
   },
   "confirm": {
     "tips": "提示",
