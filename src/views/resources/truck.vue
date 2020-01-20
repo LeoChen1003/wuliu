@@ -82,7 +82,7 @@
                       v-for="(img, index) in regPreList"
                       :key="index"
                       style="width: 100px; height: 100px;margin-right:10px;"
-                      :src="img + '?x-oss-process=style/th-90'"
+                      :src="img"
                       :preview-src-list="regPreList"
                     >
                     </el-image>
@@ -119,7 +119,7 @@
                         v-for="(img, index) in insPreList"
                         :key="index"
                         style="width: 100px; height: 100px;margin-right:10px;"
-                        :src="img + '?x-oss-process=style/th-90'"
+                        :src="img"
                         :preview-src-list="insPreList"
                       >
                       </el-image>
@@ -138,7 +138,7 @@
                       v-for="(img, index) in truPreList"
                       :key="index"
                       style="width: 100px; height: 100px;margin-right:10px;"
-                      :src="img + '?x-oss-process=style/th-90'"
+                      :src="img"
                       :preview-src-list="truPreList"
                     >
                     </el-image>
@@ -151,7 +151,14 @@
         </el-tabs>
       </el-col>
     </el-row>
-    <el-dialog :title="$t('resources.truck')" :visible.sync="dialogVisible" @close="dialogClose" width="700px" center>
+    <el-dialog
+      :close-on-click-modal="false"
+      :title="$t('resources.truck')"
+      :visible.sync="dialogVisible"
+      @close="dialogClose"
+      width="700px"
+      center
+    >
       <div>
         <el-form
           ref="detailform"
@@ -305,7 +312,7 @@ export default {
         category: "",
         subCategory: "",
         insuranceAmount: 0,
-        insuranceExpiredAt: "2019-01-01",
+        insuranceExpiredAt: "",
         insuranceStatus: "HAS_INSURANCE",
         plate: "",
         registerAtRegion: "",
@@ -389,16 +396,18 @@ export default {
         category: "",
         subCategory: "",
         insuranceAmount: 0,
-        insuranceExpiredAt: "2019-01-01",
+        insuranceExpiredAt: "",
         insuranceStatus: "HAS_INSURANCE",
         plate: "",
         registerAtRegion: "",
         status: "ACTIVE",
         mobile: "",
       };
-      this.$nextTick(() => {
-        self.$refs.bc.clearData();
-      });
+      if (self.detailform.insuranceStatus == "HAS_INSURANCE") {
+        this.$nextTick(() => {
+          self.$refs.bc.clearData();
+        });
+      }
       if (self.$refs.detailform) {
         self.$refs.detailform.resetFields();
       }
@@ -420,9 +429,11 @@ export default {
         subCategory: row.subCategory,
         insuranceAmount: row.insuranceAmount,
         insuranceExpiredAt: row.insuranceExpiredAt
-          .split("/")
-          .reverse()
-          .join("-"),
+          ? row.insuranceExpiredAt
+              .split("/")
+              .reverse()
+              .join("-")
+          : "",
         insuranceStatus: row.insuranceStatus,
         plate: row.plate,
         registerAtRegion: row.registerAtRegion,
@@ -454,10 +465,11 @@ export default {
       self.fileList2 = insPreList;
       self.fileList3 = truPreList;
       self.curEditId = row.id;
-      this.$nextTick(() => {
-        self.$refs.bc.setData(row.insuranceExpiredAt);
-      });
-
+      if (self.detailform.insuranceStatus == "HAS_INSURANCE" && row.insuranceExpiredAt) {
+        this.$nextTick(() => {
+          self.$refs.bc.setData(row.insuranceExpiredAt);
+        });
+      }
       self.dialogVisible = true;
     },
     toConfirm() {
