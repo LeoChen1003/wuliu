@@ -639,5 +639,7 @@
     "undeliverableDistrict": "不可派送的地区",
     "origin": "始发地",
     "edit": "编辑"
-  }
+  },
+  "booking.importExcel": "导入excel",
+  "booking.downloadExcelTemplate": "下载excel模板"
 }
