@@ -58,7 +58,7 @@
                       v-for="(img, index) in licPreList"
                       :key="index"
                       style="width: 100px; height: 100px;margin-right:10px;"
-                      :src="img + '?x-oss-process=style/th-90'"
+                      :src="img"
                       :preview-src-list="licPreList"
                     >
                     </el-image>
@@ -70,7 +70,7 @@
                       v-for="(img, index) in idePreList"
                       :key="index"
                       style="width: 100px; height: 100px;margin-right:10px;"
-                      :src="img + '?x-oss-process=style/th-90'"
+                      :src="img"
                       :preview-src-list="idePreList"
                     >
                     </el-image>
@@ -83,7 +83,14 @@
         </el-tabs>
       </el-col>
     </el-row>
-    <el-dialog :title="$t('resources.driver')" :visible.sync="dialogVisible" @close="dialogClose" width="60%" center>
+    <el-dialog
+      :title="$t('resources.driver')"
+      :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
+      @close="dialogClose"
+      width="60%"
+      center
+    >
       <div>
         <el-form ref="detailform" :model="detailform" :rules="detailRules" class="form" label-position="left" label-width="160px">
           <el-form-item prop="name" :label="$t('resources.name')">

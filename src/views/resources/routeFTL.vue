@@ -670,6 +670,7 @@ export default {
         },
       ];
       self.editDialog = true;
+      self.allChecked = false;
     },
     // 编辑按钮
     edit(row) {
@@ -715,6 +716,7 @@ export default {
       this.$forceUpdate();
       self.editDialog = true;
       self.thisId = item.id;
+      self.checkAllCheck();
     },
     // 提交修改
     confirmIt() {
@@ -994,7 +996,7 @@ export default {
                 this.$forceUpdate();
               })
               .catch(res => {
-                self.$message.info("距离计算失败，正在重试...");
+                self.$message.info(self.$t("resources.Distancecalculationfailedretrying"));
                 setTimeout(() => {
                   self.toProvinceCodeChange(e);
                 }, 1500);
@@ -1047,7 +1049,7 @@ export default {
             this.$forceUpdate();
           })
           .catch(() => {
-            self.$message.info("距离计算失败，正在重试...");
+            self.$message.info(self.$t("resources.Distancecalculationfailedretrying"));
             setTimeout(() => {
               self.formCityChange(row);
             }, 1500);
@@ -1127,9 +1129,9 @@ export default {
       }
       // 如果小于起始值
       if (val < list[index].minKm) {
-        return self.$message.warning("不能小于总件数");
+        return self.$message.warning(self.$t("resources.Mustnotbelessthantotalkilometers"));
       } else if (val === "") {
-        return self.$message.warning("不能为空");
+        return self.$message.warning(self.$t("resources.Cannotbeempty"));
       }
       // 操作队列
       // 有更大值
@@ -1146,7 +1148,7 @@ export default {
           unitPrice: null,
         });
       } else {
-        return self.$message.warning("不合法的数值");
+        return self.$message.warning(self.$t("resources.Non-conformingvalues"));
       }
       // 重新排序
       // list.sort((a, b) => {
@@ -1175,6 +1177,17 @@ export default {
               minKm: 0,
               maxKm: null,
               unitPrice: null,
+            },
+          ];
+        }
+      } else {
+        if (!self.form.cityList || self.form.cityList.length < 1) {
+          self.form.cityList = [
+            {
+              fromCityCode: "",
+              toCityCodes: [],
+              charge: "",
+              transitTime: "",
             },
           ];
         }
